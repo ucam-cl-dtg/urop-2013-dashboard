@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>urop-2013-notifications</artifactId>
+	<name>urop-2013-notifications</name>
+	<groupId>util</groupId>
+	<version>0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<properties>
+		<jettyVersion>7.2.0.v20101020</jettyVersion>
+		<custom_scripts>
+      <![CDATA[<link href="/css/vendor/jquery-ui/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css">]]>
+      <![CDATA[<script src="/js/vendor/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>]]>
+      		<![CDATA[<script src="/js/shared.js"></script>]]>
+			<![CDATA[<script src="/js/signups.js"></script>]]>
+			<![CDATA[<script src="/js/events.js"></script>]]>
+			<![CDATA[<script src="/js/groups.js"></script>]]>
+			<![CDATA[<script src="/js/deadlines.js"></script>]]>
+		</custom_scripts>
+		<custom_templates>
+			<![CDATA[<script src="/soy/js/3/signapp.groups.js"></script>]]>
+      <![CDATA[<script src="/soy/js/3/signapp.deadlines.js"></script>]]>
+			<![CDATA[<script src="/soy/js/3/signapp.home_page.js"></script>]]>
+			<![CDATA[<script src="/soy/js/3/signapp.events.js"></script>]]>
+            <![CDATA[<script src="/soy/js/3/signapp.errors.js"></script>]]>
+		</custom_templates>
+		<custom_css>
+		  <![CDATA[<link href="/css/main.css" rel="stylesheet" type="text/css">]]>
+		</custom_css>
+		<css_namespace>
+		    <![CDATA[id="signapps"]]>
+		</css_namespace>
+	</properties>
+	<repositories>
+		<repository>
+			<id>htmleasy</id>
+			<url>http://htmleasy-maven.googlecode.com/svn/trunk/</url>
+		</repository>
+		<repository>
+			<id>codedance on Github</id>
+			<url>https://github.com/codedance/maven-repository/raw/master</url>
+		</repository>
+		<repository>
+			<id>jboss</id>
+			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
+		</repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>${jettyVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.htmleasy</groupId>
+			<artifactId>htmleasy</artifactId>
+			<version>0.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>2.2.1.GA</version>
+		</dependency>
+		<dependency>
+			<groupId>com.papercut.silken</groupId>
+			<artifactId>silken</artifactId>
+			<version>2013-03-05</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>4.2.2.Final</version>
+		</dependency>		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.2.145</version>
+		</dependency>
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.1-901-1.jdbc4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jackson-provider</artifactId>
+			<version>2.3.1.GA</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jettyVersion}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jasig.maven</groupId>
+				<artifactId>sass-maven-plugin</artifactId>
+				<version>1.1.1</version>
+				<configuration>
+					<sassSourceDirectory>${basedir}/src/main/webapp/sass</sassSourceDirectory>
+					<destination>${basedir}/src/main/webapp/css</destination>
+					<sassOptions>
+						<cache>false</cache>
+						<style>:compressed</style>
+						<syntax>:scss</syntax>
+					</sassOptions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<!-- here the phase you need -->
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+						  <nonFilteredFileExtensions>
+                <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+                <nonFilteredFileExtension>eot</nonFilteredFileExtension>
+                <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+                <nonFilteredFileExtension>svg</nonFilteredFileExtension>
+              </nonFilteredFileExtensions>
+							<outputDirectory>${basedir}/src/main/webapp/app</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/../urop-2013-frontend</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
