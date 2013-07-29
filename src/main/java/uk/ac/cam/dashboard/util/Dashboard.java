@@ -7,13 +7,16 @@ import javax.ws.rs.core.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.dashboard.controllers.DeadlinesController;
+import uk.ac.cam.dashboard.controllers.GroupsController;
+import uk.ac.cam.dashboard.controllers.HomePageController;
+import uk.ac.cam.dashboard.controllers.NotificationsController;
+
 import com.googlecode.htmleasy.HtmleasyProviders;
 
-import uk.ac.cam.dashboard.controllers.*;
-
-public class Signapps extends Application {
+public class Dashboard extends Application {
 	
-  private static Logger log = LoggerFactory.getLogger(Signapps.class);
+  private static Logger log = LoggerFactory.getLogger(Dashboard.class);
 	
   public Set<Class<?>> getClasses() {
     Set<Class<?>> myServices = new HashSet<Class<?>>();
@@ -22,6 +25,7 @@ public class Signapps extends Application {
     log.debug("Adding controllers to main application");
     myServices.add(DeadlinesController.class);
     myServices.add(GroupsController.class);
+    myServices.add(NotificationsController.class);
     myServices.add(HomePageController.class);
     
     // Add Htmleasy Providers

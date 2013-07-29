@@ -1,4 +1,4 @@
 /target
 /src/main/webapp/app/*
-/logs/*
+/logs/main.log
 .project

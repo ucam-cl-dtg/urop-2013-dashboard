@@ -25,10 +25,9 @@ import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
-import com.googlecode.htmleasy.ViewWith;
 
 
-@Path("/dashboard/")
+@Path("dashboard/notifications")
 public class NotificationsController {
 
 	private Criteria criteria;
@@ -84,7 +83,7 @@ public class NotificationsController {
 	
 	private static Logger log = LoggerFactory.getLogger(NotificationsController.class);
 	
-	@GET @Path("/notifications/{id}")
+	@GET @Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, ?> notificationStream(@PathParam("id") String id,
 							   				 @QueryParam("start") Integer start,
@@ -133,7 +132,7 @@ public class NotificationsController {
 		
 	}
 	
-	@GET @Path("/notifications/create")
+	@GET @Path("/create")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, ?> createNotification(@QueryParam("message") String message,
 								   			 @QueryParam("users") String users,

@@ -374,3 +374,4 @@ Caused by: java.net.ConnectException: Connection refused
 [2013-07-29 13:12:47] [ERROR] SqlExceptionHelper:147 - Connection refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
 [2013-07-29 13:12:55] [ERROR] SqlExceptionHelper:147 - Connection refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
 [2013-07-29 13:12:58] [ERROR] SqlExceptionHelper:147 - Connection refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+[2013-07-29 13:14:08] [ERROR] SqlExceptionHelper:147 - Connection refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
