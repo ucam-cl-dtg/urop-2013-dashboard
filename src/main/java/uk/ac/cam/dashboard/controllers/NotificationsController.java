@@ -36,11 +36,11 @@ public class NotificationsController extends ApplicationController {
 		private User currentUser;
 		
 		// Notification create
-		public static void pushNotificationToUsers(String message, Set<User> users) {
+		public static void pushNotificationToUsers(String message, String section, String link, Set<User> users) {
 
 			Session s = HibernateUtil.getTransactionSession();
 				
-			Notification notification = new Notification(message);
+			Notification notification = new Notification(message, section, link);
 			
 			for (User u:users) {
 				notification.addUser(u);	
@@ -53,13 +53,20 @@ public class NotificationsController extends ApplicationController {
 		// Index
 		@GET @Path("/")
 		@Produces(MediaType.APPLICATION_JSON)
-		public Map<String, ?> getNotifications() {
+		public Map<String, ?> getNotifications( @QueryParam("offset") Integer offset,
+												@QueryParam("limit") Integer limit,
+												@QueryParam("section") String section,
+												@QueryParam("read") Boolean read) throws RedirectException {
 			
 			currentUser = initialiseUser();
 			
-			// Next retrieve the notifications associated with the current user
 			NotificationQuery nq = NotificationQuery.all();
 			nq.forUser(currentUser);
+			
+			if (offset != null) { nq.offset(offset); }
+			if (limit != null) { nq.limit(limit); }
+			if (section != null) { nq.inSection(section); }
+			if (read != null) {	nq.isRead(read); }
 			
 			List<?> result = nq.list();
 			List<Map<?,?>> notifications = new ArrayList<Map<?,?>>();
@@ -67,30 +74,40 @@ public class NotificationsController extends ApplicationController {
 				notifications.add(((Notification)o).toMap());
 			}
 						
-			return ImmutableMap.of("userId", currentUser.getCrsid(), "notifictions", notifications); 
+			return ImmutableMap.of("userId", currentUser.getCrsid(), "notifications", notifications); 
 			
 		}
 		
 		// Create
 		@POST @Path("/")
 		public void createNotification(@QueryParam("message") String message,
-									   @QueryParam("users") String users) {
+									   @QueryParam("section") String section,
+									   @QueryParam("link") String link,
+									   @QueryParam("users") String users) throws RedirectException {
 			
 			String [] userStrings = users.split(",");
 			Set<User> userSet = new HashSet<User>();
 			for (String u:userStrings) {
-				User user = new User(u);
+				User user = User.registerUser(u);
 				userSet.add(user);
 			}
 			
-			NotificationsController.pushNotificationToUsers(message, userSet);
+			NotificationsController.pushNotificationToUsers(message, section, link, userSet);
 			
-			throw new RedirectException(NotificationsController.class, "createNotificationCallback");
+			throw new RedirectException(NotificationsController.class, "successCallback");
 			
 		}
 		
-		public Map<String, ?> createNotificationCallback() {
-			return ImmutableMap.of("success", "true");
+		@GET @Path("/success")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Map<String, ?> successCallback() {
+			return ImmutableMap.of("success", 1);
 		}
 
+		@GET @Path("/error")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Map<String, ?> errorCallback() {
+			return ImmutableMap.of("error", 1);
+		}
+		
 }

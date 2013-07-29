@@ -34,13 +34,23 @@ public class NotificationQuery {
 		return this;
 	}
 	
-	public NotificationQuery begins(int start) {
-		this.criteria.setFirstResult(start - 1);
+	public NotificationQuery offset(int offset) {
+		this.criteria.setFirstResult(offset);
 		return this;
 	}
 
-	public NotificationQuery ends(int start, int end) {
-		this.criteria.setMaxResults(end - start);
+	public NotificationQuery limit(int limit) {
+		this.criteria.setMaxResults(limit);
+		return this;
+	}
+	
+	public NotificationQuery inSection(String section) {
+		this.criteria.add(Restrictions.eq("section", section));
+		return this;
+	}
+	
+	public NotificationQuery isRead(boolean read) {
+		this.criteria.add(Restrictions.eq("read", read));
 		return this;
 	}
 	

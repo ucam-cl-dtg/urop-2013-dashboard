@@ -85,7 +85,7 @@ public class User {
 	
 	// Get username from LDAP
 	public String retrieveUsername(String crsid) {
-		return "test";
+		return "test-username";
 		// return LDAPProvider.getData(crsid, "cn");
 	}
 	

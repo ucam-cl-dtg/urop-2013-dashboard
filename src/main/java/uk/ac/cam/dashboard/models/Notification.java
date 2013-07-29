@@ -13,8 +13,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import uk.ac.cam.dashboard.models.User;
-
 import com.google.common.collect.ImmutableMap;
 
 @Entity
@@ -31,29 +29,46 @@ public class Notification {
 	
 	private String message;
 	private Calendar timestamp;
+	private String section;
+	private String link;
+	private boolean read;
 	
 	public Notification() {}
-	public Notification(String message) {
+	public Notification(String message, String section, String link) {
 		this.message = message;
+		this.section = section;
+		this.link = link;
 		this.timestamp = Calendar.getInstance();
+		this.read = false;
 	}
 
 	public Map<String,?> toMap() {
-		return ImmutableMap.of("id", id, "message", message, "timestamp", timestamp.getTime().toString(), "users", users);
+		ImmutableMap.Builder<String, Object> map = new ImmutableMap.Builder<String, Object>();
+		
+		map = map.put("id", this.id);
+		map = map.put("message", this.message);
+		map = map.put("section", this.section);
+		map = map.put("link", this.link);
+		map = map.put("timestamp", this.timestamp.getTime().toString());
+		map = map.put("read", this.read);
+		map = map.put("users", this.usersToSet());
+		
+		ImmutableMap<String, ?> finalMap = map.build();
+		return finalMap; 
 	}
 	
-	public Set<User> getUsers() {
-		return users;
-	}
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
-	public void addUser(User user) {
-		this.users.add(user);
+	public Set<User> getUsers() {return users;}
+	public void setUsers(Set<User> users) {this.users = users;}
+	public void addUser(User user) {this.users.add(user);}
+	public Set<String> usersToSet() {
+		HashSet<String> userCrsids = new HashSet<String>();
+		for (User u:this.users) {
+			userCrsids.add(u.getCrsid());
+		}
+		return userCrsids;
 	}
 	
 	// Should not be needed, but included for posterity
-	
 	public int getId() { return id; }
 	public void setId(int id) { this.id = id; }
 	
@@ -63,5 +78,13 @@ public class Notification {
 	public Calendar getTimestamp() { return timestamp; }
 	public void setTimestamp(Calendar timestamp) { this.timestamp = timestamp; }
 	
+	public String getSection() {return section;}
+	public void setSection(String section) {this.section = section;}
 	
+	public String getLink() {return link;}
+	public void setLink(String link) {this.link = link;}
+	
+	public boolean isRead() {return read;}
+	public void setRead(boolean read) {this.read = read;}
+		
 }
