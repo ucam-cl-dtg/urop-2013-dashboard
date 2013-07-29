@@ -1,0 +1,27 @@
+{namespace notifications}
+
+/**
+ * @param error 1 if there is an error, 0 otherwise
+ * @param errorMessage The message returned with the error
+ */
+{template .createNotification}
+<html>
+	{if $error == 0}Please enter a message and a list of comma separated CRSIDs{/if}
+	{if $error == 1}{$errorMessage}{/if}
+	<hr />
+	<div>
+		<form method="GET">
+			<div>
+				<label>Message:</label><input type="text" name="message" />
+			</div>
+			<div>
+				<label>User CRSIDs:</label><input type="text" name="users" />
+			</div>
+			<div>
+				<input type="hidden" name="submitted" value="submitted" />
+				<input type="submit" value="Submit" />
+			</div>
+		</form>
+	</div>
+</html>
+{/template}

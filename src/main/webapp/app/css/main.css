@@ -4459,6 +4459,8 @@ div.events#new li.token-input-token-facebook {
 div.events#new .delete-time-slot {
   height: 34px;
   padding: 8px 0 8px 0; }
+div.events#new .empty {
+  height: 11px; }
 
 div.events#show input[type="text"].slot-field {
   display: inline;
