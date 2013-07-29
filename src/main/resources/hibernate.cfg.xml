@@ -54,9 +54,10 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">validate</property>
 
-        <mapping class="uk.ac.cam.signups.models.User" />
-        <mapping class="uk.ac.cam.signups.models.Group" />
-        <mapping class="uk.ac.cam.signups.models.Deadline" />
+        <mapping class="uk.ac.cam.dashboard.models.User" />
+        <mapping class="uk.ac.cam.dashboard.models.Group" />
+        <mapping class="uk.ac.cam.dashboard.models.Deadline" />
+        <mapping class="uk.ac.cam.dashboard.models.Notification" />
 
     </session-factory>
 

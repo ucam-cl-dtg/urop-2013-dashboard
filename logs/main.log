@@ -187,3 +187,7 @@ Caused by: java.net.ConnectException: Connection refused
 [2013-07-26 15:28:16] [ERROR] SchemaExport:426 - ERROR: relation "groups_users" does not exist
 [2013-07-26 15:28:16] [ERROR] SchemaExport:425 - HHH000389: Unsuccessful: alter table GROUPS_USERS drop constraint FK_1srwmnguoiq8074iw6kis62kw
 [2013-07-26 15:28:16] [ERROR] SchemaExport:426 - ERROR: relation "groups_users" does not exist
+[2013-07-29 11:50:00] [ERROR] SchemaExport:425 - HHH000389: Unsuccessful: alter table NOTIFICATIONS_USERS drop constraint FK_1ncj942c4342ldmj88evvct5o
+[2013-07-29 11:50:00] [ERROR] SchemaExport:426 - ERROR: relation "notifications_users" does not exist
+[2013-07-29 11:50:00] [ERROR] SchemaExport:425 - HHH000389: Unsuccessful: alter table NOTIFICATIONS_USERS drop constraint FK_pch6f86u6csrxtpvdob9mlo7y
+[2013-07-29 11:50:00] [ERROR] SchemaExport:426 - ERROR: relation "notifications_users" does not exist
