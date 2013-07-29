@@ -26,7 +26,7 @@ import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.ViewWith;
 
 
-@Path("/")
+@Path("/dashboard/")
 public class NotificationsController {
 
 	private Criteria criteria;

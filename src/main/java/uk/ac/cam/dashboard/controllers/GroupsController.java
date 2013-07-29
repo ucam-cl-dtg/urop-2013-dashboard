@@ -31,7 +31,7 @@ import uk.ac.cam.dashboard.util.LDAPProvider;
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
 
-@Path("signapp/groups")
+@Path("dashboard/groups")
 public class GroupsController extends ApplicationController {
 	
 		// Create the logger

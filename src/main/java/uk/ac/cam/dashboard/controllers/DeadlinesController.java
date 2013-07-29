@@ -24,7 +24,7 @@ import uk.ac.cam.dashboard.models.User;
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
 
-@Path("/signapp/deadlines")
+@Path("/dashboard/deadlines")
 public class DeadlinesController extends ApplicationController {
 	
 	private User currentUser;
