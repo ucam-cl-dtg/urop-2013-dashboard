@@ -5,12 +5,11 @@
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 	
-	<!-- Include this for the raven filter 
+	<!-- Include this for the raven filter --> 
 	<filter>
 		<filter-name>ravenFilter</filter-name>
 		<filter-class>uk.ac.cam.dashboard.webauth.RavenFilter</filter-class>
 	</filter>
-	-->
 	
 	<!-- Include this for the Hibernate filter -->
 	<filter>
@@ -28,12 +27,11 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</filter>
 
 	<!-- Include for raven filter (url-pattern set to /* for securing all
-	pages of the website with raven 
+	pages of the website with raven -->
 	<filter-mapping>
 		<filter-name>ravenFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	-->
 
 	<filter-mapping>
 		<filter-name>Hibernate</filter-name>

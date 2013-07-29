@@ -9,7 +9,9 @@ import java.util.Set;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -82,9 +84,8 @@ public class NotificationsController {
 	
 	private static Logger log = LoggerFactory.getLogger(NotificationsController.class);
 	
-	@GET
-	@Path("/notifications/{id}")
-	@ViewWith("/soy/notifications.notifications")
+	@GET @Path("/notifications/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, ?> notificationStream(@PathParam("id") String id,
 							   				 @QueryParam("start") Integer start,
 							   				 @QueryParam("end") Integer end) {
@@ -132,9 +133,8 @@ public class NotificationsController {
 		
 	}
 	
-	@GET
-	@Path("/notifications/create/")
-	@ViewWith("/soy/notifications.createNotification")
+	@GET @Path("/notifications/create")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, ?> createNotification(@QueryParam("message") String message,
 								   			 @QueryParam("users") String users,
 								   			 @QueryParam("submitted") String submitted) {
