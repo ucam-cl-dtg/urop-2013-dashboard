@@ -19,6 +19,8 @@ import org.hibernate.Session;
 import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
+import uk.ac.cam.dashboard.util.LDAPProvider;
+
 import com.google.common.collect.ImmutableMap;
 
 @Entity
@@ -26,6 +28,8 @@ import com.google.common.collect.ImmutableMap;
 public class User {
 	@Id
 	private String crsid;
+	
+	private String username;
 	
 	@ManyToMany(mappedBy = "users")
 	private Set<Deadline> deadlines = new HashSet<Deadline>();
@@ -39,6 +43,7 @@ public class User {
 	public User() {}
 	public User(String crsid) {
 		this.crsid = crsid;
+		this.username = this.retrieveUsername(crsid);
 	}
 	
 	public String getCrsid() {return crsid;}
@@ -76,6 +81,12 @@ public class User {
 
 		
 		return user;
+	}
+	
+	// Get username from LDAP
+	public String retrieveUsername(String crsid) {
+		return "test";
+		// return LDAPProvider.getData(crsid, "cn");
 	}
 	
 	// Maps

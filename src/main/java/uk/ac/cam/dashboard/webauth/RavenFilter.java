@@ -343,6 +343,7 @@ public class RavenFilter implements Filter {
 	protected WebauthValidator getWebauthValidator() {
 		if (webauthValidator == null) {
 			webauthValidator = new WebauthValidator(getKeyStore());
+			webauthValidator.setMaxSkew(30000);
 		}
 		return webauthValidator;
 	}
