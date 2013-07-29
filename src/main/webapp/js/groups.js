@@ -1,4 +1,4 @@
-moduleScripts['signapp']['groups'] = {
+moduleScripts['dashboard']['groups'] = {
 	'index' : 
 		[
 			function() {

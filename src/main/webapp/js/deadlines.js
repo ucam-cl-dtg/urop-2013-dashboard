@@ -1,4 +1,4 @@
-moduleScripts['signapp']['deadlines'] = {
+moduleScripts['dashboard']['deadlines'] = {
 	'index' : 
 		[
 	    function() {
