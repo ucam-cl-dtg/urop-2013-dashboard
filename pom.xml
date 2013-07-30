@@ -22,9 +22,10 @@
 			<![CDATA[<script src="/js/deadlines.js"></script>]]>
 		</custom_scripts>
 		<custom_templates>
+			<![CDATA[<script src="/soy/js/3/shared.dashboard.js"></script>]]>
 			<![CDATA[<script src="/soy/js/3/dashboard.groups.js"></script>]]>
      		<![CDATA[<script src="/soy/js/3/dashboard.deadlines.js"></script>]]>
-			<![CDATA[<script src="/soy/js/3/dashboard.home_page.js"></script>]]>
+			<![CDATA[<script src="/soy/js/3/dashboard.homePage.js"></script>]]>
             <![CDATA[<script src="/soy/js/3/dashboard.errors.js"></script>]]>
             <![CDATA[<script src="/soy/js/3/dashboard.notifications.js"></script>]]>
 		</custom_templates>

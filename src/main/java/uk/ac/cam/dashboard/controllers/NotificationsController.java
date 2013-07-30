@@ -79,7 +79,7 @@ public class NotificationsController extends ApplicationController {
 			List<?> result = nq.list();
 			List<Map<?,?>> notifications = new ArrayList<Map<?,?>>();
 			for (Object o:result) {
-				notifications.add(((Notification)o).toMap());
+				notifications.add(((Notification) o).toMap());
 			}
 			map = map.put("notifications", notifications);
 			

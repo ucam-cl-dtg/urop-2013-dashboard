@@ -130,6 +130,7 @@ public class User {
 		return userDeadlines;
 		
 	}
+	
 	public List<Map<String, ?>> getUserCreatedDeadlinesMap() {
 		List<Map<String, ?>> userDeadlines = new ArrayList<Map<String, ?>>();
 		

@@ -1,5 +1,7 @@
 package uk.ac.cam.dashboard.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.GET;
@@ -7,30 +9,54 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-
 //Import the following for logging
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.dashboard.models.Notification;
 //Import models
-
 import uk.ac.cam.dashboard.models.User;
+import uk.ac.cam.dashboard.queries.NotificationQuery;
 
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
 import com.googlecode.htmleasy.ViewWith;
 
-@Path("/dashboard")
+@Path("/")
 public class HomePageController extends ApplicationController{
 	
-	// Create the logger
+	// Logger
 	private static Logger log = LoggerFactory.getLogger(HomePageController.class);
 	
-	private User user;
+	private User currentUser;
+	
+	@GET @Path("/dashboard")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map<String, ?> homePage() {
+		currentUser = initialiseUser();
+		//ImmutableMap<String, ?> userMap = ulm.getAll();
+		
+		NotificationQuery nq = NotificationQuery.all();
+		nq.forUser(currentUser).limit(10);
+		
+		List<?> result = nq.list();
+		List<Map<?,?>> notifications = new ArrayList<Map<?,?>>();
+		for (Object o:result) {
+			notifications.add(((Notification) o).toMap());
+		}
+		
+		return ImmutableMap.of("user", currentUser.getCrsid(), "deadlines", currentUser.getUserDeadlinesMap(), "notifications", notifications);
+	}
+	
+	/*
+	 * Archive ----------------------------------------------
+	 * ------------------------------------------------------ *
+	 * ------------------------------------------------------ *
+	 */
 	
 	@GET @Path("/")
 	public void localhostRedirect() {
-		throw new RedirectException("/app/#notifications/");
+		throw new RedirectException("/app/#dashboard/");
 	}
 	
 	// DOS Index

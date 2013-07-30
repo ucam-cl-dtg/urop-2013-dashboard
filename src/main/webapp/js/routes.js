@@ -28,7 +28,7 @@ $(document).ready(function() {
     router = Router({
         
         // Home page
-        "dashboard/": "dashboard.home_page.index",
+        "dashboard/": "dashboard.homePage.index",
 
         // Deadlines
         "dashboard/deadlines" : "dashboard.deadlines.index",

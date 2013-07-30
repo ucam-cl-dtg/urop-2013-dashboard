@@ -29,7 +29,7 @@ public class DeadlinesController extends ApplicationController {
 	
 	private User currentUser;
 	
-	//Logger
+	// Logger
 	private static Logger log = LoggerFactory.getLogger(DeadlinesController.class);
 	
 	// Index 

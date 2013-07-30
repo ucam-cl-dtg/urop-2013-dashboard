@@ -12,7 +12,7 @@
 	<div class="row">
 		<div class="columns large-12 small-12">
 			<ul class="notification-feed" data-limit="{$limit}" data-offset="{$offset}">
-				{call .getNotifications}
+				{call shared.dashboard.getNotifications}
 					{param notifications: $notifications /}
 				{/call}
 			</ul>
@@ -25,15 +25,4 @@
 	</div>
 	<div class="hide" id="new-notifications-wrapper"></div>
 	
-{/template}
-
-/**
- * @param notifications
- */
-{template .getNotifications}
-	{foreach $notification in $notifications}
-	<li class="notification-feed-item">
-		<div>Message: {$notification.message} | Section: {$notification.section} | Link: {$notification.link} | Read: {$notification.read} | Time: {$notification.timestamp} | users: {foreach $user in $notification.users}{$user}, {/foreach}</div>
-	</li>
-	{/foreach}
 {/template}
