@@ -1,0 +1,12 @@
+{namespace shared.dashboard}
+
+/**
+ * @param notifications
+ */
+{template .getNotifications}
+	{foreach $notification in $notifications}
+	<li class="notification-feed-item">
+		<div>Message: {$notification.message} | Section: {$notification.section} | Link: {$notification.link} | Read: {$notification.read} | Time: {$notification.timestamp} | users: {foreach $user in $notification.users}{$user}, {/foreach}</div>
+	</li>
+	{/foreach}
+{/template}
