@@ -26,13 +26,24 @@ function supportRedirect(templateName) {
 
 $(document).ready(function() {
     router = Router({
-        "dashboard/groups": "dashboard.groups.index",
-        "dashboard/groups/error/:type": "dashboard.groups.index",
+        
+        // Home page
+        "dashboard/": "dashboard.home_page.index",
+
+        // Deadlines
         "dashboard/deadlines" : "dashboard.deadlines.index",
         "dashboard/deadlines/:id/edit" : supportRedirect("dashboard.deadlines.edit"),
         "dashboard/deadlines/error/:type": "dashboard.deadlines.index",
-        "dashboard/": "dashboard.home_page.index",
+        
+        // Groups
+        
+        "dashboard/groups": "dashboard.groups.index",
+        "dashboard/groups/error/:type": "dashboard.groups.index",
         "dashboard/groups/:id/edit" : "dashboard.groups.edit",
+        
+        // Notifications
+        "dashboard/notifications/:userID": "dashboard.notifications.notifications",
+        "dashboard/notifications/create": "dashboard.notifications.createNotification",
 
         //For getting params in get requests
         // Use the last line to redirect unmatched routes to an error page

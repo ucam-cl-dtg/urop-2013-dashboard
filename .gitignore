@@ -2,3 +2,6 @@
 /src/main/webapp/app/*
 /logs/main.log
 .project
+logs/main.log
+
+*.log
