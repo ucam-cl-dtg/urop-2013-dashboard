@@ -11,7 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.annotations.GenericGenerator;
+
+import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -68,6 +72,9 @@ public class Notification {
 		return userCrsids;
 	}
 	
+	public boolean isRead() {return read;}
+	public void setRead(boolean read) {this.read = read;}
+	
 	// Should not be needed, but included for posterity
 	public int getId() { return id; }
 	public void setId(int id) { this.id = id; }
@@ -84,7 +91,26 @@ public class Notification {
 	public String getLink() {return link;}
 	public void setLink(String link) {this.link = link;}
 	
-	public boolean isRead() {return read;}
-	public void setRead(boolean read) {this.read = read;}
+	// Static functions
+	public static void delete(int id) {
+		
+		Session s = HibernateUtil.getTransactionSession();
+		
+		Query getNotification = s.createQuery("from Notification where id = :id").setParameter("id", id);
+	  	Notification notification = (Notification) getNotification.uniqueResult();	
+	  	s.delete(notification);
+	  	
+	}
+	
+	public static void markAsRead(int id) {
+		
+		Session s = HibernateUtil.getTransactionSession();
+		
+		Query getNotification = s.createQuery("from Notification where id = :id").setParameter("id", id);
+	  	Notification notification = (Notification) getNotification.uniqueResult();
+	  	notification.setRead(true);
+	  	s.update(notification);	
+	  	
+	}
 		
 }

@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -19,12 +23,11 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.User;
+import uk.ac.cam.dashboard.queries.NotificationQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
-
-import dashboard.queries.NotificationQuery;
 
 @Path("dashboard/notifications")
 public class NotificationsController extends ApplicationController {
@@ -80,10 +83,10 @@ public class NotificationsController extends ApplicationController {
 		
 		// Create
 		@POST @Path("/")
-		public void createNotification(@QueryParam("message") String message,
-									   @QueryParam("section") String section,
-									   @QueryParam("link") String link,
-									   @QueryParam("users") String users) throws RedirectException {
+		public void createNotification(@FormParam("message") String message,
+									   @FormParam("section") String section,
+									   @FormParam("link") String link,
+									   @FormParam("users") String users) throws RedirectException {
 			
 			String [] userStrings = users.split(",");
 			Set<User> userSet = new HashSet<User>();
@@ -93,6 +96,26 @@ public class NotificationsController extends ApplicationController {
 			}
 			
 			NotificationsController.pushNotificationToUsers(message, section, link, userSet);
+			
+			throw new RedirectException(NotificationsController.class, "successCallback");
+			
+		}
+		
+		// Delete
+		@DELETE @Path("/{id}")
+		public void deleteNotification(@PathParam("id") int id) {
+		
+			Notification.delete(id);
+			
+			throw new RedirectException(NotificationsController.class, "successCallback");
+			
+		}
+		
+		// Update
+		@PUT @Path("/{id}")
+		public void markNotificationAsRead(@PathParam("id") int id) {
+			
+			Notification.markAsRead(id);
 			
 			throw new RedirectException(NotificationsController.class, "successCallback");
 			
