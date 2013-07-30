@@ -93,24 +93,33 @@ public class Notification {
 	
 	// Static functions
 	public static void delete(int id) {
-		
 		Session s = HibernateUtil.getTransactionSession();
 		
 		Query getNotification = s.createQuery("from Notification where id = :id").setParameter("id", id);
 	  	Notification notification = (Notification) getNotification.uniqueResult();	
-	  	s.delete(notification);
-	  	
+	  	s.delete(notification); 	
 	}
 	
 	public static void markAsRead(int id) {
-		
 		Session s = HibernateUtil.getTransactionSession();
 		
 		Query getNotification = s.createQuery("from Notification where id = :id").setParameter("id", id);
 	  	Notification notification = (Notification) getNotification.uniqueResult();
 	  	notification.setRead(true);
 	  	s.update(notification);	
-	  	
+	}
+	
+	// Notification create
+	public static void pushNotificationToUsers(String message, String section, String link, Set<User> users) {
+		Session s = HibernateUtil.getTransactionSession();
+			
+		Notification notification = new Notification(message, section, link);
+		
+		for (User u:users) {
+			notification.addUser(u);	
+		}
+		
+		s.save(notification);
 	}
 		
 }

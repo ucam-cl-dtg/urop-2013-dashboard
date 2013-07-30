@@ -38,21 +38,6 @@ public class NotificationsController extends ApplicationController {
 		// Get current user from raven session
 		private User currentUser;
 		
-		// Notification create
-		public static void pushNotificationToUsers(String message, String section, String link, Set<User> users) {
-
-			Session s = HibernateUtil.getTransactionSession();
-				
-			Notification notification = new Notification(message, section, link);
-			
-			for (User u:users) {
-				notification.addUser(u);	
-			}
-			
-			s.save(notification);
-			
-		}
-		
 		// Index
 		@GET @Path("/")
 		@Produces(MediaType.APPLICATION_JSON)
@@ -60,7 +45,6 @@ public class NotificationsController extends ApplicationController {
 												@QueryParam("limit") Integer limit,
 												@QueryParam("section") String section,
 												@QueryParam("read") Boolean read) throws RedirectException {
-			
 			currentUser = initialiseUser();
 			
 			NotificationQuery nq = NotificationQuery.all();
@@ -78,7 +62,6 @@ public class NotificationsController extends ApplicationController {
 			}
 						
 			return ImmutableMap.of("userId", currentUser.getCrsid(), "notifications", notifications); 
-			
 		}
 		
 		// Create
@@ -87,7 +70,6 @@ public class NotificationsController extends ApplicationController {
 									   @FormParam("section") String section,
 									   @FormParam("link") String link,
 									   @FormParam("users") String users) throws RedirectException {
-			
 			String [] userStrings = users.split(",");
 			Set<User> userSet = new HashSet<User>();
 			for (String u:userStrings) {
@@ -95,32 +77,26 @@ public class NotificationsController extends ApplicationController {
 				userSet.add(user);
 			}
 			
-			NotificationsController.pushNotificationToUsers(message, section, link, userSet);
+			Notification.pushNotificationToUsers(message, section, link, userSet);
 			
 			throw new RedirectException(NotificationsController.class, "successCallback");
-			
 		}
 		
 		// Delete
 		@DELETE @Path("/{id}")
 		public void deleteNotification(@PathParam("id") int id) {
-		
 			Notification.delete(id);
-			
 			throw new RedirectException(NotificationsController.class, "successCallback");
-			
 		}
 		
 		// Update
 		@PUT @Path("/{id}")
 		public void markNotificationAsRead(@PathParam("id") int id) {
-			
 			Notification.markAsRead(id);
-			
-			throw new RedirectException(NotificationsController.class, "successCallback");
-			
+			throw new RedirectException(NotificationsController.class, "successCallback");	
 		}
 		
+		// Callbacks
 		@GET @Path("/success")
 		@Produces(MediaType.APPLICATION_JSON)
 		public Map<String, ?> successCallback() {
