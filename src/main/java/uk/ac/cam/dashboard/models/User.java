@@ -35,10 +35,13 @@ public class User {
 	private Set<Deadline> deadlines = new HashSet<Deadline>();
 
 	@ManyToMany(mappedBy = "users")
-	private Set<Group> subscriptions = new HashSet<Group>(0);
+	private Set<Group> subscriptions = new HashSet<Group>();
 	
 	@OneToMany(mappedBy = "owner")
-	private Set<Group> groups = new HashSet<Group>(0);
+	private Set<Group> groups = new HashSet<Group>();
+	
+	@ManyToMany(mappedBy = "users")
+	private Set<Notification> notifications = new HashSet<Notification>();
 	
 	public User() {}
 	public User(String crsid) {
