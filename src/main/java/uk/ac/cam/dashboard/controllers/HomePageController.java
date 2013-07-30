@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
 import com.googlecode.htmleasy.ViewWith;
 
-@Path("/")
+@Path("/dashboard")
 public class HomePageController extends ApplicationController{
 	
 	// Create the logger
