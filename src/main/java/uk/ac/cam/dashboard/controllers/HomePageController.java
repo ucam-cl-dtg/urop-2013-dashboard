@@ -33,20 +33,6 @@ public class HomePageController extends ApplicationController{
 		throw new RedirectException("/app/#notifications/");
 	}
 	
-	// Index
-	@GET @Path("/notifications") 
-	@Produces(MediaType.APPLICATION_JSON)
-	public Map indexHomePage() {
-		
-		user = initialiseUser();
-		
-		// Get user details
-		log.debug("Index GET: Getting user details");		
-		
-		// return ImmutableMap.of("deadlines", user.getUserDeadlinesMap());
-		return ImmutableMap.of("test", "test");
-	}
-	
 	// DOS Index
 	@GET @Path("signapp/DoS") @ViewWith("/soy/home_page.dos")
 	public Map dosHomePage() {

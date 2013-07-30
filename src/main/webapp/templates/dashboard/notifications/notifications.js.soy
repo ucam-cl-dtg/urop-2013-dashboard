@@ -1,42 +1,39 @@
 {namespace dashboard.notifications}
 
 /**
- * @param userID This is the user's CRSID as passed on by raven (retrieved from the request.getSession())
- * @param uName This username is retrieved via LDAP
+ * @param userId This is the user's CRSID as passed on by raven (retrieved from the request.getSession())
  * @param notifications The notifications associated with the user
- * @param error 1 if there is an error, 0 otherwise
- * @param errorMessage The message returned with the error
+ * @param offset
+ * @param limit
  */
-{template .notifications}
+{template .getNotificationsController}
 
-	{if $error == 0}
-	<div>Notification stream for {$uName} (CSRID {$userID})</div>
-	<ul>
-		{foreach $notification in $notifications}
-		<li>
-			<p>Message: {$notification.message}</p>
-			<p>Time: {$notification.timestamp}</p>
-			<p>users: {foreach $user in $notification.users}{$user.CRSID}, {/foreach}</p>
-		</li>
-		{/foreach}
-	</ul>
-	{/if}
-	{if $error == 1}
-		{$errorMessage}
-	{/if}
-	<hr />
-	<div>
-		<form method="GET">
-			<div>
-				<label>Start:</label><input type="text" name="start" />
-			</div>
-			<div>
-				<label>End:</label><input type="text" name="end" />
-			</div>
-			<div>
-				<input type="submit" value="Submit" />
-			</div>
-		</form>
+	<h3>Notification feed for {$userId}</h3>
+	<div class="row">
+		<div class="columns large-12 small-12">
+			<ul class="notification-feed" data-limit="{$limit}" data-offset="{$offset}">
+				{call .getNotifications}
+					{param notifications: $notifications /}
+				{/call}
+			</ul>
+		</div>
 	</div>
+	<div class="row">
+		<div class="columns large-12 small-12">
+			<a class="large button expand" id="show-more-notifications">Show more notifications</a>
+		</div>
+	</div>
+	<div class="hide" id="new-notifications-wrapper"></div>
+	
+{/template}
 
+/**
+ * @param notifications
+ */
+{template .getNotifications}
+	{foreach $notification in $notifications}
+	<li class="notification-feed-item">
+		<div>Message: {$notification.message} | Section: {$notification.section} | Link: {$notification.link} | Read: {$notification.read} | Time: {$notification.timestamp} | users: {foreach $user in $notification.users}{$user}, {/foreach}</div>
+	</li>
+	{/foreach}
 {/template}
