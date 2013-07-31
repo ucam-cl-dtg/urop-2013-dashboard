@@ -46,6 +46,7 @@ public class Api implements Mappable{
 	public int getId() { return id; }
 	public String getKey() { return key; }
 	public void setKey(String key) { this.key = key; }
+	
 	public User getUser() { return user; }
 	public void setUser(User user) { this.user = user;}
 	
