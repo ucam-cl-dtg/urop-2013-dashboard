@@ -2,7 +2,6 @@ package uk.ac.cam.dashboard.models;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.HashSet;
 import java.util.Map;
 
 import javax.persistence.Entity;
@@ -13,8 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-
-import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -33,6 +30,9 @@ public class Api implements Mappable{
 	
 	private String key;
 	
+	// Does not require a user
+	private boolean globalPermissions = false;
+	
 	public Api() {
 		String generatedKey = this.generateNewApiKey();
 		this.setKey(generatedKey);
@@ -49,6 +49,9 @@ public class Api implements Mappable{
 	
 	public User getUser() { return user; }
 	public void setUser(User user) { this.user = user;}
+	
+	public boolean isGlobalPermissions() { return globalPermissions; }
+	public void setGlobalPermissions(boolean globalPermissions) { this.globalPermissions = globalPermissions; }
 	
 	@Override
 	public Map<String, ?> toMap(){
