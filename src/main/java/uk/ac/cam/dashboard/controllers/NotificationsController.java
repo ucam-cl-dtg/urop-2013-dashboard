@@ -106,18 +106,21 @@ public class NotificationsController extends ApplicationController {
 			throw new RedirectException(NotificationsController.class, "successCallback");
 		}
 		
-		// Delete
-		@DELETE @Path("/{id}")
-		public void deleteNotification(@PathParam("id") int id) {
-			Notification.delete(id);
-			throw new RedirectException(NotificationsController.class, "successCallback");
-		}
-		
 		// Update
 		@PUT @Path("/{id}")
 		public void markNotificationAsRead(@PathParam("id") int id) {
-			Notification.markAsRead(id);
-			throw new RedirectException(NotificationsController.class, "successCallback");	
+			currentUser = initialiseUser();
+			Set<Notification> notifications = currentUser.getNotifications();
+			
+			for (Notification n : notifications) {
+				if ( n.getId() == id) {
+					Notification.markAsRead(id);
+					throw new RedirectException(NotificationsController.class, "successCallback");
+				}
+			}
+			
+			throw new RedirectException(NotificationsController.class, "errorCallback");
+			
 		}
 		
 		// Callbacks

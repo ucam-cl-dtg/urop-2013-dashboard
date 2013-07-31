@@ -34,16 +34,24 @@ public class ApiController extends ApplicationController {
 		User currentUser = initialiseUser();
 		
 		Api api = new Api();
-		
-		api.setUser(user);
+		api.setUser(currentUser);
 		
 		s.save(api);
 		
 		return ImmutableMap.of("user", currentUser.getCrsid(), "key", api.getKey());
 	}
 	
-	public boolean validateApiKey(String key, String userCrsid) {
-		return true;
+	public static boolean validateApiKey(String key, String userCrsid) {
+		User user = User.registerUser(userCrsid);
+		
+		for (Api a : user.getApis()) {
+			if ( key.equals(a.getKey()) ) {
+				return true;
+			}
+		}
+		
+		return false;
+		
 	}
 	
 }
