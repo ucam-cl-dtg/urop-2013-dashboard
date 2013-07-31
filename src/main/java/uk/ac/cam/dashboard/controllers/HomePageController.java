@@ -42,7 +42,7 @@ public class HomePageController extends ApplicationController{
 		List<?> result = nq.list();
 		List<Map<?,?>> notifications = new ArrayList<Map<?,?>>();
 		for (Object o:result) {
-			notifications.add(((Notification) o).toMap());
+			notifications.add(((Notification) o).toMap(currentUser));
 		}
 		
 		return ImmutableMap.of("user", currentUser.getCrsid(), "deadlines", currentUser.getUserDeadlinesMap(), "notifications", notifications);
