@@ -7,6 +7,7 @@ import javax.ws.rs.core.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.dashboard.controllers.ApiController;
 import uk.ac.cam.dashboard.controllers.DeadlinesController;
 import uk.ac.cam.dashboard.controllers.GroupsController;
 import uk.ac.cam.dashboard.controllers.HomePageController;
@@ -27,6 +28,7 @@ public class Dashboard extends Application {
     myServices.add(GroupsController.class);
     myServices.add(NotificationsController.class);
     myServices.add(HomePageController.class);
+    myServices.add(ApiController.class);
     
     // Add Htmleasy Providers
     log.debug("Adding Htmleasy providers");

@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -20,12 +19,13 @@ import org.hibernate.Session;
 import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
+import uk.ac.cam.dashboard.util.LDAPProvider;
+
 import com.google.common.collect.ImmutableMap;
 
 @Entity
 @Table(name="USERS")
 public class User {
-	
 	@Id
 	private String crsid;
 	
@@ -40,8 +40,11 @@ public class User {
 	@OneToMany(mappedBy = "owner")
 	private Set<Group> groups = new HashSet<Group>();
 	
+	@ManyToMany(mappedBy = "users")
+	private Set<Notification> notifications = new HashSet<Notification>();
+	
 	@OneToMany(mappedBy = "user")
-	private Set<NotificationUser> notificationsUsers = new HashSet<NotificationUser>(); 
+	private Set<Api> apis = new HashSet<Api>();
 	
 	public User() {}
 	public User(String crsid) {
@@ -60,6 +63,10 @@ public class User {
 
 	public Set<Group> getSubscriptions() { return this.subscriptions; }
 	public void addSubscriptions(Set<Group> subscriptions) { this.subscriptions.addAll(subscriptions); }
+	
+	public Set<Api> getApis() { return this.apis; }
+	public void addApi(Api api) { this.apis.add(api); }
+	public void addApis(Set<Api> apis) { this.apis.addAll(apis); }
 	
 	// Register user from CRSID
 	public static User registerUser(String crsid){
@@ -105,20 +112,6 @@ public class User {
 			userGroups.add(g.toMap());
 		}
 		return userGroups;
-	}
-	
-	// Get notifications as a map associated with current user
-	public Set<NotificationUser> getNotificationsUsers() {
-		return this.notificationsUsers;
-	}
-	
-	@Transient
-	public Set<Notification> getNotifications() {
-		Set<Notification> notifications = new HashSet<Notification>();
-		for (NotificationUser n:this.notificationsUsers) {
-			notifications.add(n.getNotification());
-		}
-		return notifications;
 	}
 	
 	// Get users deadlines as a map

@@ -1,13 +1,14 @@
 package uk.ac.cam.dashboard.queries;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import uk.ac.cam.dashboard.models.Notification;
-import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
@@ -24,13 +25,14 @@ public class NotificationQuery {
 	public static NotificationQuery all() {
 		return new NotificationQuery (
 			HibernateUtil.getTransactionSession()
-			.createCriteria(NotificationUser.class)
-			.addOrder(Order.desc("notification.timestamp"))
+			.createCriteria(Notification.class)
+			.addOrder(Order.desc("timestamp"))
 		);
 	}
 	
 	public NotificationQuery forUser(User user) {
-		criteria.add(Restrictions.eq("user.crsid", user.getCrsid()));
+		criteria.createAlias("users", "u")
+			.add(Restrictions.eq("u.crsid", user.getCrsid()));
 		return this;
 	}
 	

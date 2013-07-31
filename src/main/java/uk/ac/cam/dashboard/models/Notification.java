@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.Query;
@@ -28,13 +28,14 @@ public class Notification {
 	@GenericGenerator(name="increment", strategy="increment")
 	private int id;
 	
-	@OneToMany(mappedBy = "notification")
-	private Set<NotificationUser> notificationsUsers = new HashSet<NotificationUser>();
+	@ManyToMany
+	private Set<User> users = new HashSet<User>();
 	
 	private String message;
 	private Calendar timestamp;
 	private String section;
 	private String link;
+	private boolean read;
 	
 	public Notification() {}
 	public Notification(String message, String section, String link) {
@@ -42,11 +43,10 @@ public class Notification {
 		this.section = section;
 		this.link = link;
 		this.timestamp = Calendar.getInstance();
+		this.read = false;
 	}
 
-	public Map<String,?> toMap(User user) {
-		Session s = HibernateUtil.getTransactionSession();
-
+	public Map<String,?> toMap() {
 		ImmutableMap.Builder<String, Object> map = new ImmutableMap.Builder<String, Object>();
 		
 		map = map.put("id", this.id);
@@ -54,28 +54,27 @@ public class Notification {
 		map = map.put("section", this.section);
 		map = map.put("link", this.link);
 		map = map.put("timestamp", this.timestamp.getTime().toString());
-		
-		Query getNotificationUser = s.createQuery("from NotificationUser where notification = :notification and user = :user").setParameter("notification", this).setParameter("user", user);
-	  	NotificationUser notificationUser = (NotificationUser) getNotificationUser.uniqueResult();
-		map = map.put("read", notificationUser.isRead());
-	  	
+		map = map.put("read", this.read);
 		map = map.put("users", this.usersToSet());
 		
 		ImmutableMap<String, ?> finalMap = map.build();
 		return finalMap; 
 	}
 	
-	public Set<NotificationUser> getNotificationsUsers() {return this.notificationsUsers;}
-	public void setNotificationsUsers(Set<NotificationUser> notificationsUsers) {this.notificationsUsers = notificationsUsers;}
-	
+	public Set<User> getUsers() {return users;}
+	public void setUsers(Set<User> users) {this.users = users;}
+	public void addUser(User user) {this.users.add(user);}
 	public Set<String> usersToSet() {
 		HashSet<String> userCrsids = new HashSet<String>();
-		for (NotificationUser n:this.notificationsUsers) {
-			userCrsids.add(n.getUser().getCrsid());
+		for (User u:this.users) {
+			userCrsids.add(u.getCrsid());
 		}
 		return userCrsids;
 	}
-
+	
+	public boolean isRead() {return read;}
+	public void setRead(boolean read) {this.read = read;}
+	
 	// Should not be needed, but included for posterity
 	public int getId() { return id; }
 	public void setId(int id) { this.id = id; }
@@ -101,13 +100,13 @@ public class Notification {
 	  	s.delete(notification); 	
 	}
 	
-	public static void markAsRead(int notification, String user) {
+	public static void markAsRead(int id) {
 		Session s = HibernateUtil.getTransactionSession();
 		
-		Query getNotificationUser = s.createQuery("from NotificationUser where notification = :notification and user = :user").setParameter("notification", notification).setParameter("user", user);
-	  	NotificationUser notificationUser = (NotificationUser) getNotificationUser.uniqueResult();
-	  	notificationUser.setRead(true);
-	  	s.update(notificationUser);	
+		Query getNotification = s.createQuery("from Notification where id = :id").setParameter("id", id);
+	  	Notification notification = (Notification) getNotification.uniqueResult();
+	  	notification.setRead(true);
+	  	s.update(notification);	
 	}
 	
 	// Notification create
@@ -115,14 +114,12 @@ public class Notification {
 		Session s = HibernateUtil.getTransactionSession();
 			
 		Notification notification = new Notification(message, section, link);
-
+		
 		for (User u:users) {
-			NotificationUser notificationUser = new NotificationUser();
-			notificationUser.setNotification(notification);
-			notificationUser.setUser(u);
-			s.save(notificationUser);
+			notification.addUser(u);	
 		}
 		
+		s.save(notification);
 	}
 		
 }

@@ -76,10 +76,10 @@ public class NotificationsController extends ApplicationController {
 				map = map.put("read", read);
 			}
 			
-			List<Notification> result = nq.list();
+			List<?> result = nq.list();
 			List<Map<?,?>> notifications = new ArrayList<Map<?,?>>();
-			for (Notification n:result) {
-				notifications.add(n.toMap(currentUser));
+			for (Object o:result) {
+				notifications.add(((Notification) o).toMap());
 			}
 			map = map.put("notifications", notifications);
 			
@@ -116,8 +116,7 @@ public class NotificationsController extends ApplicationController {
 		// Update
 		@PUT @Path("/{id}")
 		public void markNotificationAsRead(@PathParam("id") int id) {
-			currentUser = initialiseUser();
-			Notification.markAsRead(id, currentUser.getCrsid());
+			Notification.markAsRead(id);
 			throw new RedirectException(NotificationsController.class, "successCallback");	
 		}
 		
