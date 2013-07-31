@@ -109,20 +109,12 @@ function asyncLoad(elems) {
     elems.each(function(i) {
        var elem = $(elems[i]),
            data_path = getLocation(elem.attr("data-path")),
-           template_name = elem.attr("template-name"),
-           template_function = elem.attr("template-function"),
-           template;
-
-       if (template_function)
-            template = getTemplate(template_function);
-       else
-            template = template_name;
-
+           template_name = elem.attr("template-name");
        $.get(data_path, function(json) {
-            applyTemplate(elem, template, json);
+            applyTemplate(elem, template_name, json);
        }).fail(function(err) {
             console.log(err);
-            applyTemplate(elem, template, {});
+            applyTemplate(elem, template_name, {});
        })
     });
 }

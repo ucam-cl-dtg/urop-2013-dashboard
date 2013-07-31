@@ -2,6 +2,7 @@ package uk.ac.cam.dashboard.models;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +19,6 @@ import org.hibernate.Session;
 
 import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
 import uk.ac.cam.dashboard.util.HibernateUtil;
-
-import uk.ac.cam.dashboard.util.LDAPProvider;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -155,6 +154,16 @@ public class User {
 			userDeadlines.add(d.toMap());
 		}
 		return userDeadlines;
+	}
+	
+	public List<String> getUserApisMap(){
+		List<String> userApis = new ArrayList<String>();
+		
+		for(Api a : apis){
+			userApis.add(a.getKey());
+		}
+		
+		return userApis;
 	}
 	
 	// equals

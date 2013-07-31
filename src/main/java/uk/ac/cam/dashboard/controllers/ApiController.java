@@ -23,7 +23,7 @@ public class ApiController extends ApplicationController {
 	public ImmutableMap<String, ?> getUserApiKeys() {
 		User currentUser = initialiseUser();
 		
-		return ImmutableMap.of("user", currentUser.getCrsid(), "keys", currentUser.getApis());
+		return ImmutableMap.of("user", currentUser.getCrsid(), "keys", currentUser.getUserApisMap());
 	}
 	
 	@GET @Path("/new")
@@ -34,9 +34,10 @@ public class ApiController extends ApplicationController {
 		User currentUser = initialiseUser();
 		
 		Api api = new Api();
-		currentUser.addApi(api);
-
-		s.save(currentUser);
+		
+		api.setUser(user);
+		
+		s.save(api);
 		
 		return ImmutableMap.of("user", currentUser.getCrsid(), "key", api.getKey());
 	}
