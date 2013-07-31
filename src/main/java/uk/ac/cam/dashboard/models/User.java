@@ -62,6 +62,8 @@ public class User {
 
 	public Set<Group> getSubscriptions() { return this.subscriptions; }
 	public void addSubscriptions(Set<Group> subscriptions) { this.subscriptions.addAll(subscriptions); }
+
+	public Set<Notification> getNotifications() { return this.notifications; }
 	
 	public Set<Api> getApis() { return this.apis; }
 	public void addApi(Api api) { this.apis.add(api); }
