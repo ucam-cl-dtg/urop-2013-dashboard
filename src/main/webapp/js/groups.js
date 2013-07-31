@@ -7,7 +7,7 @@ moduleScripts['dashboard']['groups'] = {
 			  // Ajax delete request
 			      var deleteData = $.ajax({
 			            type: 'DELETE',
-			            url: "/signapp/groups/" + group_id,
+			            url: "/dashboard/groups/" + group_id,
                         success: function(resultData) {
                             $("#"+group_id).hide(2000, function() {
                                 $(this).remove();
@@ -16,7 +16,7 @@ moduleScripts['dashboard']['groups'] = {
 			      });
 			  });
 			  
-			  $(".member_token_input").tokenInput("/signapp/groups/queryCRSID", {
+			  $(".member_token_input").tokenInput("/dashboard/groups/queryCRSID", {
 			      method: "post",
 			      tokenValue: "crsid",
 			      propertyToSearch: "crsid",
@@ -30,7 +30,7 @@ moduleScripts['dashboard']['groups'] = {
 			      tokenFormatter: function(item) { return "<li><p>" + item.name + " (" + item.crsid + ")</p></li>" },                           
 			  });
 			  
-			  $(".exgroup_token_input").tokenInput("/signapp/groups/queryGroup", {
+			  $(".exgroup_token_input").tokenInput("/dashboard/groups/queryGroup", {
 			    method: "post",
 			    tokenValue: "id",
 			    propertyToSearch: "name",

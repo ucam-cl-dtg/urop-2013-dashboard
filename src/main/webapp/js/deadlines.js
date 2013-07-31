@@ -5,7 +5,7 @@ moduleScripts['dashboard']['deadlines'] = {
 	          // Create deadline
               $(".datepicker").datepicker({dateFormat: "dd/mm/yy"});
               
-    	      $(".deadline_user_token_input").tokenInput("/signapp/groups/queryCRSID", {
+    	      $(".deadline_user_token_input").tokenInput("/dashboard/groups/queryCRSID", {
     	        method: "post",
     	        tokenValue: "crsid",
     	        propertyToSearch: "crsid",
@@ -19,7 +19,7 @@ moduleScripts['dashboard']['deadlines'] = {
     	        tokenFormatter: function(item) { return "<li><p>" + item.name + " (" + item.crsid + ")</p></li>" },                           
     	      });
     	             
-    	      $(".deadline_group_token_input").tokenInput("/signapp/deadlines/queryGroup", {
+    	      $(".deadline_group_token_input").tokenInput("/dashboard/deadlines/queryGroup", {
     	        method: "post",
     	        tokenValue: "group_id",
     	        propertyToSearch: "group_name",
@@ -35,7 +35,7 @@ moduleScripts['dashboard']['deadlines'] = {
               // Ajax delete request
                   var deleteData = $.ajax({
                         type: 'DELETE',
-                        url: "/signapp/deadlines/" + deadline_id,
+                        url: "/dashboard/deadlines/" + deadline_id,
                         success: function(resultData) {
                             $("#"+deadline_id).hide(2000, function() {
                                 $(this).remove();
