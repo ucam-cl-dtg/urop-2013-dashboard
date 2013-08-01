@@ -37,7 +37,7 @@ public class GroupsController extends ApplicationController {
 		// Index
 		@GET @Path("/") 
 		@Produces(MediaType.APPLICATION_JSON)
-		public Map indexGroups() {
+		public Map<String, ?> indexGroups() {
 
 			currentUser = initialiseUser();
 			
@@ -50,9 +50,10 @@ public class GroupsController extends ApplicationController {
 			
 			currentUser = initialiseUser();
 
-			int id= groupForm.handle(currentUser);
+			groupForm.handle(currentUser);
 			
-			throw new RedirectException("/app/#signapp/groups");
+			log.debug("Redirecting to supervisor page");
+			throw new RedirectException("/app/#dashboard/supervisor");
 		}
 		
 		// Import from LDAP
@@ -61,15 +62,16 @@ public class GroupsController extends ApplicationController {
 			
 			currentUser = initialiseUser();
 
-			int id= groupForm.handleImport(currentUser);
+			groupForm.handleImport(currentUser);
 			
-			throw new RedirectException("/app/#signapp/groups");
+			log.debug("Redirecting to supervisor page");
+			throw new RedirectException("/app/#signapp/supervisor");
 		}
 		
 		//Edit
 		@GET @Path("/{id}/edit") //@ViewWith("/soy/groups.edit")
 		@Produces(MediaType.APPLICATION_JSON)
-		public Map editGroup(@PathParam("id") int id) {
+		public Map<String, ?> editGroup(@PathParam("id") int id) {
 			
 			currentUser = initialiseUser();
 			
@@ -111,7 +113,7 @@ public class GroupsController extends ApplicationController {
 		// Find users
 		@POST @Path("/queryCRSID")
 		@Produces(MediaType.APPLICATION_JSON)
-		public List queryCRSId(String q) {
+		public List<ImmutableMap<String, ?>> queryCRSId(String q) {
 			
 			//Remove q= prefix
 			String x = q.substring(2);
@@ -125,7 +127,7 @@ public class GroupsController extends ApplicationController {
 		// Find groups from LDAP
 		@POST @Path("/queryGroup")
 		@Produces(MediaType.APPLICATION_JSON)
-		public List queryGroup(String q) {
+		public List<ImmutableMap<String, ?>> queryGroup(String q) {
 			
 			//Remove q= prefix
 			String x = q.substring(2);

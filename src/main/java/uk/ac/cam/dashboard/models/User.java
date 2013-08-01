@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -29,7 +30,7 @@ public class User {
 	
 	private String username;
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<DeadlineUser> deadlines = new HashSet<DeadlineUser>();
 
 	@ManyToMany(mappedBy = "users")
@@ -41,7 +42,7 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private Set<Api> apis = new HashSet<Api>();
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<NotificationUser> notifications = new HashSet<NotificationUser>();
 	
 	public User() {}
@@ -52,6 +53,9 @@ public class User {
 	
 	public String getCrsid() {return crsid;}
 	public void setCrsid(String crsid) {this.crsid = crsid;}
+	
+	public String getUsername() {return username;}
+	public void setUsername(String username) {this.username = username;}
 	
 	public Set<DeadlineUser> getDeadlines() { return deadlines; }
 	public void addDeadlines(Set<DeadlineUser> deadlines) { this.deadlines.addAll(deadlines); }

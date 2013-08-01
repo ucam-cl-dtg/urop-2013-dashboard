@@ -31,7 +31,7 @@ public class DeadlineQuery {
 		return new DeadlineQuery (
 			HibernateUtil.getTransactionSession()
 			.createCriteria(Deadline.class)
-			.addOrder(Order.desc("datetime"))
+			.addOrder(Order.asc("datetime"))
 		);
 	}
 	
@@ -40,7 +40,7 @@ public class DeadlineQuery {
 			HibernateUtil.getTransactionSession()
 			.createCriteria(DeadlineUser.class)
 			.createAlias("deadline", "d")
-			.addOrder(Order.desc("d.datetime"))
+			.addOrder(Order.asc("d.datetime"))
 		);
 	}
 	

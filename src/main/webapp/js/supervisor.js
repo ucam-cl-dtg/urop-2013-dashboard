@@ -2,6 +2,7 @@ moduleScripts['dashboard']['supervisor'] = {
     'index' : 
         [
             function() {
+            // Delete group
               $(".group_delete").click(function() {
               var group_id = $(this).parents("form").attr("id");
               // Ajax delete request
@@ -41,7 +42,7 @@ moduleScripts['dashboard']['supervisor'] = {
                 tokenFormatter: function(item) { return "<li><p>" + item.name + "</p></li>" },
               });
               
-              // Create deadline
+              // Create deadline datepicker
               $(".datepicker").datepicker({dateFormat: "dd/mm/yy"});
               
               $(".deadline_user_token_input").tokenInput("/dashboard/groups/queryCRSID", {
@@ -76,15 +77,29 @@ moduleScripts['dashboard']['supervisor'] = {
                         type: 'DELETE',
                         url: "/dashboard/deadlines/" + deadline_id,
                         success: function(resultData) {
-                            $("#"+deadline_id).hide(2000, function() {
-                                $(this).remove();
-                            });
-                            $("#d_"+deadline_id).hide(2000, function() {
-                                $(this).remove();
-                            });
+                            console.log(resultData);
+                            console.log(resultData.success);
+                            if(resultData.success==true){
+                                $("#"+resultData.id).hide(2000, function() {
+                                    $(this).remove();
+                                });
+                                $("#d_"+resultData.id).hide(2000, function() {
+                                    $(this).remove();
+                                });
+                            }
                         }
                   });
               });
+              
+               // Edit deadline
+              $(".deadline_edit").click(function() {
+                alert("clicked");
+                var deadline_id = $(this).parents('form').attr("id");
+                 var subpanel = $(this).parents('form').find('.deadline_subpanel');
+                 loadModule(subpanel, "dashboard/deadlines/"+deadline_id+"/edit", "dashboard.groups.edit", function(){alert("group edit");});
+              });
+              
+              
             }
         ]
 }

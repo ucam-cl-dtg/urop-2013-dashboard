@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -38,7 +39,7 @@ public class Deadline implements Comparable<Deadline>, Mappable {
 	//@Temporal(TemporalType.TIMESTAMP)
 	private Calendar datetime;
 
-	@OneToMany(mappedBy = "deadline")
+	@OneToMany(mappedBy = "deadline", cascade = CascadeType.ALL)
 	private Set<DeadlineUser> users = new HashSet<DeadlineUser>();
 	
 	@ManyToOne
@@ -89,15 +90,6 @@ public class Deadline implements Comparable<Deadline>, Mappable {
 	  	return deadline;
 	}
 	
-	public static void deleteDeadline(int id){
-		
-		Session session = HibernateUtil.getTransactionSession();
-		
-		Query getDeadline = session.createQuery("from Deadline where id = :id").setParameter("id", id);
-	  	Deadline deadline = (Deadline) getDeadline.uniqueResult();	
-	  	session.delete(deadline);
-	}
-
 	// Get formatted Date and time
 	public ImmutableMap<String, ?> getDateMap(){
 		ImmutableMap<String, ?> dateMap;
