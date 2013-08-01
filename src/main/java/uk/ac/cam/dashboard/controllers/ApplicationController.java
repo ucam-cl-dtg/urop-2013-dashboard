@@ -86,19 +86,4 @@ public class ApplicationController {
 		GLOBAL_API_WITH_USER
 	}
 	
-	/*
-	if ( validateRequest() == Permissions.NO_PERMISSIONS ) {
-		throw new RedirectException(NotificationsController.class, "errorCallback");
-	} else if ( validateRequest() == Permissions.GLOBAL_API ) {
-		// A user must be provided
-		throw new RedirectException(NotificationsController.class, "errorCallback");
-	} else if ( validateRequest() == Permissions.GLOBAL_API_WITH_USER ) {
-		currentUser = initialiseSpecifiedUser(sRequest.getParameter("user"));
-	} else if ( validateRequest() == Permissions.USER_API ) {
-		currentUser = initialiseSpecifiedUser(sRequest.getParameter("user"));
-	} else if ( validateRequest() == Permissions.RAVEN_SESSION ) {
-		currentUser = initialiseUser();
-	}
-	*/
-	
 }

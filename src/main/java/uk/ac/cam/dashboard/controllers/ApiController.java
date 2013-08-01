@@ -21,6 +21,8 @@ import com.google.common.collect.ImmutableMap;
 @Path("/dashboard/api")
 public class ApiController extends ApplicationController {
 	
+	// Creation
+	
 	@GET @Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ImmutableMap<String, ?> getUserApiKeys() {
@@ -42,6 +44,19 @@ public class ApiController extends ApplicationController {
 		s.save(api);
 		
 		return ImmutableMap.of("user", currentUser.getCrsid(), "key", api.getKey());
+	}
+	
+	@GET @Path("/newGlobal")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map<String, String> getNewGlobalApiKey() {
+		Session s = HibernateUtil.getTransactionSession();
+
+		Api api = new Api();
+		api.setGlobalPermissions(true);
+		
+		s.save(api);
+		
+		return ImmutableMap.of("key", api.getKey());
 	}
 	
 	// Validation
