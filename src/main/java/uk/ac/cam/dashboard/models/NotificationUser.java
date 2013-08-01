@@ -7,7 +7,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.Session;
 import org.hibernate.annotations.GenericGenerator;
+
+import uk.ac.cam.dashboard.queries.NotificationQuery;
+import uk.ac.cam.dashboard.util.HibernateUtil;
 
 @Entity
 @Table(name="NOTIFICATIONS_USERS")
@@ -42,5 +46,42 @@ public class NotificationUser {
 	
 	public Notification getNotification() { return notification; }
 	public void addNotification(Notification notification) { this.notification = notification; }
+	
+	public boolean getRead() { return read; }
+	public void setRead(boolean read) { this.read = read; }
+	
+	public static boolean markAsRead(User user, int notificationId){
 		
+		Notification notification = NotificationQuery.get(notificationId);
+		
+		NotificationQuery nq = NotificationQuery.all();
+		nq.byUser(user);
+		nq.byNotification(notification);
+		
+		NotificationUser nu = nq.uniqueResult();
+		
+		Session session = HibernateUtil.getTransactionSession();
+		nu.setRead(true);
+		session.update(nu);
+		
+		return nu.getRead();
+	}
+	
+	public static boolean markAsUnread(User user, int notificationId){
+		
+		Notification notification = NotificationQuery.get(notificationId);
+		
+		NotificationQuery nq = NotificationQuery.all();
+		nq.byUser(user);
+		nq.byNotification(notification);
+		
+		NotificationUser nu = nq.uniqueResult();
+		
+		Session session = HibernateUtil.getTransactionSession();
+		nu.setRead(false);
+		session.update(nu);
+		
+		return nu.getRead();
+	}
+	
 }

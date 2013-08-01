@@ -31,7 +31,6 @@ public class Notification {
 	private Calendar timestamp;
 	private String section;
 	private String link;
-	private boolean read;
 	
 	public Notification() {}
 	public Notification(String message, String section, String link) {
@@ -39,7 +38,6 @@ public class Notification {
 		this.section = section;
 		this.link = link;
 		this.timestamp = Calendar.getInstance();
-		this.read = false;
 	}
 
 	public Map<String,?> toMap() {
@@ -50,14 +48,12 @@ public class Notification {
 		map = map.put("section", this.section);
 		map = map.put("link", this.link);
 		map = map.put("timestamp", this.timestamp.getTime().toString());
-		map = map.put("read", this.read);
 		
 		ImmutableMap<String, ?> finalMap = map.build();
 		return finalMap; 
 	}
 	
-	public boolean getRead() {return read;}
-	public void setRead(boolean read) {this.read = read;}
+	public int getId() {return id;}
 	
 	public String getMessage() { return message; }
 	public void setMessage(String message) { this.message = message; }

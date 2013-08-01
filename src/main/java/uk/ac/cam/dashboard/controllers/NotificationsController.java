@@ -6,15 +6,21 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jboss.resteasy.annotations.Form;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.dashboard.forms.NotificationForm;
 import uk.ac.cam.dashboard.models.Notification;
+import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
 
@@ -32,7 +38,7 @@ public class NotificationsController extends ApplicationController {
 		// Index
 		@GET @Path("/")
 		@Produces(MediaType.APPLICATION_JSON)
-		public Map<String, ?> getNotifications( @QueryParam("offset") Integer offset,
+		public Map<String, ?> getNotifications(@QueryParam("offset") Integer offset,
 												@QueryParam("limit") Integer limit,
 												@QueryParam("section") String section,
 												@QueryParam("read") Boolean read) 
@@ -81,41 +87,27 @@ public class NotificationsController extends ApplicationController {
 			
 		}
 		
-//		// Create
-//		@POST @Path("/")
-//		public void createNotification( @FormParam("message") String message,
-//									    @FormParam("section") String section,
-//									    @FormParam("link") String link,
-//									    @FormParam("users") String users ) throws RedirectException {
-//			String [] userStrings = users.split(",");
-//			Set<User> userSet = new HashSet<User>();
-//			for (String u:userStrings) {
-//				User user = User.registerUser(u);
-//				userSet.add(user);
-//			}
-//			
-//			Notification.pushNotificationToUsers(message, section, link, userSet);
-//			
-//			throw new RedirectException(NotificationsController.class, "successCallback");
-//		}
-//		
-//		// Update
-//		@PUT @Path("/{id}")
-//		public void markNotificationAsRead(@PathParam("id") int id) {
-//			currentUser = initialiseUser();
-//			Set<Notification> notifications = currentUser.getNotifications();
-//			
-//			for (Notification n : notifications) {
-//				if ( n.getId() == id) {
-//					Notification.markAsRead(id);
-//					throw new RedirectException(NotificationsController.class, "successCallback");
-//				}
-//			}
-//			
-//			throw new RedirectException(NotificationsController.class, "errorCallback");
-//			
-//		}
-//		
+		// Create
+		@POST @Path("/")
+		public void createNotification(@Form NotificationForm notificationForm) throws RedirectException {
+			
+			notificationForm.handle();
+			
+			throw new RedirectException("/app/#dashboard/notifications");
+		}
+		
+		// Update
+		@PUT @Path("/{id}")
+		public void markNotificationAsRead(@PathParam("id") int id) {
+	
+			currentUser = initialiseUser();
+			
+			NotificationUser.markAsRead(currentUser, id);
+			
+			throw new RedirectException("/app/#dashboard/notifications");
+			
+		}
+		
 //		// Callbacks
 //		@GET @Path("/success")
 //		@Produces(MediaType.APPLICATION_JSON)

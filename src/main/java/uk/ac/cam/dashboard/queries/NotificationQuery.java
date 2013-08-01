@@ -3,12 +3,14 @@ package uk.ac.cam.dashboard.queries;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.dashboard.models.Notification;
+import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
@@ -31,6 +33,23 @@ public class NotificationQuery {
 			.createCriteria(Notification.class)
 			.addOrder(Order.desc("timestamp"))
 		);
+	}
+	
+	public static Notification get(int id) {
+		Session session = HibernateUtil.getTransactionSession();
+		Notification n = (Notification) session
+			.createQuery("from Notification where id = :id")
+			.setParameter("id", id)
+			.uniqueResult();
+			
+			return n;
+	}
+	
+	public NotificationQuery byNotification(Notification notification) {
+		log.debug("Getting notification id: " + notification.getId());
+		criteria.createAlias("users", "nu")
+		.add(Restrictions.eq("nu.notification", notification));
+	return this;
 	}
 	
 	public NotificationQuery byUser(User user) {
@@ -60,8 +79,14 @@ public class NotificationQuery {
 		return this;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Notification> list() {
 		return this.criteria.list();
+	}
+
+	public NotificationUser uniqueResult() {
+		NotificationUser notificationUser = (NotificationUser)criteria.uniqueResult();
+		return notificationUser;
 	}
 	
 }
