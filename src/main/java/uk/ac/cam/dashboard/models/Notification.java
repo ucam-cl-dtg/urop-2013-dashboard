@@ -56,7 +56,7 @@ public class Notification {
 		return finalMap; 
 	}
 	
-	public boolean isRead() {return read;}
+	public boolean getRead() {return read;}
 	public void setRead(boolean read) {this.read = read;}
 	
 	public String getMessage() { return message; }

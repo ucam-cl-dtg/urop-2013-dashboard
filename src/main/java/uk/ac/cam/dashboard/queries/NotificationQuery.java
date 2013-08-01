@@ -1,18 +1,21 @@
 package uk.ac.cam.dashboard.queries;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
 public class NotificationQuery {
+	
+	// Create the logger
+	private static Logger log = LoggerFactory.getLogger(NotificationQuery.class);
 	
 	private Criteria criteria;
 	
@@ -30,9 +33,10 @@ public class NotificationQuery {
 		);
 	}
 	
-	public NotificationQuery forUser(User user) {
-		criteria.createAlias("users", "u")
-			.add(Restrictions.eq("u.crsid", user.getCrsid()));
+	public NotificationQuery byUser(User user) {
+			log.debug("Getting notifications for user: " + user.getCrsid());
+			criteria.createAlias("users", "nu")
+			.add(Restrictions.eq("nu.user", user));
 		return this;
 	}
 	
