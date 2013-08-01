@@ -39,7 +39,7 @@ public class DeadlinesController extends ApplicationController {
 
 		currentUser = initialiseUser();
 		
-		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.getUserDeadlinesMap(), "cdeadlines", currentUser.getUserCreatedDeadlinesMap());
+		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.getUserDeadlinesMap());
 	}
 	
 	// Create
@@ -49,12 +49,12 @@ public class DeadlinesController extends ApplicationController {
 		
 		int id = deadlineForm.handleCreate(currentUser);
 		
-		throw new RedirectException("/app/#signapp/deadlines");
+		throw new RedirectException("/app/#dashboard/supervisor");
 	}
 	
 
 //	// Edit
-//	@GET @Path("/{id}/edit") //@ViewWith("/soy/deadlines.edit")
+//	@GET @Path("/{id}/edit") 
 //	@Produces(MediaType.APPLICATION_JSON)
 //	public Map editDeadline(@PathParam("id") int id) {
 //		

@@ -34,6 +34,8 @@ public class Deadline implements Comparable<Deadline>, Mappable {
 	private String title;
 	private String message;
 	private String url;
+	
+	//@Temporal(TemporalType.TIMESTAMP)
 	private Calendar datetime;
 
 	@OneToMany(mappedBy = "deadline")

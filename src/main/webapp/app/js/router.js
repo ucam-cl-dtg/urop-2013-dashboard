@@ -25,22 +25,12 @@ function executeModuleScripts(elem, templateName) {
 }
 
 //
-// Sidebar
-//
-
-function resizeSidebar() {
-    var sidebarHeight = Math.max($('.main').outerHeight(), $(window).height() - $('.sidebar').offset().top);
-    $('.sidebar').height(sidebarHeight);
-}
-
-//
 // Call JavaScript after module has been loaded
 //
 
 function postModuleLoad (elem, templateName) {
   executeModuleScripts(elem, templateName);
   $(document).foundation();
-  resizeSidebar();
 }
 
 //
@@ -109,12 +99,20 @@ function asyncLoad(elems) {
     elems.each(function(i) {
        var elem = $(elems[i]),
            data_path = getLocation(elem.attr("data-path")),
-           template_name = elem.attr("template-name");
+           template_name = elem.attr("template-name"),
+           template_function = elem.attr("template-function"),
+           template;
+
+       if (template_function)
+            template = getTemplate(template_function);
+       else
+            template = template_name;
+
        $.get(data_path, function(json) {
-            applyTemplate(elem, template_name, json);
+            applyTemplate(elem, template, json);
        }).fail(function(err) {
             console.log(err);
-            applyTemplate(elem, template_name, {});
+            applyTemplate(elem, template, {});
        })
     });
 }
@@ -148,6 +146,5 @@ function loadModule(elem, location, template, callback) {
             callback.call(elem);
    }).fail(function() {
        elem.html('<h3>Error: could not load ' + location + '</h3>');
-       resizeSidebar();
    });
 }

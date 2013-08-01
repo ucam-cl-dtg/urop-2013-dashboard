@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.dashboard.models.User;
+import uk.ac.cam.dashboard.util.SessionManager;
 import uk.ac.cam.dashboard.util.UserLookupManager;
 
 public class ApplicationController {
@@ -22,16 +23,14 @@ public class ApplicationController {
 	
 	protected User initialiseUser() {
 		
-		// This will extract the CRSID of the current user and return it:
 		log.debug("Getting crsid from raven");	
 		String crsid = (String) sRequest.getSession().getAttribute("RavenRemoteUser");
 		
-		// Create UserLookupManager for this user
-		log.debug("Creating userLookupManager");	
-		ulm = UserLookupManager.getUserLookupManager(crsid);
-		
-		// Register or return the user
-		return User.registerUser(crsid);
+		if(crsid!=null){
+			sRequest.getSession().setAttribute("UserPermissions", new SessionManager(crsid));			
+		}
+
+		return ((SessionManager)sRequest.getSession().getAttribute("UserPermissions")).getUser();
 	}
 	
 	// temporary for testing

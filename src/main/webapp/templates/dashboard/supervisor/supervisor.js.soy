@@ -2,28 +2,210 @@
 
 /**
  * Dashboard: supervisor page
- * @param groups
- * @param errors
+ * @param cdeadlines
+ * @param cgroups
  */
 {template .index }
+      
+	<h2>Supervisor Homepage</h2>
         
-        {if $errors.auth}
-        <span class="round alert label">You are not authorised to edit that group</span>
-        {/if}
-        {if $errors.get}
+    <div class="section-container auto" data-section>
+        <section>
+            <p class="title" data-section-title><a href="#panel1">Manage Deadlines</a></p>
+            <div class="content" data-section-content>
+            
+                {call .deadline}
+                    {param cdeadlines: $cdeadlines /}
+                {/call}
+                
+            </div>
+            </section>
+            <section>
+            <p class="title" data-section-title><a href="#panel2">Manage Groups</a></p>
+            <div class="content" data-section-content>
 
-        {/if}
+                {call .group}
+                    {param cgroups: $cgroups /}
+                {/call}
+
+            </div>
+        </section>
+    </div>
+    
+
+
+				
+{/template}
+
+/**
+ * Manage deadlines
+ * @param cdeadlines
+ *
+ */
+{template .deadline }
+
+        <div class="row">
+            <ul class="panels">
+
+           <!--display a row for each created deadline-->
+            
+            {foreach $deadline in $cdeadlines}
+            <form id="{$deadline.id}"> 
+                <li class="panel-wrapper columns large-12">
+                    <div class="list-panel">
+                        <div class="row list-inner-panel">
+                            <div class="columns large-9 small-9"><strong>{$deadline.name}</strong> - due {$deadline.datetime.nicedate} at {$deadline.datetime.hour}:{$deadline.datetime.minute}<br/><em>{$deadline.message}</em></div>
+                            <div class="columns large-3 small-3 text-right">
+                                <div class="icon-button-wrapper">
+                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array expand-sub-panel">&#43;</a>
+                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader deadline_edit"  data-target="#dashboard/deadlines/{$deadline.id}/edit">&#83;</a>
+                                    <a class="icon-button panel-icon-button websymbols-icon deadline_delete">&#39;</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="sub-panel">
+                        <li class="list-sub-panel">
+                            <div class="row list-inner-sub-panel">
+                            
+                                <!-- display members loop -->
+                       
+                                {foreach $user in $deadline.users}
+                                <div class="columns large-7 small-7">
+                                {$user.name} ({$user.crsid})
+                                </div>
+                                {ifempty}
+                                <div class="columns large-7 small-7">
+                                No users associated with this deadline
+                                </div>
+                                {/foreach}
+
+                                <!-- end display members loop -->
+                                <div class="columns large-5 small-5 text-right">
+                                    <div class="icon-button-wrapper">
+                                        <!--edit members buttons?-->
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                </form>
+                {ifempty}
+                <div class="columns large-12 small-12">
+                    You have not created any deadlines
+                </div>
+                {/foreach}
+                
+                <!-- end groups display deadline--> 
+                
+            </ul>
+        </div>
+    
+    <h3>Create new deadline</h3>
+    <form name="deadlineForm" action="/dashboard/deadlines" method="post" class="custom" data-abide>
+        <div class="row">
+            <div class="columns large-2 small-4 field-label" >Deadline name</div>
+            <div class="columns large-10 small-8">
+                <input type="text" name="title" placeholder="Deadline name" required/>
+            </div>
+        </div>
+         
+        <div class="row">
+            <div class="columns large-2 small-4 field-label">Due date</div>
+            <div class="columns large-10 small-8">
+                <div class="row">
+                    <div class="columns large-6">
+                        <input type="text" placeholder="Date" class="datepicker" name="date" required/>
+                    </div>
+                    <div class="large-6 columns">
+                        <div class="row collapse">
+                            <div class="large-3 columns">
+                                <span class="prefix field-label">Hour</span>
+                            </div>
+                            <div class="large-3 columns">
+                                <select name="hour">
+                                    {for $i in range(0,24)}
+                                        <option>{$i}</option> 
+                                    {/for}
+                                </select>
+                            </div>
+                            <div class="large-3 columns">
+                                <span class="prefix field-label">Minute</span>
+                            </div>
+                            <div class="large-3 columns">
+                                <select name="minute">
+                                    {for $i in range(0,60)}
+                                        <option>{$i}</option> 
+                                    {/for}
+                                </select>
+                            </div>                   
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="columns large-2 small-4 field-label">URL</div>
+            <div class="columns large-10 small-8">
+                <input type="text" name="url" placeholder="(optional) URL of event, question set etc." />
+            </div>
+        </div>
+        <div class="row">
+            <div class="columns large-2 small-4 field-label">Message</div>
+            <div class="columns large-10 small-8">
+                <textarea name="message" placeholder="(optional) Deadline description eg. sign up for OOP supervisions"></textarea>
+            </div>
+        </div>
         
-		<h2>Groups</h2>
-		
-		<h3>Current groups</h3>
-		
+         <div class="row">
+            <div class="columns large-2 small-4 field-label">Recipients</div>
+        </div>
+         <!-- START ADD USERS AS RECIPIENTS -->
+
+        <div class="row">
+                <div class="columns large-2 small-4 field-label">Add users</div>
+                <div class="columns large-10 small-8">
+                    <input type="text" class="deadline_user_token_input" name="users[]"/>
+                </div>
+            </div>
+
+         <!-- END ADD USERS AS RECIPIENTS -->
+            
+         <!-- START ADD GROUPS AS RECIPIENTS -->
+         
+        <div class="row">
+                <div class="columns large-2 small-4 field-label">Add groups</div>
+                <div class="columns large-10 small-8">
+                    <input type="text" class="deadline_group_token_input" name="groups[]"/>
+                </div>
+            </div>
+            
+         <!-- END ADD GROUPS AS RECIPIENTS -->
+         
+         <div class="row">
+            <div class="columns large-12 small-12">
+                <input type="submit" value="Create deadline" class="button"/>
+            </div>
+        </div>
+        
+    </form>       
+
+{/template}
+
+/**
+ * Manage groups
+ * @param cgroups
+ *
+ */
+{template .group }
+
         <div class="row">
             <ul class="panels">
             
             <!--display a row for each group-->
             
-            {foreach $group in $groups}
+            {foreach $group in $cgroups}
             <form id="{$group.id}"> 
                 <li class="panel-wrapper columns large-12">
                     <div class="list-panel">
@@ -32,7 +214,7 @@
                             <div class="columns large-5 small-5 text-right">
                                 <div class="icon-button-wrapper">
                                     <a class="icon-button panel-icon-button websymbols-icon icon-button-array expand-sub-panel">&#43;</a>
-                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader group_edit" data-target="#signapp/groups/{$group.id}/edit">&#83;</a>
+                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader group_edit" data-target="#dashboard/groups/{$group.id}/edit">&#83;</a>
                                     <a class="icon-button panel-icon-button websymbols-icon group_delete">&#39;</a>
                                 </div>
                             </div>
@@ -79,18 +261,12 @@
             </ul>
         </div>
     
-        <h3>Create new group</h3>     	
-        <form id="group" name="group" action="/signapp/groups" method="post"  data-abide>
+        <h3>Create new group</h3>       
+        <form id="group" name="group" action="/dashboard/groups" method="post"  data-abide>
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Group name</div>
                 <div class="columns large-10 small-8">
-                    {if $errors.noname}
-                    <label class="error">Error</label>
-                    <input type="text" name="title" class="error" required/>
-                    <small class="error">No group name specified</small>                             
-                    {else}
                     <input type="text" placeholder="Group name" name="title" id="title" required/>
-                    {/if}
                 </div>
             </div>
             <div class="row">
@@ -108,21 +284,11 @@
         
         <h3>Import Existing Group (LDAP)</h3>    
         <h6 class="subheader">Small public groups only</h6>         
-        <form id="import_group" name="import_group" action="/signapp/groups/import" method="post" data-abide>
+        <form id="import_group" name="import_group" action="/dashboard/groups/import" method="post" data-abide>
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Import Group</div>
                 <div class="columns large-10 small-8">
-                {if $errors.importsize}
-                  <label class="error">Error</label>
-                  <input type="text" name="import_id" class="exgroup_token_input error"/>
-                  <small class="error">Invalid group size - group must have at least one member and less than 50 members</small>                
-                {elseif $errors.noimport}
-                  <label class="error">Error</label>
-                  <input type="text" name="import_id" class="exgroup_token_input error"/>
-                  <small class="error">No group chosen for import</small>                
-                {else}
                     <input type="text" class="exgroup_token_input" name="import_id"/>          
-                {/if}
                 </div>
             </div>
             <div class="row">
@@ -130,75 +296,7 @@
                     <input type="submit" value="Save" id="import_group_submit" />
                 </div>
             </div>
-        </form>
-				
+        </form>   
+
 {/template}
 
-/**
- * Edit group
- * @param id
- * @param name
- * @param users
- */
-{template .edit }
-
-        {if $id == -1}
-        <span class="round alert label">Error getting group - group may not exist</span>    
-        {elseif $id == -2}
-        <span class="round alert label">You are not authorised to edit that group</span>      
-        {else}
-        <h3>Edit group</h3>
-        <form name="group_edit" action="/signapp/groups/{$id}/update" method="post" data-abide>
-            <div class="row">
-                <div class="columns large-2 small-4 field-label">Group name</div>
-                <div class="columns large-10 small-8">
-                    <input type="text" placeholder="Group name" name="title" id="title" value="{$name}" required/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="columns large-2 small-4 field-label">Group members</div>
-                <div class="columns large-10 small-8">
-                    <input type="text" class="member_token_input" name="users[]"/>
-                    
-                    <!-- HORRIBLE WAY OF INCLUDING JS - try and get this working in main.js later-->
-                    
-                    {literal}
-                    <script type="text/javascript">
-                    $(document).ready(function() {
-                        $(".member_token_input").tokenInput("/signapp/groups/queryCRSID", {
-                            method: "post",
-                            tokenValue: "crsid",
-                            propertyToSearch: "crsid",
-                            theme: "facebook",
-                            minChars: 3,
-                            hintText: "Search for a user",
-                            resultsLimit: 10,
-                            preventDuplicates: true,
-                            prePopulate: [
-                            
-                    {/literal}
-                    {foreach $user in $users}
-                    {lb}crsid: "{$user.crsid}", name: "{$user.name}"{rb},
-                    {/foreach}
-                    {literal}                     
-                            ],
-
-                            resultsFormatter: function(item){ return "<li>" + "<div style='display: inline-block; padding-left: 10px;'><div class='full_name'>" + item.name + " (" + item.crsid + ")</div><div class='email'>" + item.crsid + "@cam.ac.uk</div></div></li>" },
-                            tokenFormatter: function(item) { return "<li><p>" + item.name + " (" + item.crsid + ")</p></li>" },                           
-                        });
-                    });
-                    </script>
-                    {/literal}
-                    
-                    <!-- HORRIBLE WAY OF INCLUDING JS - try and get this working in main.js later-->
-                    
-                </div>
-            </div>
-            <div class="row">
-                <div class="columns large-12 small-12">
-                    <input type="submit" value="Save" id="group_submit" />
-                </div>
-            </div>
-        </form>
-        {/if}
-{/template}

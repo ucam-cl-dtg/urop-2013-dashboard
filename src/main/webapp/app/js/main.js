@@ -1,22 +1,6 @@
 $(document).ready(function() {
 
 	//
-	// Sidebar resize
-	//
-
-	$(window).resize(function() {
-		resizeSidebar();
-	});
-
-	$(document).resize(function() {
-		resizeSidebar();
-	});
-
-	$('.main').resize(function() {
-		resizeSidebar();
-	});
-
-	//
 	// Sidebar dropdowns
 	//
 
@@ -50,7 +34,8 @@ $(document).ready(function() {
 	//
 
 	$(document).on('click', '.expand-sub-panel', function() {
-		$(this).closest('.list-panel').siblings('.sub-panel').slideToggle();
+		$(this).closest('.list-panel').siblings('.sub-panel')
+			.slideToggle().toggleClass('hidden');
 	});
 
 	$(document).on('click', '.upload-marked-work', function() {

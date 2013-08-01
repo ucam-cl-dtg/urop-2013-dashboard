@@ -12,6 +12,7 @@ import uk.ac.cam.dashboard.controllers.DeadlinesController;
 import uk.ac.cam.dashboard.controllers.GroupsController;
 import uk.ac.cam.dashboard.controllers.HomePageController;
 import uk.ac.cam.dashboard.controllers.NotificationsController;
+import uk.ac.cam.dashboard.controllers.SupervisorController;
 
 import com.googlecode.htmleasy.HtmleasyProviders;
 
@@ -29,6 +30,7 @@ public class Dashboard extends Application {
     myServices.add(NotificationsController.class);
     myServices.add(HomePageController.class);
     myServices.add(ApiController.class);
+    myServices.add(SupervisorController.class);
     
     // Add Htmleasy Providers
     log.debug("Adding Htmleasy providers");

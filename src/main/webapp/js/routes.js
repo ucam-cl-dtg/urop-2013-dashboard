@@ -32,7 +32,7 @@ $(document).ready(function() {
 
         // Deadlines
         "dashboard/deadlines" : "dashboard.deadlines.index",
-        "dashboard/deadlines/:id/edit" : supportRedirect("dashboard.deadlines.edit"),
+        "dashboard/deadlines/:id/edit" : "dashboard.deadlines.edit",
         "dashboard/deadlines/error/:type": "dashboard.deadlines.index",
         
         // Groups
@@ -41,8 +41,11 @@ $(document).ready(function() {
         "dashboard/groups/:id/edit" : "dashboard.groups.edit",
         
         // Notifications
-        "dashboard/notifications(:params*)": "dashboard.notifications.index"
-
+        "dashboard/notifications(:params*)": "dashboard.notifications.index",
+        
+        // Supervisor
+        "dashboard/supervisor" : "dashboard.supervisor.index"
+        
         //For getting params in get requests
         // Use the last line to redirect unmatched routes to an error page
         //"*undefined": "errors.notfound"

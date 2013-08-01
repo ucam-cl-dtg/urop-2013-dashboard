@@ -20,6 +20,7 @@
       		<![CDATA[<script src="/js/notifications.js"></script>]]>
 			<![CDATA[<script src="/js/groups.js"></script>]]>
 			<![CDATA[<script src="/js/deadlines.js"></script>]]>
+            <![CDATA[<script src="/js/supervisor.js"></script>]]>
 		</custom_scripts>
 		<custom_templates>
 			<![CDATA[<script src="/soy/js/3/shared.dashboard.js"></script>]]>
@@ -28,6 +29,7 @@
 			<![CDATA[<script src="/soy/js/3/dashboard.homePage.js"></script>]]>
             <![CDATA[<script src="/soy/js/3/dashboard.errors.js"></script>]]>
             <![CDATA[<script src="/soy/js/3/dashboard.notifications.js"></script>]]>
+            <![CDATA[<script src="/soy/js/3/dashboard.supervisor.js"></script>]]>
 		</custom_templates>
 		<css_namespace>
 		    <![CDATA[id="dashboard"]]>

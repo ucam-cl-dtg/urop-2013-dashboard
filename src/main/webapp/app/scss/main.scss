@@ -9,14 +9,22 @@
 //
 
 $header-height: 40px;
+$sidebar-width: 350px;
 
 //
 // Global styles
 //
 
-html, body {
+html {
+	min-height: 100%;
 	height: 100%;
 }
+
+body {
+	min-height: 100%;
+	background: url('../img/content-bg.png') left repeat-y #ffffff;
+}
+
 .clearfix { @include clearfix(); }
 
 .module-loader {
@@ -31,6 +39,22 @@ html, body {
 .custom.dropdown, .custom.dropdown .current, .custom.dropdown .selector {
 	height: 34px !important;
 	line-height: 34px !important;
+}
+
+//
+// Layout adapt
+//
+
+@media only screen and (max-width: $small-screen) {
+	body {
+		background: #ffffff;
+	}
+	.main {
+		margin-left: 0 !important;
+	}
+	.header-logo {
+		width: 100% !important;
+	}
 }
 
 //
@@ -49,6 +73,8 @@ html, body {
 	background-color: darken($primary-color, 10%);
 	font-size: 19px;
 	font-weight: bold;
+	float: left;
+	width: $sidebar-width;
 }
 
 .header-logo-inner {
@@ -60,6 +86,10 @@ html, body {
 
 .header-icon-button:hover {
 	color: #246190;
+}
+
+.header-extra {
+	padding: 0 0.9375em;
 }
 
 .ajax-loader {
@@ -113,11 +143,8 @@ html, body {
 //
 
 .central-content {
-	min-height: 100%;
 	color: #525252;
 	font-size: 13px;
-	margin-top: -$header-height;
-	padding-top: $header-height;
 }
 
 //
@@ -127,8 +154,10 @@ html, body {
 .sidebar {
 	background-color: #F6F6F6;
 	padding: 0;
-	min-height: 100%;
 	border-right: 1px solid #ccc;
+	width: $sidebar-width;
+	float: left;
+	position: absolute;
 }
 
 .sidebar .columns {
@@ -180,6 +209,7 @@ html, body {
 //
 
 .main {
+	margin-left: $sidebar-width;
 	padding: 10px 17px 10px 17px;
 }
 

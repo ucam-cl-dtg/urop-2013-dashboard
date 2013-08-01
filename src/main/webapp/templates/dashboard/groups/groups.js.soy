@@ -3,20 +3,10 @@
 /**
  * Group page for timetables
  * @param groups
- * @param errors
  */
 {template .index }
         
-        {if $errors.auth}
-        <span class="round alert label">You are not authorised to edit that group</span>
-        {/if}
-        {if $errors.get}
-
-        {/if}
-        
-		<h2>Groups</h2>
-		
-		<h3>Current groups</h3>
+		<h3>Groups you belong to</h3>
 		
         <div class="row">
             <ul class="panels">
@@ -78,59 +68,6 @@
                 
             </ul>
         </div>
-    
-        <h3>Create new group</h3>     	
-        <form id="group" name="group" action="/signapp/groups" method="post"  data-abide>
-            <div class="row">
-                <div class="columns large-2 small-4 field-label">Group name</div>
-                <div class="columns large-10 small-8">
-                    {if $errors.noname}
-                    <label class="error">Error</label>
-                    <input type="text" name="title" class="error" required/>
-                    <small class="error">No group name specified</small>                             
-                    {else}
-                    <input type="text" placeholder="Group name" name="title" id="title" required/>
-                    {/if}
-                </div>
-            </div>
-            <div class="row">
-                <div class="columns large-2 small-4 field-label">Group members</div>
-                <div class="columns large-10 small-8">
-                    <input type="text" class="member_token_input" name="users[]"/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="columns large-12 small-12">
-                    <input type="submit" value="Save" id="group_submit" />
-                </div>
-            </div>
-        </form>
-        
-        <h3>Import Existing Group (LDAP)</h3>    
-        <h6 class="subheader">Small public groups only</h6>         
-        <form id="import_group" name="import_group" action="/signapp/groups/import" method="post" data-abide>
-            <div class="row">
-                <div class="columns large-2 small-4 field-label">Import Group</div>
-                <div class="columns large-10 small-8">
-                {if $errors.importsize}
-                  <label class="error">Error</label>
-                  <input type="text" name="import_id" class="exgroup_token_input error"/>
-                  <small class="error">Invalid group size - group must have at least one member and less than 50 members</small>                
-                {elseif $errors.noimport}
-                  <label class="error">Error</label>
-                  <input type="text" name="import_id" class="exgroup_token_input error"/>
-                  <small class="error">No group chosen for import</small>                
-                {else}
-                    <input type="text" class="exgroup_token_input" name="import_id"/>          
-                {/if}
-                </div>
-            </div>
-            <div class="row">
-                <div class="columns large-12 small-12">
-                    <input type="submit" value="Save" id="import_group_submit" />
-                </div>
-            </div>
-        </form>
 				
 {/template}
 

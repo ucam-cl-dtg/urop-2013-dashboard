@@ -61,7 +61,11 @@ public class DeadlineUser implements Mappable{
 		map.put("archived", this.archived);
 		map.put("user", this.user.getCrsid());
 		map.put("deadline_id", this.deadline.getId());
-		//TODO
+		map.put("name", this.deadline.getTitle());
+		map.put("message", this.deadline.getMessage());
+		map.put("url", this.deadline.getURL());
+		map.put("owner", this.deadline.getOwner().toMap());
+		map.put("datetime", this.deadline.getDateMap());
 		
 		return map.build();
 	}
