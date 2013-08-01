@@ -41,7 +41,7 @@ $(document).ready(function() {
         "dashboard/groups/:id/edit" : "dashboard.groups.edit",
         
         // Notifications
-        "dashboard/notifications(:params*)": "dashboard.notifications.getNotificationsController"
+        "dashboard/notifications(:params*)": "dashboard.notifications.index"
 
         //For getting params in get requests
         // Use the last line to redirect unmatched routes to an error page

@@ -24,6 +24,7 @@ import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
 
+import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
 
 @Path("dashboard/notifications")
@@ -45,7 +46,7 @@ public class NotificationsController extends ApplicationController {
 												throws RedirectException {
 			
 			Map<String, Object> userNotifications = new HashMap<String, Object>();
-			
+
 			currentUser = initialiseUser();
 			
 			NotificationQuery nq = NotificationQuery.all();
@@ -76,11 +77,14 @@ public class NotificationsController extends ApplicationController {
 				userNotifications.put("read", read);
 			}
 			
-			List<?> result = nq.list();
-			List<Map<?,?>> notifications = new ArrayList<Map<?,?>>();
-			for (Object o:result) {
-				notifications.add(((Notification) o).toMap());
+			List<Notification> results = nq.list();
+			
+			List<ImmutableMap<String,Object>> notifications = new ArrayList<ImmutableMap<String,Object>>();
+			for (Notification n : results) {
+				notifications.add(n.toMap());
 			}
+			
+			userNotifications.put("user", currentUser.toMap());
 			userNotifications.put("notifications", notifications);
 
 			return userNotifications;

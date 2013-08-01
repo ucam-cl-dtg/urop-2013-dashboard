@@ -2,7 +2,6 @@ package uk.ac.cam.dashboard.models;
 
 import java.util.Calendar;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -10,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -28,11 +29,17 @@ public class Notification {
 	private Set<NotificationUser> users = new HashSet<NotificationUser>();
 	
 	private String message;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar timestamp;
+	
 	private String section;
 	private String link;
 	
-	public Notification() {}
+	public Notification() {
+		this.timestamp = Calendar.getInstance();
+	}
+	
 	public Notification(String message, String section, String link) {
 		this.message = message;
 		this.section = section;
@@ -40,7 +47,8 @@ public class Notification {
 		this.timestamp = Calendar.getInstance();
 	}
 
-	public Map<String,?> toMap() {
+	public ImmutableMap<String, Object> toMap() {
+		
 		ImmutableMap.Builder<String, Object> map = new ImmutableMap.Builder<String, Object>();
 		
 		map = map.put("id", this.id);
@@ -49,8 +57,7 @@ public class Notification {
 		map = map.put("link", this.link);
 		map = map.put("timestamp", this.timestamp.getTime().toString());
 		
-		ImmutableMap<String, ?> finalMap = map.build();
-		return finalMap; 
+		return map.build();
 	}
 	
 	public int getId() {return id;}
