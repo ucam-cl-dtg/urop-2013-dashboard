@@ -4359,19 +4359,11 @@ a.th {
   background-color: #BEE18E;
   border-color: #75B370; }
 
-.marked .list-panel {
+.marked .list-panel, .marked.list-panel {
   background-color: #B6D08F;
   border: 1px solid #75B370; }
 
-.marked .list-sub-panel {
-  background-color: #BEE18E;
-  border-color: #75B370; }
-
-.marked.list-panel {
-  background-color: #B6D08F;
-  border: 1px solid #75B370; }
-
-.marked.list-sub-panel {
+.marked .list-sub-panel, .marked.list-sub-panel {
   background-color: #BEE18E;
   border-color: #75B370; }
 

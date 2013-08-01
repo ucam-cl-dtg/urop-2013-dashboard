@@ -42,8 +42,7 @@ public class NotificationsController extends ApplicationController {
 		public Map<String, ?> getNotifications(@QueryParam("offset") Integer offset,
 												@QueryParam("limit") Integer limit,
 												@QueryParam("section") String section,
-												@QueryParam("read") Boolean read) 
-												throws RedirectException {
+												@QueryParam("read") Boolean read) throws RedirectException {
 			
 			Map<String, Object> userNotifications = new HashMap<String, Object>();
 
