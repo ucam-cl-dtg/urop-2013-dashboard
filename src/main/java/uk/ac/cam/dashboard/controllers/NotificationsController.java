@@ -43,7 +43,19 @@ public class NotificationsController extends ApplicationController {
 												@QueryParam("limit") Integer limit,
 												@QueryParam("section") String section,
 												@QueryParam("read") Boolean read) throws RedirectException {
-			currentUser = initialiseUser();
+			
+			if ( validateRequest() == Permissions.NO_PERMISSIONS ) {
+				throw new RedirectException(NotificationsController.class, "errorCallback");
+			} else if ( validateRequest() == Permissions.GLOBAL_API ) {
+				// A user must be provided
+				throw new RedirectException(NotificationsController.class, "errorCallback");
+			} else if ( validateRequest() == Permissions.GLOBAL_API_WITH_USER ) {
+				currentUser = initialiseSpecifiedUser(sRequest.getParameter("user"));
+			} else if ( validateRequest() == Permissions.USER_API ) {
+				currentUser = initialiseSpecifiedUser(sRequest.getParameter("user"));
+			} else if ( validateRequest() == Permissions.RAVEN_SESSION ) {
+				currentUser = initialiseUser();
+			}
 			
 			ImmutableMap.Builder<String, Object> map = new ImmutableMap.Builder<String, Object>();
 			map = map.put("userId", currentUser.getCrsid());

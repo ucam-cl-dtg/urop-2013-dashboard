@@ -44,5 +44,44 @@ public class ApplicationController {
 		// Register or return the user
 		return User.registerUser(crsid);
 	}
+
+	// Validation
+	
+	public Permissions validateRequest() {
+		String user = sRequest.getParameter("user");
+		String apiToken = sRequest.getParameter("apiToken");
+		String ravenUser = (String) sRequest.getSession().getAttribute("RavenRemoteUser");
+		
+		if (user != null && apiToken != null) {
+			// Check user permissions
+			if ( ApiController.validateApiKeyForUser(apiToken, user) ) {
+				return Permissions.USER_API;
+			}
+			// Check if global permission
+			if ( true ) {
+				return Permissions.GLOBAL_API_WITH_USER;
+			}
+		}
+		
+		if (user == null && apiToken != null) {
+			// Check if global permissions
+			return Permissions.GLOBAL_API;
+		}
+		
+		if (ravenUser != null) {
+			return Permissions.RAVEN_SESSION;
+		}
+		
+		return Permissions.NO_PERMISSIONS;
+		
+	}
+	
+	public enum Permissions {
+		NO_PERMISSIONS,
+		RAVEN_SESSION,
+		USER_API,
+		GLOBAL_API,
+		GLOBAL_API_WITH_USER
+	}
 	
 }

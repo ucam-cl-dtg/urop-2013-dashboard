@@ -1,8 +1,6 @@
 package uk.ac.cam.dashboard.queries;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -56,6 +54,7 @@ public class NotificationQuery {
 		return this;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Notification> list() {
 		return this.criteria.list();
 	}
