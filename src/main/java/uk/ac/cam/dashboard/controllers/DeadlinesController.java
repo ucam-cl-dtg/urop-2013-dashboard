@@ -90,7 +90,22 @@ public class DeadlinesController extends ApplicationController {
 	// Delete
 	@DELETE @Path("/{id}")
 	public void deleteDeadline(@PathParam("id") int id) {
-		
+
+		/*
+		if ( validateRequest() == Permissions.NO_PERMISSIONS ) {
+			throw new RedirectException(NotificationsController.class, "errorCallback");
+		} else if ( validateRequest() == Permissions.GLOBAL_API ) {
+			// A user must be provided
+			throw new RedirectException(NotificationsController.class, "errorCallback");
+		} else if ( validateRequest() == Permissions.GLOBAL_API_WITH_USER ) {
+			currentUser = initialiseSpecifiedUser(sRequest.getParameter("user"));
+		} else if ( validateRequest() == Permissions.USER_API ) {
+			currentUser = initialiseSpecifiedUser(sRequest.getParameter("user"));
+		} else if ( validateRequest() == Permissions.RAVEN_SESSION ) {
+			currentUser = initialiseUser();
+		}
+		*/
+
 		Deadline.deleteDeadline(id);
 		
 		throw new RedirectException("/app/#signapp/deadlines");
