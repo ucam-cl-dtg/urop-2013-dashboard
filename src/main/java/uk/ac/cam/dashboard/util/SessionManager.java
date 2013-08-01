@@ -1,3 +1,7 @@
+//
+// This is now void. Instead, the permissions get set in the ApiFilter class
+//
+
 package uk.ac.cam.dashboard.util;
 
 import uk.ac.cam.dashboard.controllers.ApiController;

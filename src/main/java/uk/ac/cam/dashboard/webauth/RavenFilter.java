@@ -207,6 +207,12 @@ public class RavenFilter implements Filter {
 	 * Optional. Defaults to https://raven.cam.ac.uk/auth/authenticate.html
 	 */
 	public static String INIT_PARAM_AUTHENTICATE_URL = "authenticateUrl";
+	
+	/**
+	 * Whether the filter allows unauthorised users through, for API filter
+	 * validation
+	 */
+	public static String INIT_PARAM_ALLOW_UNAUTHORISED = "allowedUnauthorised";
 
 	/**
 	 * The filter init-param param-name path to the certificate. Optional.
@@ -238,6 +244,14 @@ public class RavenFilter implements Filter {
 	 * https://demo.raven.cam.ac.uk/auth/authenticate.html
 	 */
 	private String sRavenAuthenticatePage = "https://raven.cam.ac.uk/auth/authenticate.html";
+	
+	
+	/**
+	 * Whether to allow unauthorised. Optional.
+	 * 
+	 * Defaults to false.
+	 */
+	private boolean allowUnauthorised = false; 
 
 	/** KeyStore used by WebauthValidator class */
 	protected KeyStore keyStore = null;
@@ -258,6 +272,11 @@ public class RavenFilter implements Filter {
 				.getInitParameter(INIT_PARAM_AUTHENTICATE_URL);
 		if (authenticatePage != null)
 			sRavenAuthenticatePage = authenticatePage;
+		
+		// check if allowUnauthorised is configured.  
+		boolean allowUnauthorised = Boolean.parseBoolean(config
+				.getInitParameter(INIT_PARAM_ALLOW_UNAUTHORISED));
+		this.allowUnauthorised = allowUnauthorised;
 
 		// get the path to the raven certificate or use a default
 		String sCertContextPath = config

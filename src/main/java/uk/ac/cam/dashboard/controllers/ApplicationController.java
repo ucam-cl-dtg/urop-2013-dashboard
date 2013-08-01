@@ -26,6 +26,7 @@ public class ApplicationController {
 		log.debug("Getting crsid from raven");
 		
 		// Only do this once
+		// This is now void
 		String crsid = (String) sRequest.getParameter("user");
 		String auth = (String) sRequest.getParameter("auth");
 		boolean ravenUser = (String) sRequest.getSession().getAttribute("RavenRemoteUser") != null ? true: false;

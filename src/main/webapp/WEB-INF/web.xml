@@ -9,6 +9,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<filter>
 		<filter-name>ravenFilter</filter-name>
 		<filter-class>uk.ac.cam.dashboard.webauth.RavenFilter</filter-class>
+		<init-param>
+			<param-name>allowUnauthorized</param-name>
+			<param-value>true</param-value>
+		</init-param>
 	</filter>
 	
 	<!-- Include this for the Hibernate filter -->
