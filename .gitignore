@@ -1,7 +1,8 @@
 /target
-/src/main/webapp/app/*
-/logs/main.log
-.project
-logs/main.log
 
-*.log
+src/main/webapp/app/*
+
+logs/main.log
+.project
+
+src/main/webapp/app/scss/main.scss

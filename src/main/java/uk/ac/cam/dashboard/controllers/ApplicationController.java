@@ -23,12 +23,14 @@ public class ApplicationController {
 	
 	protected User initialiseUser() {
 		
-		log.debug("Getting crsid from raven");	
-		String crsid = (String) sRequest.getSession().getAttribute("RavenRemoteUser");
+		log.debug("Getting crsid from raven");
 		
-		if(crsid!=null){
-			sRequest.getSession().setAttribute("UserPermissions", new SessionManager(crsid));			
-		}
+		// Only do this once
+		String crsid = (String) sRequest.getParameter("user");
+		String auth = (String) sRequest.getParameter("auth");
+		boolean ravenUser = (String) sRequest.getSession().getAttribute("RavenRemoteUser") != null ? true: false;
+		
+		sRequest.getSession().setAttribute("UserPermissions", new SessionManager(crsid, auth, ravenUser));
 
 		return ((SessionManager)sRequest.getSession().getAttribute("UserPermissions")).getUser();
 	}
@@ -42,47 +44,6 @@ public class ApplicationController {
 		
 		// Register or return the user
 		return User.registerUser(crsid);
-	}
-
-	// Validation
-	
-	public Permissions validateRequest() {
-		String user = sRequest.getParameter("user");
-		String apiToken = sRequest.getParameter("apiToken");
-		String ravenUser = (String) sRequest.getSession().getAttribute("RavenRemoteUser");
-		
-		if (user != null && apiToken != null) {
-			// Check user permissions
-			if ( ApiController.validateApiKeyForUser(apiToken, user) ) {
-				return Permissions.USER_API;
-			}
-			// Check if global permissions
-			if ( ApiController.validateGlobalApiKey(apiToken) ) {
-				return Permissions.GLOBAL_API_WITH_USER;
-			}
-		}
-		
-		if (user == null && apiToken != null) {
-			// Check if global permissions
-			if ( ApiController.validateGlobalApiKey(apiToken) ) {
-				return Permissions.GLOBAL_API;
-			}
-		}
-		
-		if (ravenUser != null) {
-			return Permissions.RAVEN_SESSION;
-		}
-		
-		return Permissions.NO_PERMISSIONS;
-		
-	}
-	
-	public enum Permissions {
-		NO_PERMISSIONS,
-		RAVEN_SESSION,
-		USER_API,
-		GLOBAL_API,
-		GLOBAL_API_WITH_USER
 	}
 	
 }
