@@ -39,7 +39,7 @@ public class DeadlinesController extends ApplicationController {
 
 		currentUser = initialiseUser();
 		
-		return ImmutableMap.of("crsid", currentUser.getCrsid(), "deadlines", currentUser.getUserDeadlinesMap(), "cdeadlines", currentUser.getUserCreatedDeadlinesMap());
+		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.getUserDeadlinesMap(), "cdeadlines", currentUser.getUserCreatedDeadlinesMap());
 	}
 	
 	// Create

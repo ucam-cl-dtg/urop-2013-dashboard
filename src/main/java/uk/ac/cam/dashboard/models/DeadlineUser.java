@@ -7,16 +7,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.Session;
 import org.hibernate.annotations.GenericGenerator;
-
-import uk.ac.cam.dashboard.queries.NotificationQuery;
-import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 
 @Entity
-@Table(name="DEADLINE_USERS")
+@Table(name="DEADLINES_USERS")
 public class DeadlineUser implements Mappable{
 	
 	@Id
