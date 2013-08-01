@@ -1,20 +1,5 @@
 package uk.ac.cam.dashboard.util;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.imageio.ImageIO;
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
-
-import org.apache.commons.codec.binary.Base64;
-import org.eclipse.jetty.util.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

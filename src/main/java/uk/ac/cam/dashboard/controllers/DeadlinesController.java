@@ -12,6 +12,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.hibernate.Session;
 import org.jboss.resteasy.annotations.Form;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,8 @@ import uk.ac.cam.dashboard.forms.DeadlineForm;
 import uk.ac.cam.dashboard.models.Deadline;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
+import uk.ac.cam.dashboard.queries.DeadlineQuery;
+import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
@@ -39,7 +42,7 @@ public class DeadlinesController extends ApplicationController {
 
 		currentUser = initialiseUser();
 		
-		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.getUserDeadlinesMap());
+		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.deadlinesToMap());
 	}
 	
 	// Create
@@ -53,25 +56,25 @@ public class DeadlinesController extends ApplicationController {
 	}
 	
 
-//	// Edit
-//	@GET @Path("/{id}/edit") 
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public Map editDeadline(@PathParam("id") int id) {
-//		
-//		currentUser = initialiseUser();
-//		
-//	  	Deadline deadline = Deadline.getDeadline(id);
-//	  	
-//	  	if(deadline==null){
-//	  		//throw new RedirectException("/app/#signapp/deadlines/error/1");
-//	  		return ImmutableMap.of("redirect", "signapp/deadlines/error/1");
-//	  	}
-//	  	if(!deadline.getOwner().equals(currentUser)){
-//	  		//throw new RedirectException("/app/#signapp/deadlines/error/2");
-//	  		return ImmutableMap.of("redirect", "signapp/deadlines/error/2");
-//	  	}
-//		return deadline.toMap();		
-//	}
+	// Edit
+	@GET @Path("/{id}/edit") 
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map editDeadline(@PathParam("id") int id) {
+		
+		currentUser = initialiseUser();
+		
+	  	Deadline deadline = Deadline.getDeadline(id);
+	  	
+	  	if(deadline==null){
+	  		//throw new RedirectException("/app/#signapp/deadlines/error/1");
+	  		return ImmutableMap.of("redirect", "signapp/deadlines/error/1");
+	  	}
+	  	if(!deadline.getOwner().equals(currentUser)){
+	  		//throw new RedirectException("/app/#signapp/deadlines/error/2");
+	  		return ImmutableMap.of("redirect", "signapp/deadlines/error/2");
+	  	}
+		return deadline.toMap();		
+	}
 	
 //	// Update
 //	@POST @Path("/{id}/edit")
@@ -87,38 +90,16 @@ public class DeadlinesController extends ApplicationController {
 	
 	// Delete
 	@DELETE @Path("/{id}")
-	public void deleteDeadline(@PathParam("id") int id) {
-
-		/*
-		if ( validateRequest() == Permissions.NO_PERMISSIONS ) {
-			throw new RedirectException(NotificationsController.class, "errorCallback");
-		} else if ( validateRequest() == Permissions.GLOBAL_API ) {
-			// A user must be provided
-			throw new RedirectException(NotificationsController.class, "errorCallback");
-		} else if ( validateRequest() == Permissions.GLOBAL_API_WITH_USER ) {
-			currentUser = initialiseSpecifiedUser(sRequest.getParameter("user"));
-		} else if ( validateRequest() == Permissions.USER_API ) {
-			currentUser = initialiseSpecifiedUser(sRequest.getParameter("user"));
-		} else if ( validateRequest() == Permissions.RAVEN_SESSION ) {
-			currentUser = initialiseUser();
-		}
-		*/
-
-		Deadline.deleteDeadline(id);
-		
-		throw new RedirectException("/app/#signapp/deadlines");
-	}
-	
-	// Errors
-	@GET @Path("/error/{type}") 
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map deadlineErrors(@PathParam("type") int error){
-		
-		currentUser = initialiseUser();
-		
-		ImmutableMap<String, ?> errors = ImmutableMap.of("get", (error==1), "auth", (error==2), "noname", (error==3), "inpast", (error==4));
+	public Map<String, ?> deleteDeadline(@PathParam("id") int id) {
 
-		return ImmutableMap.of("crsid", currentUser.getCrsid(), "deadlines", currentUser.getUserDeadlinesMap(), "cdeadlines", currentUser.getUserCreatedDeadlinesMap(), "errors", errors);
+		Session session = HibernateUtil.getTransactionSession();
+				
+		Deadline d = DeadlineQuery.get(id);
+
+	  	session.delete(d);
+		
+		return ImmutableMap.of("success", true, "id", id);
 	}
 	
 	// Find groups AJAX

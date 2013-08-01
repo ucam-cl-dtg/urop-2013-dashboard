@@ -27,7 +27,8 @@ public class SupervisorController extends ApplicationController {
 
 		currentUser = initialiseUser();
 		
-		return ImmutableMap.of("user", currentUser.toMap(), "cdeadlines", currentUser.getUserCreatedDeadlinesMap(), "cgroups", currentUser.getGroupsMap());
+		log.debug("Returning JSON of user, user created deadlines and user created groups");
+		return ImmutableMap.of("user", currentUser.toMap(), "cdeadlines", currentUser.createdDeadlinesToMap(), "cgroups", currentUser.groupsToMap());
 	}
 
 }

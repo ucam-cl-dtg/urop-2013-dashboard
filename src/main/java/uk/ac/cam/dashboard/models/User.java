@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -16,6 +17,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
+import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
@@ -28,7 +30,7 @@ public class User {
 	
 	private String username;
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<DeadlineUser> deadlines = new HashSet<DeadlineUser>();
 
 	@ManyToMany(mappedBy = "users")
@@ -40,7 +42,7 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private Set<Api> apis = new HashSet<Api>();
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<NotificationUser> notifications = new HashSet<NotificationUser>();
 	
 	public User() {}
@@ -51,6 +53,9 @@ public class User {
 	
 	public String getCrsid() {return crsid;}
 	public void setCrsid(String crsid) {this.crsid = crsid;}
+	
+	public String getUsername() {return username;}
+	public void setUsername(String username) {this.username = username;}
 	
 	public Set<DeadlineUser> getDeadlines() { return deadlines; }
 	public void addDeadlines(Set<DeadlineUser> deadlines) { this.deadlines.addAll(deadlines); }
@@ -67,18 +72,14 @@ public class User {
 	public void addApi(Api api) { this.apis.add(api); }
 	public void addApis(Set<Api> apis) { this.apis.addAll(apis); }
 	
-	// Register user from CRSID
 	public static User registerUser(String crsid){
-		// Add user to database if necessary
 
-		// Begin hibernate session
 		Session session = HibernateUtil.getTransactionSession();
 		
-		// Does the user already exist?
 		Query userQuery = session.createQuery("from User where id = :id").setParameter("id", crsid);
 	  	User user = (User) userQuery.uniqueResult();
 	  	
-	  	// If no, check if they exist in LDAP and create them if so
+	  	// If user not in database, check if they exist in LDAP and create them if so
 	  	if(user==null){
 	  		if(LDAPQueryHelper.checkCRSID(crsid)==null){
 	  			return null;
@@ -87,20 +88,16 @@ public class User {
 	  		session.save(newUser);
 	  		return newUser;
 	  	}
-
 		
 		return user;
 	}
 	
-	// Get username from LDAP
 	public String retrieveUsername(String crsid) {
-		return "test-username";
-		// return LDAPProvider.getData(crsid, "cn");
+		return LDAPQueryHelper.getRegisteredName(crsid);
 	}
 	
 	// Maps
-	// Get users groups as a map
-	public Set<Map<String, ?>> getGroupsMap() {
+	public Set<Map<String, ?>> groupsToMap() {
 		HashSet<Map<String, ?>> userGroups = new HashSet<Map<String, ?>>();
 		
 		if(groups==null){
@@ -113,22 +110,28 @@ public class User {
 		return userGroups;
 	}
 	
+	public Set<Map<String, ?>> subscriptionsToMap() {
+		HashSet<Map<String, ?>> userSubscriptions = new HashSet<Map<String, ?>>();
+		
+		if(subscriptions==null){
+			return new HashSet<Map<String, ?>>();
+		}
+		
+		for(Group g : subscriptions)  {
+			userSubscriptions.add(g.toMap());
+		}
+		return userSubscriptions;
+	}
+	
 	// Get users deadlines as a map
-	public List<Map<String, ?>> getUserDeadlinesMap() {
+	public List<Map<String, ?>> deadlinesToMap() {
+		
 		List<Map<String, ?>> userDeadlines = new ArrayList<Map<String, ?>>();
 		
 		if(deadlines==null){
 			return new ArrayList<Map<String, ?>>();
 		}
 		
-//		//Sort the deadlines
-//		ArrayList<Deadline> sortedDeadlines = new ArrayList<Deadline>();
-//		for(DeadlineUser d : deadlines){
-//			sortedDeadlines.add(d);
-//		}	
-//		Collections.sort(sortedDeadlines);
-		
-		// Get deadlines as a map of all parameters
 		for(DeadlineUser d : deadlines)  {
 			userDeadlines.add(d.toMap());
 		}
@@ -136,26 +139,27 @@ public class User {
 		
 	}
 	
-	public List<Map<String, ?>> getUserCreatedDeadlinesMap() {
+	public List<Map<String, ?>> createdDeadlinesToMap() {
+		
 		List<Map<String, ?>> userDeadlines = new ArrayList<Map<String, ?>>();
 		
-		// Query deadlines where this user is the owner
-		Session session = HibernateUtil.getTransactionSession();
-		Query getDeadlines = session.createQuery("from Deadline where owner = :owner").setParameter("owner", this);
-	  	List<Deadline> createdDeadlines = (List<Deadline>) getDeadlines.list();			
-	 
-		if(createdDeadlines==null){
+		DeadlineQuery dq = DeadlineQuery.created();
+		dq.byOwner(this);
+		
+		if(deadlines==null){
 			return new ArrayList<Map<String, ?>>();
 		}
 		
-		// Get deadlines as a map of all parameters
-		for(Deadline d : createdDeadlines)  {
+		List<Deadline> results = dq.createdList();
+		
+		for (Deadline d : results) {
 			userDeadlines.add(d.toMap());
 		}
+		
 		return userDeadlines;
 	}
 	
-	public List<String> getUserApisMap(){
+	public List<String> apisToMap(){
 		List<String> userApis = new ArrayList<String>();
 		
 		for(Api a : apis){

@@ -88,8 +88,8 @@ public class NotificationsController extends ApplicationController {
 			userNotifications.put("notifications", notifications);
 			userNotifications.put("filter", filter);
 
+			log.debug("Returning JSON of user notifications");
 			return userNotifications;
-			
 		}
 		
 		// Create
@@ -98,6 +98,7 @@ public class NotificationsController extends ApplicationController {
 			
 			notificationForm.handle();
 			
+			log.debug("Redirecting to notifications page");
 			throw new RedirectException("/app/#dashboard/notifications");
 		}
 		
@@ -109,8 +110,8 @@ public class NotificationsController extends ApplicationController {
 			
 			NotificationUser.markAsRead(currentUser, id);
 			
+			log.debug("Redirecting to notifications page");
 			throw new RedirectException("/app/#dashboard/notifications");
-			
 		}
 		
 //		// Callbacks

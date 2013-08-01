@@ -11,6 +11,7 @@ moduleScripts['dashboard']['deadlines'] = {
                         type: 'DELETE',
                         url: "/dashboard/deadlines/" + deadline_id,
                         success: function(resultData) {
+                            alert(resultData);
                             $("#"+deadline_id).hide(2000, function() {
                                 $(this).remove();
                             });

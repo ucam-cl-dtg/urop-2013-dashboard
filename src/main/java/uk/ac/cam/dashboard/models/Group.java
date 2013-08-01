@@ -22,7 +22,6 @@ import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
-import com.googlecode.htmleasy.RedirectException;
 
 @Entity
 @Table(name="GROUPS")

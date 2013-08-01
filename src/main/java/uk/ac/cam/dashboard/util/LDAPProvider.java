@@ -1,7 +1,6 @@
 package uk.ac.cam.dashboard.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 

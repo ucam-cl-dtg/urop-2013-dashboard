@@ -2,7 +2,6 @@ package uk.ac.cam.dashboard.forms;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.FormParam;
@@ -66,8 +65,6 @@ public class DeadlineForm {
 		deadline.setDatetime(cal);
 		
 		session.save(deadline);
-		
-		Set<User> deadlineUsers = new HashSet<User>();
 		
 		// Create deadlineUser objects from users field
 		if(!users.equals("")){

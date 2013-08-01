@@ -28,7 +28,7 @@ public class ApiController extends ApplicationController {
 	public ImmutableMap<String, ?> getUserApiKeys() {
 		User currentUser = initialiseUser();
 		
-		return ImmutableMap.of("user", currentUser.getCrsid(), "keys", currentUser.getUserApisMap());
+		return ImmutableMap.of("user", currentUser.getCrsid(), "keys", currentUser.apisToMap());
 	}
 	
 	@GET @Path("/new")

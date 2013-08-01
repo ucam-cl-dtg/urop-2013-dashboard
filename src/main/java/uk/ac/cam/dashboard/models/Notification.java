@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -25,7 +26,7 @@ public class Notification {
 	@GenericGenerator(name="increment", strategy="increment")
 	private int id;
 	
-	@OneToMany(mappedBy = "notification")
+	@OneToMany(mappedBy = "notification", cascade = CascadeType.ALL)
 	private Set<NotificationUser> users = new HashSet<NotificationUser>();
 	
 	private String message;

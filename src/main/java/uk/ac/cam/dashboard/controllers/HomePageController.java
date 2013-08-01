@@ -1,22 +1,16 @@
 package uk.ac.cam.dashboard.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 //Import the following for logging
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cam.dashboard.models.Notification;
 //Import models
 import uk.ac.cam.dashboard.models.User;
-import uk.ac.cam.dashboard.queries.NotificationQuery;
 
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
@@ -33,6 +27,7 @@ public class HomePageController extends ApplicationController{
 //	@GET @Path("/dashboard")
 //	@Produces(MediaType.APPLICATION_JSON)
 //	public Map<String, ?> homePage() {
+//		
 //		currentUser = initialiseUser();
 //		//ImmutableMap<String, ?> userMap = ulm.getAll();
 //		
@@ -45,33 +40,12 @@ public class HomePageController extends ApplicationController{
 //			notifications.add(((Notification) o).toMap());
 //		}
 //		
-//		return ImmutableMap.of("user", currentUser.getCrsid(), "deadlines", currentUser.getUserDeadlinesMap(), "notifications", notifications);
+//		return ImmutableMap.of();
 //	}
-//	
-	/*
-	 * Archive ----------------------------------------------
-	 * ------------------------------------------------------ *
-	 * ------------------------------------------------------ *
-	 */
 	
 	@GET @Path("/")
 	public void localhostRedirect() {
 		throw new RedirectException("/app/#dashboard/");
-	}
-	
-	// DOS Index
-	@GET @Path("signapp/DoS") @ViewWith("/soy/home_page.dos")
-	public Map dosHomePage() {
-		
-		// Initialise user
-		initialiseUser();
-		
-		// Does user have staff level access?
-		if(!isStaff()){
-			throw new RedirectException("/");
-		}
-		
-		return ImmutableMap.of();
 	}
 	
 	// Admin Index
