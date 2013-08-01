@@ -13,9 +13,11 @@ import org.hibernate.annotations.GenericGenerator;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
+import com.google.common.collect.ImmutableMap;
+
 @Entity
 @Table(name="NOTIFICATIONS_USERS")
-public class NotificationUser {
+public class NotificationUser implements Mappable{
 	
 	@Id
 	@GeneratedValue(generator="increment")
@@ -83,5 +85,23 @@ public class NotificationUser {
 		
 		return nu.getRead();
 	}
+	
+	@Override
+	public ImmutableMap<String, ?> toMap() {
+		
+		ImmutableMap.Builder<String, Object> map = new ImmutableMap.Builder<String, Object>();
+		
+		map.put("id", this.id);
+		map.put("read", this.read);
+		map.put("user", this.user.getCrsid());
+		map.put("notification_id", this.notification.getId());
+		map.put("message", this.notification.getMessage());
+		map.put("section", this.notification.getSection());
+		map.put("link", this.notification.getLink());
+		map.put("timestamp", this.notification.getTimestamp().getTime().toString());
+		
+		return map.build();
+	}
+
 	
 }

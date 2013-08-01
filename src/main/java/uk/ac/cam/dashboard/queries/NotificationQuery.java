@@ -30,8 +30,9 @@ public class NotificationQuery {
 	public static NotificationQuery all() {
 		return new NotificationQuery (
 			HibernateUtil.getTransactionSession()
-			.createCriteria(Notification.class)
-			.addOrder(Order.desc("timestamp"))
+			.createCriteria(NotificationUser.class)
+			.createAlias("notification", "n")
+			.addOrder(Order.desc("n.timestamp"))
 		);
 	}
 	
@@ -47,15 +48,13 @@ public class NotificationQuery {
 	
 	public NotificationQuery byNotification(Notification notification) {
 		log.debug("Getting notification id: " + notification.getId());
-		criteria.createAlias("users", "nu")
-		.add(Restrictions.eq("nu.notification", notification));
+		criteria.add(Restrictions.eq("notification", notification));
 	return this;
 	}
 	
 	public NotificationQuery byUser(User user) {
 			log.debug("Getting notifications for user: " + user.getCrsid());
-			criteria.createAlias("users", "nu")
-			.add(Restrictions.eq("nu.user", user));
+			criteria.add(Restrictions.eq("user", user));
 		return this;
 	}
 	
@@ -75,12 +74,13 @@ public class NotificationQuery {
 	}
 	
 	public NotificationQuery isRead(boolean read) {
-		this.criteria.add(Restrictions.eq("read", read));
+		criteria.createAlias("users", "nu")
+		.add(Restrictions.eq("nu.read", true));
 		return this;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Notification> list() {
+	public List<NotificationUser> list() {
 		return this.criteria.list();
 	}
 
@@ -88,5 +88,11 @@ public class NotificationQuery {
 		NotificationUser notificationUser = (NotificationUser)criteria.uniqueResult();
 		return notificationUser;
 	}
+	
+//	public HashMap<String, ?> map() {
+//		NotificationUser notificationUser = (NotificationUser)criteria.uniqueResult();
+//		
+//		return notificationUser;
+//	}
 	
 }

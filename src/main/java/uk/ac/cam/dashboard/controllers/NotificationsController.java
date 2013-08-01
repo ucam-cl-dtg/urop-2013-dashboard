@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.dashboard.forms.NotificationForm;
-import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
@@ -45,6 +44,7 @@ public class NotificationsController extends ApplicationController {
 												@QueryParam("read") Boolean read) throws RedirectException {
 			
 			Map<String, Object> userNotifications = new HashMap<String, Object>();
+			Map<String, Object> filter = new HashMap<String, Object>();
 
 			currentUser = initialiseUser();
 			
@@ -76,15 +76,17 @@ public class NotificationsController extends ApplicationController {
 				userNotifications.put("read", read);
 			}
 			
-			List<Notification> results = nq.list();
+			List<NotificationUser> results = nq.list();
 			
-			List<ImmutableMap<String,Object>> notifications = new ArrayList<ImmutableMap<String,Object>>();
-			for (Notification n : results) {
-				notifications.add(n.toMap());
+			List<ImmutableMap<String, ?>> notifications = new ArrayList<ImmutableMap<String,?>>();
+			for (NotificationUser nu : results) {
+				notifications.add(nu.toMap());
 			}
 			
 			userNotifications.put("user", currentUser.toMap());
+			
 			userNotifications.put("notifications", notifications);
+			userNotifications.put("filter", filter);
 
 			return userNotifications;
 			
