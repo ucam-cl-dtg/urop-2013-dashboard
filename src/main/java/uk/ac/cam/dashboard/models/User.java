@@ -1,7 +1,6 @@
 package uk.ac.cam.dashboard.models;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +28,8 @@ public class User {
 	
 	private String username;
 	
-	@ManyToMany(mappedBy = "users")
-	private Set<Deadline> deadlines = new HashSet<Deadline>();
+	@OneToMany(mappedBy = "user")
+	private Set<DeadlineUser> deadlines = new HashSet<DeadlineUser>();
 
 	@ManyToMany(mappedBy = "users")
 	private Set<Group> subscriptions = new HashSet<Group>();
@@ -53,8 +52,8 @@ public class User {
 	public String getCrsid() {return crsid;}
 	public void setCrsid(String crsid) {this.crsid = crsid;}
 	
-	public Set<Deadline> getDeadlines() { return deadlines; }
-	public void addDeadlines(Set<Deadline> deadlines) { this.deadlines.addAll(deadlines); }
+	public Set<DeadlineUser> getDeadlines() { return deadlines; }
+	public void addDeadlines(Set<DeadlineUser> deadlines) { this.deadlines.addAll(deadlines); }
 	
 	public Set<Group> getGroups() { return this.groups; }
 	public void addGroups(Set<Group> groups) { this.groups.addAll(groups); }
@@ -122,16 +121,15 @@ public class User {
 			return new ArrayList<Map<String, ?>>();
 		}
 		
-		//Sort the deadlines
-		ArrayList<Deadline> sortedDeadlines = new ArrayList<Deadline>();
-		for(Deadline d : deadlines){
-			sortedDeadlines.add(d);
-		}	
-		Collections.sort(sortedDeadlines);
+//		//Sort the deadlines
+//		ArrayList<Deadline> sortedDeadlines = new ArrayList<Deadline>();
+//		for(DeadlineUser d : deadlines){
+//			sortedDeadlines.add(d);
+//		}	
+//		Collections.sort(sortedDeadlines);
 		
 		// Get deadlines as a map of all parameters
-		for(Deadline d : sortedDeadlines)  {
-			System.out.println("Deadline: " +d.getTitle());
+		for(DeadlineUser d : deadlines)  {
 			userDeadlines.add(d.toMap());
 		}
 		return userDeadlines;

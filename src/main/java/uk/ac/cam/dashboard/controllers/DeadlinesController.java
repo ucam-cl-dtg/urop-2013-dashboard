@@ -33,15 +33,13 @@ public class DeadlinesController extends ApplicationController {
 	private static Logger log = LoggerFactory.getLogger(DeadlinesController.class);
 	
 	// Index 
-	@GET @Path("/") //@ViewWith("deadlines.index")
+	@GET @Path("/") 
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map indexDeadlines() {
+	public ImmutableMap<String, ?> indexDeadlines() {
 
 		currentUser = initialiseUser();
-
-		ImmutableMap<String, ?> errors = ImmutableMap.of("get", false, "auth", false, "noname", false, "inpast", false);
 		
-		return ImmutableMap.of("crsid", currentUser.getCrsid(), "deadlines", currentUser.getUserDeadlinesMap(), "cdeadlines", currentUser.getUserCreatedDeadlinesMap(), "errors", errors);
+		return ImmutableMap.of("crsid", currentUser.getCrsid(), "deadlines", currentUser.getUserDeadlinesMap(), "cdeadlines", currentUser.getUserCreatedDeadlinesMap());
 	}
 	
 	// Create
@@ -55,36 +53,36 @@ public class DeadlinesController extends ApplicationController {
 	}
 	
 
-	// Edit
-	@GET @Path("/{id}/edit") //@ViewWith("/soy/deadlines.edit")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Map editDeadline(@PathParam("id") int id) {
-		
-		currentUser = initialiseUser();
-		
-	  	Deadline deadline = Deadline.getDeadline(id);
-	  	
-	  	if(deadline==null){
-	  		//throw new RedirectException("/app/#signapp/deadlines/error/1");
-	  		return ImmutableMap.of("redirect", "signapp/deadlines/error/1");
-	  	}
-	  	if(!deadline.getOwner().equals(currentUser)){
-	  		//throw new RedirectException("/app/#signapp/deadlines/error/2");
-	  		return ImmutableMap.of("redirect", "signapp/deadlines/error/2");
-	  	}
-		return deadline.toMap();		
-	}
+//	// Edit
+//	@GET @Path("/{id}/edit") //@ViewWith("/soy/deadlines.edit")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Map editDeadline(@PathParam("id") int id) {
+//		
+//		currentUser = initialiseUser();
+//		
+//	  	Deadline deadline = Deadline.getDeadline(id);
+//	  	
+//	  	if(deadline==null){
+//	  		//throw new RedirectException("/app/#signapp/deadlines/error/1");
+//	  		return ImmutableMap.of("redirect", "signapp/deadlines/error/1");
+//	  	}
+//	  	if(!deadline.getOwner().equals(currentUser)){
+//	  		//throw new RedirectException("/app/#signapp/deadlines/error/2");
+//	  		return ImmutableMap.of("redirect", "signapp/deadlines/error/2");
+//	  	}
+//		return deadline.toMap();		
+//	}
 	
-	// Update
-	@POST @Path("/{id}/edit")
-	public void updateDeadline(@Form DeadlineForm deadlineForm, @PathParam("id") int id) {
-		
-		currentUser = initialiseUser();
-		
-		id = deadlineForm.handleUpdate(currentUser, id);
-		
-		throw new RedirectException("/app/#signapp/deadlines");
-	}
+//	// Update
+//	@POST @Path("/{id}/edit")
+//	public void updateDeadline(@Form DeadlineForm deadlineForm, @PathParam("id") int id) {
+//		
+//		currentUser = initialiseUser();
+//		
+//		id = deadlineForm.handleUpdate(currentUser, id);
+//		
+//		throw new RedirectException("/app/#signapp/deadlines");
+//	}
 	
 	
 	// Delete
