@@ -2,7 +2,6 @@ package uk.ac.cam.dashboard.models;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -39,11 +38,11 @@ public class User {
 	@OneToMany(mappedBy = "owner")
 	private Set<Group> groups = new HashSet<Group>();
 	
-	@ManyToMany(mappedBy = "users")
-	private Set<Notification> notifications = new HashSet<Notification>();
-	
 	@OneToMany(mappedBy = "user")
 	private Set<Api> apis = new HashSet<Api>();
+	
+	@OneToMany(mappedBy = "user")
+	private Set<NotificationUser> notifications = new HashSet<NotificationUser>();
 	
 	public User() {}
 	public User(String crsid) {
@@ -63,7 +62,7 @@ public class User {
 	public Set<Group> getSubscriptions() { return this.subscriptions; }
 	public void addSubscriptions(Set<Group> subscriptions) { this.subscriptions.addAll(subscriptions); }
 
-	public Set<Notification> getNotifications() { return this.notifications; }
+	public Set<NotificationUser> getNotifications() { return this.notifications; }
 	
 	public Set<Api> getApis() { return this.apis; }
 	public void addApi(Api api) { this.apis.add(api); }

@@ -57,15 +57,17 @@ public class ApplicationController {
 			if ( ApiController.validateApiKeyForUser(apiToken, user) ) {
 				return Permissions.USER_API;
 			}
-			// Check if global permission
-			if ( true ) {
+			// Check if global permissions
+			if ( ApiController.validateGlobalApiKey(apiToken) ) {
 				return Permissions.GLOBAL_API_WITH_USER;
 			}
 		}
 		
 		if (user == null && apiToken != null) {
 			// Check if global permissions
-			return Permissions.GLOBAL_API;
+			if ( ApiController.validateGlobalApiKey(apiToken) ) {
+				return Permissions.GLOBAL_API;
+			}
 		}
 		
 		if (ravenUser != null) {
@@ -83,5 +85,20 @@ public class ApplicationController {
 		GLOBAL_API,
 		GLOBAL_API_WITH_USER
 	}
+	
+	/*
+	if ( validateRequest() == Permissions.NO_PERMISSIONS ) {
+		throw new RedirectException(NotificationsController.class, "errorCallback");
+	} else if ( validateRequest() == Permissions.GLOBAL_API ) {
+		// A user must be provided
+		throw new RedirectException(NotificationsController.class, "errorCallback");
+	} else if ( validateRequest() == Permissions.GLOBAL_API_WITH_USER ) {
+		currentUser = initialiseSpecifiedUser(sRequest.getParameter("user"));
+	} else if ( validateRequest() == Permissions.USER_API ) {
+		currentUser = initialiseSpecifiedUser(sRequest.getParameter("user"));
+	} else if ( validateRequest() == Permissions.RAVEN_SESSION ) {
+		currentUser = initialiseUser();
+	}
+	*/
 	
 }

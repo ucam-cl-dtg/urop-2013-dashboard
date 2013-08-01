@@ -3,14 +3,21 @@ package uk.ac.cam.dashboard.queries;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.dashboard.models.Notification;
+import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
 public class NotificationQuery {
+	
+	// Create the logger
+	private static Logger log = LoggerFactory.getLogger(NotificationQuery.class);
 	
 	private Criteria criteria;
 	
@@ -28,9 +35,27 @@ public class NotificationQuery {
 		);
 	}
 	
-	public NotificationQuery forUser(User user) {
-		criteria.createAlias("users", "u")
-			.add(Restrictions.eq("u.crsid", user.getCrsid()));
+	public static Notification get(int id) {
+		Session session = HibernateUtil.getTransactionSession();
+		Notification n = (Notification) session
+			.createQuery("from Notification where id = :id")
+			.setParameter("id", id)
+			.uniqueResult();
+			
+			return n;
+	}
+	
+	public NotificationQuery byNotification(Notification notification) {
+		log.debug("Getting notification id: " + notification.getId());
+		criteria.createAlias("users", "nu")
+		.add(Restrictions.eq("nu.notification", notification));
+	return this;
+	}
+	
+	public NotificationQuery byUser(User user) {
+			log.debug("Getting notifications for user: " + user.getCrsid());
+			criteria.createAlias("users", "nu")
+			.add(Restrictions.eq("nu.user", user));
 		return this;
 	}
 	
@@ -57,6 +82,11 @@ public class NotificationQuery {
 	@SuppressWarnings("unchecked")
 	public List<Notification> list() {
 		return this.criteria.list();
+	}
+
+	public NotificationUser uniqueResult() {
+		NotificationUser notificationUser = (NotificationUser)criteria.uniqueResult();
+		return notificationUser;
 	}
 	
 }

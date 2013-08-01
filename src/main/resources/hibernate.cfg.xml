@@ -52,12 +52,13 @@
         <property name="show_sql">true</property>
 
         <!-- Drop and re-create the database schema on startup -->
-        <property name="hbm2ddl.auto">validate</property>
+        <property name="hbm2ddl.auto">update</property>
 
         <mapping class="uk.ac.cam.dashboard.models.User" />
         <mapping class="uk.ac.cam.dashboard.models.Group" />
         <mapping class="uk.ac.cam.dashboard.models.Deadline" />
         <mapping class="uk.ac.cam.dashboard.models.Notification" />
+        <mapping class="uk.ac.cam.dashboard.models.NotificationUser" />
         <mapping class="uk.ac.cam.dashboard.models.Api" />
 
     </session-factory>

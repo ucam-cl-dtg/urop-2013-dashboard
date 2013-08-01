@@ -30,24 +30,24 @@ public class HomePageController extends ApplicationController{
 	
 	private User currentUser;
 	
-	@GET @Path("/dashboard")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Map<String, ?> homePage() {
-		currentUser = initialiseUser();
-		//ImmutableMap<String, ?> userMap = ulm.getAll();
-		
-		NotificationQuery nq = NotificationQuery.all();
-		nq.forUser(currentUser).limit(10);
-		
-		List<?> result = nq.list();
-		List<Map<?,?>> notifications = new ArrayList<Map<?,?>>();
-		for (Object o:result) {
-			notifications.add(((Notification) o).toMap());
-		}
-		
-		return ImmutableMap.of("user", currentUser.getCrsid(), "deadlines", currentUser.getUserDeadlinesMap(), "notifications", notifications);
-	}
-	
+//	@GET @Path("/dashboard")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Map<String, ?> homePage() {
+//		currentUser = initialiseUser();
+//		//ImmutableMap<String, ?> userMap = ulm.getAll();
+//		
+//		NotificationQuery nq = NotificationQuery.all();
+//		nq.forUser(currentUser).limit(10);
+//		
+//		List<?> result = nq.list();
+//		List<Map<?,?>> notifications = new ArrayList<Map<?,?>>();
+//		for (Object o:result) {
+//			notifications.add(((Notification) o).toMap());
+//		}
+//		
+//		return ImmutableMap.of("user", currentUser.getCrsid(), "deadlines", currentUser.getUserDeadlinesMap(), "notifications", notifications);
+//	}
+//	
 	/*
 	 * Archive ----------------------------------------------
 	 * ------------------------------------------------------ *
