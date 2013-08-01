@@ -2,7 +2,6 @@ package uk.ac.cam.dashboard.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -39,7 +38,7 @@ public class DeadlinesController extends ApplicationController {
 
 		currentUser = initialiseUser();
 		
-		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.getUserDeadlinesMap());
+		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.deadlinesToMap());
 	}
 	
 	// Create
@@ -107,18 +106,6 @@ public class DeadlinesController extends ApplicationController {
 		Deadline.deleteDeadline(id);
 		
 		throw new RedirectException("/app/#signapp/deadlines");
-	}
-	
-	// Errors
-	@GET @Path("/error/{type}") 
-	@Produces(MediaType.APPLICATION_JSON)
-	public Map deadlineErrors(@PathParam("type") int error){
-		
-		currentUser = initialiseUser();
-		
-		ImmutableMap<String, ?> errors = ImmutableMap.of("get", (error==1), "auth", (error==2), "noname", (error==3), "inpast", (error==4));
-
-		return ImmutableMap.of("crsid", currentUser.getCrsid(), "deadlines", currentUser.getUserDeadlinesMap(), "cdeadlines", currentUser.getUserCreatedDeadlinesMap(), "errors", errors);
 	}
 	
 	// Find groups AJAX

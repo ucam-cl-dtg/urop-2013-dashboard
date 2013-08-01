@@ -4,19 +4,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.jboss.resteasy.annotations.Form;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +21,6 @@ import uk.ac.cam.dashboard.forms.GroupForm;
 import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
-import uk.ac.cam.dashboard.util.HibernateUtil;
-import uk.ac.cam.dashboard.util.LDAPProvider;
 
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
@@ -46,10 +40,8 @@ public class GroupsController extends ApplicationController {
 		public Map indexGroups() {
 
 			currentUser = initialiseUser();
-
-			ImmutableMap<String, ?> errors = ImmutableMap.of("get", false, "auth", false, "noname", false, "noimport", false, "importsize", false);
 			
-			return ImmutableMap.of("crsid", currentUser.getCrsid(), "groups", currentUser.getGroupsMap(), "errors", errors);
+			return ImmutableMap.of("user", currentUser.toMap(), "groups", currentUser.subscriptionsToMap());
 		}
 		
 		// Create
@@ -114,18 +106,6 @@ public class GroupsController extends ApplicationController {
 			Group.deleteGroup(id);
 
 			throw new RedirectException("/app/#signapp/groups");
-		}
-		
-		// Errors
-		@GET @Path("/error/{type}") 
-		@Produces(MediaType.APPLICATION_JSON)
-		public Map groupErrors(@PathParam("type") int error){
-			
-			currentUser = initialiseUser();
-			
-			ImmutableMap<String, ?> errors = ImmutableMap.of("get", (error==1), "auth", (error==2), "noname", (error==3), "noimport", (error==4), "importsize", (error==5));
-
-			return ImmutableMap.of("crsid", currentUser.getCrsid(), "groups", currentUser.getGroupsMap(), "errors", errors);
 		}
 		
 		// Find users
