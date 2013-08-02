@@ -3,7 +3,6 @@ package uk.ac.cam.dashboard.controllers;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 
-import org.eclipse.jetty.server.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +24,7 @@ public class ApplicationController {
 		
 		log.debug("Getting crsid from raven");
 
-		return ((SessionManager)sRequest.getSession()).getUser();
+		return (User) sRequest.getSession().getAttribute("RavenRemoteUser");
 	}
 	
 	// temporary for testing
