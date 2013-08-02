@@ -1,32 +1,32 @@
 /*
- * This class has been written using code from cam.cl.raven.RavenValve, a Tomcat Valve,
+ * This class has been written using code from cam.cl.raven.RavenValve, a Tomcat Valve, 
  * written by William Billingsley (whb21 at cam.ac.uk).
- *
- * The main body of the code remains unchanged. All that has been added in version 1 is
+ * 
+ * The main body of the code remains unchanged. All that has been added in version 1 is 
  * additional error handling and a simplified configuration.
- *
- * RavenValve and RavenFilter achieve the same end result.
- *
+ * 
+ * RavenValve and RavenFilter achieve the same end result. 
+ * 
  * The advantages of RavenFilter are that it can be used on any servlet container without
- * code modification but the Principal object containing the id of the authenticated user
- * has to be obtained via an HttpSession attribute.
- *
- * RavenValve, is only usable within Tomcat. However, it does allow the Raven user id
- * to be fetched from the standard Principal object available through HttpServletRequest.getRemoteUser().
- *
- *
- *
+ * code modification but the Principal object containing the id of the authenticated user 
+ * has to be obtained via an HttpSession attribute. 
+ * 
+ * RavenValve, is only usable within Tomcat.  However, it does allow the Raven user id
+ * to be fetched from the standard Principal object available through HttpServletRequest.getRemoteUser(). 
+ * 
+ * 
+ * 
  * This program is free software; you can redistribute it and/or modify it under the terms
  * of the GNU Lesser General Public License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
- *
+ * 
  */
 
 package uk.ac.cam.dashboard.webauth;
@@ -77,27 +77,27 @@ import org.apache.commons.logging.LogFactory;
  * Add a filter definition:
  * 
  * <pre>
- * &lt;filter&gt;
- * &lt;filter-name&gt;ravenFilter&lt;/filter-name&gt;
- * &lt;filter-class&gt;uk.ac.cam.ucs.webauth.RavenFilter&lt;/filter-class&gt;
- * &lt;/filter&gt;
+ *  &lt;filter&gt;
+ *      &lt;filter-name&gt;ravenFilter&lt;/filter-name&gt;
+ *      &lt;filter-class&gt;uk.ac.cam.ucs.webauth.RavenFilter&lt;/filter-class&gt;
+ *  &lt;/filter&gt;
  * </pre>
  * 
  * Add one or more filter-mapping's for your application. Eg:
  * 
  * <pre>
- * &lt;filter-mapping&gt;
- * &lt;filter-name&gt;ravenFilter&lt;/filter-name&gt;
- * &lt;url-pattern&gt;/private&lt;/url-pattern&gt;
- * &lt;/filter-mapping&gt;
+ *  &lt;filter-mapping&gt;
+ *      &lt;filter-name&gt;ravenFilter&lt;/filter-name&gt;
+ *      &lt;url-pattern&gt;/private&lt;/url-pattern&gt;
+ *  &lt;/filter-mapping&gt;
  * </pre>
  * 
  * <h3>Retrieve authenticated user name</h3>
  * 
- * Get the value of session or request attribute "RavenRemoteUser".
+ * Get the value of session attribute "RavenRemoteUser".
  * 
  * <p>
- * <code>String userId = request.getAttribute("RavenRemoteUser");</code>
+ * <code>String userId = request.getSession().getAttribute("RavenRemoteUser");</code>
  * </p>
  * 
  * 
@@ -131,30 +131,30 @@ import org.apache.commons.logging.LogFactory;
  * passed on by RavenFilter to the servlet container.
  * 
  * <pre>
- * &lt;!--
- * Raven related Error pages
- * --&gt;
+ *  &lt;!-- 
+ *  Raven related Error pages 
+ *  --&gt;
  * 
- * &lt;!-- Authentication cancelled at user's request --&gt;
- * &lt;error-page&gt;&lt;error-code&gt;410&lt;/error-code&gt;&lt;location&gt;/ravenError.jsp&lt;/location&gt;&lt;/error-page&gt;
+ *  &lt;!-- Authentication cancelled at user's request --&gt;
+ *  &lt;error-page&gt;&lt;error-code&gt;410&lt;/error-code&gt;&lt;location&gt;/ravenError.jsp&lt;/location&gt;&lt;/error-page&gt; 
  * 
- * &lt;!-- No mutually acceptable types of authentication available --&gt;
- * &lt;error-page&gt;&lt;error-code&gt;510&lt;/error-code&gt;&lt;location&gt;/ravenError.jsp&lt;/location&gt;&lt;/error-page&gt;
+ *  &lt;!-- No mutually acceptable types of authentication available --&gt;
+ *  &lt;error-page&gt;&lt;error-code&gt;510&lt;/error-code&gt;&lt;location&gt;/ravenError.jsp&lt;/location&gt;&lt;/error-page&gt; 
  * 
- * &lt;!-- Unsupported authentication protocol version --&gt;
- * &lt;error-page&gt;&lt;error-code&gt;520&lt;/error-code&gt;&lt;location&gt;/ravenError.jsp&lt;/location&gt;&lt;/error-page&gt;
+ *  &lt;!-- Unsupported authentication protocol version --&gt;
+ *  &lt;error-page&gt;&lt;error-code&gt;520&lt;/error-code&gt;&lt;location&gt;/ravenError.jsp&lt;/location&gt;&lt;/error-page&gt; 
  * 
- * &lt;!-- Parameter error in authentication request --&gt;
- * &lt;error-page&gt;&lt;error-code&gt;530&lt;/error-code&gt;&lt;location&gt;/ravenError.jsp&lt;/location&gt;&lt;/error-page&gt;
+ *  &lt;!-- Parameter error in authentication request --&gt;
+ *  &lt;error-page&gt;&lt;error-code&gt;530&lt;/error-code&gt;&lt;location&gt;/ravenError.jsp&lt;/location&gt;&lt;/error-page&gt;
  * 
- * &lt;!-- Interaction with the user would be required --&gt;
- * &lt;error-page&gt;&lt;error-code&gt;540&lt;/error-code&gt;&lt;location&gt;/ravenError.jsp&lt;/location&gt;&lt;/error-page&gt;
+ *  &lt;!-- Interaction with the user would be required --&gt;
+ *  &lt;error-page&gt;&lt;error-code&gt;540&lt;/error-code&gt;&lt;location&gt;/ravenError.jsp&lt;/location&gt;&lt;/error-page&gt;
  * 
- * &lt;!-- Web server not authorised to use the authentication service --&gt;
- * &lt;error-page&gt;&lt;error-code&gt;560&lt;/error-code&gt;&lt;location&gt;/ravenError.jsp&lt;/location&gt;&lt;/error-page&gt;
+ *  &lt;!--  Web server not authorised to use the authentication service --&gt;
+ *  &lt;error-page&gt;&lt;error-code&gt;560&lt;/error-code&gt;&lt;location&gt;/ravenError.jsp&lt;/location&gt;&lt;/error-page&gt; 
  * 
- * &lt;!-- Operation declined by the authentication service --&gt;
- * &lt;error-page&gt;&lt;error-code&gt;570&lt;/error-code&gt;&lt;location&gt;/ravenError.jsp&lt;/location&gt;&lt;/error-page&gt;
+ *  &lt;!-- Operation declined by the authentication service --&gt;
+ *  &lt;error-page&gt;&lt;error-code&gt;570&lt;/error-code&gt;&lt;location&gt;/ravenError.jsp&lt;/location&gt;&lt;/error-page&gt;
  * </pre>
  * 
  * @author whb21 William Billingsley (whb21 at cam.ac.uk)
@@ -209,6 +209,17 @@ public class RavenFilter implements Filter {
 	public static String INIT_PARAM_AUTHENTICATE_URL = "authenticateUrl";
 
 	/**
+	 * Whether the filter allows unauthorised users through, for API filter
+	 * validation
+	 */
+	public static String INIT_PARAM_ALLOW_UNAUTHORISED = "allowUnauthorised";
+	
+	/**
+	 * Override of default max skew - in case there is lag in the clocks
+	 */
+	public static String INIT_PARAM_MAX_SKEW = "maxSkew";
+
+	/**
 	 * The filter init-param param-name path to the certificate. Optional.
 	 * Defaults to /WEB-INF/raven/pubkey2.crt
 	 */
@@ -239,6 +250,20 @@ public class RavenFilter implements Filter {
 	 */
 	private String sRavenAuthenticatePage = "https://raven.cam.ac.uk/auth/authenticate.html";
 
+	/**
+	 * Whether to allow unauthorised. Optional.
+	 * 
+	 * Defaults to false.
+	 */
+	private Boolean allowUnauthorised = false;
+
+	/**
+	 * Override for max skew. Optional.
+	 * 
+	 * Defaults to null.
+	 */
+	private Integer maxSkew = null;
+
 	/** KeyStore used by WebauthValidator class */
 	protected KeyStore keyStore = null;
 
@@ -258,6 +283,16 @@ public class RavenFilter implements Filter {
 				.getInitParameter(INIT_PARAM_AUTHENTICATE_URL);
 		if (authenticatePage != null)
 			sRavenAuthenticatePage = authenticatePage;
+		
+		// defaults to false if the init param is not set
+		allowUnauthorised = Boolean.parseBoolean(config
+				.getInitParameter(INIT_PARAM_ALLOW_UNAUTHORISED));
+		
+		// checks if the init-param is set, and if so overrides max skew. 
+		String maxSkew = config
+				.getInitParameter(INIT_PARAM_MAX_SKEW);
+		if (maxSkew != null)
+			this.maxSkew = Integer.parseInt(maxSkew);
 
 		// get the path to the raven certificate or use a default
 		String sCertContextPath = config
@@ -327,7 +362,7 @@ public class RavenFilter implements Filter {
 			log.error("Unable to load certificate file: " + sCertRealPath, e);
 			throw new RuntimeException(e);
 		} catch (IOException e) {
-			log.error("General IO problem. Unable to initialised filter.", e);
+			log.error("General IO problem.  Unable to initialised filter.", e);
 			throw new RuntimeException(e);
 		}
 
@@ -343,7 +378,9 @@ public class RavenFilter implements Filter {
 	protected WebauthValidator getWebauthValidator() {
 		if (webauthValidator == null) {
 			webauthValidator = new WebauthValidator(getKeyStore());
-			webauthValidator.setMaxSkew(30000);
+			if (this.maxSkew != null) {
+				webauthValidator.setMaxSkew(this.maxSkew);
+			}
 		}
 		return webauthValidator;
 	}
@@ -370,7 +407,7 @@ public class RavenFilter implements Filter {
 
 		// Only process http requests.
 		if ((servletReq instanceof HttpServletRequest) == false) {
-			String msg = "Configuration Error. RavenFilter can only handle Http requests. The rest of the filter chain will NOT be processed.";
+			String msg = "Configuration Error.  RavenFilter can only handle Http requests. The rest of the filter chain will NOT be processed.";
 			log.error(msg);
 			return;
 		}
@@ -445,8 +482,7 @@ public class RavenFilter implements Filter {
 					chain.doFilter(request, response);
 					return;
 				} else {
-					response.sendError(403,
-							"You are not authorized to view this page.");
+					response.sendError(403,"You are not authorized to view this page.");
 					return;
 				}
 			}
@@ -510,6 +546,10 @@ public class RavenFilter implements Filter {
 				}
 				return;
 			}
+		} else if (allowUnauthorised) {
+			session.setAttribute(ATTR_REMOTE_USER, null);
+			chain.doFilter(request, response);
+			return;
 		} else {
 			/*
 			 * No WLS-Response, no stored state. Redirect the user to Raven to
