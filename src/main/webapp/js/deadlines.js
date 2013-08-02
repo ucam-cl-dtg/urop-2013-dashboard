@@ -3,21 +3,28 @@ moduleScripts['dashboard']['deadlines'] = {
 		[
 	    function() {
     	      
-              // Delete deadline
-              $(".deadline_delete").click(function() {
+              // Toggle deadline archived
+              $(".archive_deadline").click(function() {
               var deadline_id = $(this).parents("form").attr("id");
-              // Ajax delete request
-                  var deleteData = $.ajax({
-                        type: 'DELETE',
-                        url: "/dashboard/deadlines/" + deadline_id,
+              // Ajax update request
+                  var archiveData = $.ajax({
+                        type: 'PUT',
+                        url: "/dashboard/deadlines/" + deadline_id+"/archive",
                         success: function(resultData) {
-                            alert(resultData);
-                            $("#"+deadline_id).hide(2000, function() {
-                                $(this).remove();
-                            });
-                            $("#d_"+deadline_id).hide(2000, function() {
-                                $(this).remove();
-                            });
+                            alert("archived");
+                        }
+                  });
+              });
+              
+              // Toggle deadline complete
+              $(".complete_deadline").click(function() {
+              var deadline_id = $(this).parents("form").attr("id");
+              // Ajax update request
+                  var archiveData = $.ajax({
+                        type: 'PUT',
+                        url: "/dashboard/deadlines/" + deadline_id+"/complete",
+                        success: function(resultData) {
+                            alert("complete");
                         }
                   });
               });

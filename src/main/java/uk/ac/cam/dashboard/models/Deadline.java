@@ -1,8 +1,10 @@
 package uk.ac.cam.dashboard.models;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,7 +41,7 @@ public class Deadline implements Comparable<Deadline>, Mappable {
 	//@Temporal(TemporalType.TIMESTAMP)
 	private Calendar datetime;
 
-	@OneToMany(mappedBy = "deadline", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "deadline", cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<DeadlineUser> users = new HashSet<DeadlineUser>();
 	
 	@ManyToOne
@@ -78,6 +80,7 @@ public class Deadline implements Comparable<Deadline>, Mappable {
 	public void setOwner(User owner) { this.owner= owner; }
 	
 	public Set<DeadlineUser> getUsers() { return this.users; }
+	public void clearUsers() { users.clear(); }
 	public void setUsers(Set<DeadlineUser> users) { this.users.addAll(users); }
 	
 	// Queries
@@ -127,7 +130,7 @@ public class Deadline implements Comparable<Deadline>, Mappable {
 	@Override
 	public Map<String, ?> toMap() {
 		
-		ImmutableMap.Builder<String, Object> builder; ;
+		ImmutableMap.Builder<String, Object> builder; 
 		
 		try {
 			builder = new ImmutableMap.Builder<String, Object>();
@@ -165,6 +168,18 @@ public class Deadline implements Comparable<Deadline>, Mappable {
 			return builder.build();
 		}
 		return builder.build();
+	}
+	
+	public List<ImmutableMap<String, ?>> usersToMap(){
+		
+		List<ImmutableMap<String, ?>> deadlineUsers =new ArrayList<ImmutableMap<String, ?>>();
+		
+		for(DeadlineUser u : users){
+			String crsid = u.getUser().getCrsid();
+			deadlineUsers.add(ImmutableMap.of("crsid", crsid, "name", LDAPQueryHelper.getRegisteredName(crsid)));
+		}
+		
+		return deadlineUsers;
 	}
 	
 }

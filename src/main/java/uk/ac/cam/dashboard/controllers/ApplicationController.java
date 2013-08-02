@@ -26,13 +26,11 @@ public class ApplicationController {
 		log.debug("Getting crsid from raven");
 		
 		// Only do this once
-		String crsid = (String) sRequest.getParameter("user");
-		String auth = (String) sRequest.getParameter("auth");
-		boolean ravenUser = (String) sRequest.getSession().getAttribute("RavenRemoteUser") != null ? true: false;
+		String crsid = (String) sRequest.getSession().getAttribute("RavenRemoteUser");
 		
-		sRequest.getSession().setAttribute("UserPermissions", new SessionManager(crsid, auth, ravenUser));
-
-		return ((SessionManager)sRequest.getSession().getAttribute("UserPermissions")).getUser();
+		ulm = UserLookupManager.getUserLookupManager(crsid);
+		
+		return User.registerUser(crsid);
 	}
 	
 	// temporary for testing

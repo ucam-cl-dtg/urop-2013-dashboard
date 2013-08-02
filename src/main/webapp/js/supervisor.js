@@ -69,6 +69,7 @@ moduleScripts['dashboard']['supervisor'] = {
                 preventDuplicates: true           
               });
               
+              
               // Delete deadline
               $(".deadline_delete").click(function() {
               var deadline_id = $(this).parents("form").attr("id");
@@ -77,8 +78,6 @@ moduleScripts['dashboard']['supervisor'] = {
                         type: 'DELETE',
                         url: "/dashboard/deadlines/" + deadline_id,
                         success: function(resultData) {
-                            console.log(resultData);
-                            console.log(resultData.success);
                             if(resultData.success==true){
                                 $("#"+resultData.id).hide(2000, function() {
                                     $(this).remove();
@@ -93,12 +92,23 @@ moduleScripts['dashboard']['supervisor'] = {
               
                // Edit deadline
               $(".deadline_edit").click(function() {
-                alert("clicked");
                 var deadline_id = $(this).parents('form').attr("id");
-                 var subpanel = $(this).parents('form').find('.deadline_subpanel');
-                 loadModule(subpanel, "dashboard/deadlines/"+deadline_id+"/edit", "dashboard.groups.edit", function(){alert("group edit");});
+                var panel = $(this).parents('form');
+                var subpanel = $(this).parents('form').find('.deadline_subpanel');
+                 loadModule(subpanel, "dashboard/deadlines/"+deadline_id+"/edit", "dashboard.deadlines.edit", function(){
+                    //expand subpanel
+                    var updateForm = "#d_edit_"+deadline_id;         
+                     $(updateForm).ajaxForm({
+                            type: 'POST',
+                            url: "/dashboard/deadlines/" + deadline_id + "/edit",
+                            success: function() {
+                                loadModule(panel, "dashboard/deadlines/"+deadline_id+"/edit", "dashboard.supervisor.deadline", function(){
+                            })    
+                        }
+                     });
+                 });
               });
-              
+
               
             }
         ]

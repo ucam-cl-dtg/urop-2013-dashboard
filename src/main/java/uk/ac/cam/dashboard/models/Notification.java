@@ -26,7 +26,7 @@ public class Notification {
 	@GenericGenerator(name="increment", strategy="increment")
 	private int id;
 	
-	@OneToMany(mappedBy = "notification", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "notification", cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<NotificationUser> users = new HashSet<NotificationUser>();
 	
 	private String message;

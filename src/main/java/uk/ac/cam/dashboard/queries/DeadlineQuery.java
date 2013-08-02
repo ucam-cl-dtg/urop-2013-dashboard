@@ -54,6 +54,16 @@ public class DeadlineQuery {
 			return n;
 	}
 	
+	public static DeadlineUser getDUser(int id) {
+		Session session = HibernateUtil.getTransactionSession();
+		DeadlineUser n = (DeadlineUser) session
+			.createQuery("from DeadlineUser where id = :id")
+			.setParameter("id", id)
+			.uniqueResult();
+			
+			return n;
+	}
+	
 	public DeadlineQuery byDeadline(Deadline Deadline) {
 		log.debug("Getting Deadline id: " + Deadline.getId());
 		criteria.add(Restrictions.eq("Deadline", Deadline));
@@ -79,7 +89,7 @@ public class DeadlineQuery {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<DeadlineUser> setlist() {
+	public List<DeadlineUser> setList() {
 		return this.criteria.list();
 	}
 	

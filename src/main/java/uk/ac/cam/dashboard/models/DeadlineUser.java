@@ -9,6 +9,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import uk.ac.cam.dashboard.util.HibernateUtil;
+
 import com.google.common.collect.ImmutableMap;
 
 @Entity
@@ -50,6 +52,21 @@ public class DeadlineUser implements Mappable{
 	
 	public boolean getComplete() { return complete; }
 	public void setComplete(boolean complete) { this.complete = complete; }
+	
+	public boolean getArchived() { return archived; }
+	public void setArchived(boolean archived) { this.archived = archived; }
+	
+	public void toggleComplete(boolean complete){
+		this.setComplete(complete);
+		
+		HibernateUtil.getTransactionSession().update(this);
+	}
+	
+	public void toggleArchived(boolean archived){
+		this.setArchived(archived);
+		
+		HibernateUtil.getTransactionSession().update(this);
+	}
 	
 	@Override
 	public ImmutableMap<String, ?> toMap() {

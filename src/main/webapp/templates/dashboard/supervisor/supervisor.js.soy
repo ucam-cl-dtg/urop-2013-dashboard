@@ -14,9 +14,33 @@
             <p class="title" data-section-title><a href="#panel1">Manage Deadlines</a></p>
             <div class="content" data-section-content>
             
-                {call .deadline}
-                    {param cdeadlines: $cdeadlines /}
-                {/call}
+                <!--deadlines-->
+                
+                <div class="row">
+                <ul class="panels">
+    
+                   <!--display a row for each created deadline-->
+                    
+                    {foreach $deadline in $cdeadlines}
+                    
+                        {call .deadline}
+                            {param deadline: $deadline /}
+                        {/call}
+                        
+                    {ifempty}
+                    <div class="columns large-12 small-12">
+                    You have not created any deadlines
+                    </div>
+                    {/foreach}
+                        
+                    <!-- end groups display deadline--> 
+                    
+                </ul>
+                </div>     
+                
+                <!--end deadlines-->           
+                
+                {call .newdeadline/}
                 
             </div>
             </section>
@@ -33,23 +57,17 @@
     </div>
     
 
-
-				
+	
 {/template}
 
 /**
  * Manage deadlines
- * @param cdeadlines
+ * @param deadline
  *
  */
 {template .deadline }
 
-        <div class="row">
-            <ul class="panels">
 
-           <!--display a row for each created deadline-->
-            
-            {foreach $deadline in $cdeadlines}
             <form id="{$deadline.id}"> 
                 <li class="panel-wrapper columns large-12">
                     <div class="list-panel">
@@ -65,42 +83,22 @@
                         </div>
                     </div>
                     <ul class="sub-panel deadline_subpanel">
-                        <li class="list-sub-panel">
-                            <div class="row list-inner-sub-panel">
-                            
-                                <!-- display members loop -->
-                       
-                                {foreach $user in $deadline.users}
-                                <div class="columns large-7 small-7">
-                                {$user.name} ({$user.crsid})
-                                </div>
-                                {ifempty}
-                                <div class="columns large-7 small-7">
-                                No users associated with this deadline
-                                </div>
-                                {/foreach}
-
-                                <!-- end display members loop -->
-                                <div class="columns large-5 small-5 text-right">
-                                    <div class="icon-button-wrapper">
-                                        <!--edit members buttons?-->
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                        
+                    {call .dusers}
+                    {param users: $deadline.users /}
+                    {/call}    
+                        
                     </ul>
                 </li>
-                </form>
-                {ifempty}
-                <div class="columns large-12 small-12">
-                    You have not created any deadlines
-                </div>
-                {/foreach}
-                
-                <!-- end groups display deadline--> 
-                
-            </ul>
-        </div>
+                </form>    
+
+{/template}
+
+/**
+ * Dashboard: supervisor page, create deadlines
+ * 
+ */
+{template .newdeadline }
     
     <h3>Create new deadline</h3>
     <form name="deadlineForm" action="/dashboard/deadlines" method="post" class="custom" data-abide>
@@ -189,8 +187,40 @@
             </div>
         </div>
         
-    </form>       
+    </form>   
+  
+{/template}
 
+/**
+ * Display deadline users
+ * @param users
+ */
+{template .dusers }
+
+    <li class="list-sub-panel">
+        <div class="row list-inner-sub-panel">
+                                    
+            <!-- display members loop -->
+            <div class="columns large-12">                       
+            {foreach $user in $users}
+            <div class="row">
+                <div class="columns large-12">
+                {$user.name} ({$user.crsid})
+                </div>
+            </div>
+            {ifempty}
+            <div class="row">
+                <div class="columns large-12">
+                No users associated with this deadline
+                </div>
+            </div>    
+            {/foreach}
+            </div>
+            <!-- end display members loop -->
+
+        </div>
+    </li>
+                
 {/template}
 
 /**

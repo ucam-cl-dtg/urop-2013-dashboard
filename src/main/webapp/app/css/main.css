@@ -4493,18 +4493,26 @@ div.events#show .established-slot {
     margin: 7px 3px 3px 3px; }
   div.events#show .established-slot p {
     margin: 0; }
+<<<<<<< HEAD
 div.events#show .draggable-custom {
   cursor: move; }
+=======
+>>>>>>> aeb8f5bbc4e4d5a5d1c46ba674d9550a1975f14c
 div.events#show .token-input-list-facebook {
   display: inline-block;
   width: 145px;
   height: 47px;
   margin-right: 10px; }
   div.events#show .token-input-list-facebook li.token-input-selected-token-facebook {
+<<<<<<< HEAD
     color: black;
     cursor: inherit; }
   div.events#show .token-input-list-facebook li.token-input-token-facebook {
     cursor: inherit;
+=======
+    color: black; }
+  div.events#show .token-input-list-facebook li.token-input-token-facebook {
+>>>>>>> aeb8f5bbc4e4d5a5d1c46ba674d9550a1975f14c
     margin-top: 7px;
     display: inline-block;
     background-color: transparent;
@@ -4601,7 +4609,7 @@ body {
   body {
     background: #ffffff; }
 
-  .main-wrapper {
+  .main {
     margin-left: 0 !important; }
 
   .header-logo {
@@ -4683,7 +4691,7 @@ body {
   padding: 0; }
 
 .sidebar-navigation-item {
-  padding: 10px 12px 10px 12px;
+  padding: 10px 25px 10px 25px;
   border-top: 1px solid #fff;
   border-bottom: 1px solid #ccc; }
 
@@ -4707,12 +4715,9 @@ body {
 .sidebar-sub-navigation-item-header {
   color: #525252; }
 
-.main-wrapper {
+.main {
   margin-left: 350px;
   padding: 10px 17px 10px 17px; }
-
-.main {
-  max-width: none; }
 
 .full-width {
   width: 100%;

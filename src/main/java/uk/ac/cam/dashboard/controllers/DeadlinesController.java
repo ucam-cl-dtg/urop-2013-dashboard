@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.dashboard.forms.DeadlineForm;
 import uk.ac.cam.dashboard.models.Deadline;
+import uk.ac.cam.dashboard.models.DeadlineUser;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
@@ -47,7 +49,7 @@ public class DeadlinesController extends ApplicationController {
 	
 	// Create
 	@POST @Path("/") 
-	public void createGroup(@Form DeadlineForm deadlineForm) throws Exception {
+	public void createDeadline(@Form DeadlineForm deadlineForm) throws Exception {
 		currentUser = initialiseUser();
 		
 		int id = deadlineForm.handleCreate(currentUser);
@@ -55,7 +57,6 @@ public class DeadlinesController extends ApplicationController {
 		throw new RedirectException("/app/#dashboard/supervisor");
 	}
 	
-
 	// Edit
 	@GET @Path("/{id}/edit") 
 	@Produces(MediaType.APPLICATION_JSON)
@@ -65,28 +66,20 @@ public class DeadlinesController extends ApplicationController {
 		
 	  	Deadline deadline = Deadline.getDeadline(id);
 	  	
-	  	if(deadline==null){
-	  		//throw new RedirectException("/app/#signapp/deadlines/error/1");
-	  		return ImmutableMap.of("redirect", "signapp/deadlines/error/1");
-	  	}
-	  	if(!deadline.getOwner().equals(currentUser)){
-	  		//throw new RedirectException("/app/#signapp/deadlines/error/2");
-	  		return ImmutableMap.of("redirect", "signapp/deadlines/error/2");
-	  	}
-		return deadline.toMap();		
+		return ImmutableMap.of("deadline", deadline.toMap());		
 	}
 	
-//	// Update
-//	@POST @Path("/{id}/edit")
-//	public void updateDeadline(@Form DeadlineForm deadlineForm, @PathParam("id") int id) {
-//		
-//		currentUser = initialiseUser();
-//		
-//		id = deadlineForm.handleUpdate(currentUser, id);
-//		
-//		throw new RedirectException("/app/#signapp/deadlines");
-//	}
-	
+	// Update
+	@POST @Path("/{id}/edit")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map<String, ?> updateDeadline(@Form DeadlineForm deadlineForm, @PathParam("id") int id) {
+		
+		currentUser = initialiseUser();
+		
+		Deadline deadline = deadlineForm.handleUpdate(currentUser, id);
+
+		return deadline.toMap();
+	}
 	
 	// Delete
 	@DELETE @Path("/{id}")
@@ -100,6 +93,36 @@ public class DeadlinesController extends ApplicationController {
 	  	session.delete(d);
 		
 		return ImmutableMap.of("success", true, "id", id);
+	}
+	
+	// Change completed status
+	@PUT @Path("/{id}/complete")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map<String, ?> updateComplete(@PathParam("id") int id) {
+		
+		currentUser = initialiseUser();
+		
+		DeadlineUser d = DeadlineQuery.getDUser(id);
+		
+		if(d.getComplete()){ d.toggleComplete(false);
+		} else { d.toggleComplete(true); }
+
+		return d.toMap();
+	}
+	
+	// Change archived status	
+	@PUT @Path("/{id}/archive")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map<String, ?> updateArchive(@PathParam("id") int id) {
+		
+		currentUser = initialiseUser();
+		
+		DeadlineUser d = DeadlineQuery.getDUser(id);
+		
+		if(d.getArchived()){ d.toggleArchived(false);
+		} else { d.toggleArchived(true); }
+
+		return d.toMap();
 	}
 	
 	// Find groups AJAX

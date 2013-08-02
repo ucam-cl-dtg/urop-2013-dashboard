@@ -30,7 +30,7 @@ public class User {
 	
 	private String username;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<DeadlineUser> deadlines = new HashSet<DeadlineUser>();
 
 	@ManyToMany(mappedBy = "users")
@@ -42,7 +42,7 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private Set<Api> apis = new HashSet<Api>();
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<NotificationUser> notifications = new HashSet<NotificationUser>();
 	
 	public User() {}
@@ -58,6 +58,7 @@ public class User {
 	public void setUsername(String username) {this.username = username;}
 	
 	public Set<DeadlineUser> getDeadlines() { return deadlines; }
+	public void clearDeadlines() { deadlines.clear(); }
 	public void addDeadlines(Set<DeadlineUser> deadlines) { this.deadlines.addAll(deadlines); }
 	
 	public Set<Group> getGroups() { return this.groups; }
@@ -123,20 +124,24 @@ public class User {
 		return userSubscriptions;
 	}
 	
-	// Get users deadlines as a map
 	public List<Map<String, ?>> deadlinesToMap() {
 		
 		List<Map<String, ?>> userDeadlines = new ArrayList<Map<String, ?>>();
+		
+		DeadlineQuery dq = DeadlineQuery.set();
+		dq.byUser(this);
 		
 		if(deadlines==null){
 			return new ArrayList<Map<String, ?>>();
 		}
 		
-		for(DeadlineUser d : deadlines)  {
+		List<DeadlineUser> results = dq.setList();
+		
+		for (DeadlineUser d : results) {
 			userDeadlines.add(d.toMap());
 		}
-		return userDeadlines;
 		
+		return userDeadlines;	
 	}
 	
 	public List<Map<String, ?>> createdDeadlinesToMap() {
@@ -182,7 +187,7 @@ public class User {
 		return (((User) object).getCrsid().equals(this.crsid));
 	}
 	
-	public Map<String, ?> toMap() {
+	public ImmutableMap<String, ?> toMap() {
 		return ImmutableMap.of("crsid", crsid);
 	}
 }
