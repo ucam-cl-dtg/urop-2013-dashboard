@@ -212,7 +212,7 @@ public class RavenFilter implements Filter {
 	 * Whether the filter allows unauthorised users through, for API filter
 	 * validation
 	 */
-	public static String INIT_PARAM_ALLOW_UNAUTHORISED = "allowedUnauthorised";
+	public static String INIT_PARAM_ALLOW_UNAUTHORISED = "allowUnauthorised";
 	
 	/**
 	 * Override of default max skew - in case there is lag in the clocks
@@ -255,7 +255,7 @@ public class RavenFilter implements Filter {
 	 * 
 	 * Defaults to false.
 	 */
-	private boolean allowUnauthorised = false;
+	private Boolean allowUnauthorised = false;
 
 	/**
 	 * Override for max skew. Optional.
@@ -283,7 +283,7 @@ public class RavenFilter implements Filter {
 				.getInitParameter(INIT_PARAM_AUTHENTICATE_URL);
 		if (authenticatePage != null)
 			sRavenAuthenticatePage = authenticatePage;
-
+		
 		// defaults to false if the init param is not set
 		allowUnauthorised = Boolean.parseBoolean(config
 				.getInitParameter(INIT_PARAM_ALLOW_UNAUTHORISED));

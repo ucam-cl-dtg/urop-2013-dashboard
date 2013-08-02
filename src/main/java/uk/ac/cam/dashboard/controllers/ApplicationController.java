@@ -24,7 +24,7 @@ public class ApplicationController {
 		
 		log.debug("Getting crsid from raven");
 
-		return (User) sRequest.getSession().getAttribute("RavenRemoteUser");
+		return User.registerUser((String) sRequest.getSession().getAttribute("RavenRemoteUser"));
 	}
 	
 	// temporary for testing

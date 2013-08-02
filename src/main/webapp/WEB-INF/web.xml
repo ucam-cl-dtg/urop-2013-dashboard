@@ -5,12 +5,20 @@
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 		
-	<!-- Include this for the raven filter --> 
+	<!-- Include this for the raven filter -->
 	<filter>
 		<filter-name>ravenFilter</filter-name>
 		<filter-class>uk.ac.cam.dashboard.webauth.RavenFilter</filter-class>
 		<init-param>
-			<param-name>allowUnauthorized</param-name>
+			<param-name>maxSkew</param-name>
+			<param-value>30000</param-value>
+		</init-param>
+	</filter>
+	<filter>
+		<filter-name>ravenFilterUnauth</filter-name>
+		<filter-class>uk.ac.cam.dashboard.webauth.RavenFilter</filter-class>
+		<init-param>
+			<param-name>allowUnauthorised</param-name>
 			<param-value>true</param-value>
 		</init-param>
 		<init-param>
@@ -19,18 +27,18 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		</init-param>
 	</filter>
 	
-	<!-- Include this for the Hibernate filter -->
-	<filter>
-		<filter-name>Hibernate</filter-name>
-		<filter-class>uk.ac.cam.dashboard.util.HibernateSessionRequestFilter</filter-class>
-	</filter>
-
 	<!-- Include this for the api filter --> 
 	<filter>
 		<filter-name>apiFilter</filter-name>
 		<filter-class>uk.ac.cam.dashboard.webauth.ApiFilter</filter-class>
 	</filter>
 	
+	<!-- Include this for the Hibernate filter -->
+	<filter>
+		<filter-name>Hibernate</filter-name>
+		<filter-class>uk.ac.cam.dashboard.util.HibernateSessionRequestFilter</filter-class>
+	</filter>
+
 	<filter>
 		<filter-name>Htmleasy</filter-name>
 		<filter-class>com.googlecode.htmleasy.HtmleasyFilterDispatcher</filter-class>
@@ -40,22 +48,27 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		</init-param>
 	</filter>
 
-	<!-- Include for raven filter (url-pattern set to /* for securing all
-	pages of the website with raven -->
+	<!-- Include for raven filter (url-pattern set to /* for securing all 
+	pages of the website with raven) -->
 	<filter-mapping>
 		<filter-name>ravenFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-
+	
+	<!-- Include for the api filter
 	<filter-mapping>
-		<filter-name>Hibernate</filter-name>
-		<url-pattern>/*</url-pattern>
+		<filter-name>ravenFilterUnauth</filter-name>
+		<url-pattern>/api/*</url-pattern>
 	</filter-mapping>
 	
-	<!-- Include for the api filter (url-pattern set to /* for securing all
-	pages of the website with the api filter -->
 	<filter-mapping>
 		<filter-name>apiFilter</filter-name>
+		<url-pattern>/api/*</url-pattern>
+	</filter-mapping>
+ 	-->
+ 	
+	<filter-mapping>
+		<filter-name>Hibernate</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 

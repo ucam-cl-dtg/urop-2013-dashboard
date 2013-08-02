@@ -1,6 +1,8 @@
 package uk.ac.cam.dashboard.webauth;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -51,6 +53,11 @@ public class ApiFilter implements Filter {
 		String auth = (String) request.getParameter("auth");
 		String ravenUser = (String) session.getAttribute("RavenRemoteUser");
 		
+		System.out.println(Arrays.toString(request.getParameterMap().keySet().toArray()));
+		System.out.println("User: " + user);
+		System.out.println("Auth: " + auth);
+		System.out.println("RavenUser: " + ravenUser);
+		
 		if (ravenUser != null) {
 			log.debug("No need for API validation");
 			session.setAttribute("permissions", Permissions.USER);
@@ -91,10 +98,14 @@ public class ApiFilter implements Filter {
 	public boolean validateApiKeyForUser(String key, String userCrsid) {
 		User user = User.registerUser(userCrsid);
 		
-		for (Api a : user.getApis()) {
-			if ( key.equals(a.getKey()) ) {
-				return true;
+		if (user != null) {
+		
+			for (Api a : user.getApis()) {
+				if ( key.equals(a.getKey()) ) {
+					return true;
+				}
 			}
+		
 		}
 		
 		return false;
