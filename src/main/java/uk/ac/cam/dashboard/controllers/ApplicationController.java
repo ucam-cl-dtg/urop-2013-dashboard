@@ -3,11 +3,11 @@ package uk.ac.cam.dashboard.controllers;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 
+import org.eclipse.jetty.server.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.dashboard.models.User;
-import uk.ac.cam.dashboard.util.SessionManager;
 import uk.ac.cam.dashboard.util.UserLookupManager;
 
 public class ApplicationController {
@@ -24,16 +24,8 @@ public class ApplicationController {
 	protected User initialiseUser() {
 		
 		log.debug("Getting crsid from raven");
-		
-		// Only do this once
-		// This is now void
-		String crsid = (String) sRequest.getParameter("user");
-		String auth = (String) sRequest.getParameter("auth");
-		boolean ravenUser = (String) sRequest.getSession().getAttribute("RavenRemoteUser") != null ? true: false;
-		
-		sRequest.getSession().setAttribute("UserPermissions", new SessionManager(crsid, auth, ravenUser));
 
-		return ((SessionManager)sRequest.getSession().getAttribute("UserPermissions")).getUser();
+		return ((SessionManager)sRequest.getSession()).getUser();
 	}
 	
 	// temporary for testing

@@ -59,37 +59,4 @@ public class ApiController extends ApplicationController {
 		return ImmutableMap.of("key", api.getKey());
 	}
 	
-	// Validation
-	
-	public static boolean validateApiKeyForUser(String key, String userCrsid) {
-		User user = User.registerUser(userCrsid);
-		
-		for (Api a : user.getApis()) {
-			if ( key.equals(a.getKey()) ) {
-				return true;
-			}
-		}
-		
-		return false;
-		
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static boolean validateGlobalApiKey(String key) {
-		Session s = HibernateUtil.getTransactionSession();
-		
-		Criteria criteria = s.createCriteria(Api.class);
-		criteria.add(Restrictions.eq("globalPermissions", true));
-		List<Api> apis = criteria.list();
-		
-		for ( Api a : apis ) {
-			if ( a.getKey().equals(key) ) {
-				return true;
-			}
-		}
-		
-		return false;
-		
-	}
-	
 }
