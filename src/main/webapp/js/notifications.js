@@ -1,9 +1,3 @@
-moduleScripts['dashboard']['notifications'] = {
-    'getNotificationsController': [
-	    bindNotificationShowMoreListener
-    ]
-}
-
 function bindNotificationShowMoreListener() {
 	
 	$('#show-more-notifications').on('click', function(e) {

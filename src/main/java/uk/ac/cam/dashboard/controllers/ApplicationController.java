@@ -24,8 +24,8 @@ public class ApplicationController {
 		
 		log.debug("Getting crsid from raven");
 		
-		// Only do this once
-		String crsid = (String) sRequest.getSession().getAttribute("RavenRemoteUser");
+		// String crsid = (String) sRequest.getSession().getAttribute("RavenRemoteUser");
+		String crsid = "jd658";
 		
 		ulm = UserLookupManager.getUserLookupManager(crsid);
 		

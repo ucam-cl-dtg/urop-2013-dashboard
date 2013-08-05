@@ -1,15 +1,3 @@
-moduleScripts['dashboard']['supervisor'] = {
-    'index' : [
-        supervisor,
-        editDeadline,
-        deleteDeadline,
-        deadlineAutocomplete,
-        createGroup,
-        deleteGroup,
-        applyDatepicker
-	]
-}
-
 function editDeadline() {
 
     $(".deadline_edit").click(function() {

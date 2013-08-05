@@ -3,18 +3,12 @@ package uk.ac.cam.dashboard.helpers;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
-
-import org.apache.commons.codec.binary.Base64;
-import org.eclipse.jetty.util.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableMap;
-
 import uk.ac.cam.dashboard.util.LDAPProvider;
-import uk.ac.cam.dashboard.util.UserLookupManager;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * @author      Holly Priest <hp343@cam.ac.uk>
