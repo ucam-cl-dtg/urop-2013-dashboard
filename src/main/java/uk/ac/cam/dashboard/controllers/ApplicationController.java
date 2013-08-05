@@ -3,8 +3,11 @@ package uk.ac.cam.dashboard.controllers;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.googlecode.htmleasy.RedirectException;
 
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.UserLookupManager;
@@ -20,16 +23,19 @@ public class ApplicationController {
 	@Context
 	HttpServletRequest sRequest;
 	
-	protected User initialiseUser() {
+	protected User initialiseUser() throws RedirectException { 
 		
 		log.debug("Getting crsid from raven");
 		
-		// String crsid = (String) sRequest.getSession().getAttribute("RavenRemoteUser");
-		String crsid = "jd658";
+		sRequest = ResteasyProviderFactory.getContextData(HttpServletRequest.class);
+		String crsid = (String) sRequest.getSession().getAttribute("RavenRemoteUser");
 		
-		ulm = UserLookupManager.getUserLookupManager(crsid);
+		if (crsid != null) {
+			ulm = UserLookupManager.getUserLookupManager(crsid);
+			return User.registerUser(crsid);
+		}
 		
-		return User.registerUser(crsid);
+		throw new RedirectException("/app/#dashboard/");
 	}
 	
 	// temporary for testing
