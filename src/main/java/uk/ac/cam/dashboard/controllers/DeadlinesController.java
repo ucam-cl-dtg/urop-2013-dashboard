@@ -93,6 +93,7 @@ public class DeadlinesController extends ApplicationController {
 	  	session.delete(d);
 		
 		return ImmutableMap.of("success", true, "id", id);
+		
 	}
 	
 	// Change completed status

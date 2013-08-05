@@ -62,7 +62,7 @@ public class GroupForm {
 				
 	}
 
-	public int handleUpdate(User currentUser, int id) {		
+	public Group handleUpdate(User currentUser, int id) {		
 		
 		parseForm();
 		
@@ -96,11 +96,11 @@ public class GroupForm {
 		
 		session.update(group);
 		
-		return group.getId();
+		return group;
 				
 	}
 	
-	public int handleImport(User currentUser) {	
+	public Group handleImport(User currentUser) {	
 		
 		parseForm();
 		
@@ -152,7 +152,7 @@ public class GroupForm {
 			session.update(u);
 		}
 		
-		return group.getId();
+		return group;
 				
 	}
 

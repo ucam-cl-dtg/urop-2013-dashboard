@@ -1,7 +1,6 @@
 package uk.ac.cam.dashboard.controllers;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +12,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.hibernate.Session;
 import org.jboss.resteasy.annotations.Form;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +21,8 @@ import uk.ac.cam.dashboard.forms.GroupForm;
 import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
+import uk.ac.cam.dashboard.queries.GroupQuery;
+import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
@@ -76,38 +78,36 @@ public class GroupsController extends ApplicationController {
 			currentUser = initialiseUser();
 			
 		  	Group group = Group.getGroup(id);
-		  	Map<String, ?> groupMap;
 		  	
-		  	// Error handling.. not great but works. can't use redirects because of template errors
-		  	if(group==null){
-		  		groupMap = ImmutableMap.of("id", -1, "name", "Group not found", "owner", currentUser.toMap(), "users", new HashSet<ImmutableMap<String,?>>());
-		  	} else if(!group.getOwner().equals(currentUser)) {
-		  		groupMap = ImmutableMap.of("id", -2, "name", "Group not found", "owner", currentUser.toMap(), "users", new HashSet<ImmutableMap<String,?>>());		  		
-		  	} else {
-		  		groupMap = group.toMap();
-		  	}
-		  	
-			return groupMap;
+			return ImmutableMap.of("group", group.toMap());	
 		}
 		
 		// Update
-		@POST @Path("/{id}/update")
-		public void updateGroup(@Form GroupForm groupForm, @PathParam("id") int id) {	
+		@POST @Path("/{id}/edit")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Map<String, ?> updateGroup(@Form GroupForm groupForm, @PathParam("id") int id) {	
 			
 			currentUser = initialiseUser();
-						
-			id = groupForm.handleUpdate(currentUser, id);
+			
+			Group group = groupForm.handleUpdate(currentUser, id);
+			System.out.println("Group updated");
 
-			throw new RedirectException("/app/#signapp/groups");
+			return group.toMap();
 		}
 		
 		// Destroy 
 		@DELETE @Path("/{id}")
-		public void deleteGroup(@PathParam("id") int id) {
+		@Produces(MediaType.APPLICATION_JSON)
+		public Map<String, ?> deleteGroup(@PathParam("id") int id) {
 			
-			Group.deleteGroup(id);
+			Session session = HibernateUtil.getTransactionSession();
+			
+			Group g = GroupQuery.get(id);
 
-			throw new RedirectException("/app/#signapp/groups");
+		  	session.delete(g);
+			
+			return ImmutableMap.of("success", true, "id", id);
+			
 		}
 		
 		// Find users
