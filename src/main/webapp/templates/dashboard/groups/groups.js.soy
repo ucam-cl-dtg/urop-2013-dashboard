@@ -73,23 +73,20 @@
 
 /**
  * Edit group
- * @param id
- * @param name
- * @param users
+ * @param group
  */
 {template .edit }
 
-        {if $id == -1}
-        <span class="round alert label">Error getting group - group may not exist</span>    
-        {elseif $id == -2}
-        <span class="round alert label">You are not authorised to edit that group</span>      
-        {else}
-        <h3>Edit group</h3>
-        <form name="group_edit" action="/signapp/groups/{$id}/update" method="post" data-abide>
+        <li class="list-sub-panel">
+        <div class="row list-inner-sub-panel">
+    
+        <div class="columns large-12 small-8">
+
+        <form class="custom" id="g_edit_{$group.id}" data-abide>
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Group name</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" placeholder="Group name" name="title" id="title" value="{$name}" required/>
+                    <input type="text" placeholder="Group name" name="title" id="title" value="{$group.name}" required/>
                 </div>
             </div>
             <div class="row">
@@ -114,7 +111,7 @@
                             prePopulate: [
                             
                     {/literal}
-                    {foreach $user in $users}
+                    {foreach $user in $group.users}
                     {lb}crsid: "{$user.crsid}", name: "{$user.name}"{rb},
                     {/foreach}
                     {literal}                     
@@ -133,9 +130,12 @@
             </div>
             <div class="row">
                 <div class="columns large-12 small-12">
-                    <input type="submit" value="Save" id="group_submit" />
+                    <input type="submit" value="Save group" class="button"/>
                 </div>
             </div>
         </form>
-        {/if}
+        </div>
+        </div>
+        </li>
+        
 {/template}

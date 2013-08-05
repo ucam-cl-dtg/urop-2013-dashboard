@@ -83,13 +83,14 @@ public class GroupsController extends ApplicationController {
 		}
 		
 		// Update
-		@POST @Path("/{id}/update")
+		@POST @Path("/{id}/edit")
 		@Produces(MediaType.APPLICATION_JSON)
 		public Map<String, ?> updateGroup(@Form GroupForm groupForm, @PathParam("id") int id) {	
 			
 			currentUser = initialiseUser();
 			
 			Group group = groupForm.handleUpdate(currentUser, id);
+			System.out.println("Group updated");
 
 			return group.toMap();
 		}
