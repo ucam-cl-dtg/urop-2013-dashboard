@@ -26,7 +26,7 @@ import uk.ac.cam.dashboard.queries.NotificationQuery;
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
 
-@Path("dashboard/notifications")
+@Path("api/dashboard/notifications")
 public class NotificationsController extends ApplicationController {
 	
 		// Create the logger
@@ -99,7 +99,7 @@ public class NotificationsController extends ApplicationController {
 			notificationForm.handle();
 			
 			log.debug("Redirecting to notifications page");
-			throw new RedirectException("/app/#dashboard/notifications");
+			throw new RedirectException("/app#dashboard/notifications");
 		}
 		
 		// Update
@@ -111,7 +111,7 @@ public class NotificationsController extends ApplicationController {
 			NotificationUser.markAsRead(currentUser, id);
 			
 			log.debug("Redirecting to notifications page");
-			throw new RedirectException("/app/#dashboard/notifications");
+			throw new RedirectException("/app#dashboard/notifications");
 		}
 		
 //		// Callbacks

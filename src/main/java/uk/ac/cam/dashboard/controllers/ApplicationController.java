@@ -35,7 +35,7 @@ public class ApplicationController {
 			return User.registerUser(crsid);
 		}
 		
-		throw new RedirectException("/app/#dashboard/");
+		throw new RedirectException("/app#dashboard/");
 	}
 	
 	// temporary for testing

@@ -15,7 +15,7 @@ import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 
-@Path("/dashboard/api")
+@Path("/api")
 public class ApiController extends ApplicationController {
 	
 	// Creation
