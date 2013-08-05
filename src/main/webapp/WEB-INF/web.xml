@@ -1,39 +1,55 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" [
+<!ENTITY frontend SYSTEM "frontend.xml">
+]>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
-		
-	<!-- Include this for the raven filter -->
-	<filter>
-		<filter-name>ravenFilter</filter-name>
-		<filter-class>uk.ac.cam.dashboard.webauth.RavenFilter</filter-class>
-		<init-param>
-			<param-name>maxSkew</param-name>
-			<param-value>30000</param-value>
-		</init-param>
-	</filter>
-	<filter>
-		<filter-name>ravenFilterUnauth</filter-name>
-		<filter-class>uk.ac.cam.dashboard.webauth.RavenFilter</filter-class>
-		<init-param>
-			<param-name>allowUnauthorised</param-name>
-			<param-value>true</param-value>
-		</init-param>
-		<init-param>
-			<param-name>maxSkew</param-name>
-			<param-value>30000</param-value>
-		</init-param>
-	</filter>
-	
-	<!-- Include this for the api filter --> 
-	<filter>
-		<filter-name>apiFilter</filter-name>
-		<filter-class>uk.ac.cam.dashboard.webauth.ApiFilter</filter-class>
-	</filter>
-	
-	<!-- Include this for the Hibernate filter -->
+
+	<context-param>
+		<param-name>cssNamespace</param-name>
+		<param-value>dashboard</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>cssFiles</param-name>
+		<param-value>/css/vendor/jquery-ui/jquery-ui-1.10.3.custom.min.css,</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>jsFiles</param-name>
+		<param-value>/js/shared.js,/js/notifications.js,/js/groups.js,/js/deadlines.js,/js/supervisor.js,/js/dashboard.js,/soy/js/3/shared.dashboard.js,/soy/js/3/dashboard.groups.js,/soy/js/3/dashboard.deadlines.js,/soy/js/3/dashboard.homePage.js,/soy/js/3/dashboard.errors.js,/soy/js/3/dashboard.notifications.js,/soy/js/3/dashboard.supervisor.js</param-value>
+	</context-param>
+
+	<!-- Scripts formerly in the pom.xml
+	<custom_scripts>
+      	<![CDATA[<link href="/css/vendor/jquery-ui/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css">]]>
+      	<![CDATA[<script src="/js/vendor/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>]]>
+     
+        <![CDATA[<script src="http://malsup.github.com/jquery.form.js" type="text/javascript"></script>]]>
+      		
+      	<![CDATA[<script src="/js/dashboard.js"></script>]]>
+      	<![CDATA[<script src="/js/shared.js"></script>]]>
+      		
+      	<![CDATA[<script src="/js/notifications.js"></script>]]>
+		<![CDATA[<script src="/js/groups.js"></script>]]>
+		<![CDATA[<script src="/js/deadlines.js"></script>]]>
+        <![CDATA[<script src="/js/supervisor.js"></script>]]>
+	</custom_scripts>
+	<custom_templates>
+		<![CDATA[<script src="/soy/js/3/shared.dashboard.js"></script>]]>
+		<![CDATA[<script src="/soy/js/3/dashboard.groups.js"></script>]]>
+     	<![CDATA[<script src="/soy/js/3/dashboard.deadlines.js"></script>]]>
+		<![CDATA[<script src="/soy/js/3/dashboard.homePage.js"></script>]]>
+        <![CDATA[<script src="/soy/js/3/dashboard.errors.js"></script>]]>
+        <![CDATA[<script src="/soy/js/3/dashboard.notifications.js"></script>]]>
+        <![CDATA[<script src="/soy/js/3/dashboard.supervisor.js"></script>]]>
+	</custom_templates>
+ 	-->
+ 	
 	<filter>
 		<filter-name>Hibernate</filter-name>
 		<filter-class>uk.ac.cam.dashboard.util.HibernateSessionRequestFilter</filter-class>
@@ -48,25 +64,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		</init-param>
 	</filter>
 
-	<!-- Include for raven filter (url-pattern set to /* for securing all 
-	pages of the website with raven) -->
-	<filter-mapping>
-		<filter-name>ravenFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	
-	<!-- Include for the api filter
-	<filter-mapping>
-		<filter-name>ravenFilterUnauth</filter-name>
-		<url-pattern>/api/*</url-pattern>
-	</filter-mapping>
-	
-	<filter-mapping>
-		<filter-name>apiFilter</filter-name>
-		<url-pattern>/api/*</url-pattern>
-	</filter-mapping>
- 	-->
- 	
 	<filter-mapping>
 		<filter-name>Hibernate</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -77,18 +74,5 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-	<servlet>
-		<servlet-name>soy</servlet-name>
-		<servlet-class>com.papercut.silken.SilkenServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-		<init-param>
-			<param-name>disableCaching</param-name>
-			<param-value>true</param-value>
-		</init-param>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>soy</servlet-name>
-		<url-pattern>/soy/*</url-pattern>
-	</servlet-mapping>
+	&frontend;
 </web-app>
