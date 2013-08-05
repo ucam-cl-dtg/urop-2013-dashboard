@@ -33,7 +33,7 @@
                     </div>
                     {/foreach}
                         
-                    <!-- end groups display deadline--> 
+                    <!-- end display deadlines--> 
                     
                 </ul>
                 </div>     
@@ -48,9 +48,33 @@
             <p class="title" data-section-title><a href="#panel2">Manage Groups</a></p>
             <div class="content" data-section-content>
 
-                {call .group}
-                    {param cgroups: $cgroups /}
-                {/call}
+                <!--groups-->
+                
+                <div class="row">
+                <ul class="panels">
+    
+                   <!--display a row for each created group-->
+                    
+                    {foreach $group in $cgroups}
+                    
+                        {call .group}
+                            {param group: $group /}
+                        {/call}
+                        
+                    {ifempty}
+                    <div class="columns large-12 small-12">
+                    You have not created any groups
+                    </div>
+                    {/foreach}
+                        
+                    <!-- end display groups--> 
+                    
+                </ul>
+                </div>     
+                
+                <!--end groups-->           
+                
+                {call .newgroup/}
 
             </div>
         </section>
@@ -92,6 +116,104 @@
                 </li>
                 </form>    
 
+{/template}
+
+/**
+ * Display deadline users
+ * @param users
+ */
+{template .dusers }
+
+    <li class="list-sub-panel">
+        <div class="row list-inner-sub-panel">
+                                    
+            <!-- display members loop -->
+            <div class="columns large-12">                       
+            {foreach $user in $users}
+            <div class="row">
+                <div class="columns large-12">
+                {$user.name} ({$user.crsid})
+                </div>
+            </div>
+            {ifempty}
+            <div class="row">
+                <div class="columns large-12">
+                No users associated with this deadline
+                </div>
+            </div>    
+            {/foreach}
+            </div>
+            <!-- end display members loop -->
+
+        </div>
+    </li>
+                
+{/template}
+
+/**
+ * Manage groups
+ * @param group
+ *
+ */
+{template .group }
+
+
+            <form id="{$group.id}"> 
+                <li class="panel-wrapper columns large-12">
+                    <div class="list-panel">
+                        <div class="row list-inner-panel">
+                            <div class="columns large-9 small-9"><strong>{$group.name}</strong></div>
+                            <div class="columns large-3 small-3 text-right">
+                                <div class="icon-button-wrapper">
+                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array expand-sub-panel">&#43;</a>
+                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader group_edit">&#83;</a>
+                                    <a class="icon-button panel-icon-button websymbols-icon group_delete">&#39;</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="sub-panel group_subpanel">
+                        
+                    {call .gusers}
+                    {param users: $group.users /}
+                    {/call}    
+                        
+                    </ul>
+                </li>
+                </form>    
+
+{/template}
+
+/**
+ * Display group users
+ * @param users
+ */
+{template .gusers }
+
+    <li class="list-sub-panel">
+        <div class="row list-inner-sub-panel">
+                                    
+            <!-- display members loop -->
+            <div class="columns large-12">                       
+            {foreach $user in $users}
+            <div class="row">
+                <div class="columns large-12">
+                {$user.name} ({$user.crsid})
+                </div>
+            </div>
+            {ifempty}
+            <div class="row">
+                <div class="columns large-12">
+                No users associated with this group
+                </div>
+            </div>    
+            {/foreach}
+            </div>
+            <!-- end display members loop -->
+
+        </div>
+    </li>
+                
 {/template}
 
 /**
@@ -192,105 +314,12 @@
 {/template}
 
 /**
- * Display deadline users
- * @param users
- */
-{template .dusers }
-
-    <li class="list-sub-panel">
-        <div class="row list-inner-sub-panel">
-                                    
-            <!-- display members loop -->
-            <div class="columns large-12">                       
-            {foreach $user in $users}
-            <div class="row">
-                <div class="columns large-12">
-                {$user.name} ({$user.crsid})
-                </div>
-            </div>
-            {ifempty}
-            <div class="row">
-                <div class="columns large-12">
-                No users associated with this deadline
-                </div>
-            </div>    
-            {/foreach}
-            </div>
-            <!-- end display members loop -->
-
-        </div>
-    </li>
-                
-{/template}
-
-/**
- * Manage groups
- * @param cgroups
+ * Dashboard: supervisor page, create groups
+ * 
  *
  */
-{template .group }
+{template .newgroup }
 
-        <div class="row">
-            <ul class="panels">
-            
-            <!--display a row for each group-->
-            
-            {foreach $group in $cgroups}
-            <form id="{$group.id}"> 
-                <li class="panel-wrapper columns large-12">
-                    <div class="list-panel">
-                        <div class="row list-inner-panel">
-                            <div class="columns large-7 small-7" >{$group.name}</div>
-                            <div class="columns large-5 small-5 text-right">
-                                <div class="icon-button-wrapper">
-                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array expand-sub-panel">&#43;</a>
-                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader group_edit" data-target="#dashboard/groups/{$group.id}/edit">&#83;</a>
-                                    <a class="icon-button panel-icon-button websymbols-icon group_delete">&#39;</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <ul class="sub-panel">
-                        <li class="list-sub-panel">
-                            <div class="row list-inner-sub-panel">
-                            
-                                <!-- display members loop -->
-                            
-                                
-                                
-                                {foreach $user in $group.users}
-                                <div class="columns large-7 small-7">
-                                {$user.name} ({$user.crsid})
-                                </div>
-                                {ifempty}
-                                <div class="columns large-7 small-7">
-                                No users in this group
-                                </div>
-                                {/foreach}
-
-                                
-                                <!-- end display members loop -->
-                                <div class="columns large-5 small-5 text-right">
-                                    <div class="icon-button-wrapper">
-                                        <!--edit members buttons?-->
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                </form>
-                {ifempty}
-                <div class="columns large-12 small-12">
-                    You have not created any groups
-                </div>
-                {/foreach}
-                
-                <!-- end groups display loop-->
-                
-            </ul>
-        </div>
-    
         <h3>Create new group</h3>       
         <form id="group" name="group" action="/dashboard/groups" method="post"  data-abide>
             <div class="row">
