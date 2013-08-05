@@ -43,7 +43,7 @@ function deleteDeadline() {
 
 }
 
-function deadlineAutocomplete() {
+function autocomplete() {
 
     $(".deadline_user_token_input").tokenInput("/dashboard/groups/queryCRSID", {
         method: "post",
@@ -95,7 +95,7 @@ function deadlineAutocomplete() {
       
 }
 
-function createGroup() {
+function editGroup() {
 
     $(".group_edit").click(function() {
         var str_id = $(this).parents('form').attr("id");

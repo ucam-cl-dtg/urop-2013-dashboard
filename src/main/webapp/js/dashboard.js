@@ -21,8 +21,8 @@ moduleScripts['dashboard'] = {
 		'index' : [
 	        editDeadline,
 	        deleteDeadline,
-	        deadlineAutocomplete,
-	        createGroup,
+	        autocomplete,
+	        editGroup,
 	        deleteGroup,
 	        applyDatepicker
 		]	
