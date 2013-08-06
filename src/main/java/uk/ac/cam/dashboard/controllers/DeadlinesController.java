@@ -15,8 +15,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.hibernate.Session;
 import org.jboss.resteasy.annotations.Form;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.dashboard.forms.DeadlineForm;
 import uk.ac.cam.dashboard.models.Deadline;
@@ -36,9 +34,6 @@ public class DeadlinesController extends ApplicationController {
 	
 	private User currentUser;
 	
-	// Logger
-	private static Logger log = LoggerFactory.getLogger(DeadlinesController.class);
-	
 	// Index 
 	@GET @Path("/") 
 	public ImmutableMap<String, ?> indexDeadlines() {
@@ -53,9 +48,15 @@ public class DeadlinesController extends ApplicationController {
 	public Map<String, ?> createDeadline(@Form DeadlineForm deadlineForm) throws Exception {
 		currentUser = initialiseUser();
 		
-		Deadline d = deadlineForm.handleCreate(currentUser);
+		ArrayListMultimap<String, String> errors = deadlineForm.validate();
+		ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
 		
-		return ImmutableMap.of("deadline", d.toMap());
+		if(errors.isEmpty()){
+			Deadline deadline = deadlineForm.handleCreate(currentUser);
+			return ImmutableMap.of("success", "true", "errors", "undefined", "deadline", deadline.toMap());
+		} else {
+			return ImmutableMap.of("success", "false", "errors", actualErrors);
+		}
 	}
 	
 	// Edit
@@ -80,9 +81,10 @@ public class DeadlinesController extends ApplicationController {
 		
 		if(errors.isEmpty()){
 			Deadline deadline = deadlineForm.handleUpdate(currentUser, id);
-			return ImmutableMap.of("success", "true", "errors", "undefined");
+			// redirect to deadline tab on supervisor page
+			return ImmutableMap.of("success", "true", "errors", "undefined", "deadline", deadline.toMap());
 		} else {
-			return ImmutableMap.of("success", "false", "errors", actualErrors);
+			return ImmutableMap.of("success", "false", "errors", actualErrors, "deadline", deadlineForm.toMap());
 		}
 	}
 	

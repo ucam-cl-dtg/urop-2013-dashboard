@@ -28,7 +28,7 @@ import com.google.common.collect.ImmutableMap;
 
 @Entity
 @Table(name="DEADLINES")
-public class Deadline implements Comparable<Deadline>, Mappable {
+public class Deadline implements Mappable {
 	@Id
 	@GeneratedValue(generator="increment")
 	@GenericGenerator(name="increment", strategy = "increment")
@@ -75,6 +75,11 @@ public class Deadline implements Comparable<Deadline>, Mappable {
 	
 	public Calendar getDatetime() { return this.datetime; }
 	public void setDatetime(Calendar datetime) { this.datetime= datetime; }
+	public String getFormattedDate() { 
+		SimpleDateFormat df = new SimpleDateFormat("EEEEE, dd MMMMM yyyy");
+		SimpleDateFormat tf = new SimpleDateFormat("HH:mm");
+		return df.format(datetime.getTime()) + " at " + tf.format(datetime.getTime());
+	}
 	
 	public User getOwner() { return this.owner; }
 	public void setOwner(User owner) { this.owner= owner; }
@@ -82,6 +87,12 @@ public class Deadline implements Comparable<Deadline>, Mappable {
 	public Set<DeadlineUser> getUsers() { return this.users; }
 	public void clearUsers() { users.clear(); }
 	public void setUsers(Set<DeadlineUser> users) { this.users.addAll(users); }
+	
+	public boolean getImminence() {
+		Calendar tomorrow = Calendar.getInstance();
+		tomorrow.add(Calendar.DAY_OF_YEAR,1);
+		return (this.datetime.before(tomorrow));
+	}
 	
 	// Queries
 	public static Deadline getDeadline(int id){
@@ -91,39 +102,6 @@ public class Deadline implements Comparable<Deadline>, Mappable {
 		Query getDeadline = session.createQuery("from Deadline where id = :id").setParameter("id", id);
 	  	Deadline deadline = (Deadline) getDeadline.uniqueResult();	
 	  	return deadline;
-	}
-	
-	// Get formatted Date and time
-	public ImmutableMap<String, ?> getDateMap(){
-		ImmutableMap<String, ?> dateMap;
-		
-		SimpleDateFormat niceDateFormat = new SimpleDateFormat("EEEEE, dd MMMMM yyyy");
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
-		SimpleDateFormat minuteFormat = new SimpleDateFormat("mm");
-		String niceDateString = niceDateFormat.format(datetime.getTime());
-		String dateString = dateFormat.format(datetime.getTime());
-		String hourString = hourFormat.format(datetime.getTime());
-		String minuteString = minuteFormat.format(datetime.getTime());
-		
-		// Is the deadline imminent? (ie. is it very close to current date)
-		Calendar tomorrow = Calendar.getInstance();
-		tomorrow.add(Calendar.DAY_OF_YEAR, 1);
-		boolean imminent = tomorrow.get(Calendar.YEAR) >= datetime.get(Calendar.YEAR) &&
-							tomorrow.get(Calendar.DAY_OF_YEAR) >= datetime.get(Calendar.DAY_OF_YEAR);
-		
-		try {
-			dateMap = ImmutableMap.of("nicedate", niceDateString, "date", dateString, "hour", hourString, "minute", minuteString, "imminent", imminent);
-			return dateMap;
-		} catch(NullPointerException e){
-			return ImmutableMap.of("nicedate", "00/00/0000", "date", "00/00/0000", "hour", "00", "minute", "00");
-		}
-			
-	}
-	
-	// Set deadline natural ordering
-	public int compareTo(Deadline deadline) {
-		return this.datetime.compareTo(deadline.datetime);
 	}
 	
 	// Map builder
@@ -151,12 +129,8 @@ public class Deadline implements Comparable<Deadline>, Mappable {
 				deadlineUsers.add(ImmutableMap.of("crsid",crsid, "name", name));
 			}		
 			
-			SimpleDateFormat niceDateFormat = new SimpleDateFormat("EEEEE, dd MMMMM yyyy");
-			SimpleDateFormat niceTimeFormat = new SimpleDateFormat("HH:mm");
-			String datetime = niceDateFormat + " at " + niceTimeFormat;
-			
 			builder = builder
-					.put("datetime", getDateMap())
+					.put("datetime", getFormattedDate())
 					.put("users", deadlineUsers);
 			
 		} catch(NullPointerException e){
@@ -167,7 +141,7 @@ public class Deadline implements Comparable<Deadline>, Mappable {
 					.put("message", "")
 					.put("url", "")
 					.put("owner", "")
-					.put("datetime", getDateMap())
+					.put("datetime", getFormattedDate())
 					.put("users", "");
 			return builder.build();
 		}

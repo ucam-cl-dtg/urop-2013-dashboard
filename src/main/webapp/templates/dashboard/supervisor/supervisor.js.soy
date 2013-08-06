@@ -108,7 +108,7 @@
                 <li class="panel-wrapper columns large-12">
                     <div class="list-panel">
                         <div class="row list-inner-panel">
-                            <div class="columns large-9 small-9"><strong>{$deadline.name}</strong> - due {$deadline.datetime.nicedate} at {$deadline.datetime.hour}:{$deadline.datetime.minute}<br/><em>{$deadline.message}</em></div>
+                            <div class="columns large-9 small-9"><strong>{$deadline.name}</strong> - due {$deadline.datetime}<br/><em>{$deadline.message}</em></div>
                             <div class="columns large-3 small-3 text-right">
                                 <div class="icon-button-wrapper">
                                     <a class="icon-button panel-icon-button websymbols-icon icon-button-array expand-sub-panel">&#43;</a>
@@ -235,7 +235,7 @@
 {template .newdeadline }
     
     <h3>Create new deadline</h3>
-    <form name="deadlineForm" action="/dashboard/deadlines" method="post" class="custom" data-abide>
+    <form name="deadlineForm" action="api/dashboard/deadlines" method="post" class="custom" data-abide>
         <div class="row">
             <div class="columns large-2 small-4 field-label" >Deadline name</div>
             <div class="columns large-10 small-8">
@@ -298,7 +298,7 @@
         <div class="row">
                 <div class="columns large-2 small-4 field-label">Add users</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="deadline_user_token_input" name="users[]"/>
+                    <input type="text" class="deadline_user_token_input" name="users"/>
                 </div>
             </div>
 
@@ -309,7 +309,7 @@
         <div class="row">
                 <div class="columns large-2 small-4 field-label">Add groups</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="deadline_group_token_input" name="groups[]"/>
+                    <input type="text" class="deadline_group_token_input" name="groups"/>
                 </div>
             </div>
             
@@ -333,7 +333,7 @@
 {template .newgroup }
 
         <h3>Create new group</h3>       
-        <form id="group" name="group" action="/dashboard/groups" method="post"  data-abide>
+        <form id="group" name="group" action="api/dashboard/groups" method="post"  data-abide>
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Group name</div>
                 <div class="columns large-10 small-8">

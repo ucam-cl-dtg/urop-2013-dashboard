@@ -24,6 +24,7 @@ import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableMap;
 
 public class DeadlineForm {
 	@FormParam("title") String title;
@@ -77,6 +78,7 @@ public class DeadlineForm {
 		
 		// Add users from users field
 		List<DeadlineUser> dUsers = new ArrayList<DeadlineUser>();
+		if(!users.equals("")){
 			User user;
 			DeadlineUser dUser;
 			String[] crsids = users.split(",");
@@ -86,9 +88,12 @@ public class DeadlineForm {
 				dUsers.add(dUser);
 				session.save(dUser);
 			}		
-			
+		}
+		
 		// Add users from groups field
-		Set<User> groupUsers;
+		if(!groups.equals("")){
+			Set<User> groupUsers;
+			DeadlineUser dUser;
 			String[] groupIds = groups.split(",");
 			for(String g : groupIds){
 				// Get group users
@@ -99,7 +104,7 @@ public class DeadlineForm {
 					session.save(dUser);
 			  	}
 			}	
-		
+		}
 		// Create notification
 		Notification n = new Notification();
 		n.setMessage(currentUser.getCrsid() + " set you a deadline: " + deadline.getTitle());
@@ -225,5 +230,18 @@ public class DeadlineForm {
 		
 		return errors;	
 	}
+	
+	public ImmutableMap<String, ?> toMap() {
+		ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>();
+		builder.put("title", title);
+		builder.put("date", date);
+		builder.put("hour", hour);
+		builder.put("minute", minute);
+		builder.put("message", message);
+		builder.put("url", url);
+		builder.put("users", users);
+		builder.put("groups", groups);
+		return builder.build();
+	}	
 	
 }
