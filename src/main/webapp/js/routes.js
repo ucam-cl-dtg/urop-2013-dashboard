@@ -21,13 +21,13 @@ function supportRedirect(templateName) {
         if (json.redirect) 
             router.navigate(json.redirect, {trigger: true});
         return templateName;
-    }
+    };
 }
 
 var BASE_PATH="/api/";
-var ROUTER_OPTIONS= {
+var ROUTER_OPTIONS = {
      pushState: true
-}
+};
 
 $(document).ready(function() {
     router = Router({

@@ -65,14 +65,21 @@ public class NotificationsController extends ApplicationController {
 		
 		// Update
 		@PUT @Path("/{id}")
-		public void markNotificationAsRead(@PathParam("id") int id) {
+		public ImmutableMap<String, String> markNotificationAsRead(@PathParam("id") int id) {
 	
 			currentUser = initialiseUser();
 			
-			NotificationUser.markAsRead(currentUser, id);
+			ImmutableMap<String, String> error = ImmutableMap.of("error", "Could not mark notification as read");
 			
-			log.debug("Redirecting to notifications page");
-			throw new RedirectException("/app#dashboard/notifications");
+			try {
+				if ( !NotificationUser.markAsRead(currentUser, id) ) {
+					return error;
+				}
+			} catch (Exception e) {
+				return error;
+			}
+			
+			return ImmutableMap.of("redirectTo", "dashboard/notifications");
 		}
 		
 }
