@@ -50,9 +50,7 @@ public class NotificationsController extends ApplicationController {
 		
 		// Create
 		@POST @Path("/")
-		public Map<String, ?> createNotification() {
-			
-			CreateNotificationForm notificationForm = new CreateNotificationForm();
+		public Map<String, ?> createNotification(@Form CreateNotificationForm notificationForm) {
 			
 			ImmutableMap<String, List<String>> errors = notificationForm.validate();
 

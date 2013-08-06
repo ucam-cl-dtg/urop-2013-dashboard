@@ -58,7 +58,7 @@ public class CreateNotificationForm {
 	
 	public ImmutableMap<String, List<String>> validate() {
 		ArrayListMultimap<String, String> errors = ArrayListMultimap.create();
-
+		
 		// Message
 		if (message == null || message.equals("")) {
 			errors.put("message", "Message field cannot be empty.");
