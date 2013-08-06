@@ -25,9 +25,9 @@ public class ApplicationController {
 	
 	protected User initialiseUser() throws RedirectException { 
 		
-		log.debug("Getting crsid from raven");
+		//log.debug("Getting crsid from raven");
 		
-		sRequest = ResteasyProviderFactory.getContextData(HttpServletRequest.class);
+		//sRequest = ResteasyProviderFactory.getContextData(HttpServletRequest.class);
 		String crsid = (String) sRequest.getSession().getAttribute("RavenRemoteUser");
 		
 		if (crsid != null) {
