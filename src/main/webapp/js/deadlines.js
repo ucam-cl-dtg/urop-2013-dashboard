@@ -6,7 +6,7 @@ function deadlinesIndex() {
         // Ajax update request
             var archiveData = $.ajax({
                   type: 'PUT',
-                  url: "/dashboard/deadlines/" + deadline_id+"/archive",
+                  url: prepareURL("dashboard/deadlines/" + deadline_id + "/archive"),
                   success: function(resultData) {
                       alert("archived");
                   }
@@ -19,7 +19,7 @@ function deadlinesIndex() {
         // Ajax update request
             var archiveData = $.ajax({
                   type: 'PUT',
-                  url: "/dashboard/deadlines/" + deadline_id+"/complete",
+                  url: prepareURL("dashboard/deadlines/" + deadline_id + "/complete"),
                   success: function(resultData) {
                       alert("complete");
                   }
