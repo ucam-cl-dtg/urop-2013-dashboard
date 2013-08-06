@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
 
 @Path("api/")
+@Produces(MediaType.APPLICATION_JSON)
 public class HomePageController extends ApplicationController{
 	
 	// Logger
@@ -27,7 +28,6 @@ public class HomePageController extends ApplicationController{
 	private User currentUser;
 	
 	@GET @Path("/dashboard")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, ?> homePage() {
 		
 		currentUser = initialiseUser();

@@ -31,6 +31,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 
 @Path("api/dashboard/deadlines")
+@Produces(MediaType.APPLICATION_JSON)
 public class DeadlinesController extends ApplicationController {
 	
 	private User currentUser;
@@ -40,7 +41,6 @@ public class DeadlinesController extends ApplicationController {
 	
 	// Index 
 	@GET @Path("/") 
-	@Produces(MediaType.APPLICATION_JSON)
 	public ImmutableMap<String, ?> indexDeadlines() {
 
 		currentUser = initialiseUser();
@@ -50,7 +50,6 @@ public class DeadlinesController extends ApplicationController {
 	
 	// Create
 	@POST @Path("/") 
-	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, ?> createDeadline(@Form DeadlineForm deadlineForm) throws Exception {
 		currentUser = initialiseUser();
 		
@@ -61,7 +60,6 @@ public class DeadlinesController extends ApplicationController {
 	
 	// Edit
 	@GET @Path("/{id}/edit") 
-	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, ?> editDeadline(@PathParam("id") int id) {
 		
 		currentUser = initialiseUser();
@@ -73,7 +71,6 @@ public class DeadlinesController extends ApplicationController {
 	
 	// Update
 	@POST @Path("/{id}/edit")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, ?> updateDeadline(@Form DeadlineForm deadlineForm, @PathParam("id") int id) {
 		
 		currentUser = initialiseUser();
@@ -91,7 +88,6 @@ public class DeadlinesController extends ApplicationController {
 	
 	// Delete
 	@DELETE @Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, ?> deleteDeadline(@PathParam("id") int id) {
 
 		Session session = HibernateUtil.getTransactionSession();
@@ -106,7 +102,6 @@ public class DeadlinesController extends ApplicationController {
 	
 	// Change completed status
 	@PUT @Path("/{id}/complete")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, ?> updateComplete(@PathParam("id") int id) {
 		
 		currentUser = initialiseUser();
@@ -121,7 +116,6 @@ public class DeadlinesController extends ApplicationController {
 	
 	// Change archived status	
 	@PUT @Path("/{id}/archive")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, ?> updateArchive(@PathParam("id") int id) {
 		
 		currentUser = initialiseUser();
@@ -136,7 +130,6 @@ public class DeadlinesController extends ApplicationController {
 	
 	// Find groups AJAX
 	@POST @Path("/queryGroup")
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<ImmutableMap<String, ?>> queryCRSID(String q) {
 		currentUser = initialiseUser();
 		

@@ -6,7 +6,7 @@
 {template .getNotifications}
 	{foreach $notification in $notifications}
 	<li class="notification-feed-item">
-		<div><form id="{$notification.id}">Message: {$notification.message} | Section: {$notification.section} | Link: {$notification.link} | Read: {$notification.read} | Time: {$notification.timestamp} </form></div>
+		<div id="{$notification.id}">Message: {$notification.message} | Section: {$notification.section} | Link: {$notification.link} | Read: {$notification.read} | Time: {$notification.timestamp}</div>
 	</li>
 	{/foreach}
 {/template}

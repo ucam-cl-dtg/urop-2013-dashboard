@@ -28,6 +28,7 @@ import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
 
 @Path("api/dashboard/groups")
+@Produces(MediaType.APPLICATION_JSON)
 public class GroupsController extends ApplicationController {
 	
 		// Create the logger
@@ -38,7 +39,6 @@ public class GroupsController extends ApplicationController {
 		
 		// Index
 		@GET @Path("/") 
-		@Produces(MediaType.APPLICATION_JSON)
 		public Map<String, ?> indexGroups() {
 
 			currentUser = initialiseUser();
@@ -72,7 +72,6 @@ public class GroupsController extends ApplicationController {
 		
 		//Edit
 		@GET @Path("/{id}/edit") //@ViewWith("/soy/groups.edit")
-		@Produces(MediaType.APPLICATION_JSON)
 		public Map<String, ?> editGroup(@PathParam("id") int id) {
 			
 			currentUser = initialiseUser();
@@ -84,7 +83,6 @@ public class GroupsController extends ApplicationController {
 		
 		// Update
 		@POST @Path("/{id}/edit")
-		@Produces(MediaType.APPLICATION_JSON)
 		public Map<String, ?> updateGroup(@Form GroupForm groupForm, @PathParam("id") int id) {	
 			
 			currentUser = initialiseUser();
@@ -97,7 +95,6 @@ public class GroupsController extends ApplicationController {
 		
 		// Destroy 
 		@DELETE @Path("/{id}")
-		@Produces(MediaType.APPLICATION_JSON)
 		public Map<String, ?> deleteGroup(@PathParam("id") int id) {
 			
 			Session session = HibernateUtil.getTransactionSession();
@@ -112,7 +109,6 @@ public class GroupsController extends ApplicationController {
 		
 		// Find users
 		@POST @Path("/queryCRSID")
-		@Produces(MediaType.APPLICATION_JSON)
 		public List<ImmutableMap<String, ?>> queryCRSId(String q) {
 			
 			//Remove q= prefix
@@ -126,7 +122,6 @@ public class GroupsController extends ApplicationController {
 		
 		// Find groups from LDAP
 		@POST @Path("/queryGroup")
-		@Produces(MediaType.APPLICATION_JSON)
 		public List<ImmutableMap<String, ?>> queryGroup(String q) {
 			
 			//Remove q= prefix
