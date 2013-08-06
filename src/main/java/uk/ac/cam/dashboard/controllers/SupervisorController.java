@@ -2,16 +2,13 @@ package uk.ac.cam.dashboard.controllers;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cam.dashboard.models.Deadline;
 import uk.ac.cam.dashboard.models.User;
-import uk.ac.cam.dashboard.queries.DeadlineQuery;
 
 import com.google.common.collect.ImmutableMap;
 

@@ -6,7 +6,7 @@ function editDeadline() {
         var panel = $(this).parents('form');
         var subpanel = $(this).parents('form').find('.deadline_subpanel');
         loadModule(subpanel, "dashboard/deadlines/"+deadline_id+"/edit", "dashboard.deadlines.edit", function(){
-            //expand subpanel
+            subpanel.addClass("expanded");
             var updateForm = "#d_edit_"+deadline_id;         
             $(updateForm).ajaxForm({
                 type: 'POST',
@@ -36,7 +36,6 @@ function deleteDeadline() {
     $(".deadline_delete").click(function() {
         var str_id = $(this).parents('form').attr("id");
         var deadline_id = str_id.substring(2);
-        alert("deadline id" + deadline_id);
         var deleteData = $.ajax({
             type: 'DELETE',
             url: "/api/dashboard/deadlines/" + deadline_id,

@@ -151,6 +151,10 @@ public class Deadline implements Comparable<Deadline>, Mappable {
 				deadlineUsers.add(ImmutableMap.of("crsid",crsid, "name", name));
 			}		
 			
+			SimpleDateFormat niceDateFormat = new SimpleDateFormat("EEEEE, dd MMMMM yyyy");
+			SimpleDateFormat niceTimeFormat = new SimpleDateFormat("HH:mm");
+			String datetime = niceDateFormat + " at " + niceTimeFormat;
+			
 			builder = builder
 					.put("datetime", getDateMap())
 					.put("users", deadlineUsers);

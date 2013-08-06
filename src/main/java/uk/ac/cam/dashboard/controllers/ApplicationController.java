@@ -3,14 +3,13 @@ package uk.ac.cam.dashboard.controllers;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 
-import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.htmleasy.RedirectException;
-
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.UserLookupManager;
+
+import com.googlecode.htmleasy.RedirectException;
 
 public class ApplicationController {
 	// Logger
