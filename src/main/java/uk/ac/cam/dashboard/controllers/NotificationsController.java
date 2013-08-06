@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.dashboard.forms.GetNotificationForm;
-import uk.ac.cam.dashboard.forms.NotificationForm;
+import uk.ac.cam.dashboard.forms.CreateNotificationForm;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
@@ -53,7 +53,7 @@ public class NotificationsController extends ApplicationController {
 		
 		// Create
 		@POST @Path("/")
-		public Map<String, ?> createNotification(@Form NotificationForm notificationForm) throws RedirectException {
+		public Map<String, ?> createNotification(@Form CreateNotificationForm notificationForm) throws RedirectException {
 			
 			ImmutableMap<String, List<String>> errors = notificationForm.validate();
 

@@ -18,14 +18,14 @@ import uk.ac.cam.dashboard.util.Util;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 
-public class NotificationForm {
+public class CreateNotificationForm {
 	@FormParam("message") String message;
 	@FormParam("section") String section;
 	@FormParam("link") String link;
 	@FormParam("users") String users;
 	
 	// Logger
-	private static Logger log = LoggerFactory.getLogger(NotificationForm.class);
+	private static Logger log = LoggerFactory.getLogger(CreateNotificationForm.class);
 	
 	public int handle() {
 		
