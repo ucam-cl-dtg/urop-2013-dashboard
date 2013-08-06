@@ -1,12 +1,16 @@
 package uk.ac.cam.dashboard.util;
 
-import uk.ac.cam.dashboard.models.Mappable;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import uk.ac.cam.dashboard.models.Mappable;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 public class Util {
 	
@@ -34,5 +38,15 @@ public class Util {
 		}
 		
 		return null;
+	}
+	
+	public static <T, K> ImmutableMap<T, List<K>> multimapToImmutableMap(ArrayListMultimap<T, K> mm) {
+		ImmutableMap.Builder<T, List<K>> builder = ImmutableMap.builder();
+				
+		for(T k : mm.keySet()) {
+			builder.put(k, ImmutableList.copyOf(mm.get(k)));
+		}
+			
+		return builder.build();
 	}
 }

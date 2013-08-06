@@ -25,11 +25,12 @@ import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.dashboard.util.Util;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
-import com.googlecode.htmleasy.RedirectException;
 
-@Path("/dashboard/deadlines")
+@Path("api/dashboard/deadlines")
 public class DeadlinesController extends ApplicationController {
 	
 	private User currentUser;
@@ -49,18 +50,19 @@ public class DeadlinesController extends ApplicationController {
 	
 	// Create
 	@POST @Path("/") 
-	public void createDeadline(@Form DeadlineForm deadlineForm) throws Exception {
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map<String, ?> createDeadline(@Form DeadlineForm deadlineForm) throws Exception {
 		currentUser = initialiseUser();
 		
-		int id = deadlineForm.handleCreate(currentUser);
+		Deadline d = deadlineForm.handleCreate(currentUser);
 		
-		throw new RedirectException("/app/#dashboard/supervisor");
+		return ImmutableMap.of("deadline", d.toMap());
 	}
 	
 	// Edit
 	@GET @Path("/{id}/edit") 
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map editDeadline(@PathParam("id") int id) {
+	public Map<String, ?> editDeadline(@PathParam("id") int id) {
 		
 		currentUser = initialiseUser();
 		
@@ -76,9 +78,15 @@ public class DeadlinesController extends ApplicationController {
 		
 		currentUser = initialiseUser();
 		
-		Deadline deadline = deadlineForm.handleUpdate(currentUser, id);
-
-		return deadline.toMap();
+		ArrayListMultimap<String, String> errors = deadlineForm.validate();
+		ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
+		
+		if(errors.isEmpty()){
+			Deadline deadline = deadlineForm.handleUpdate(currentUser, id);
+			return ImmutableMap.of("success", "true", "errors", "undefined");
+		} else {
+			return ImmutableMap.of("success", "false", "errors", actualErrors);
+		}
 	}
 	
 	// Delete
@@ -129,9 +137,8 @@ public class DeadlinesController extends ApplicationController {
 	// Find groups AJAX
 	@POST @Path("/queryGroup")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List queryCRSID(String q) {
+	public List<ImmutableMap<String, ?>> queryCRSID(String q) {
 		currentUser = initialiseUser();
-		String crsid = currentUser.getCrsid();
 		
 		//Remove q= prefix
 		String x = q.substring(2);

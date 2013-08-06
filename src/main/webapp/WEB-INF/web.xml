@@ -21,7 +21,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
 	<context-param>
 		<param-name>jsFiles</param-name>
-		<param-value>/js/shared.js,/js/notifications.js,/js/groups.js,/js/deadlines.js,/js/supervisor.js,/js/dashboard.js,/soy/js/3/shared.dashboard.js,/soy/js/3/dashboard.groups.js,/soy/js/3/dashboard.deadlines.js,/soy/js/3/dashboard.homePage.js,/soy/js/3/dashboard.errors.js,/soy/js/3/dashboard.notifications.js,/soy/js/3/dashboard.supervisor.js</param-value>
+		<param-value>http://malsup.github.com/jquery.form.js,/js/shared.js,/js/notifications.js,/js/groups.js,/js/deadlines.js,/js/supervisor.js,/js/dashboard.js,/soy/js/3/shared.dashboard.js,/soy/js/3/dashboard.groups.js,/soy/js/3/dashboard.deadlines.js,/soy/js/3/dashboard.homePage.js,/soy/js/3/dashboard.errors.js,/soy/js/3/dashboard.notifications.js,/soy/js/3/dashboard.supervisor.js</param-value>
 	</context-param>
 
 	<!-- Scripts formerly in the pom.xml

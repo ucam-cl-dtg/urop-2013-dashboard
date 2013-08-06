@@ -1,5 +1,6 @@
 package uk.ac.cam.dashboard.forms;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,7 +23,7 @@ import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
-import com.googlecode.htmleasy.RedirectException;
+import com.google.common.collect.ArrayListMultimap;
 
 public class DeadlineForm {
 	@FormParam("title") String title;
@@ -31,55 +32,53 @@ public class DeadlineForm {
 	@FormParam("minute") String minute;
 	@FormParam("message") String message;
 	@FormParam("url") String url;
-	@FormParam("users[]") String users;
-	@FormParam("groups[]") String groups;
+	@FormParam("users") String users;
+	@FormParam("groups") String groups;
 	
 	//Logger
 	private static Logger log = LoggerFactory.getLogger(DeadlineForm.class);
 	
-	public int handleCreate(User currentUser) {		
-		
-		parseForm();
+	public Deadline handleCreate(User currentUser) {		
 		
 		Session session = HibernateUtil.getTransactionSession();
 		
-		// Create deadline prototype
+		// Create deadline 
 		Deadline deadline = new Deadline();
+		
+		// Set mandatory fields
 		deadline.setTitle(title);
 		deadline.setOwner(currentUser);
-		deadline.setMessage(message);
-		deadline.setURL(url);
 		
 		// Format and set date
-		String datetime = date;
-		datetime += " " + hour + ":" + minute;
-		
+		String datetime = date+ " " + hour + ":" + minute;
 		Calendar cal = Calendar.getInstance();
-		Calendar today = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		try {
 			cal.setTime(sdf.parse(datetime));
 		} catch (Exception e) {
 			log.error("e.getMessage()" +  ": error parsing date");
+			cal = Calendar.getInstance();
 		}
-		
-		//check its not in the past
-		if(cal.getTime().before(today.getTime())){
-			throw new RedirectException("/app/#signapp/deadlines/error/4");
-		}
-		
 		deadline.setDatetime(cal);
+		
+		// Set optional fields
+		if(!(message.equals("")||message==null)){
+			deadline.setMessage(message);
+		} else {
+			deadline.setMessage("No message");
+		}
+		if(!(message.equals("")||message==null)){
+			deadline.setURL(url);
+		} else {
+			deadline.setURL("#");
+		}
 		
 		session.save(deadline);
 		
+		// Add users from users field
 		List<DeadlineUser> dUsers = new ArrayList<DeadlineUser>();
-		
-		// Create deadlineUser objects from users field
-		if(!users.equals("")){
 			User user;
-			
 			DeadlineUser dUser;
-			
 			String[] crsids = users.split(",");
 			for(String u : crsids){
 				user = User.registerUser(u);
@@ -87,25 +86,19 @@ public class DeadlineForm {
 				dUsers.add(dUser);
 				session.save(dUser);
 			}		
-		}
 			
 		// Add users from groups field
-		if(!groups.equals("")){
-			Set<User> groupUsers;
+		Set<User> groupUsers;
 			String[] groupIds = groups.split(",");
-			
-			DeadlineUser dUser;
-			
 			for(String g : groupIds){
 				// Get group users
 				groupUsers = Group.getGroup(Integer.parseInt(g)).getUsers();
-			  	for(User user : groupUsers){
-					dUser = new DeadlineUser(user, deadline);
+			  	for(User u : groupUsers){
+					dUser = new DeadlineUser(u, deadline);
 					dUsers.add(dUser);
 					session.save(dUser);
 			  	}
 			}	
-		}
 		
 		// Create notification
 		Notification n = new Notification();
@@ -121,60 +114,53 @@ public class DeadlineForm {
 		}
 		
 		
-		return deadline.getId();
-				
+		return deadline;			
 	}
 	
 	public Deadline handleUpdate(User currentUser, int id) {		
-		
-		parseForm();
 		
 		Session session = HibernateUtil.getTransactionSession();
 		
 		// Get the deadline to edit
 		Deadline deadline = DeadlineQuery.get(id);
-	  	
-		// Check the owner is current user
-		if(!deadline.getOwner().equals(currentUser)){
-			throw new RedirectException("/app/#dashboard/deadlines");
-		}
 		
-		// Set new values
+		// Set new mandatory values
 		deadline.setTitle(title);
-		deadline.setMessage(message);	
-		deadline.setURL(url);	
 		
 		// Format and set date
-		String datetime = date;
-		if(date!=null||date!=""){
-			datetime += " " + hour + ":" + minute;
-			Calendar cal = Calendar.getInstance();
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-			try {
-				cal.setTime(sdf.parse(datetime));
-			} catch (Exception e) {
-				log.error("e.getMessage()" +  ": error parsing date");
-			}
-			deadline.setDatetime(cal);
-		} else {
-			deadline.setDatetime(Calendar.getInstance());
+		String datetime = date+ " " + hour + ":" + minute;
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		try {
+			cal.setTime(sdf.parse(datetime));
+		} catch (Exception e) {
+			log.error("e.getMessage()" +  ": error parsing date");
+			cal = Calendar.getInstance();
 		}
+		deadline.setDatetime(cal);
 
+		// Set new optional fields
+		if(!(message.equals("")||message==null)){
+			deadline.setMessage(message);
+		} else {
+			deadline.setMessage("No message");
+		}
+		if(!(message.equals("")||message==null)){
+			deadline.setURL(url);
+		} else {
+			deadline.setURL("#");
+		}
 		
-		// Current deadline users
+		// Add users from users field
 		Set<DeadlineUser> deadlineUsers = new HashSet<DeadlineUser>();
-		
-		// Create deadlineUser objects from users field
 		if(!users.equals("")){
 			User user;
-			
 			String[] crsids = users.split(",");
 			for(String u : crsids){
 				user = User.registerUser(u);
 				deadlineUsers.add(new DeadlineUser(user, deadline));
 			}		
-		}
-			
+		}	
 		// Add users from groups field
 		if(!groups.equals("")){
 			Set<User> groupUsers;
@@ -182,36 +168,62 @@ public class DeadlineForm {
 			
 			for(String g : groupIds){
 				// Get group users
+				System.out.println("group: [" + g + "]");
 				groupUsers = Group.getGroup(Integer.parseInt(g)).getUsers();
-			  	for(User user : groupUsers){
-					deadlineUsers.add(new DeadlineUser(user, deadline));
+			  	for(User u : groupUsers){
+					deadlineUsers.add(new DeadlineUser(u, deadline));
 			  	}
 			}	
 		}
 		
+		// Clear old users
 		deadline.clearUsers();
+		// Set new users
 		deadline.setUsers(deadlineUsers);
-		
-		for(DeadlineUser d: deadline.getUsers()){
-			System.out.println(d.getUser().getCrsid());
-		}
 		
 		session.update(deadline);
 		
 		return deadline;	
 	}
 	
-	public void parseForm() {
-				
-		// Check for empty fields
-		if(title==null||title.equals("")){ this.title = "Untitled Deadline"; }
-		if(hour==null||hour.equals("")){ this.hour = "0"; }
-		if(minute==null||minute.equals("")){ this.minute = "0"; }
-		if(message==null||message.equals("")){ this.message = "No message"; }		
-		if(url==null||url.equals("")){ this.url = "none"; }	
-		if(users==null||users.equals("")){ this.users = ""; }		
-		if(groups==null||groups.equals("")){ this.groups = ""; }	
-				
+	public ArrayListMultimap<String, String> validate() {
+		ArrayListMultimap<String, String> errors = ArrayListMultimap.create();
+		
+		// title
+		if (title.equals("") || title == null){
+			errors.put("title", "Please give your deadline a name");
+		} else if(title.length()>255){
+			errors.put("title", "Name cannot be longer than 255 characters");
+		}
+		
+		// date
+		if((date==null||date.equals(""))){ 
+			errors.put("date", "Please choose a due date for the deadline"); 
+		}	
+		//check its not in the past
+		String datetime = date;
+		datetime += " " + hour + ":" + minute;
+		
+		Calendar cal = Calendar.getInstance();
+		Calendar today = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		try {
+			cal.setTime(sdf.parse(datetime));
+		} catch (ParseException e){
+			log.error("Error parsing datetime string");
+			cal = Calendar.getInstance();
+		}
+		
+		if(cal.getTime().before(today.getTime())){
+			errors.put("datepast", "Deadline due date cannot be in the past");
+		}	
+		
+		// users/groups
+		if((users==null||users.equals(""))&&(groups==null||groups.equals(""))){ 
+			errors.put("users", "You must assign at least one user to this deadline"); 
+		}	
+		
+		return errors;	
 	}
 	
 }

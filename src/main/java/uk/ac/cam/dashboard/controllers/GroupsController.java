@@ -27,7 +27,7 @@ import uk.ac.cam.dashboard.util.HibernateUtil;
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
 
-@Path("dashboard/groups")
+@Path("api/dashboard/groups")
 public class GroupsController extends ApplicationController {
 	
 		// Create the logger

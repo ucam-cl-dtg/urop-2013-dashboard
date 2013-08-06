@@ -25,6 +25,12 @@ moduleScripts['dashboard'] = {
 	        editGroup,
 	        deleteGroup,
 	        applyDatepicker
-		]	
+		],
+		'deadline' : [
+		  	editDeadline,
+			deleteDeadline,
+			autocomplete,
+			applyDatepicker
+		]
 	}
 }

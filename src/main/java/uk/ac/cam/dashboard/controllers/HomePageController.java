@@ -11,13 +11,14 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
 //Import models
 import uk.ac.cam.dashboard.models.User;
 
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
 
-@Path("/")
+@Path("api/")
 public class HomePageController extends ApplicationController{
 	
 	// Logger
@@ -32,7 +33,7 @@ public class HomePageController extends ApplicationController{
 		currentUser = initialiseUser();
 		//ImmutableMap<String, ?> userMap = ulm.getAll();
 		
-		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.deadlinesToMap());
+		return ImmutableMap.of("user", LDAPQueryHelper.getAll(currentUser.getCrsid()), "deadlines", currentUser.deadlinesToMap());
 	}
 	
 	@GET @Path("/")

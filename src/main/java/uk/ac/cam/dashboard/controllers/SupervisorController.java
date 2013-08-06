@@ -15,7 +15,7 @@ import uk.ac.cam.dashboard.queries.DeadlineQuery;
 
 import com.google.common.collect.ImmutableMap;
 
-@Path("/dashboard/supervisor")
+@Path("api/dashboard/supervisor")
 public class SupervisorController extends ApplicationController {
 	
 	private User currentUser;
