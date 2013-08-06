@@ -38,7 +38,7 @@ public class NotificationsController extends ApplicationController {
 		// Index
 		@GET @Path("/")
 		@Produces(MediaType.APPLICATION_JSON)
-		public Map<String, ?> getNotifications(@Form GetNotificationForm notificationForm) throws RedirectException {
+		public Map<String, ?> getNotifications(@Form GetNotificationForm notificationForm) {
 			
 			currentUser = initialiseUser();
 			ImmutableMap<String, List<String>> errors = notificationForm.validate();
@@ -53,7 +53,10 @@ public class NotificationsController extends ApplicationController {
 		
 		// Create
 		@POST @Path("/")
-		public Map<String, ?> createNotification(@Form CreateNotificationForm notificationForm) throws RedirectException {
+		@Produces(MediaType.APPLICATION_JSON)
+		public Map<String, ?> createNotification() {
+			
+			CreateNotificationForm notificationForm = new CreateNotificationForm();
 			
 			ImmutableMap<String, List<String>> errors = notificationForm.validate();
 
