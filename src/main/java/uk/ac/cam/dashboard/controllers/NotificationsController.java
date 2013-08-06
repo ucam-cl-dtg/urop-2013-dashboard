@@ -1,7 +1,5 @@
 package uk.ac.cam.dashboard.controllers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,11 +15,10 @@ import org.jboss.resteasy.annotations.Form;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cam.dashboard.forms.GetNotificationForm;
 import uk.ac.cam.dashboard.forms.CreateNotificationForm;
+import uk.ac.cam.dashboard.forms.GetNotificationForm;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
-import uk.ac.cam.dashboard.queries.NotificationQuery;
 
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;

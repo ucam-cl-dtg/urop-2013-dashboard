@@ -91,10 +91,19 @@ public class CreateNotificationForm {
 	
 	public ImmutableMap<String, ?> toMap() {
 		ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>();
-		builder.put("message", message);
-		builder.put("section", section);
-		builder.put("link", link);
-		builder.put("users", users);
+		
+		String localMessage = (message == null ? "" : message);
+		builder.put("message", localMessage);
+		
+		String localSection = (section == null ? "" : section);
+		builder.put("section", localSection);
+		
+		String localLink = (link == null ? "" : link);
+		builder.put("link", localLink);
+		
+		String localUsers = (users == null ? "" : users);
+		builder.put("users", localUsers);
+		
 		return builder.build();
 	}
 	
