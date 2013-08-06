@@ -112,12 +112,30 @@ public class GetNotificationForm {
 		}
 		
 		// Section
-		String[] validSections = {"dashboard", "signups", "handins", "events"};
+		String[] validSections = {"dashboard", "signups", "handins", "events"}; // Shared with CreateNotificationForm
 		if (section != null && !section.equals("") && !Arrays.asList(validSections).contains(section)) {
 			errors.put("section", "Invalid section field.");
 		}
 		
 		return Util.multimapToImmutableMap(errors);
+	}
+	
+	public ImmutableMap<String, ?> toMap() {
+		ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>();
+		
+		String localOffset = (offset == null ? "" : offset);
+		builder.put("offset", localOffset);
+		
+		String localLimit = (limit == null ? "" : limit);
+		builder.put("limit", localLimit);
+		
+		String localSection = (section == null ? "" : section);
+		builder.put("section", localSection);
+		
+		String localRead = (read == null ? "" : read);
+		builder.put("read", localRead);
+		
+		return builder.build();
 	}
 	
 }
