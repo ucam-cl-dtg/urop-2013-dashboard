@@ -69,13 +69,12 @@ public class NotificationQuery {
 	}
 	
 	public NotificationQuery inSection(String section) {
-		this.criteria.add(Restrictions.eq("section", section));
+		criteria.add(Restrictions.eq("n.section", section));
 		return this;
 	}
-	
+		
 	public NotificationQuery isRead(boolean read) {
-		criteria.createAlias("users", "nu")
-		.add(Restrictions.eq("nu.read", true));
+		this.criteria.add(Restrictions.eq("read", read));
 		return this;
 	}
 	
