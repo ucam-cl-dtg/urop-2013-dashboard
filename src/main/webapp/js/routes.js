@@ -24,6 +24,8 @@ function supportRedirect(templateName) {
     }
 }
 
+var BASE_PATH = "/api/";
+
 $(document).ready(function() {
     router = Router({
         
