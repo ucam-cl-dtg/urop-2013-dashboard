@@ -27,6 +27,7 @@ import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
 
 @Path("api/dashboard/notifications")
+@Produces(MediaType.APPLICATION_JSON)
 public class NotificationsController extends ApplicationController {
 	
 		// Create the logger
@@ -37,7 +38,6 @@ public class NotificationsController extends ApplicationController {
 		
 		// Index
 		@GET @Path("/")
-		@Produces(MediaType.APPLICATION_JSON)
 		public Map<String, ?> getNotifications(@Form GetNotificationForm notificationForm) {
 			
 			currentUser = initialiseUser();
@@ -46,14 +46,13 @@ public class NotificationsController extends ApplicationController {
 			if (errors.isEmpty()) {
 				return notificationForm.handle(currentUser);
 			} else {
-				return ImmutableMap.of("errors", errors);
+				return ImmutableMap.of("errors", errors, "data", notificationForm.toMap());
 			}
 			
 		}
 		
 		// Create
 		@POST @Path("/")
-		@Produces(MediaType.APPLICATION_JSON)
 		public Map<String, ?> createNotification() {
 			
 			CreateNotificationForm notificationForm = new CreateNotificationForm();
@@ -64,7 +63,7 @@ public class NotificationsController extends ApplicationController {
 				notificationForm.handle();
 				return ImmutableMap.of("redirectTo", "dashboard/notifications");
 			} else {
-				return ImmutableMap.of("errors", errors);
+				return ImmutableMap.of("errors", errors, "data", notificationForm.toMap());
 			}
 			
 		}
