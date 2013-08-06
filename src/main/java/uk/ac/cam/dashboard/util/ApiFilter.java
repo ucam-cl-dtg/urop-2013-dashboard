@@ -1,4 +1,4 @@
-package uk.ac.cam.dashboard.webauth;
+package uk.ac.cam.dashboard.util;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cam.dashboard.controllers.ApiController;
 import uk.ac.cam.dashboard.models.Api;
 import uk.ac.cam.dashboard.models.User;
-import uk.ac.cam.dashboard.util.HibernateUtil;
 
 public class ApiFilter implements Filter {
 	

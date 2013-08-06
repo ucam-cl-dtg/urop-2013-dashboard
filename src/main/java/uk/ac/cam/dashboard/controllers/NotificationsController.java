@@ -11,14 +11,14 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jboss.resteasy.annotations.Form;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cam.dashboard.forms.NotificationForm;
+import uk.ac.cam.dashboard.forms.GetNotificationForm;
+import uk.ac.cam.dashboard.forms.CreateNotificationForm;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
@@ -38,68 +38,32 @@ public class NotificationsController extends ApplicationController {
 		// Index
 		@GET @Path("/")
 		@Produces(MediaType.APPLICATION_JSON)
-		public Map<String, ?> getNotifications(@QueryParam("offset") Integer offset,
-												@QueryParam("limit") Integer limit,
-												@QueryParam("section") String section,
-												@QueryParam("read") Boolean read) throws RedirectException {
+		public Map<String, ?> getNotifications(@Form GetNotificationForm notificationForm) throws RedirectException {
 			
-			Map<String, Object> userNotifications = new HashMap<String, Object>();
-			Map<String, Object> filter = new HashMap<String, Object>();
-
 			currentUser = initialiseUser();
-			
-			NotificationQuery nq = NotificationQuery.all();
-			nq.byUser(currentUser);
-			
-			if (offset != null) {
-				nq.offset(offset);
-				userNotifications.put("offset", offset);
-			} else {
-				userNotifications.put("offset", 0);
-			}
-			
-			if (limit != null) {
-				nq.limit(limit);
-				userNotifications.put("limit", limit);
-			} else {
-				nq.limit(10);
-				userNotifications.put("limit", 10);
-			}
-				
-			if (section != null && !section.isEmpty()) {
-				nq.inSection(section);
-				userNotifications.put("section", section);
-			}
-			
-			if (read != null) {
-				nq.isRead(read);
-				userNotifications.put("read", read);
-			}
-			
-			List<NotificationUser> results = nq.list();
-			
-			List<ImmutableMap<String, ?>> notifications = new ArrayList<ImmutableMap<String,?>>();
-			for (NotificationUser nu : results) {
-				notifications.add(nu.toMap());
-			}
-			
-			userNotifications.put("user", currentUser.toMap());
-			
-			userNotifications.put("notifications", notifications);
-			userNotifications.put("filter", filter);
+			ImmutableMap<String, List<String>> errors = notificationForm.validate();
 
-			log.debug("Returning JSON of user notifications");
-			return userNotifications;
+			if (errors.isEmpty()) {
+				return notificationForm.handle(currentUser);
+			} else {
+				return ImmutableMap.of("errors", errors);
+			}
+			
 		}
 		
 		// Create
 		@POST @Path("/")
-		public void createNotification(@Form NotificationForm notificationForm) throws RedirectException {
+		public Map<String, ?> createNotification(@Form CreateNotificationForm notificationForm) throws RedirectException {
 			
-			notificationForm.handle();
+			ImmutableMap<String, List<String>> errors = notificationForm.validate();
+
+			if (errors.isEmpty()) {
+				notificationForm.handle();
+				return ImmutableMap.of("redirectTo", "dashboard/notifications");
+			} else {
+				return ImmutableMap.of("errors", errors);
+			}
 			
-			log.debug("Redirecting to notifications page");
-			throw new RedirectException("/app#dashboard/notifications");
 		}
 		
 		// Update
@@ -113,18 +77,5 @@ public class NotificationsController extends ApplicationController {
 			log.debug("Redirecting to notifications page");
 			throw new RedirectException("/app#dashboard/notifications");
 		}
-		
-//		// Callbacks
-//		@GET @Path("/success")
-//		@Produces(MediaType.APPLICATION_JSON)
-//		public Map<String, ?> successCallback() {
-//			return ImmutableMap.of("success", 1);
-//		}
-//
-//		@GET @Path("/error")
-//		@Produces(MediaType.APPLICATION_JSON)
-//		public Map<String, ?> errorCallback() {
-//			return ImmutableMap.of("error", 1);
-//		}
 		
 }
