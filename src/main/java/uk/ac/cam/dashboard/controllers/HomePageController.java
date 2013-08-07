@@ -36,6 +36,7 @@ public class HomePageController extends ApplicationController{
 		
 		// Get notifications
 		GetNotificationForm notificationForm = new GetNotificationForm();
+		notificationForm.validate();
 		
 		return ImmutableMap.of("user", LDAPQueryHelper.getAll(currentUser.getCrsid()), "deadlines", currentUser.deadlinesToMap(), "userNotifications", notificationForm.handle(currentUser, false));
 	}

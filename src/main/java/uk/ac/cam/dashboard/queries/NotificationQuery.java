@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,8 @@ public class NotificationQuery {
 	
 	private Criteria criteria;
 	
+	// Initialisation methods
+	
 	public NotificationQuery() {}
 	
 	public NotificationQuery(Criteria criteria) {
@@ -32,9 +35,10 @@ public class NotificationQuery {
 			HibernateUtil.getTransactionSession()
 			.createCriteria(NotificationUser.class)
 			.createAlias("notification", "n")
-			.addOrder(Order.desc("n.timestamp"))
 		);
 	}
+	
+	// Query methods
 	
 	public static Notification get(int id) {
 		Session session = HibernateUtil.getTransactionSession();
@@ -58,6 +62,18 @@ public class NotificationQuery {
 		return this;
 	}
 	
+	public NotificationQuery inSection(String section) {
+		criteria.add(Restrictions.eq("n.section", section));
+		return this;
+	}
+	
+	public NotificationQuery isRead(boolean read) {
+		this.criteria.add(Restrictions.eq("read", read));
+		return this;
+	}
+	
+	// Pagination methods
+	
 	public NotificationQuery offset(int offset) {
 		this.criteria.setFirstResult(offset);
 		return this;
@@ -68,26 +84,28 @@ public class NotificationQuery {
 		return this;
 	}
 	
-	public NotificationQuery inSection(String section) {
-		criteria.add(Restrictions.eq("n.section", section));
-		return this;
-	}
+	public int totalRows() {
+		Integer totalRows = ((Long) this.criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
 		
-	public NotificationQuery isRead(boolean read) {
-		this.criteria.add(Restrictions.eq("read", read));
-		return this;
+		// Reset query
+		this.criteria.setProjection(null);
+		this.criteria.setResultTransformer(Criteria.ROOT_ENTITY);
+		
+		return totalRows;
 	}
+	
+	// Result methods
 	
 	@SuppressWarnings("unchecked")
 	public List<NotificationUser> list() {
-		return this.criteria.list();
+		return this.criteria.addOrder(Order.desc("n.timestamp")).list();
 	}
 
 	public NotificationUser uniqueResult() {
 		NotificationUser notificationUser = (NotificationUser)criteria.uniqueResult();
 		return notificationUser;
 	}
-	
+
 //	public HashMap<String, ?> map() {
 //		NotificationUser notificationUser = (NotificationUser)criteria.uniqueResult();
 //		

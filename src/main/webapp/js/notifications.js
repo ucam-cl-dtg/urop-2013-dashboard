@@ -6,21 +6,25 @@ function bindNotificationShowMoreListener() {
 		if (!$(this).hasClass('disabled')) {
 			$(this).addClass('disabled');
 			
-			var offset = Number($('.notification-feed').attr('data-offset'));
-			var limit = Number($('.notification-feed').attr('data-limit'));
+			var $elem = $('.notification-feed');
+			var offset = Number($elem.attr('data-offset'));
+			var limit = Number($elem.attr('data-limit'));
+			var total = Number($elem.attr('data-total'));
+			
 			var newOffset = offset + limit;
+			
 			$('.notification-feed').attr('data-offset', newOffset);
 		
 			var queryString = 'offset=' + newOffset + '&limit=' + limit;
 		
-			getNotifications(queryString, limit);
+			getNotifications(queryString, limit, total);
 		}
 		
 	});
 	
 }
 
-function getNotifications(queryString, limit) {
+function getNotifications(queryString, limit, total) {
 	var elem = $('#new-notifications-wrapper');
 	var location = 'dashboard/notifications?' + queryString;
 	var template = 'shared.dashboard.getNotifications';	
@@ -54,6 +58,9 @@ function markNotificationAsReadUnread() {
 	    				$(this).remove();
 	    			});
 	    		}
+	    	},
+	    	error: function() {
+	    		alert('Error: could not perform AJAX request');
 	    	}
 	    });
 	});
