@@ -4,13 +4,15 @@
  * Dashboard: supervisor page
  * @param cdeadlines
  * @param cgroups
+ * @param target
+ * @param errors
  */
 {template .index }
       
 	<h2>Supervisor Homepage</h2>
         
     <div class="section-container auto" data-section>
-        <section>
+        <section {if $target=='deadlines'}class="active"{/if}>
             <p class="title" data-section-title><a href="#panel1">Manage Deadlines</a></p>
             <div class="content" data-section-content>
             
@@ -25,6 +27,7 @@
                     
                         {call .deadline}
                             {param deadline: $deadline /}
+                            {param errors: $errors /}
                         {/call}
                         
                     {ifempty}
@@ -42,7 +45,7 @@
                 
             </div>
             </section>
-            <section>
+            <section {if $target=='groups'}class="active"{/if}>
             <p class="title" data-section-title><a href="#panel2">Manage Groups</a></p>
             <div class="content" data-section-content>
 
@@ -57,6 +60,7 @@
                     
                         {call .group}
                             {param group: $group /}
+                            {param errors: $errors /}
                         {/call}
                         
                     {ifempty}
@@ -74,19 +78,23 @@
 
             </div>
         </section>
-        <section>
+        <section {if $target=='newdeadline'}class="active"{/if}>
             <p class="title" data-section-title><a href="#panel2">New Deadline</a></p>
-            <div class="content" data-section-content>        
+            <div id="newDeadlineSection" class="content" data-section-content>        
                 
-                {call .newdeadline/}
+                        {call .newdeadline}
+                            {param errors: $errors /}
+                        {/call}
 
             </div>
         </section>
-        <section>
+        <section {if $target=='newgroup'}class="active"{/if}>
             <p class="title" data-section-title><a href="#panel2">New Group</a></p>
-            <div class="content" data-section-content>        
+            <div id="newGroupSection" class="content" data-section-content>        
                 
-                {call .newgroup/}
+                        {call .newgroup}
+                            {param errors: $errors /}
+                        {/call}
 
             </div>
         </section>
@@ -99,7 +107,7 @@
 /**
  * Manage deadlines
  * @param deadline
- *
+ * 
  */
 {template .deadline }
 
@@ -119,7 +127,7 @@
                         </div>
                     </div>
                     <ul class="sub-panel deadline_subpanel">
-                        
+                    
                     {call .dusers}
                     {param users: $deadline.users /}
                     {/call}    
@@ -230,16 +238,17 @@
 
 /**
  * Dashboard: supervisor page, create deadlines
- * 
+ * @param errors
  */
 {template .newdeadline }
     
-    <h3>Create new deadline</h3>
-    <form name="deadlineForm" action="api/dashboard/deadlines" method="post" class="custom" data-abide>
+    <form id="newDeadlineForm" action="api/dashboard/deadlines" method="post" class="custom">
         <div class="row">
             <div class="columns large-2 small-4 field-label" >Deadline name</div>
             <div class="columns large-10 small-8">
-                <input type="text" name="title" placeholder="Deadline name" required/>
+            	{if $errors != 'undefined' and $errors.title}<label class="error">Error</label>{/if}
+                <input type="text" name="title" placeholder="Deadline name" {if $errors != 'undefined' and $errors.title}class="error"{/if}/>
+                {if $errors != 'undefined' and $errors.title}<small class="error">{$errors.title}</small>{/if}
             </div>
         </div>
          
@@ -248,7 +257,9 @@
             <div class="columns large-10 small-8">
                 <div class="row">
                     <div class="columns large-6">
-                        <input type="text" placeholder="Date" class="datepicker" name="date" required/>
+                    	{if $errors != 'undefined' and ($errors.date or $errors.datepast)}<label class="error">Error</label>{/if}
+                        <input type="text" placeholder="Date" class="datepicker" name="date" {if $errors != 'undefined' and ($errors.datepast or $errors.date)}class="error"{/if}/>
+                    	{if $errors != 'undefined' and $errors.date}<small class="error">{$errors.date}</small>{elseif $errors != 'undefined' and $errors.datepast}<small class="error">{$errors.datepast}</small>{/if}                   
                     </div>
                     <div class="large-6 columns">
                         <div class="row collapse">
@@ -298,7 +309,9 @@
         <div class="row">
                 <div class="columns large-2 small-4 field-label">Add users</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="deadline_user_token_input" name="users"/>
+            	{if $errors != 'undefined'  and $errors.users}<label class="error">Error</label>{/if}
+                    <input type="text" class="deadline_user_token_input {if $errors != 'undefined' and $errors.users}error{/if}" name="users"/>
+                {if $errors != 'undefined'  and $errors.users}<small class="error">{$errors.users}</small>{/if}
                 </div>
             </div>
 

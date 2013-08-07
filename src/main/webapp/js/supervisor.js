@@ -1,3 +1,9 @@
+function createDeadline() {
+	$("#newDeadlineForm").ajaxForm(function(data) {
+		applyTemplate($('#newDeadlineSection'), "dashboard.supervisor.newdeadline", data);
+	});
+}
+
 function editDeadline() {
 
     $(".deadline_edit").click(function() {

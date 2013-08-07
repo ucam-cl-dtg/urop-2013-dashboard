@@ -52,11 +52,22 @@ public class DeadlinesController extends ApplicationController {
 		ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
 		
 		if(errors.isEmpty()){
-			Deadline deadline = deadlineForm.handleCreate(currentUser);
-			return ImmutableMap.of("success", "true", "errors", "undefined", "deadline", deadline.toMap());
+			deadlineForm.handleCreate(currentUser);
+			return ImmutableMap.of("redirectTo", "api/dashboard/deadline/id");
 		} else {
-			return ImmutableMap.of("success", "false", "errors", actualErrors);
+			return ImmutableMap.of("data", deadlineForm.toMap(), "errors", actualErrors);
 		}
+	}
+	
+	// Get
+	@GET @Path("/{id}") 
+	public Map<String, ?> getDeadline(@PathParam("id") int id) {
+		
+		currentUser = initialiseUser();
+		
+	  	Deadline deadline = Deadline.getDeadline(id);
+	  	
+		return ImmutableMap.of("deadline", deadline.toMap());		
 	}
 	
 	// Edit

@@ -37,6 +37,7 @@ $(document).ready(function() {
 
         // Deadlines
         "dashboard/deadlines" : "dashboard.deadlines.index",
+        "dashboard/deadlines/:id" : "dashboard.deadlines.manage",
         "dashboard/deadlines/:id/edit" : "dashboard.deadlines.edit",
         "dashboard/deadlines/error/:type": "dashboard.deadlines.index",
         

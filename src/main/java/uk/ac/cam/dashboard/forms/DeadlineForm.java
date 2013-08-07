@@ -193,6 +193,7 @@ public class DeadlineForm {
 	
 	public ArrayListMultimap<String, String> validate() {
 		ArrayListMultimap<String, String> errors = ArrayListMultimap.create();
+
 		
 		// title
 		if (title.equals("") || title == null){

@@ -25,18 +25,24 @@ moduleScripts['dashboard'] = {
 	},
 	'supervisor' : {
 		'index' : [
+			createDeadline,	
 	        editDeadline,
 	        deleteDeadline,
-	        autocomplete,
 	        editGroup,
 	        deleteGroup,
-	        applyDatepicker
+	        applyDatepicker,
+	        autocomplete	
 		],
 		'deadline' : [
 		  	editDeadline,
 			deleteDeadline,
 			autocomplete,
 			applyDatepicker
+		],
+		'newdeadline' : [
+			createDeadline,	
+	        applyDatepicker,
+	        autocomplete	
 		]
 	}
 }
