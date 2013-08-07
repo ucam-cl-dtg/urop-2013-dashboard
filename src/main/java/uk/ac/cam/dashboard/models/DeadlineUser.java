@@ -82,7 +82,8 @@ public class DeadlineUser implements Mappable{
 		map.put("message", this.deadline.getMessage());
 		map.put("url", this.deadline.getURL());
 		map.put("owner", this.deadline.getOwner().toMap());
-		map.put("datetime", this.deadline.getDateMap());
+		map.put("datetime", this.deadline.getFormattedDate());
+		map.put("imminent", this.deadline.getImminence());
 		
 		return map.build();
 	}

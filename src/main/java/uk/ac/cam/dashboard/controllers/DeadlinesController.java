@@ -15,8 +15,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.hibernate.Session;
 import org.jboss.resteasy.annotations.Form;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.dashboard.forms.DeadlineForm;
 import uk.ac.cam.dashboard.models.Deadline;
@@ -36,9 +34,6 @@ public class DeadlinesController extends ApplicationController {
 	
 	private User currentUser;
 	
-	// Logger
-	private static Logger log = LoggerFactory.getLogger(DeadlinesController.class);
-	
 	// Index 
 	@GET @Path("/") 
 	public ImmutableMap<String, ?> indexDeadlines() {
@@ -48,29 +43,35 @@ public class DeadlinesController extends ApplicationController {
 		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.deadlinesToMap());
 	}
 	
-	// Create
-	@POST @Path("/") 
-	public Map<String, ?> createDeadline(@Form DeadlineForm deadlineForm) throws Exception {
-		currentUser = initialiseUser();
-		
-		Deadline d = deadlineForm.handleCreate(currentUser);
-		
-		return ImmutableMap.of("deadline", d.toMap());
-	}
-	
-	// Edit
-	@GET @Path("/{id}/edit") 
-	public Map<String, ?> editDeadline(@PathParam("id") int id) {
+	// Get
+	@GET @Path("/{id}") 
+	public Map<String, ?> getDeadline(@PathParam("id") int id) {
 		
 		currentUser = initialiseUser();
 		
 	  	Deadline deadline = Deadline.getDeadline(id);
 	  	
-		return ImmutableMap.of("deadline", deadline.toMap());		
+		return ImmutableMap.of("errors", "undefined","deadline", deadline.toMap(), "deadlineEdit", deadline.toMap());		
+	}
+	
+	// Create
+	@POST @Path("/") 
+	public Map<String, ?> createDeadline(@Form DeadlineForm deadlineForm) throws Exception {
+		currentUser = initialiseUser();
+		
+		ArrayListMultimap<String, String> errors = deadlineForm.validate();
+		ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
+		
+		if(errors.isEmpty()){
+			int id = deadlineForm.handleCreate(currentUser);
+			return ImmutableMap.of("redirectTo", "dashboard/deadlines/"+id);
+		} else {
+			return ImmutableMap.of("data", deadlineForm.toMap(), "errors", actualErrors);
+		}
 	}
 	
 	// Update
-	@POST @Path("/{id}/edit")
+	@POST @Path("/{id}")
 	public Map<String, ?> updateDeadline(@Form DeadlineForm deadlineForm, @PathParam("id") int id) {
 		
 		currentUser = initialiseUser();
@@ -79,10 +80,10 @@ public class DeadlinesController extends ApplicationController {
 		ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
 		
 		if(errors.isEmpty()){
-			Deadline deadline = deadlineForm.handleUpdate(currentUser, id);
-			return ImmutableMap.of("success", "true", "errors", "undefined");
+			deadlineForm.handleUpdate(currentUser, id);
+			return ImmutableMap.of("redirectTo", "dashboard/deadlines/"+id);
 		} else {
-			return ImmutableMap.of("success", "false", "errors", actualErrors);
+			return ImmutableMap.of("errors", actualErrors, "deadline", deadlineForm.toMap());
 		}
 	}
 	

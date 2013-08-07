@@ -25,24 +25,43 @@ moduleScripts['dashboard'] = {
 		'index' : [
 			deadlinesIndex
 		],
+		'manage' : [
+			editDeadline,
+			applyDatepicker,
+			userTokenInput
+		],
 		'edit' : [
-			applyDatepicker
+			editDeadline,
+			applyDatepicker,
+			userTokenInput
 		]
 	},
 	'supervisor' : {
 		'index' : [
-	        editDeadline,
+			createDeadline,	
 	        deleteDeadline,
-	        autocomplete,
-	        editGroup,
+	      	createGroup,
+	      	importGroup,
 	        deleteGroup,
-	        applyDatepicker
+	        applyDatepicker,
+			userTokenInput
 		],
 		'deadline' : [
-		  	editDeadline,
-			deleteDeadline,
-			autocomplete,
-			applyDatepicker
+			deleteDeadline
+		],
+		'group' : [
+			deleteGroup
+		],
+		'newdeadline' : [
+			createDeadline,	
+	        applyDatepicker,
+			userTokenInput	
+		],
+		'newgroup' : [
+			createGroup,	
+	      	importGroup,
+	        applyDatepicker,
+			userTokenInput	
 		]
 	}
 };

@@ -4,13 +4,15 @@
  * Dashboard: supervisor page
  * @param cdeadlines
  * @param cgroups
+ * @param target
+ * @param errors
  */
 {template .index }
       
 	<h2>Supervisor Homepage</h2>
         
     <div class="section-container auto" data-section>
-        <section>
+        <section {if $target=='deadlines'}class="active"{/if}>
             <p class="title" data-section-title><a>Manage Deadlines</a></p>
             <div class="content" data-section-content>
             
@@ -25,6 +27,7 @@
                     
                         {call .deadline}
                             {param deadline: $deadline /}
+                            {param errors: $errors /}
                         {/call}
                         
                     {ifempty}
@@ -42,8 +45,8 @@
                 
             </div>
             </section>
-            <section>
-            <p class="title" data-section-title><a>Manage Groups</a></p>
+            <section {if $target=='groups'}class="active"{/if}>
+			<p class="title" data-section-title><a>Manage Groups</a></p>
             <div class="content" data-section-content>
 
                 <!--groups-->
@@ -57,6 +60,7 @@
                     
                         {call .group}
                             {param group: $group /}
+                            {param errors: $errors /}
                         {/call}
                         
                     {ifempty}
@@ -74,20 +78,20 @@
 
             </div>
         </section>
-        <section>
+        <section {if $target=='newdeadline'}class="active"{/if}>
             <p class="title" data-section-title><a>New Deadline</a></p>
-            <div class="content" data-section-content>        
-                
-                {call .newdeadline/}
-
+            <div id="newDeadlineSection" class="content" data-section-content>        
+                {call .newdeadline}
+		            {param errors: $errors /}
+				{/call}
             </div>
         </section>
-        <section>
+        <section {if $target=='newgroup'}class="active"{/if}>
+            <p class="title" data-section-title><a href="#panel2">New Group</a></p>
             <p class="title" data-section-title><a>New Group</a></p>
-            <div class="content" data-section-content>        
-                
-                {call .newgroup/}
-
+				{call .newgroup}
+					{param errors: $errors /}
+				{/call}
             </div>
         </section>
     </div>
@@ -99,7 +103,7 @@
 /**
  * Manage deadlines
  * @param deadline
- *
+ * 
  */
 {template .deadline }
 
@@ -108,18 +112,18 @@
                 <li class="panel-wrapper columns large-12">
                     <div class="list-panel">
                         <div class="row list-inner-panel">
-                            <div class="columns large-9 small-9"><strong>{$deadline.name}</strong> - due {$deadline.datetime.nicedate} at {$deadline.datetime.hour}:{$deadline.datetime.minute}<br/><em>{$deadline.message}</em></div>
+                            <div class="columns large-9 small-9"><strong>{$deadline.name}</strong> - due {$deadline.datetime}<br/><em>{$deadline.message}</em></div>
                             <div class="columns large-3 small-3 text-right">
                                 <div class="icon-button-wrapper">
                                     <a class="icon-button panel-icon-button websymbols-icon icon-button-array expand-sub-panel">&#43;</a>
-                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader deadline_edit">&#83;</a>
+                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader" data-target="dashboard/deadlines/{$deadline.id}">&#83;</a>
                                     <a class="icon-button panel-icon-button websymbols-icon deadline_delete">&#39;</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <ul class="sub-panel deadline_subpanel">
-                        
+                    
                     {call .dusers}
                     {param users: $deadline.users /}
                     {/call}    
@@ -178,7 +182,7 @@
                             <div class="columns large-3 small-3 text-right">
                                 <div class="icon-button-wrapper">
                                     <a class="icon-button panel-icon-button websymbols-icon icon-button-array expand-sub-panel">&#43;</a>
-                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader group_edit">&#83;</a>
+                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader" data-target="dashboard/groups/{$group.id}">&#83;</a>
                                     <a class="icon-button panel-icon-button websymbols-icon group_delete">&#39;</a>
                                 </div>
                             </div>
@@ -230,16 +234,17 @@
 
 /**
  * Dashboard: supervisor page, create deadlines
- * 
+ * @param errors
  */
 {template .newdeadline }
     
-    <h3>Create new deadline</h3>
-    <form name="deadlineForm" action="/dashboard/deadlines" method="post" class="custom" data-abide>
+    <form id="newDeadlineForm" action="api/dashboard/deadlines" method="post" class="custom">
         <div class="row">
             <div class="columns large-2 small-4 field-label" >Deadline name</div>
             <div class="columns large-10 small-8">
-                <input type="text" name="title" placeholder="Deadline name" required/>
+            	{if $errors != 'undefined' and $errors.title}<label class="error">Error</label>{/if}
+                <input type="text" name="title" placeholder="Deadline name" {if $errors != 'undefined' and $errors.title}class="error"{/if}/>
+                {if $errors != 'undefined' and $errors.title}<small class="error">{$errors.title}</small>{/if}
             </div>
         </div>
          
@@ -248,7 +253,9 @@
             <div class="columns large-10 small-8">
                 <div class="row">
                     <div class="columns large-6">
-                        <input type="text" placeholder="Date" class="datepicker" name="date" required/>
+                    	{if $errors != 'undefined' and ($errors.date or $errors.datepast)}<label class="error">Error</label>{/if}
+                        <input type="text" placeholder="Date" class="datepicker" name="date" {if $errors != 'undefined' and ($errors.datepast or $errors.date)}class="error"{/if}/>
+                    	{if $errors != 'undefined' and $errors.date}<small class="error">{$errors.date}</small>{elseif $errors != 'undefined' and $errors.datepast}<small class="error">{$errors.datepast}</small>{/if}                   
                     </div>
                     <div class="large-6 columns">
                         <div class="row collapse">
@@ -298,7 +305,9 @@
         <div class="row">
                 <div class="columns large-2 small-4 field-label">Add users</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="deadline_user_token_input" name="users[]"/>
+            	{if $errors != 'undefined'  and $errors.users}<label class="error">Error</label>{/if}
+                    <input type="text" class="user-token-input {if $errors != 'undefined' and $errors.users}error{/if}" name="users"/>
+                {if $errors != 'undefined'  and $errors.users}<small class="error">{$errors.users}</small>{/if}
                 </div>
             </div>
 
@@ -309,7 +318,7 @@
         <div class="row">
                 <div class="columns large-2 small-4 field-label">Add groups</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="deadline_group_token_input" name="groups[]"/>
+                    <input type="text" class="deadline_group_token_input" name="groups"/>
                 </div>
             </div>
             
@@ -327,13 +336,12 @@
 
 /**
  * Dashboard: supervisor page, create groups
- * 
  *
  */
 {template .newgroup }
 
         <h3>Create new group</h3>       
-        <form id="group" name="group" action="/dashboard/groups" method="post"  data-abide>
+        <form id="newGroupForm" action="api/dashboard/groups" method="post">
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Group name</div>
                 <div class="columns large-10 small-8">
@@ -343,7 +351,7 @@
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Group members</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="member_token_input" name="users[]"/>
+                    <input type="text" class="user-token-input" name="users[]"/>
                 </div>
             </div>
             <div class="row">
@@ -355,7 +363,7 @@
         
         <h3>Import Existing Group (LDAP)</h3>    
         <h6 class="subheader">Small public groups only</h6>         
-        <form id="import_group" name="import_group" action="/dashboard/groups/import" method="post" data-abide>
+        <form id="importGroupForm" action="/dashboard/groups/import" method="post" data-abide>
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Import Group</div>
                 <div class="columns large-10 small-8">

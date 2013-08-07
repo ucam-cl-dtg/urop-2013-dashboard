@@ -14,11 +14,9 @@
            <!--start display deadlines loop-->
             
             {foreach $deadline in $deadlines}
-            
                 {call .deadline}
-                {param deadline: $deadline /}
+                	{param deadline: $deadline /}
                 {/call}
-                
             {ifempty}
             
                 <div class="columns large-12 small-12">
@@ -44,7 +42,7 @@
                 <li class="panel-wrapper columns large-12">
                     <div class="list-panel">
                     <div class="row list-inner-panel">
-                        <div class="columns large-9 small-9"><strong>{$deadline.name}</strong> - due <span class="{if $deadline.datetime.imminent}round alert label{else}label{/if}">{$deadline.datetime.nicedate} at {$deadline.datetime.hour}:{$deadline.datetime.minute}</span><br/><em>{$deadline.message}</em></div>
+                        <div class="columns large-9 small-9"><strong>{$deadline.name}</strong> - due <span class="{if $deadline.imminent}round alert label{else}label{/if}">{$deadline.datetime}</span><br/><em>{$deadline.message}</em></div>
                         <div class="columns large-3 small-3 text-right">
                             <div class="icon-button-wrapper">
                                 <a class="icon-button panel-icon-button websymbols-icon icon-button-array" href="{$deadline.url}">&#88;</a>
@@ -56,149 +54,5 @@
                     </div>
                 </li>
                </form>
-
-{/template}
-
-/**
- * Edit deadline
- * @param deadline
- * 
- */
-{template .edit }
-
-    <li class="list-sub-panel">
-    <div class="row list-inner-sub-panel">
-
-    <div class="columns large-12 small-8">
-    
-    <form class="custom" id="d_edit_{$deadline.id}">
-        <div class="row">
-            <div class="columns large-2 small-4 field-label">Deadline name</div>
-            <div class="columns large-10 small-8">
-                <input type="text" name="title" placeholder="Deadline name" value="{$deadline.name}" />
-            </div>
-        </div>
-         
-        <div class="row">
-            <div class="columns large-2 small-4 field-label">Due date</div>
-            <div class="columns large-10 small-8">
-                <div class="row">
-                    <div class="columns large-6">
-                        <input type="text" placeholder="Date" value="{$deadline.datetime.date}" class="datepicker" name="date" />
-                    </div>
-                    <div class="large-6 columns">
-                        <div class="row collapse">
-                            <div class="large-3 columns">
-                                <span class="prefix field-label">Hour</span>
-                            </div>
-                            <div class="large-3 columns">
-                                <select name="hour">
-                                    {for $i in range(0,24)}
-                                        {if $i == $deadline.datetime.hour}
-                                        <option SELECTED>{$i}</option> 
-                                        {else}
-                                        <option>{$i}</option> 
-                                        {/if}
-                                    {/for}
-                                </select>
-                            </div>
-                            <div class="large-3 columns">
-                                <span class="prefix field-label">Minute</span>
-                            </div>
-                            <div class="large-3 columns">
-                                <select name="minute">
-                                    {for $i in range(0,60)}
-                                        {if $i == $deadline.datetime.minute}
-                                        <option SELECTED>{$i}</option> 
-                                        {else}
-                                        <option>{$i}</option> 
-                                        {/if}
-                                    {/for}
-                                </select>
-                            </div>                   
-                        </div>
-                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="columns large-2 small-4 field-label">URL</div>
-            <div class="columns large-10 small-8">
-                <input type="text" name="url" value="{$deadline.url}" placeholder="(optional) URL of event, question set etc." />
-            </div>
-        </div>
-        <div class="row">
-            <div class="columns large-2 small-4 field-label">Message</div>
-            <div class="columns large-10 small-8">
-                <textarea name="message" placeholder="(optional) Deadline description eg. sign up for OOP supervisions">{$deadline.message}</textarea>
-            </div>
-        </div>
-        
-         <div class="row">
-            <div class="columns large-2 small-4 field-label">Recipients</div>
-        </div>
-         <!-- START ADD USERS AS RECIPIENTS -->
-
-        <div class="row">
-                <div class="columns large-2 small-4 field-label">Add users</div>
-                <div class="columns large-10 small-8">
-                    <input type="text" class="edit_deadline_user_token_input" name="users"/>
-                </div>
-            </div>
-            
-                    <!-- HORRIBLE WAY OF INCLUDING JS - try and get this working in main.js later-->
-                    
-                    {literal}
-                    <script type="text/javascript">
-                    $(document).ready(function() {
-                        $(".edit_deadline_user_token_input").tokenInput("/dashboard/groups/queryCRSID", {
-                            method: "post",
-                            tokenValue: "crsid",
-                            propertyToSearch: "crsid",
-                            theme: "facebook",
-                            minChars: 3,
-                            hintText: "Search for a user",
-                            resultsLimit: 10,
-                            preventDuplicates: true,
-                            prePopulate: [
-                            
-                    {/literal}
-                    {foreach $user in $deadline.users}
-                    {lb}crsid: "{$user.crsid}", name: "{$user.name}"{rb},
-                    {/foreach}
-                    {literal}                     
-                            ],
-
-                            resultsFormatter: function(item){ return "<li>" + "<div style='display: inline-block; padding-left: 10px;'><div class='full_name'>" + item.name + " (" + item.crsid + ")</div><div class='email'>" + item.crsid + "@cam.ac.uk</div></div></li>" },
-                            tokenFormatter: function(item) { return "<li><p>" + item.name + " (" + item.crsid + ")</p></li>" },                           
-                        });
-                    });
-                    </script>
-                    {/literal}
-                    
-                    <!-- HORRIBLE WAY OF INCLUDING JS - try and get this working in main.js later-->
-
-         <!-- END ADD USERS AS RECIPIENTS -->
-            
-         <!-- START ADD GROUPS AS RECIPIENTS -->
-         
-        <div class="row">
-                <div class="columns large-2 small-4 field-label">Add groups</div>
-                <div class="columns large-10 small-8">
-                    <input type="text" class="deadline_group_token_input" name="groups"/>
-                </div>
-            </div>
-
-         <!-- END ADD GROUPS AS RECIPIENTS -->
-         
-         <div class="row">
-            <div class="columns large-12 small-12">
-                <input type="submit" value="Save deadline" class="button"/>
-            </div>
-        </div>
-        </form>
-        </div>
-        </div>
-        </li>
 
 {/template}

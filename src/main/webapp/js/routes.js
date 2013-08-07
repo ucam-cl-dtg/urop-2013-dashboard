@@ -37,12 +37,12 @@ $(document).ready(function() {
 
         // Deadlines
         "dashboard/deadlines" : "dashboard.deadlines.index",
+        "dashboard/deadlines/:id" : "dashboard.deadlines.manage",
         "dashboard/deadlines/:id/edit" : "dashboard.deadlines.edit",
-        "dashboard/deadlines/error/:type": "dashboard.deadlines.index",
         
         // Groups
         "dashboard/groups": "dashboard.groups.index",
-        "dashboard/groups/error/:type": "dashboard.groups.index",
+        "dashboard/groups/:id" : "dashboard.groups.manage",
         "dashboard/groups/:id/edit" : "dashboard.groups.edit",
         
         // Notifications

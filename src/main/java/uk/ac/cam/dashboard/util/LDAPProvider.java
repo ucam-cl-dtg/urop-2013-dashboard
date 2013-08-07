@@ -162,7 +162,7 @@ public class LDAPProvider {
 	 * Possible subtrees to search: people, groups, institutions
 	 * @return List<ImmutableMap<String,?>>
 	 */
-	public static List partialUserQuery(String x, String type){
+	public static List<ImmutableMap<String,?>> partialUserQuery(String x, String type){
 		
 		Hashtable env = setupQuery();
 		NamingEnumeration<SearchResult> enumResults;
