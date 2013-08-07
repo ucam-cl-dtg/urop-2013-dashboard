@@ -5,6 +5,11 @@ moduleScripts['dashboard'] = {
             markNotificationAsReadUnread
         ]
 	},
+	'account' : {
+		'index': [
+            bindSaveSettingsListener
+		 ]
+	},
 	'notifications' : {
 		'index': [
 			bindNotificationShowMoreListener,

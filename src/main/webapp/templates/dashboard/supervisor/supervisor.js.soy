@@ -13,7 +13,7 @@
         
     <div class="section-container auto" data-section>
         <section {if $target=='deadlines'}class="active"{/if}>
-            <p class="title" data-section-title><a href="#panel1">Manage Deadlines</a></p>
+            <p class="title" data-section-title><a>Manage Deadlines</a></p>
             <div class="content" data-section-content>
             
                 <!--deadlines-->
@@ -27,7 +27,7 @@
                     
                         {call .deadline}
                             {param deadline: $deadline /}
-                            {param errors: $errors /}
+                            // {param errors: $errors /}
                         {/call}
                         
                     {ifempty}
@@ -46,7 +46,7 @@
             </div>
             </section>
             <section {if $target=='groups'}class="active"{/if}>
-            <p class="title" data-section-title><a href="#panel2">Manage Groups</a></p>
+			<p class="title" data-section-title><a>Manage Groups</a></p>
             <div class="content" data-section-content>
 
                 <!--groups-->
@@ -79,23 +79,19 @@
             </div>
         </section>
         <section {if $target=='newdeadline'}class="active"{/if}>
-            <p class="title" data-section-title><a href="#panel2">New Deadline</a></p>
+            <p class="title" data-section-title><a>New Deadline</a></p>
             <div id="newDeadlineSection" class="content" data-section-content>        
-                
-                        {call .newdeadline}
-                            {param errors: $errors /}
-                        {/call}
-
+                {call .newdeadline}
+		            {param errors: $errors /}
+				{/call}
             </div>
         </section>
         <section {if $target=='newgroup'}class="active"{/if}>
             <p class="title" data-section-title><a href="#panel2">New Group</a></p>
-            <div id="newGroupSection" class="content" data-section-content>        
-                
-                        {call .newgroup}
-                            {param errors: $errors /}
-                        {/call}
-
+            <p class="title" data-section-title><a>New Group</a></p>
+				{call .newgroup}
+					{param errors: $errors /}
+				{/call}
             </div>
         </section>
     </div>

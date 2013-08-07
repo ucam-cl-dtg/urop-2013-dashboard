@@ -14,11 +14,9 @@
            <!--start display deadlines loop-->
             
             {foreach $deadline in $deadlines}
-            
                 {call .deadline}
-                {param deadline: $deadline /}
+                	{param deadline: $deadline /}
                 {/call}
-                
             {ifempty}
             
                 <div class="columns large-12 small-12">

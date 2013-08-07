@@ -24,7 +24,11 @@
 	</div>
 	<div class="row">
 		<div class="columns large-12 small-12">
+			{if ($total <= 10)}
+			<a class="large button expand disabled" id="show-more-notifications">No more notifications</a>
+			{else}
 			<a class="large button expand" id="show-more-notifications">Show more notifications</a>
+			{/if}
 		</div>
 	</div>
 	<div class="hide" id="new-notifications-wrapper"></div>

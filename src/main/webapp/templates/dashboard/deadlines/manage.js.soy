@@ -13,7 +13,7 @@
         
     <div class="section-container auto" data-section>
         <section {if $target=='statistics'}class="active"{/if}>
-            <p class="title" data-section-title><a href="#panel1">Statistics</a></p>
+            <p class="title" data-section-title><a>Statistics</a></p>
             <div class="content" data-section-content>
             
       			Deadline statistics
@@ -21,14 +21,12 @@
             </div>
             </section>
             <section {if $target=='edit'}class="active"{/if}>
-            <p class="title" data-section-title><a href="#panel2">Edit Deadline</a></p>
+            <p class="title" data-section-title><a>Edit Deadline</a></p>
             <div class="content" data-section-content id="editDeadlineSection">
-
                 {call .edit}
-                {param deadline: $deadlineEdit /}
-                {param errors: $errors /}
-                {/call}          
-
+                	{param deadline: $deadlineEdit /}
+                	{param errors: $errors /}
+                {/call}
             </div>
         </section>
     </div>

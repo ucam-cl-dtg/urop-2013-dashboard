@@ -63,7 +63,7 @@
     
     <div class="section-container auto" data-section>
         <section>
-            <p class="title" data-section-title><a href="#panel2">Everything</a></p>
+            <p class="title" data-section-title><a>Everything</a></p>
             <div class="content" data-section-content>
               
             <!--deadlines--> 
@@ -101,23 +101,21 @@
             
         </section>
         <section>
-        	<p class="title" data-section-title><a href="#panel2">Notifications</a></p>
+        	<p class="title" data-section-title><a>Notifications</a></p>
         	<div class="content" data-section-content>
-        	    <ul class="notification-feed">
-        	 		{call dashboard.notifications.index}
-        	 			{param user: $userNotifications.user /}
-        	 			{param notifications: $userNotifications.notifications /}
-        	 			{param offset: $userNotifications.offset /}
-        	 			{param limit: $userNotifications.limit /}
-        	 			{param total: $userNotifications.total /}
-        	 			{param section: $userNotifications.section /}
-        	 			{param read: $userNotifications.read /}
-        	 		{/call}
-        	    </ul>
+        	 	{call dashboard.notifications.index}
+        	 		{param user: $userNotifications.user /}
+        	 		{param notifications: $userNotifications.notifications /}
+        	 		{param offset: $userNotifications.offset /}
+        	 		{param limit: $userNotifications.limit /}
+        	 		{param total: $userNotifications.total /}
+        	 		{param section: $userNotifications.section /}
+        	 		{param read: $userNotifications.read /}
+        		{/call}
         	</div>
         </section>
         <section>
-            <p class="title" data-section-title><a href="#panel3"><i class="icon icon-calendar"></i></a></p>
+            <p class="title" data-section-title><a><i class="icon icon-calendar"></i></a></p>
             <div class="content" data-section-content>
                 <p>Calendar</p>
             </div>
