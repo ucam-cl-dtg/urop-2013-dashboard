@@ -12,6 +12,7 @@ import uk.ac.cam.dashboard.util.UserLookupManager;
 import com.googlecode.htmleasy.RedirectException;
 
 public class ApplicationController {
+	
 	// Logger
 	private static Logger log = LoggerFactory.getLogger(ApplicationController.class);
 	
@@ -35,7 +36,7 @@ public class ApplicationController {
 			return User.registerUser(crsid);
 		}
 		
-		throw new RedirectException("/app#dashboard/");
+		throw new RedirectException("/dashboard/");
 	}
 	
 	// temporary for testing

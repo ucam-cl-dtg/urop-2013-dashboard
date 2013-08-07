@@ -24,16 +24,14 @@ public class GetNotificationForm {
 	@QueryParam("offset") String offset;
 	@QueryParam("limit") String limit;
 	@QueryParam("section") String section;
-	@QueryParam("read") String read;
 	
 	private Integer intOffset;
 	private Integer intLimit;
-	private Boolean boolRead;
 	
 	// Logger
 	private static Logger log = LoggerFactory.getLogger(GetNotificationForm.class);
 	
-	public Map<String, ?> handle(User user) {
+	public Map<String, ?> handle(User user, boolean read) {
 		
 		Map<String, Object> userNotifications = new HashMap<String, Object>();
 
@@ -62,12 +60,8 @@ public class GetNotificationForm {
 			userNotifications.put("section", "none");
 		}
 		
-		if (boolRead != null) {
-			nq.isRead(boolRead);
-			userNotifications.put("read", boolRead);
-		} else {
-			userNotifications.put("read", "none");
-		}
+		nq.isRead(read);
+		userNotifications.put("read", read);
 		
 		List<NotificationUser> results = nq.list();
 		
@@ -104,17 +98,6 @@ public class GetNotificationForm {
 			}
 		}
 		
-		// Read
-		if (read != null) {
-			if (read.equals("true")) {
-				boolRead = true;
-			} else if (read.equals("false")) {
-				boolRead = false;
-			} else {
-				errors.put("read", "Read field must be either 'true' or 'false'");
-			}
-		}
-		
 		// Section
 		String[] validSections = {"dashboard", "signups", "handins", "events"}; // Shared with CreateNotificationForm
 		if (section != null && !section.equals("") && !Arrays.asList(validSections).contains(section)) {
@@ -135,9 +118,6 @@ public class GetNotificationForm {
 		
 		String localSection = (section == null ? "" : section);
 		builder.put("section", localSection);
-		
-		String localRead = (read == null ? "" : read);
-		builder.put("read", localRead);
 		
 		return builder.build();
 	}

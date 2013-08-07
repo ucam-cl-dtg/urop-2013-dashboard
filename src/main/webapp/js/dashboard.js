@@ -39,4 +39,4 @@ moduleScripts['dashboard'] = {
 			applyDatepicker
 		]
 	}
-}
+};

@@ -38,7 +38,7 @@ public class HomePageController extends ApplicationController{
 	
 	@GET @Path("/")
 	public void localhostRedirect() {
-		throw new RedirectException("/app/#dashboard/");
+		throw new RedirectException("/dashboard/");
 	}
 	
 	// Authenticate staff

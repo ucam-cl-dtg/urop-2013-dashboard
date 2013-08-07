@@ -47,6 +47,7 @@ $(document).ready(function() {
         
         // Notifications
         "dashboard/notifications(:params*)": "dashboard.notifications.index",
+        "dashboard/notifications/archive(:params*)": "dashboard.notifications.index",
         
         // Supervisor
         "dashboard/supervisor" : "dashboard.supervisor.index"

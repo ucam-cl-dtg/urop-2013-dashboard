@@ -69,7 +69,7 @@ public class NotificationUser implements Mappable{
 		return nu.getRead();
 	}
 	
-	public static boolean markAsUnread(User user, int notificationId){
+	public static boolean markAsReadUnread(User user, int notificationId, boolean read) {
 		
 		Notification notification = NotificationQuery.get(notificationId);
 		
@@ -80,7 +80,7 @@ public class NotificationUser implements Mappable{
 		NotificationUser nu = nq.uniqueResult();
 		
 		Session session = HibernateUtil.getTransactionSession();
-		nu.setRead(false);
+		nu.setRead(read);
 		session.update(nu);
 		
 		return nu.getRead();
