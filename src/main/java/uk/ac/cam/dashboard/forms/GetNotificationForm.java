@@ -35,10 +35,26 @@ public class GetNotificationForm {
 		
 		Map<String, Object> userNotifications = new HashMap<String, Object>();
 
-		NotificationQuery nq = NotificationQuery.all();
-		nq.byUser(user);
+		NotificationQuery nq = NotificationQuery.all().byUser(user);
 		
 		// Filter query based on parameters set
+		
+		if (section != null && !section.isEmpty()) {
+			nq.inSection(section);
+			userNotifications.put("section", section);
+		} else {
+			userNotifications.put("section", "none");
+		}
+		
+		nq.isRead(read);
+		userNotifications.put("read", read);
+		
+		// Get number of rows before offset or limit is set
+		
+		int total = nq.totalRows();
+		userNotifications.put("total", total);
+		
+		// Impose offset and limit
 		
 		if (intOffset != null) {
 			nq.offset(intOffset);
@@ -54,16 +70,8 @@ public class GetNotificationForm {
 			nq.limit(10);
 			userNotifications.put("limit", 10);
 		}
-			
-		if (section != null && !section.isEmpty()) {
-			nq.inSection(section);
-			userNotifications.put("section", section);
-		} else {
-			userNotifications.put("section", "none");
-		}
 		
-		nq.isRead(read);
-		userNotifications.put("read", read);
+		// Process query result set
 		
 		List<NotificationUser> results = nq.list();
 		

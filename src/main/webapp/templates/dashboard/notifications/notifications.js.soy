@@ -5,6 +5,7 @@
  * @param notifications The notifications associated with the user
  * @param offset
  * @param limit
+ * @param total
  * @param section
  * @param read
  */
@@ -14,7 +15,7 @@
 	
 	<div class="row">
 		<div class="columns large-12 small-12">
-			<ul class="notification-feed" data-limit="{$limit}" data-offset="{$offset}">
+			<ul class="notification-feed" data-limit="{$limit}" data-offset="{$offset}" data-total="{$total}">
 				{call shared.dashboard.getNotifications}
 					{param notifications: $notifications /}
 				{/call}
