@@ -27,3 +27,9 @@ function deadlinesIndex() {
         });
   
 }
+
+function editDeadline() {
+	$("#editDeadlineForm").ajaxForm(function(data) {
+		applyTemplate($('#editDeadlineSection'), "dashboard.deadlines.edit", data);
+	});
+}

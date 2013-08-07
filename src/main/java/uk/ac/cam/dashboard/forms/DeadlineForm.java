@@ -39,7 +39,7 @@ public class DeadlineForm {
 	//Logger
 	private static Logger log = LoggerFactory.getLogger(DeadlineForm.class);
 	
-	public Deadline handleCreate(User currentUser) {		
+	public int handleCreate(User currentUser) {		
 		
 		Session session = HibernateUtil.getTransactionSession();
 		
@@ -119,10 +119,10 @@ public class DeadlineForm {
 		}
 		
 		
-		return deadline;			
+		return deadline.getId();			
 	}
 	
-	public Deadline handleUpdate(User currentUser, int id) {		
+	public int handleUpdate(User currentUser, int id) {		
 		
 		Session session = HibernateUtil.getTransactionSession();
 		
@@ -188,7 +188,7 @@ public class DeadlineForm {
 		
 		session.update(deadline);
 		
-		return deadline;	
+		return deadline.getId();	
 	}
 	
 	public ArrayListMultimap<String, String> validate() {

@@ -43,6 +43,17 @@ public class DeadlinesController extends ApplicationController {
 		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.deadlinesToMap());
 	}
 	
+	// Get
+	@GET @Path("/{id}") 
+	public Map<String, ?> getDeadline(@PathParam("id") int id) {
+		
+		currentUser = initialiseUser();
+		
+	  	Deadline deadline = Deadline.getDeadline(id);
+	  	
+		return ImmutableMap.of("errors", "undefined","deadline", deadline.toMap(), "deadlineEdit", deadline.toMap());		
+	}
+	
 	// Create
 	@POST @Path("/") 
 	public Map<String, ?> createDeadline(@Form DeadlineForm deadlineForm) throws Exception {
@@ -52,37 +63,15 @@ public class DeadlinesController extends ApplicationController {
 		ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
 		
 		if(errors.isEmpty()){
-			deadlineForm.handleCreate(currentUser);
-			return ImmutableMap.of("redirectTo", "api/dashboard/deadline/id");
+			int id = deadlineForm.handleCreate(currentUser);
+			return ImmutableMap.of("redirectTo", "dashboard/deadlines/"+id);
 		} else {
 			return ImmutableMap.of("data", deadlineForm.toMap(), "errors", actualErrors);
 		}
 	}
 	
-	// Get
-	@GET @Path("/{id}") 
-	public Map<String, ?> getDeadline(@PathParam("id") int id) {
-		
-		currentUser = initialiseUser();
-		
-	  	Deadline deadline = Deadline.getDeadline(id);
-	  	
-		return ImmutableMap.of("deadline", deadline.toMap());		
-	}
-	
-	// Edit
-	@GET @Path("/{id}/edit") 
-	public Map<String, ?> editDeadline(@PathParam("id") int id) {
-		
-		currentUser = initialiseUser();
-		
-	  	Deadline deadline = Deadline.getDeadline(id);
-	  	
-		return ImmutableMap.of("deadline", deadline.toMap());		
-	}
-	
 	// Update
-	@POST @Path("/{id}/edit")
+	@POST @Path("/{id}")
 	public Map<String, ?> updateDeadline(@Form DeadlineForm deadlineForm, @PathParam("id") int id) {
 		
 		currentUser = initialiseUser();
@@ -91,11 +80,10 @@ public class DeadlinesController extends ApplicationController {
 		ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
 		
 		if(errors.isEmpty()){
-			Deadline deadline = deadlineForm.handleUpdate(currentUser, id);
-			// redirect to deadline tab on supervisor page
-			return ImmutableMap.of("success", "true", "errors", "undefined", "deadline", deadline.toMap());
+			deadlineForm.handleUpdate(currentUser, id);
+			return ImmutableMap.of("redirectTo", "dashboard/deadlines/"+id);
 		} else {
-			return ImmutableMap.of("success", "false", "errors", actualErrors, "deadline", deadlineForm.toMap());
+			return ImmutableMap.of("errors", actualErrors, "deadline", deadlineForm.toMap());
 		}
 	}
 	

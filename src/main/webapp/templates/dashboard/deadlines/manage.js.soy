@@ -3,7 +3,9 @@
 /**
  * Supervisor panel - manage a deadline and view stats
  * @param deadline
+ * @param deadlineEdit
  * @param target
+ * @param errors
  */
 {template .manage }
 
@@ -20,10 +22,11 @@
             </section>
             <section {if $target=='edit'}class="active"{/if}>
             <p class="title" data-section-title><a href="#panel2">Edit Deadline</a></p>
-            <div class="content" data-section-content>
+            <div class="content" data-section-content id="editDeadlineSection">
 
                 {call .edit}
-                {param deadline: $deadline /}
+                {param deadline: $deadlineEdit /}
+                {param errors: $errors /}
                 {/call}          
 
             </div>
@@ -35,15 +38,17 @@
 /**
  * Edit deadline
  * @param deadline
- * 
+ * @param errors
  */
 {template .edit }
     
-    <form class="custom" id="d_edit_{$deadline.id}">
+    <form class="custom" id="editDeadlineForm" method="post" action="api/dashboard/deadlines/{$deadline.id}">
         <div class="row">
             <div class="columns large-2 small-4 field-label">Deadline name</div>
             <div class="columns large-10 small-8">
-                <input type="text" name="title" placeholder="Deadline name" value="{$deadline.name}" />
+                {if $errors != 'undefined' and $errors.title}<label class="error">Error</label>{/if}
+                <input type="text" name="title" placeholder="Deadline name" value="{$deadline.name}" {if $errors != 'undefined' and $errors.title}class="error"{/if}/>
+                {if $errors != 'undefined' and $errors.title}<small class="error">{$errors.title}</small>{/if}
             </div>
         </div>
          
@@ -52,7 +57,7 @@
             <div class="columns large-10 small-8">
                 <div class="row">
                     <div class="columns large-6">
-                        <input type="text" placeholder="Date" value="{$deadline.datetime.date}" class="datepicker" name="date" />
+                        <input type="text" placeholder="Date" value="{$deadline.date.date}" class="datepicker" name="date" />
                     </div>
                     <div class="large-6 columns">
                         <div class="row collapse">
@@ -62,7 +67,7 @@
                             <div class="large-3 columns">
                                 <select name="hour">
                                     {for $i in range(0,24)}
-                                        {if $i == $deadline.datetime.hour}
+                                        {if $i == $deadline.date.hour}
                                         <option SELECTED>{$i}</option> 
                                         {else}
                                         <option>{$i}</option> 
@@ -76,7 +81,7 @@
                             <div class="large-3 columns">
                                 <select name="minute">
                                     {for $i in range(0,60)}
-                                        {if $i == $deadline.datetime.minute}
+                                        {if $i == $deadline.date.minute}
                                         <option SELECTED>{$i}</option> 
                                         {else}
                                         <option>{$i}</option> 
@@ -110,41 +115,9 @@
         <div class="row">
                 <div class="columns large-2 small-4 field-label">Add users</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="edit_deadline_user_token_input" name="users"/>
+                    <input type="text" class="user-token-input" name="users" data-prepopulate='{lb}"users":[{foreach $user in $deadline.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{/foreach}]{rb}'/>
                 </div>
             </div>
-            
-                    <!-- HORRIBLE WAY OF INCLUDING JS - try and get this working in main.js later-->
-                    
-                    {literal}
-                    <script type="text/javascript">
-                    $(document).ready(function() {
-                        $(".edit_deadline_user_token_input").tokenInput("/dashboard/groups/queryCRSID", {
-                            method: "post",
-                            tokenValue: "crsid",
-                            propertyToSearch: "crsid",
-                            theme: "facebook",
-                            minChars: 3,
-                            hintText: "Search for a user",
-                            resultsLimit: 10,
-                            preventDuplicates: true,
-                            prePopulate: [
-                            
-                    {/literal}
-                    {foreach $user in $deadline.users}
-                    {lb}crsid: "{$user.crsid}", name: "{$user.name}"{rb},
-                    {/foreach}
-                    {literal}                     
-                            ],
-
-                            resultsFormatter: function(item){ return "<li>" + "<div style='display: inline-block; padding-left: 10px;'><div class='full_name'>" + item.name + " (" + item.crsid + ")</div><div class='email'>" + item.crsid + "@cam.ac.uk</div></div></li>" },
-                            tokenFormatter: function(item) { return "<li><p>" + item.name + " (" + item.crsid + ")</p></li>" },                           
-                        });
-                    });
-                    </script>
-                    {/literal}
-                    
-                    <!-- HORRIBLE WAY OF INCLUDING JS - try and get this working in main.js later-->
 
          <!-- END ADD USERS AS RECIPIENTS -->
             

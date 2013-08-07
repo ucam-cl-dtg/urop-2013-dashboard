@@ -80,6 +80,15 @@ public class Deadline implements Mappable {
 		SimpleDateFormat tf = new SimpleDateFormat("HH:mm");
 		return df.format(datetime.getTime()) + " at " + tf.format(datetime.getTime());
 	}
+	public Map<String, ?> getDateMap() { 
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
+		SimpleDateFormat minuteFormat = new SimpleDateFormat("mm");
+		String dateString = dateFormat.format(datetime.getTime());
+		String hourString = hourFormat.format(datetime.getTime());
+		String minuteString = minuteFormat.format(datetime.getTime());	
+		return ImmutableMap.of("date", dateString, "hour", hourString, "minute", minuteString);
+	}
 	
 	public User getOwner() { return this.owner; }
 	public void setOwner(User owner) { this.owner= owner; }
@@ -131,6 +140,7 @@ public class Deadline implements Mappable {
 			
 			builder = builder
 					.put("datetime", getFormattedDate())
+					.put("date", getDateMap())
 					.put("users", deadlineUsers);
 			
 		} catch(NullPointerException e){
@@ -142,6 +152,7 @@ public class Deadline implements Mappable {
 					.put("url", "")
 					.put("owner", "")
 					.put("datetime", getFormattedDate())
+					.put("date", getDateMap())
 					.put("users", "");
 			return builder.build();
 		}

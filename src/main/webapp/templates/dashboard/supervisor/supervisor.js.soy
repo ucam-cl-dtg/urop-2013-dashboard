@@ -120,7 +120,7 @@
                             <div class="columns large-3 small-3 text-right">
                                 <div class="icon-button-wrapper">
                                     <a class="icon-button panel-icon-button websymbols-icon icon-button-array expand-sub-panel">&#43;</a>
-                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader deadline_edit">&#83;</a>
+                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader" data-target="dashboard/deadlines/{$deadline.id}">&#83;</a>
                                     <a class="icon-button panel-icon-button websymbols-icon deadline_delete">&#39;</a>
                                 </div>
                             </div>
@@ -186,7 +186,7 @@
                             <div class="columns large-3 small-3 text-right">
                                 <div class="icon-button-wrapper">
                                     <a class="icon-button panel-icon-button websymbols-icon icon-button-array expand-sub-panel">&#43;</a>
-                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader group_edit">&#83;</a>
+                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader" data-target="dashboard/groups/{$group.id}">&#83;</a>
                                     <a class="icon-button panel-icon-button websymbols-icon group_delete">&#39;</a>
                                 </div>
                             </div>
@@ -310,7 +310,7 @@
                 <div class="columns large-2 small-4 field-label">Add users</div>
                 <div class="columns large-10 small-8">
             	{if $errors != 'undefined'  and $errors.users}<label class="error">Error</label>{/if}
-                    <input type="text" class="deadline_user_token_input {if $errors != 'undefined' and $errors.users}error{/if}" name="users"/>
+                    <input type="text" class="user-token-input {if $errors != 'undefined' and $errors.users}error{/if}" name="users"/>
                 {if $errors != 'undefined'  and $errors.users}<small class="error">{$errors.users}</small>{/if}
                 </div>
             </div>
@@ -340,13 +340,12 @@
 
 /**
  * Dashboard: supervisor page, create groups
- * 
  *
  */
 {template .newgroup }
 
         <h3>Create new group</h3>       
-        <form id="group" name="group" action="api/dashboard/groups" method="post"  data-abide>
+        <form id="newGroupForm" action="api/dashboard/groups" method="post">
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Group name</div>
                 <div class="columns large-10 small-8">
@@ -356,7 +355,7 @@
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Group members</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="member_token_input" name="users[]"/>
+                    <input type="text" class="user-token-input" name="users[]"/>
                 </div>
             </div>
             <div class="row">
@@ -368,7 +367,7 @@
         
         <h3>Import Existing Group (LDAP)</h3>    
         <h6 class="subheader">Small public groups only</h6>         
-        <form id="import_group" name="import_group" action="/dashboard/groups/import" method="post" data-abide>
+        <form id="importGroupForm" action="/dashboard/groups/import" method="post" data-abide>
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Import Group</div>
                 <div class="columns large-10 small-8">

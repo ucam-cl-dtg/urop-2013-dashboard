@@ -70,8 +70,19 @@ public class GroupsController extends ApplicationController {
 			throw new RedirectException("/app/#signapp/supervisor");
 		}
 		
+		// Get
+		@GET @Path("/{id}") 
+		public Map<String, ?> getGroup(@PathParam("id") int id) {
+			
+			currentUser = initialiseUser();
+
+			Group group = Group.getGroup(id);
+			
+			return ImmutableMap.of("group", group.toMap());
+		}
+		
 		//Edit
-		@GET @Path("/{id}/edit") //@ViewWith("/soy/groups.edit")
+		@GET @Path("/{id}/edit") 
 		public Map<String, ?> editGroup(@PathParam("id") int id) {
 			
 			currentUser = initialiseUser();
