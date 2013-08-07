@@ -34,6 +34,9 @@ $(document).ready(function() {
         
         // Home page
         "dashboard": "dashboard.home.index",
+        
+        // Account
+        "dashboard/account": "dashboard.account.index",
 
         // Deadlines
         "dashboard/deadlines" : "dashboard.deadlines.index",
