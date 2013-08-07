@@ -9,7 +9,7 @@ function bindNotificationShowMoreListener() {
 			var offset = Number($('.notification-feed').attr('data-offset'));
 			var limit = Number($('.notification-feed').attr('data-limit'));
 			var newOffset = offset + limit;
-			$('.notification-feed').attr('data-offset', newOffset)
+			$('.notification-feed').attr('data-offset', newOffset);
 		
 			var queryString = 'offset=' + newOffset + '&limit=' + limit;
 		
@@ -23,7 +23,7 @@ function bindNotificationShowMoreListener() {
 function getNotifications(queryString, limit) {
 	var elem = $('#new-notifications-wrapper');
 	var location = 'dashboard/notifications?' + queryString;
-	var template = 'dashboard.notifications.getNotifications';	
+	var template = 'shared.dashboard.getNotifications';	
 	
 	loadModule(elem, location, template, function() {
 		var $newItems = $('#new-notifications-wrapper').clone();
@@ -41,12 +41,14 @@ function getNotifications(queryString, limit) {
 function markNotificationAsRead() {
 	$(document).on('click', '.mark-notification-as-read', function() {
 		var target = $(this).attr('data-notification-target');
+		// Implicitly checking whether markAsUnread is true or false
+		var markAsRead = $(this).children('a').hasClass('mark-as-read');
 	    $.ajax({
 	    	type: 'PUT',
-	    	url: prepareURL("dashboard/notifications/" + target),
+	    	url: prepareURL("dashboard/notifications/" + target + "?read=" + markAsRead),
 	    	success: function(data) {
-	    		if (data.error) {
-	    			alert('error');
+	    		if (data.errors) {
+	    			alert(data.errors);
 	    		} else {
 	    			$("#" + target).parent().slideUp(500, function() {
 	    				$(this).remove();

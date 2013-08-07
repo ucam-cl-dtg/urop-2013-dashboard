@@ -45,4 +45,4 @@ moduleScripts['dashboard'] = {
 	        autocomplete	
 		]
 	}
-}
+};
