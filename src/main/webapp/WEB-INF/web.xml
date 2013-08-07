@@ -16,7 +16,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
 	<context-param>
 		<param-name>cssFiles</param-name>
-		<param-value>/css/vendor/jquery-ui/jquery-ui-1.10.3.custom.min.css,</param-value>
+		<param-value></param-value>
 	</context-param>
 
 	<context-param>

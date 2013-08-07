@@ -1,8 +1,14 @@
 moduleScripts['dashboard'] = {
 	'notifications' : {
-		'getNotificationsController': [
-			bindNotificationShowMoreListener
+		'index': [
+			bindNotificationShowMoreListener,
+			markNotificationAsRead
 		]
+	},
+	'shared' : {
+		'getNotifications': [
+            markNotificationAsRead
+        ]
 	},
 	'groups' : {
 		'index': [

@@ -37,3 +37,22 @@ function getNotifications(queryString, limit) {
 		}
 	});
 }
+
+function markNotificationAsRead() {
+	$(document).on('click', '.mark-notification-as-read', function() {
+		var target = $(this).attr('data-notification-target');
+	    $.ajax({
+	    	type: 'PUT',
+	    	url: prepareURL("dashboard/notifications/" + target),
+	    	success: function(data) {
+	    		if (data.error) {
+	    			alert('error');
+	    		} else {
+	    			$("#" + target).parent().slideUp(500, function() {
+	    				$(this).remove();
+	    			});
+	    		}
+	    	}
+	    });
+	});
+}

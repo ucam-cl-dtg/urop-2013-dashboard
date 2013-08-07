@@ -58,11 +58,15 @@ public class GetNotificationForm {
 		if (section != null && !section.isEmpty()) {
 			nq.inSection(section);
 			userNotifications.put("section", section);
+		} else {
+			userNotifications.put("section", "none");
 		}
 		
 		if (boolRead != null) {
 			nq.isRead(boolRead);
 			userNotifications.put("read", boolRead);
+		} else {
+			userNotifications.put("read", "none");
 		}
 		
 		List<NotificationUser> results = nq.list();
