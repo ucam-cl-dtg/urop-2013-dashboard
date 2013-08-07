@@ -10,36 +10,44 @@ function bindNotificationShowMoreListener() {
 			var offset = Number($elem.attr('data-offset'));
 			var limit = Number($elem.attr('data-limit'));
 			var total = Number($elem.attr('data-total'));
-			
 			var newOffset = offset + limit;
 			
-			$('.notification-feed').attr('data-offset', newOffset);
-		
+			$('.notification-feed').attr('data-offset', newOffset);	
+			
 			var queryString = 'offset=' + newOffset + '&limit=' + limit;
-		
-			getNotifications(queryString, limit, total);
+			var elem = $('#new-notifications-wrapper');
+			var location = 'dashboard/notifications?' + queryString;
+			var template = 'shared.dashboard.getNotifications';	
+			
+			loadModule(elem, location, template, function() {
+				var $newItems = $('#new-notifications-wrapper').clone();
+				$('#new-notifications-wrapper').empty();
+				$('.notification-feed').append($newItems.html());
+				
+				// Check if the number of items returned is the limit, otherwise
+				// the number returned must be lower than the limit, and therefore
+				// the list is exhausted.
+				if ($newItems.children().length == limit) {
+					// If the number returned is the limit, check if the total has
+					// been reached.
+					if (newOffset + limit == total) {
+						noMoreNotifications();
+					} else {
+						$('#show-more-notifications').removeClass('disabled');
+					}
+				} else {
+					noMoreNotifications();
+				}
+			});
+			
 		}
 		
 	});
 	
 }
 
-function getNotifications(queryString, limit, total) {
-	var elem = $('#new-notifications-wrapper');
-	var location = 'dashboard/notifications?' + queryString;
-	var template = 'shared.dashboard.getNotifications';	
-	
-	loadModule(elem, location, template, function() {
-		var $newItems = $('#new-notifications-wrapper').clone();
-		$('#new-notifications-wrapper').empty();
-		$('.notification-feed').append($newItems.html());
-		
-		if ($newItems.children().length == limit) {
-			$('#show-more-notifications').removeClass('disabled');
-		} else {
-			$('#show-more-notifications').text('No more notifications');
-		}
-	});
+function noMoreNotifications() {
+	$('#show-more-notifications').text('No more notifications');
 }
 
 function markNotificationAsReadUnread() {
