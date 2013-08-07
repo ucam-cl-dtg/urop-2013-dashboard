@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.dashboard.forms.GetNotificationForm;
 import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
 //Import models
 import uk.ac.cam.dashboard.models.User;
@@ -33,7 +34,10 @@ public class HomePageController extends ApplicationController{
 		currentUser = initialiseUser();
 		//ImmutableMap<String, ?> userMap = ulm.getAll();
 		
-		return ImmutableMap.of("user", LDAPQueryHelper.getAll(currentUser.getCrsid()), "deadlines", currentUser.deadlinesToMap());
+		// Get notifications
+		GetNotificationForm notificationForm = new GetNotificationForm();
+		
+		return ImmutableMap.of("user", LDAPQueryHelper.getAll(currentUser.getCrsid()), "deadlines", currentUser.deadlinesToMap(), "userNotifications", notificationForm.handle(currentUser, false));
 	}
 	
 	@GET @Path("/")

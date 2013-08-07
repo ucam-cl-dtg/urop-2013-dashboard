@@ -87,19 +87,19 @@ public class LDAPQueryHelper {
 	 * @return String status
 	 */
 	public static String getStatus(String crsid){
-			log.debug("Retrieving misAffiliation for " + crsid + " from LDAP");
-			// Default status is student
-			String status = "student";
-			List<String> statusList = LDAPProvider.multipleQuery("uid", crsid, "misAffiliation", "people");
-			if(statusList==null){ System.out.println("no misAffiliation");}
-			for(String s : statusList){
-				// If the user has staff misAffiliation, set staff status
-				if(s.toString().equals("staff")){
-					log.debug("staff misAffiliation detected for user " + crsid);
-					status = "staff";
-				}
-			}
-		return status;
+//			log.debug("Retrieving misAffiliation for " + crsid + " from LDAP");
+//			// Default status is student
+//			String status = "student";
+//			List<String> statusList = LDAPProvider.multipleQuery("uid", crsid, "misAffiliation", "people");
+//			if(statusList==null){ System.out.println("no misAffiliation");}
+//			for(String s : statusList){
+//				// If the user has staff misAffiliation, set staff status
+//				if(s.toString().equals("staff")){
+//					log.debug("staff misAffiliation detected for user " + crsid);
+//					status = "staff";
+//				}
+//			}
+		return "test status";
 	}
 	
 	/**

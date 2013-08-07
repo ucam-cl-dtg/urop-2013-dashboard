@@ -37,6 +37,7 @@ public class NotificationsController extends ApplicationController {
 		
 		// Get notifications
 		public Map<String, ?> getNotifications(GetNotificationForm notificationForm, boolean read) {
+			
 			currentUser = initialiseUser();
 			ImmutableMap<String, List<String>> errors = notificationForm.validate();
 
