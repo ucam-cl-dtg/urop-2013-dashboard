@@ -33,7 +33,7 @@ $(document).ready(function() {
     router = Router({
         
         // Home page
-        "dashboard/": "dashboard.homePage.index",
+        "dashboard": "dashboard.home.index",
 
         // Deadlines
         "dashboard/deadlines" : "dashboard.deadlines.index",

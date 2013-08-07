@@ -1,13 +1,19 @@
 moduleScripts['dashboard'] = {
+	'home' : {
+		'index': [
+            bindNotificationShowMoreListener,
+            markNotificationAsReadUnread
+        ]
+	},
 	'notifications' : {
 		'index': [
 			bindNotificationShowMoreListener,
-			markNotificationAsRead
+            markNotificationAsReadUnread
 		]
 	},
 	'shared' : {
 		'getNotifications': [
-            markNotificationAsRead
+            markNotificationAsReadUnread
         ]
 	},
 	'groups' : {

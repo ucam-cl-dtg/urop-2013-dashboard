@@ -38,7 +38,7 @@ function getNotifications(queryString, limit) {
 	});
 }
 
-function markNotificationAsRead() {
+function markNotificationAsReadUnread() {
 	$(document).on('click', '.mark-notification-as-read', function() {
 		var target = $(this).attr('data-notification-target');
 		// Implicitly checking whether markAsUnread is true or false

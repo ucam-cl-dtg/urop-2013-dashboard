@@ -38,6 +38,8 @@ public class GetNotificationForm {
 		NotificationQuery nq = NotificationQuery.all();
 		nq.byUser(user);
 		
+		// Filter query based on parameters set
+		
 		if (intOffset != null) {
 			nq.offset(intOffset);
 			userNotifications.put("offset", intOffset);
