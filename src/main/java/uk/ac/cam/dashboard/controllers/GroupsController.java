@@ -1,10 +1,12 @@
 package uk.ac.cam.dashboard.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -17,6 +19,8 @@ import org.jboss.resteasy.annotations.Form;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.cl.ldap.LDAPObjectNotFoundException;
+import uk.ac.cam.cl.ldap.LDAPPartialQuery;
 import uk.ac.cam.dashboard.forms.GroupForm;
 import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
 import uk.ac.cam.dashboard.models.Group;
@@ -118,29 +122,50 @@ public class GroupsController extends ApplicationController {
 			
 		}
 		
-		// Find users
+		// Find users by crsid
 		@POST @Path("/queryCRSID")
-		public List<ImmutableMap<String, ?>> queryCRSId(String q) {
-			
-			//Remove q= prefix
-			String x = q.substring(2);
+		public List<HashMap<String, String>> queryCRSId(@FormParam("q") String x) {
 			
 			// Perform LDAP search
-			ArrayList<ImmutableMap<String,?>> matches = (ArrayList<ImmutableMap<String, ?>>) LDAPQueryHelper.queryCRSID(x);
+			List<HashMap<String, String>> matches = null;
+			try {
+				matches = LDAPPartialQuery.partialUserByCrsid(x);
+			} catch (LDAPObjectNotFoundException e){
+				log.error("Error performing LDAPQuery: " + e.getMessage());
+				return new ArrayList<HashMap<String, String>>();
+			}
+			
+			return matches;
+		}
+		
+		// Find users by surname
+		@POST @Path("/querySurname")
+		public List<HashMap<String, String>> querySurname(@FormParam("q") String x) {
+			
+			// Perform LDAP search
+			List<HashMap<String, String>> matches = null;
+			try {
+				matches = LDAPPartialQuery.partialUserBySurname(x);
+			} catch (LDAPObjectNotFoundException e){
+				log.error("Error performing LDAPQuery: " + e.getMessage());
+				return new ArrayList<HashMap<String, String>>();
+			}
 			
 			return matches;
 		}
 		
 		// Find groups from LDAP
 		@POST @Path("/queryGroup")
-		public List<ImmutableMap<String, ?>> queryGroup(String q) {
-			
-			//Remove q= prefix
-			String x = q.substring(2);
+		public List<HashMap<String, String>> queryGroup(@FormParam("q") String x) {
 			
 			// Perform LDAP search
-			ArrayList<ImmutableMap<String,?>> matches = (ArrayList<ImmutableMap<String, ?>>) LDAPQueryHelper.queryGroups(x);
-			
+			List<HashMap<String, String>> matches = null;
+			try {
+				matches = LDAPPartialQuery.partialGroupByName(x);
+			} catch (LDAPObjectNotFoundException e){
+				log.error("Error performing LDAPQuery: " + e.getMessage());
+				return new ArrayList<HashMap<String, String>>();
+			}			
 			return matches;
 		}	
 }

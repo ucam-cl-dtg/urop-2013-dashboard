@@ -1,5 +1,6 @@
 package uk.ac.cam.dashboard.controllers;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.GET;
@@ -7,12 +8,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+
 //Import the following for logging
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.cl.ldap.LDAPObjectNotFoundException;
+import uk.ac.cam.cl.ldap.LDAPQueryManager;
+import uk.ac.cam.cl.ldap.LDAPUser;
 import uk.ac.cam.dashboard.forms.GetNotificationForm;
-import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
 //Import models
 import uk.ac.cam.dashboard.models.User;
 
@@ -32,13 +36,21 @@ public class HomePageController extends ApplicationController{
 	public Map<String, ?> homePage() {
 		
 		currentUser = initialiseUser();
-		//ImmutableMap<String, ?> userMap = ulm.getAll();
+		
+		LDAPUser user = null;
+		try {
+			user = LDAPQueryManager.getUser(currentUser.getCrsid());
+		} catch (LDAPObjectNotFoundException e){
+			// Create map of default options or something
+		}
+		
+		HashMap<String, String> userData = user.getAll();
 		
 		// Get notifications
 		GetNotificationForm notificationForm = new GetNotificationForm();
 		notificationForm.validate();
 		
-		return ImmutableMap.of("user", LDAPQueryHelper.getAll(currentUser.getCrsid()), "deadlines", currentUser.deadlinesToMap(), "userNotifications", notificationForm.handle(currentUser, false));
+		return ImmutableMap.of("user", userData, "deadlines", currentUser.deadlinesToMap(), "userNotifications", notificationForm.handle(currentUser, false));
 	}
 	
 	@GET @Path("/")

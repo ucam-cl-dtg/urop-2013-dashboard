@@ -44,7 +44,10 @@ moduleScripts['dashboard'] = {
 	      	importGroup,
 	        deleteGroup,
 	        applyDatepicker,
-			userTokenInput
+			userTokenInput,
+			userSurnameTokenInput,
+			groupImportTokenInput,
+			tokenInputType
 		],
 		'deadline' : [
 			deleteDeadline
@@ -61,7 +64,10 @@ moduleScripts['dashboard'] = {
 			createGroup,	
 	      	importGroup,
 	        applyDatepicker,
-			userTokenInput	
+			userTokenInput,
+			userSurnameTokenInput,
+			groupImportTokenInput, 
+			tokenInputType	
 		]
 	}
 };
