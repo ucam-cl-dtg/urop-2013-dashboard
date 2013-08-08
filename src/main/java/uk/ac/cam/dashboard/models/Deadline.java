@@ -21,7 +21,9 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.annotations.GenericGenerator;
 
-import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
+import uk.ac.cam.cl.ldap.LDAPObjectNotFoundException;
+import uk.ac.cam.cl.ldap.LDAPQueryManager;
+import uk.ac.cam.cl.ldap.LDAPUser;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
@@ -133,8 +135,14 @@ public class Deadline implements Mappable {
 			for(DeadlineUser du : users){
 				// Get users crsid
 				crsid = du.getUser().getCrsid();
-				// Get users display name from LDAP
-				String name = LDAPQueryHelper.getRegisteredName(crsid);
+				LDAPUser u = null;
+				try {
+					u = LDAPQueryManager.getUser(crsid);
+				} catch(LDAPObjectNotFoundException e){
+					// handle error - set default name or something
+				}
+				
+				String name = u.getcName();
 				deadlineUsers.add(ImmutableMap.of("crsid",crsid, "name", name));
 			}		
 			
@@ -163,9 +171,19 @@ public class Deadline implements Mappable {
 		
 		List<ImmutableMap<String, ?>> deadlineUsers =new ArrayList<ImmutableMap<String, ?>>();
 		
-		for(DeadlineUser u : users){
-			String crsid = u.getUser().getCrsid();
-			deadlineUsers.add(ImmutableMap.of("crsid", crsid, "name", LDAPQueryHelper.getRegisteredName(crsid)));
+		for(DeadlineUser du : users){
+			String crsid = du.getUser().getCrsid();
+			
+			LDAPUser u = null;
+			try {
+				u = LDAPQueryManager.getUser(crsid);
+			} catch(LDAPObjectNotFoundException e){
+				// handle error - set default name or something
+			}	
+			
+			String name = u.getcName();
+			
+			deadlineUsers.add(ImmutableMap.of("crsid", crsid, "name", name));
 		}
 		
 		return deadlineUsers;

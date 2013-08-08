@@ -18,7 +18,9 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.annotations.GenericGenerator;
 
-import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
+import uk.ac.cam.cl.ldap.LDAPObjectNotFoundException;
+import uk.ac.cam.cl.ldap.LDAPQueryManager;
+import uk.ac.cam.cl.ldap.LDAPUser;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
@@ -106,7 +108,15 @@ public class Group implements Mappable {
 				// Get users crsid
 				crsid = u.getCrsid();
 				// Get users display name from LDAP
-				String name = LDAPQueryHelper.getRegisteredName(crsid);
+				LDAPUser lU = null;
+				try {
+					lU = LDAPQueryManager.getUser(crsid);
+				} catch (LDAPObjectNotFoundException e) {
+					//TODP: handle
+				}
+				
+				String name = lU.getcName();
+				
 				groupUsers.add(ImmutableMap.of("crsid",crsid, "name", name));
 			}
 			

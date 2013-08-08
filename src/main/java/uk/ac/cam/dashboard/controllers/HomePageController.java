@@ -8,7 +8,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-
 //Import the following for logging
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,13 +57,8 @@ public class HomePageController extends ApplicationController{
 		throw new RedirectException("/dashboard/");
 	}
 	
-	// Authenticate staff
+	// TODO: Authenticate staff
 	public boolean isStaff() {
-		try {
-			return (ulm.getStatus().equals("staff"));
-		} catch(NullPointerException e) {
-			log.error("User initialisation failed");
-			return false;
-		}
+		return false;
 	}
 }
