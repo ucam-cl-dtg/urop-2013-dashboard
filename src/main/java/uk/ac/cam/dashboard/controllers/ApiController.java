@@ -16,7 +16,7 @@ import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 
-@Path("/api/keys")
+@Path("/dashboard/auth")
 @Produces(MediaType.APPLICATION_JSON)
 public class ApiController extends ApplicationController {
 	
@@ -59,6 +59,9 @@ public class ApiController extends ApplicationController {
 	
 	@GET @Path("/type/{key}")
 	public Map<String, String> checkApiKeyType(@PathParam("key") String key) {
+		
+		// *TODO* Check if global permissions
+		
 		Session s = HibernateUtil.getTransactionSession();
 		
 		Api api = (Api) s.createQuery("from Api where key = :key").setParameter("key", key).uniqueResult();

@@ -1,58 +1,71 @@
 package uk.ac.cam.dashboard.controllers;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import uk.ac.cam.dashboard.models.Settings;
+import uk.ac.cam.dashboard.models.User;
+
 import com.google.common.collect.ImmutableMap;
 
 @Path("api/dashboard/settings")
 @Produces(MediaType.APPLICATION_JSON)
-public class ProjectSettingsController {
+public class ProjectSettingsController extends ApplicationController {
 
+	private User currentUser;
+	
 	@GET @Path("/")
-	public Map<String, ?> sidebarLinkHierarchy() {
+	public ImmutableMap<String, ?> sidebarLinkHierarchy() {
 		
 		// *TODO* Validate global permissions
+		currentUser = initialiseSpecifiedUser("jd658");
+		Settings settings = currentUser.getSettings();
 		
-		Map<String, Object> sidebar = new HashMap<String, Object>();
+		List<Object> sidebar = new LinkedList<Object>();
 		
 		// Dashboard
-		Map<String, Object> dashboard = new HashMap<String, Object>();
-		dashboard.put("Home", ImmutableMap.of("link", "dashboard", "icon", "icon-globe", "icon-type", "test"));
-		dashboard.put("Notifications", ImmutableMap.of("link", "dashboard/notifications", "icon", "icon-newspaper", "icon-type", "test"));
-		dashboard.put("Deadlines", ImmutableMap.of("link", "dashboard/deadlines", "icon", "icon-ringbell", "icon-type", "test"));
-		dashboard.put("Groups", ImmutableMap.of("link", "dashboard/groups", "icon", "icon-users", "icon-type", "test"));
-		dashboard.put("Supervisor Homepage", ImmutableMap.of("link", "dashboard/supervisor", "icon", "icon-users", "icon-type", "test"));
-		sidebar.put("Dashboard", ImmutableMap.of("links", dashboard, "icon", "&#97;", "icon-type", "test"));
+		List<Object> dashboard = new LinkedList<Object>();
+		dashboard.add(ImmutableMap.of("name", "Home", "link", "dashboard", "icon", "icon-globe", "iconType", 1, "notificationCount", 2));
+		dashboard.add(ImmutableMap.of("name", "Notifications", "link", "dashboard/notifications", "icon", "icon-newspaper", "iconType", 1, "notificationCount", 2));
+		dashboard.add(ImmutableMap.of("name", "Deadlines","link", "dashboard/deadlines", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 2));
+		dashboard.add(ImmutableMap.of("name", "Groups", "link", "dashboard/groups", "icon", "icon-users", "iconType", 1, "notificationCount", 2));
+		dashboard.add(ImmutableMap.of("name", "Supervisor Homepage", "link", "dashboard/supervisor", "icon", "icon-users", "iconType", 1, "notificationCount", 2));
+		sidebar.add(ImmutableMap.of("name", "Dashboard", "links", dashboard, "icon", "a", "iconType", 2, "notificationCount", 2));
 		
 		// Signups
-		Map<String, Object> signups = new HashMap<String, Object>();
-		signups.put("Events", ImmutableMap.of("link", "signapp/events", "icon", "&#63;", "icon-type", "test"));
-		signups.put("Create new event", ImmutableMap.of("link", "signapp/events/new", "icon", "&#63;", "icon-type", "test"));
-		sidebar.put("Timetable/Signups", ImmutableMap.of("links", signups, "icon", "&#80;", "icon-type", "test"));
+		if (settings.isSignupsOptIn()) {
+			List<Object> signups = new LinkedList<Object>();
+			signups.add(ImmutableMap.of("name", "Events", "link", "signapp/events", "icon", "?", "iconType", 2, "notificationCount", 2));
+			signups.add(ImmutableMap.of("name", "Create new event", "link", "signapp/events/new", "icon", "?", "iconType", 2, "notificationCount", 2));
+			sidebar.add(ImmutableMap.of("name", "Timetable/Signups", "links", signups, "icon", "P", "iconType", 2, "notificationCount", 2));
+		}
 		
 		// Questions
-		Map<String, Object> questions = new HashMap<String, Object>();
-		questions.put("Browse questions", ImmutableMap.of("link", "q/search", "icon", "icon-list", "icon-type", "test"));
-		questions.put("Browse question sets", ImmutableMap.of("link", "sets", "icon", "icon-file_open", "icon-type", "test"));
-		questions.put("Browse own content", ImmutableMap.of("link", "users/me", "icon", "icon-file_open", "icon-type", "test"));
-		questions.put("Create question set", ImmutableMap.of("link", "sets/add", "icon", "icon-plus", "icon-type", "test"));
-		questions.put("Fairytale land", ImmutableMap.of("link", "fairytale", "icon", "icon-ringbell", "icon-type", "test"));
-		sidebar.put("Setting Work", ImmutableMap.of("links", questions, "icon", "&#97;", "icon-type", "test"));
+		if (settings.isQuestionsOptIn()) {
+			List<Object> questions = new LinkedList<Object>();
+			questions.add(ImmutableMap.of("name", "Browse questions", "link", "q/search", "icon", "icon-list", "iconType", 1, "notificationCount", 2));
+			questions.add(ImmutableMap.of("name", "Browse question sets", "link", "sets", "icon", "icon-file_open", "iconType", 1, "notificationCount", 2));
+			questions.add(ImmutableMap.of("name", "Browse own content", "link", "users/me", "icon", "icon-file_open", "iconType", 1, "notificationCount", 2));
+			questions.add(ImmutableMap.of("name", "Create question set", "link", "sets/add", "icon", "icon-plus", "iconType", 1, "notificationCount", 2));
+			questions.add(ImmutableMap.of("name", "Fairytale land", "link", "fairytale", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 2));
+			sidebar.add(ImmutableMap.of("name", "Setting Work", "links", questions, "icon", "a", "iconType", 2, "notificationCount", 2));
+		}
 		
 		// Handins
-		Map<String, Object> handins = new HashMap<String, Object>();
-		handins.put("Create bin", ImmutableMap.of("link", "bins/create", "icon", "&#44;", "icon-type", "test"));
-		handins.put("Upload answers", ImmutableMap.of("link", "bins", "icon", "&#44;", "icon-type", "test"));
-		handins.put("Mark answers", ImmutableMap.of("link", "marking", "icon", "&#67;", "icon-type", "test"));
-		sidebar.put("Marking Work", ImmutableMap.of("links", handins, "icon", "&#70;", "icon-type", "test"));
+		if (settings.isHandinsOptIn()) {
+			List<Object> handins = new LinkedList<Object>();
+			handins.add(ImmutableMap.of("name", "Create bin", "link", "bins/create", "icon", ",", "iconType", 2, "notificationCount", 2));
+			handins.add(ImmutableMap.of("name", "Upload answers", "link", "bins", "icon", ",", "iconType", 2, "notificationCount", 2));
+			handins.add(ImmutableMap.of("name", "Mark answers", "link", "marking", "icon", "C", "iconType", 2, "notificationCount", 2));
+			sidebar.add(ImmutableMap.of("name", "Marking Work", "links", handins, "icon", "F", "iconType", 2, "notificationCount", 2));
+		}
 		
-		return sidebar;
+		return ImmutableMap.of("sidebar", sidebar);
 		
 	} 
 	
