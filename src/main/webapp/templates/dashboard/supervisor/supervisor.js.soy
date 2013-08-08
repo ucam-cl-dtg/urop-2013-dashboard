@@ -94,6 +94,14 @@
 				{/call}
             </div>
         </section>
+        <section {if $target=='importgroup'}class="active"{/if}>
+            <p class="title" data-section-title><a>Import Group</a></p>
+            <div id="importGroupSection" class="content" data-section-content>    
+				{call .importgroup}
+					{param errors: $errors /}
+				{/call}
+            </div>
+        </section>
     </div>
     
 
@@ -371,6 +379,30 @@
         <h3>Import Existing Group (LDAP)</h3>    
         <h6 class="subheader">Small public groups only</h6>         
         <form id="importGroupForm" action="/dashboard/groups/import" method="post" data-abide>
+            <div class="row">
+                <div class="columns large-2 small-4 field-label">Import Group</div>
+                <div class="columns large-10 small-8">
+                    <input type="text" class="group-import-token-input" name="import_id"/>          
+                </div>
+            </div>
+            <div class="row">
+                <div class="columns large-12 small-12">
+                    <input type="submit" value="Save" id="import_group_submit" />
+                </div>
+            </div>
+        </form>   
+
+{/template}
+
+/**
+ * Dashboard: supervisor page, import group
+ *
+ */
+{template .importgroup }
+        
+        <h3>Import Existing Group (LDAP)</h3>    
+        <h6 class="subheader">Small public groups only</h6>         
+        <form id="importGroupForm" action="/api/dashboard/groups/import" method="post">
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Import Group</div>
                 <div class="columns large-10 small-8">

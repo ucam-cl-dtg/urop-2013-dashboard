@@ -66,7 +66,7 @@ public class DeadlinesController extends ApplicationController {
 			int id = deadlineForm.handleCreate(currentUser);
 			return ImmutableMap.of("redirectTo", "dashboard/deadlines/"+id);
 		} else {
-			return ImmutableMap.of("data", deadlineForm.toMap(-1), "errors", actualErrors);
+			return ImmutableMap.of("deadline", deadlineForm.toMap(-1), "errors", actualErrors);
 		}
 	}
 	

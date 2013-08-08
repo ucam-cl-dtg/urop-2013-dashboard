@@ -39,7 +39,7 @@ public class HomePageController extends ApplicationController{
 		
 		LDAPUser user = null;
 		try {
-			user = LDAPQueryManager.getUser("jd658");
+			user = LDAPQueryManager.getUser(currentUser.getCrsid());
 		} catch (LDAPObjectNotFoundException e){
 			// Create map of default options or something
 		}

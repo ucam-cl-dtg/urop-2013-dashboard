@@ -26,7 +26,7 @@ function userTokenInput() {
 }
 
 function userSurnameTokenInput() {
-	$(".user-surname-token-input").tokenInput("api/dashboard/groups/querySurname", {
+	$(".user-surname-token-input").tokenInput("/api/dashboard/groups/querySurname", {
 		theme: "facebook",
 		method: "post",
         tokenValue: "crsid",
@@ -79,7 +79,7 @@ function tokenInputType() {
 }
 
 function groupImportTokenInput() {
-	$(".group-import-token-input").tokenInput("api/dashboard/groups/queryGroup", {
+	$(".group-import-token-input").tokenInput("/api/dashboard/groups/queryGroup", {
 		theme: "facebook",
 		method: "post",
         tokenValue: "id",

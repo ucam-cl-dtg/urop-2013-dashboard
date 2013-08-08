@@ -27,12 +27,10 @@ moduleScripts['dashboard'] = {
 		],
 		'manage' : [
 			editGroup,
-			applyDatepicker,
 			userTokenInput,		
 		],
 		'edit' : [
 			editGroup,
-			applyDatepicker,
 			userTokenInput
 		]
 	},
