@@ -25,8 +25,7 @@ import com.google.common.collect.ImmutableMap;
 public class AccountController extends ApplicationController {
 
 	// Create the logger
-	private static Logger log = LoggerFactory
-			.getLogger(NotificationsController.class);
+	private static Logger log = LoggerFactory.getLogger(NotificationsController.class);
 
 	// Get current user from raven session
 	private User currentUser;
