@@ -8,6 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.google.common.collect.ImmutableMap;
+
 @Path("api/dashboard/settings")
 @Produces(MediaType.APPLICATION_JSON)
 public class ProjectSettingsController {
@@ -21,34 +23,34 @@ public class ProjectSettingsController {
 		
 		// Dashboard
 		Map<String, Object> dashboard = new HashMap<String, Object>();
-		dashboard.put("Home", "dashboard");
-		dashboard.put("Notifications", "dashboard/notifications");
-		dashboard.put("Deadlines", "dashboard/deadlines");
-		dashboard.put("Groups", "dashboard/groups");
-		dashboard.put("Supervisor Homepage", "dashboard/supervisor");
-		sidebar.put("Dashboard", dashboard);
+		dashboard.put("Home", ImmutableMap.of("link", "dashboard", "icon", "test"));
+		dashboard.put("Notifications", ImmutableMap.of("link", "dashboard/notifications", "icon", "test"));
+		dashboard.put("Deadlines", ImmutableMap.of("link", "dashboard/deadlines", "icon", "test"));
+		dashboard.put("Groups", ImmutableMap.of("link", "dashboard/groups", "icon", "test"));
+		dashboard.put("Supervisor Homepage", ImmutableMap.of("link", "dashboard/supervisor", "icon", "test"));
+		sidebar.put("Dashboard", ImmutableMap.of("links", dashboard, "icon", "test"));
 		
 		// Signups
 		Map<String, Object> signups = new HashMap<String, Object>();
-		signups.put("Events", "signapp/events");
-		signups.put("Create new event", "signapp/events/new");
-		sidebar.put("Timetable/Signups", signups);
+		signups.put("Events", ImmutableMap.of("link", "signapp/events", "icon", "test"));
+		signups.put("Create new event", ImmutableMap.of("link", "signapp/events/new", "icon", "test"));
+		sidebar.put("Timetable/Signups", ImmutableMap.of("links", signups, "icon", "test"));
 		
 		// Questions
 		Map<String, Object> questions = new HashMap<String, Object>();
-		questions.put("Browse questions", "q/search");
-		questions.put("Browse question sets", "sets");
-		questions.put("Browse own content", "users/me");
-		questions.put("Create question set", "sets/add");
-		questions.put("Fairytale land", "fairytale");
-		sidebar.put("Setting Work", questions);
+		questions.put("Browse questions", ImmutableMap.of("link", "q/search", "icon", "test"));
+		questions.put("Browse question sets", ImmutableMap.of("link", "sets", "icon", "test"));
+		questions.put("Browse own content", ImmutableMap.of("link", "users/me", "icon", "test"));
+		questions.put("Create question set", ImmutableMap.of("link", "sets/add", "icon", "test"));
+		questions.put("Fairytale land", ImmutableMap.of("link", "fairytale", "icon", "test"));
+		sidebar.put("Setting Work", ImmutableMap.of("links", questions, "icon", "test"));
 		
 		// Handins
 		Map<String, Object> handins = new HashMap<String, Object>();
-		handins.put("Create bin", "bins/create");
-		handins.put("Upload answers", "bins");
-		handins.put("Mark answers", "marking");
-		sidebar.put("Marking Work", handins);
+		handins.put("Create bin", ImmutableMap.of("link", "bins/create", "icon", "test"));
+		handins.put("Upload answers", ImmutableMap.of("link", "bins", "icon", "test"));
+		handins.put("Mark answers", ImmutableMap.of("link", "marking", "icon", "test"));
+		sidebar.put("Marking Work", ImmutableMap.of("links", handins, "icon", "test"));
 		
 		return sidebar;
 		
