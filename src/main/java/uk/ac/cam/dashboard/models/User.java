@@ -54,7 +54,6 @@ public class User {
 	public User(String crsid) {
 		this.crsid = crsid;
 		this.username = this.retrieveUsername(crsid);
-		this.settings = new Settings();
 	}
 	
 	public Settings getSettings() {return settings;}
