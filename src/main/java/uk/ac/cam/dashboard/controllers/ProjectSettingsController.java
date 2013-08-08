@@ -23,34 +23,34 @@ public class ProjectSettingsController {
 		
 		// Dashboard
 		Map<String, Object> dashboard = new HashMap<String, Object>();
-		dashboard.put("Home", ImmutableMap.of("link", "dashboard", "icon", "test"));
-		dashboard.put("Notifications", ImmutableMap.of("link", "dashboard/notifications", "icon", "test"));
-		dashboard.put("Deadlines", ImmutableMap.of("link", "dashboard/deadlines", "icon", "test"));
-		dashboard.put("Groups", ImmutableMap.of("link", "dashboard/groups", "icon", "test"));
-		dashboard.put("Supervisor Homepage", ImmutableMap.of("link", "dashboard/supervisor", "icon", "test"));
-		sidebar.put("Dashboard", ImmutableMap.of("links", dashboard, "icon", "test"));
+		dashboard.put("Home", ImmutableMap.of("link", "dashboard", "icon", "icon-globe", "icon-type", "test"));
+		dashboard.put("Notifications", ImmutableMap.of("link", "dashboard/notifications", "icon", "icon-newspaper", "icon-type", "test"));
+		dashboard.put("Deadlines", ImmutableMap.of("link", "dashboard/deadlines", "icon", "icon-ringbell", "icon-type", "test"));
+		dashboard.put("Groups", ImmutableMap.of("link", "dashboard/groups", "icon", "icon-users", "icon-type", "test"));
+		dashboard.put("Supervisor Homepage", ImmutableMap.of("link", "dashboard/supervisor", "icon", "icon-users", "icon-type", "test"));
+		sidebar.put("Dashboard", ImmutableMap.of("links", dashboard, "icon", "&#97;", "icon-type", "test"));
 		
 		// Signups
 		Map<String, Object> signups = new HashMap<String, Object>();
-		signups.put("Events", ImmutableMap.of("link", "signapp/events", "icon", "test"));
-		signups.put("Create new event", ImmutableMap.of("link", "signapp/events/new", "icon", "test"));
-		sidebar.put("Timetable/Signups", ImmutableMap.of("links", signups, "icon", "test"));
+		signups.put("Events", ImmutableMap.of("link", "signapp/events", "icon", "&#63;", "icon-type", "test"));
+		signups.put("Create new event", ImmutableMap.of("link", "signapp/events/new", "icon", "&#63;", "icon-type", "test"));
+		sidebar.put("Timetable/Signups", ImmutableMap.of("links", signups, "icon", "&#80;", "icon-type", "test"));
 		
 		// Questions
 		Map<String, Object> questions = new HashMap<String, Object>();
-		questions.put("Browse questions", ImmutableMap.of("link", "q/search", "icon", "test"));
-		questions.put("Browse question sets", ImmutableMap.of("link", "sets", "icon", "test"));
-		questions.put("Browse own content", ImmutableMap.of("link", "users/me", "icon", "test"));
-		questions.put("Create question set", ImmutableMap.of("link", "sets/add", "icon", "test"));
-		questions.put("Fairytale land", ImmutableMap.of("link", "fairytale", "icon", "test"));
-		sidebar.put("Setting Work", ImmutableMap.of("links", questions, "icon", "test"));
+		questions.put("Browse questions", ImmutableMap.of("link", "q/search", "icon", "icon-list", "icon-type", "test"));
+		questions.put("Browse question sets", ImmutableMap.of("link", "sets", "icon", "icon-file_open", "icon-type", "test"));
+		questions.put("Browse own content", ImmutableMap.of("link", "users/me", "icon", "icon-file_open", "icon-type", "test"));
+		questions.put("Create question set", ImmutableMap.of("link", "sets/add", "icon", "icon-plus", "icon-type", "test"));
+		questions.put("Fairytale land", ImmutableMap.of("link", "fairytale", "icon", "icon-ringbell", "icon-type", "test"));
+		sidebar.put("Setting Work", ImmutableMap.of("links", questions, "icon", "&#97;", "icon-type", "test"));
 		
 		// Handins
 		Map<String, Object> handins = new HashMap<String, Object>();
-		handins.put("Create bin", ImmutableMap.of("link", "bins/create", "icon", "test"));
-		handins.put("Upload answers", ImmutableMap.of("link", "bins", "icon", "test"));
-		handins.put("Mark answers", ImmutableMap.of("link", "marking", "icon", "test"));
-		sidebar.put("Marking Work", ImmutableMap.of("links", handins, "icon", "test"));
+		handins.put("Create bin", ImmutableMap.of("link", "bins/create", "icon", "&#44;", "icon-type", "test"));
+		handins.put("Upload answers", ImmutableMap.of("link", "bins", "icon", "&#44;", "icon-type", "test"));
+		handins.put("Mark answers", ImmutableMap.of("link", "marking", "icon", "&#67;", "icon-type", "test"));
+		sidebar.put("Marking Work", ImmutableMap.of("links", handins, "icon", "&#70;", "icon-type", "test"));
 		
 		return sidebar;
 		
