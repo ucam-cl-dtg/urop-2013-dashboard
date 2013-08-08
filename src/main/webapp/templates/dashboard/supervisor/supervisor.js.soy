@@ -27,7 +27,7 @@
                     
                         {call .deadline}
                             {param deadline: $deadline /}
-                            // {param errors: $errors /}
+                            {param errors: $errors /}
                         {/call}
                         
                     {ifempty}
@@ -238,7 +238,7 @@
  */
 {template .newdeadline }
     
-    <form id="newDeadlineForm" action="api/dashboard/deadlines" method="post" class="custom">
+    <form id="newDeadlineForm" action="/api/dashboard/deadlines" method="post" class="custom">
         <div class="row">
             <div class="columns large-2 small-4 field-label" >Deadline name</div>
             <div class="columns large-10 small-8">
@@ -318,7 +318,7 @@
         <div class="row">
                 <div class="columns large-2 small-4 field-label">Add groups</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="deadline_group_token_input" name="groups"/>
+                    <input type="text" class="group-token-input" name="groups"/>
                 </div>
             </div>
             
@@ -341,7 +341,7 @@
 {template .newgroup }
 
         <h3>Create new group</h3>       
-        <form id="newGroupForm" action="api/dashboard/groups" method="post">
+        <form id="newGroupForm" action="/api/dashboard/groups" method="post">
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Group name</div>
                 <div class="columns large-10 small-8">
@@ -358,7 +358,7 @@
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Group members</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="user-token-input" name="users[]"/>
+                    <input type="text" class="user-token-input" name="users"/>
                 </div>
             </div>
             <div class="row">

@@ -17,8 +17,8 @@ import javax.persistence.Table;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import uk.ac.cam.cl.ldap.LDAPObjectNotFoundException;
-import uk.ac.cam.cl.ldap.LDAPQueryManager;
+import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
+import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
@@ -54,7 +54,7 @@ public class User {
 	public User() {}
 	public User(String crsid) {
 		this.crsid = crsid;
-		this.username = this.retrieveUsername(crsid);
+		this.username = this.getName();
 	}
 	
 	public Settings getSettings() {return settings;}
@@ -110,7 +110,7 @@ public class User {
 		return user;
 	}
 	
-	public String retrieveUsername(String crsid) {
+	public String getName() {
 		
   		try {
   			String name = LDAPQueryManager.getUser(crsid).getcName();

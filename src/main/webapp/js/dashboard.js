@@ -24,6 +24,16 @@ moduleScripts['dashboard'] = {
 	'groups' : {
 		'index': [
 			groupsIndex
+		],
+		'manage' : [
+			editGroup,
+			applyDatepicker,
+			userTokenInput,		
+		],
+		'edit' : [
+			editGroup,
+			applyDatepicker,
+			userTokenInput
 		]
 	},
 	'deadlines' : {
@@ -31,9 +41,11 @@ moduleScripts['dashboard'] = {
 			deadlinesIndex
 		],
 		'manage' : [
+			function(){this.foundation()},
 			editDeadline,
 			applyDatepicker,
-			userTokenInput
+			userTokenInput,
+			
 		],
 		'edit' : [
 			editDeadline,
@@ -51,6 +63,7 @@ moduleScripts['dashboard'] = {
 	        applyDatepicker,
 			userTokenInput,
 			userSurnameTokenInput,
+			groupTokenInput,
 			groupImportTokenInput,
 			tokenInputType
 		],
@@ -63,6 +76,7 @@ moduleScripts['dashboard'] = {
 		'newdeadline' : [
 			createDeadline,	
 	        applyDatepicker,
+	        groupTokenInput,
 			userTokenInput	
 		],
 		'newgroup' : [

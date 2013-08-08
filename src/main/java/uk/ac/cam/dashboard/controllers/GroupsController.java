@@ -19,16 +19,17 @@ import org.jboss.resteasy.annotations.Form;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cam.cl.ldap.LDAPObjectNotFoundException;
-import uk.ac.cam.cl.ldap.LDAPPartialQuery;
+import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
+import uk.ac.cam.cl.dtg.ldap.LDAPPartialQuery;
 import uk.ac.cam.dashboard.forms.GroupForm;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.GroupQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.dashboard.util.Util;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
-import com.googlecode.htmleasy.RedirectException;
 
 @Path("api/dashboard/groups")
 @Produces(MediaType.APPLICATION_JSON)
@@ -51,26 +52,34 @@ public class GroupsController extends ApplicationController {
 		
 		// Create
 		@POST @Path("/") 
-		public void createGroup(@Form GroupForm groupForm) throws Exception {
-			
+		public Map<String, ?> createGroup(@Form GroupForm groupForm) throws Exception {
 			currentUser = initialiseUser();
-
-			groupForm.handle(currentUser);
 			
-			log.debug("Redirecting to supervisor page");
-			throw new RedirectException("/app/#dashboard/supervisor");
+			ArrayListMultimap<String, String> errors = groupForm.validate();
+			ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
+			
+			if(errors.isEmpty()){
+				groupForm.handle(currentUser);
+				return ImmutableMap.of("redirectTo", "dashboard/groups/");
+			} else {
+				return ImmutableMap.of("data", groupForm.toMap(-1), "errors", actualErrors);
+			}
 		}
 		
 		// Import from LDAP
 		@POST @Path("/import") 
-		public void importGroup(@Form GroupForm groupForm) throws Exception {
-			
+		public Map<String, ?> importGroup(@Form GroupForm groupForm) throws Exception {
 			currentUser = initialiseUser();
-
-			groupForm.handleImport(currentUser);
 			
-			log.debug("Redirecting to supervisor page");
-			throw new RedirectException("/app/#signapp/supervisor");
+			ArrayListMultimap<String, String> errors = groupForm.validate();
+			ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
+			
+			if(errors.isEmpty()){
+				groupForm.handleImport(currentUser);
+				return ImmutableMap.of("redirectTo", "dashboard/supervisor/");
+			} else {
+				return ImmutableMap.of("data", groupForm.toMap(-1), "errors", actualErrors);
+			}
 		}
 		
 		// Get
@@ -84,27 +93,20 @@ public class GroupsController extends ApplicationController {
 			return ImmutableMap.of("group", group.toMap());
 		}
 		
-		//Edit
-		@GET @Path("/{id}/edit") 
-		public Map<String, ?> editGroup(@PathParam("id") int id) {
-			
-			currentUser = initialiseUser();
-			
-		  	Group group = Group.getGroup(id);
-		  	
-			return ImmutableMap.of("group", group.toMap());	
-		}
-		
 		// Update
-		@POST @Path("/{id}/edit")
+		@POST @Path("/{id}")
 		public Map<String, ?> updateGroup(@Form GroupForm groupForm, @PathParam("id") int id) {	
-			
 			currentUser = initialiseUser();
 			
-			Group group = groupForm.handleUpdate(currentUser, id);
-			System.out.println("Group updated");
-
-			return group.toMap();
+			ArrayListMultimap<String, String> errors = groupForm.validate();
+			ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
+			
+			if(errors.isEmpty()){
+				groupForm.handleUpdate(currentUser, id);
+				return ImmutableMap.of("redirectTo", "dashboard/groups/"+id);
+			} else {
+				return ImmutableMap.of("data", groupForm.toMap(id), "errors", actualErrors);
+			}
 		}
 		
 		// Destroy 

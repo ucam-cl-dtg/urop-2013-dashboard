@@ -38,3 +38,9 @@ function groupsIndex() {
     tokenFormatter: function(item) { return "<li><p>" + item.name + "</p></li>" },
   });
 }
+
+function editGroup() {
+	$("#editGroupForm").ajaxForm(function(data) {
+		applyTemplate($('#editGroupSection'), "dashboard.groups.edit", data);
+	});
+}

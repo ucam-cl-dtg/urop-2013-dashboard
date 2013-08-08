@@ -173,7 +173,6 @@ public class DeadlineForm {
 			
 			for(String g : groupIds){
 				// Get group users
-				System.out.println("group: [" + g + "]");
 				groupUsers = Group.getGroup(Integer.parseInt(g)).getUsers();
 			  	for(User u : groupUsers){
 					deadlineUsers.add(new DeadlineUser(u, deadline));
@@ -232,17 +231,28 @@ public class DeadlineForm {
 		return errors;	
 	}
 	
-	public ImmutableMap<String, ?> toMap() {
+	public ImmutableMap<String, ?> toMap(int id) {
 		ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>();
-		builder.put("title", title);
-		builder.put("date", date);
-		builder.put("hour", hour);
-		builder.put("minute", minute);
+		builder.put("id", id);
+		builder.put("name", title);
+		builder.put("date", ImmutableMap.of("date", date, "hour", hour, "minute", minute));
 		builder.put("message", message);
 		builder.put("url", url);
-		builder.put("users", users);
+		
+		if(!users.equals("")){
+			List<ImmutableMap<String,String>> userMaps = new ArrayList<ImmutableMap<String,String>>();
+			String[] crsids = users.split(",");
+			for(String s: crsids){
+				User user = User.registerUser(s);
+				userMaps.add(ImmutableMap.of("crsid", user.getCrsid(), "name", user.getName()));
+			}
+			builder.put("users", userMaps);
+		} else {
+			builder.put("users", "");
+		}
+		
 		builder.put("groups", groups);
 		return builder.build();
-	}	
+	}
 	
 }

@@ -1,5 +1,6 @@
 package uk.ac.cam.dashboard.forms;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,23 +9,23 @@ import javax.ws.rs.FormParam;
 
 import org.hibernate.Session;
 
-import uk.ac.cam.cl.ldap.LDAPGroup;
-import uk.ac.cam.cl.ldap.LDAPObjectNotFoundException;
-import uk.ac.cam.cl.ldap.LDAPQueryManager;
+import uk.ac.cam.cl.dtg.ldap.LDAPGroup;
+import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
+import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
 
 public class GroupForm {
 	@FormParam("title") String title;
-	@FormParam("users[]") String users;
+	@FormParam("users") String users;
 	@FormParam("import_id") String import_id;
 	
 	public int handle(User currentUser) {		
-		
-		parseForm();
 		
 		Session session = HibernateUtil.getTransactionSession();
 		
@@ -66,8 +67,6 @@ public class GroupForm {
 
 	public Group handleUpdate(User currentUser, int id) {		
 		
-		parseForm();
-		
 		Session session = HibernateUtil.getTransactionSession();
 		
 		// Get the group to edit
@@ -104,11 +103,7 @@ public class GroupForm {
 	
 	public Group handleImport(User currentUser) {	
 		
-		parseForm();
-		
-		if(import_id==null||import_id.equals("")){
-			return null;
-		}
+
 		
 		Session session = HibernateUtil.getTransactionSession();
 		
@@ -166,13 +161,60 @@ public class GroupForm {
 				
 	}
 
-	public void parseForm() {
-		
-		// Check for empty fields
-		if(title==null||title.equals("")){ 
+	public ArrayListMultimap<String, String> validate() {
+		ArrayListMultimap<String, String> errors = ArrayListMultimap.create();
+
+		// title
+		if (title.equals("") || title == null){
+			errors.put("title", "Please give your group a name");
+		} else if(title.length()>255){
+			errors.put("title", "Name cannot be longer than 255 characters");
 		}
-		if(users==null||users.equals("")){ this.users = ""; }
-				
+		
+		// users
+		if((users==null||users.equals(""))){ 
+			errors.put("users", "You must add at least one user to this group"); 
+		}	
+		
+		return errors;	
+	}
+	
+	public ArrayListMultimap<String, String> validateImport() {
+		ArrayListMultimap<String, String> errors = ArrayListMultimap.create();
+
+		// title
+		if (title.equals("") || title == null){
+			errors.put("title", "Please give your group a name");
+		} else if(title.length()>255){
+			errors.put("title", "Name cannot be longer than 255 characters");
+		}
+		
+		// users
+		if((import_id==null||import_id.equals(""))){ 
+			errors.put("users", "Please choose at least one group to import"); 
+		}	
+		
+		return errors;	
+	}
+	
+	public ImmutableMap<String, ?> toMap(int id) {
+		ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>();
+		builder.put("id", id);
+		builder.put("name", title);
+		
+		if(!users.equals("")){
+			List<ImmutableMap<String,String>> userMaps = new ArrayList<ImmutableMap<String,String>>();
+			String[] crsids = users.split(",");
+			for(String s: crsids){
+				User user = User.registerUser(s);
+				userMaps.add(ImmutableMap.of("crsid", user.getCrsid(), "name", user.getName()));
+			}
+			builder.put("users", userMaps);
+		} else {
+			builder.put("users", "");
+		}
+		
+		return builder.build();
 	}
 	
 }

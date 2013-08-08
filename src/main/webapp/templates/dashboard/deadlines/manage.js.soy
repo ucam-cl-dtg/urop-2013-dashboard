@@ -12,16 +12,16 @@
 	<h2>{$deadline.name}</h2>
         
     <div class="section-container auto" data-section>
-        <section {if $target=='statistics'}class="active"{/if}>
-            <p class="title" data-section-title><a>Statistics</a></p>
+        <section {if $target == 'undefined'}class="active"{/if}>
+            <p class="title" data-section-title><a href="#statistics">Statistics</a></p>
             <div class="content" data-section-content>
             
       			Deadline statistics
                 
             </div>
             </section>
-            <section {if $target=='edit'}class="active"{/if}>
-            <p class="title" data-section-title><a>Edit Deadline</a></p>
+            <section {if $target == 'edit'}class="active"{/if}>
+            <p class="title" data-section-title><a href="#edit">Edit Deadline</a></p>
             <div class="content" data-section-content id="editDeadlineSection">
                 {call .edit}
                 	{param deadline: $deadlineEdit /}
@@ -40,7 +40,7 @@
  */
 {template .edit }
     
-    <form class="custom" id="editDeadlineForm" method="post" action="api/dashboard/deadlines/{$deadline.id}">
+    <form class="custom" id="editDeadlineForm" method="post" action="/api/dashboard/deadlines/{$deadline.id}">
         <div class="row">
             <div class="columns large-2 small-4 field-label">Deadline name</div>
             <div class="columns large-10 small-8">
@@ -113,7 +113,7 @@
         <div class="row">
                 <div class="columns large-2 small-4 field-label">Add users</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="user-token-input" name="users" data-prepopulate='{lb}"users":[{foreach $user in $deadline.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{/foreach}]{rb}'/>
+                    <input type="text" class="user-token-input" name="users" data-prepopulate='{lb}"users":[{foreach $user in $deadline.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'/>
                 </div>
             </div>
 
@@ -124,7 +124,7 @@
         <div class="row">
                 <div class="columns large-2 small-4 field-label">Add groups</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="deadline_group_token_input" name="groups"/>
+                    <input type="text" class="group-token-input" name="groups"/>
                 </div>
             </div>
 
