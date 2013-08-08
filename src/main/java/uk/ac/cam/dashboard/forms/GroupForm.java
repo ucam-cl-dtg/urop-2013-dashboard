@@ -8,9 +8,9 @@ import javax.ws.rs.FormParam;
 
 import org.hibernate.Session;
 
-import uk.ac.cam.cl.ldap.LDAPGroup;
-import uk.ac.cam.cl.ldap.LDAPObjectNotFoundException;
-import uk.ac.cam.cl.ldap.LDAPQueryManager;
+import uk.ac.cam.cl.dtg.ldap.LDAPGroup;
+import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
+import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.HibernateUtil;

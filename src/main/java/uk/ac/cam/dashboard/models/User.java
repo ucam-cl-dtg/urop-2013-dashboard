@@ -17,8 +17,8 @@ import javax.persistence.Table;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import uk.ac.cam.cl.ldap.LDAPObjectNotFoundException;
-import uk.ac.cam.cl.ldap.LDAPQueryManager;
+import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
+import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
