@@ -26,6 +26,7 @@ import com.google.common.collect.ImmutableMap;
 @Entity
 @Table(name="USERS")
 public class User {
+	
 	@Id
 	private String crsid;
 	

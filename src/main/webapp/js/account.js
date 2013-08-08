@@ -2,11 +2,11 @@ function bindSaveSettingsListener() {
 	$(document).on('click', '#save-account-settings', function(e) {
 		e.preventDefault();
 		
-		var signups = $('#signups-opt-in').val();
+		var signups = $('#signups-opt-in').is(':checked');
 		alert(signups);
-		var questions = $('#questions-opt-in').val();
+		var questions = $('#questions-opt-in').is(':checked');
 		alert(questions);
-		var handins = $('#handins-opt-in').val();
+		var handins = $('#handins-opt-in').is(':checked');
 		alert(handins);
 		
 	    $.ajax({
