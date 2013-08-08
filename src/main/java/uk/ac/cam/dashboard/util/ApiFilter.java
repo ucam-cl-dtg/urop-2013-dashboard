@@ -2,7 +2,6 @@ package uk.ac.cam.dashboard.util;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -21,7 +20,6 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cam.dashboard.controllers.ApiController;
 import uk.ac.cam.dashboard.models.Api;
 import uk.ac.cam.dashboard.models.User;
 

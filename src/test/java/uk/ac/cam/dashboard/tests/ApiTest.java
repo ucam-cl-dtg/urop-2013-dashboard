@@ -1,7 +1,5 @@
 package uk.ac.cam.dashboard.tests;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.hibernate.Session;
 import org.jboss.resteasy.core.Dispatcher;
 import org.jboss.resteasy.mock.MockDispatcherFactory;

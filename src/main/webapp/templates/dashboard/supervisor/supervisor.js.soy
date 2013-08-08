@@ -87,8 +87,8 @@
             </div>
         </section>
         <section {if $target=='newgroup'}class="active"{/if}>
-            <p class="title" data-section-title><a href="#panel2">New Group</a></p>
             <p class="title" data-section-title><a>New Group</a></p>
+            <div id="newGroupSection" class="content" data-section-content>    
 				{call .newgroup}
 					{param errors: $errors /}
 				{/call}

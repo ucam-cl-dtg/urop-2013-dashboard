@@ -3,7 +3,7 @@ function applyDatepicker() {
 }
 
 function userTokenInput() {
-	$(".user-token-input").tokenInput("api/dashboard/groups/queryCRSID", {
+	$(".user-token-input").tokenInput("/api/dashboard/groups/queryCRSID", {
 		theme: "facebook",
 		method: "post",
         tokenValue: "crsid",
