@@ -6,4 +6,5 @@ logs/main.log
 /target
 
 Gemfile
+Gemfile.lock
 Guardfile

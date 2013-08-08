@@ -5,16 +5,15 @@
  * @param user
  */
 {template .index }
-	{$user}
 	<h3>Account Settings</h3>
 	<form class="custom">
       	<div class="row">
 			<div class="columns large-12 small-12">
 				<fieldset>
 					<legend>Select the services you wish to opt in to</legend>
-					<label for="signups-opt-in" class="checkbox-label"><input type="checkbox" id="signups-opt-in" CHECKED><span class="custom checkbox"></span> Signups</label>
-					<label for="questions-opt-in" class="checkbox-label"><input type="checkbox" id="questions-opt-in" CHECKED><span class="custom checkbox checked"></span> Questions</label>
-					<label for="handins-opt-in" class="checkbox-label"><input type="checkbox" id="handins-opt-in" CHECKED><span class="custom checkbox checked"></span> Handins</label>
+					<label for="signups-opt-in" class="checkbox-label"><input type="checkbox" id="signups-opt-in" {if $user.signupsOptIn}checked{/if}><span class="custom checkbox"></span> Signups</label>
+					<label for="questions-opt-in" class="checkbox-label"><input type="checkbox" id="questions-opt-in" {if $user.questionsOptIn}checked{/if}><span class="custom checkbox checked"></span> Questions</label>
+					<label for="handins-opt-in" class="checkbox-label"><input type="checkbox" id="handins-opt-in" {if $user.handinsOptIn}checked{/if}><span class="custom checkbox checked"></span> Handins</label>
 				</fieldset>
 				<input type="submit" value="Save changes" class="medium success button" id="save-account-settings" />
 			</div>
