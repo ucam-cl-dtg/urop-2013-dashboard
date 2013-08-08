@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -33,8 +34,31 @@ public class AccountController extends ApplicationController {
 	@GET
 	@Path("/")
 	public Map<String, ?> getAccountSettings() {
+		
 		currentUser = initialiseUser();
+		
 		return ImmutableMap.of("user", currentUser.getSettings());
+		
+	}
+	
+	@GET
+	@Path("/{user}")
+	public Map<String, ?> getUserAccountSettings(@PathParam("user") String user) {
+		
+		// *TODO* Check if global permissions
+		ImmutableMap<String, String> error = ImmutableMap.of("error", "Could not find settings for the specified user");
+		
+		try {
+			currentUser = initialiseSpecifiedUser(user);
+			if (currentUser != null) {
+				return ImmutableMap.of("user", currentUser.getSettings());
+			}
+		} catch (Exception e) {
+			return error;
+		}
+		
+		return error;
+		
 	}
 
 	@PUT @Path("/")
