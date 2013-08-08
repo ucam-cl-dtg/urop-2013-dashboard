@@ -32,8 +32,8 @@ public class User {
 	
 	private String username;
 	
-	@OneToOne(mappedBy = "user")
-	private Settings settings = new Settings(); 
+	@OneToOne
+	private Settings settings; 
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<DeadlineUser> deadlines = new HashSet<DeadlineUser>();
@@ -54,6 +54,7 @@ public class User {
 	public User(String crsid) {
 		this.crsid = crsid;
 		this.username = this.retrieveUsername(crsid);
+		this.settings = new Settings();
 	}
 	
 	public Settings getSettings() {return settings;}

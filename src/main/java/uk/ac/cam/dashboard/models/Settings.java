@@ -3,6 +3,7 @@ package uk.ac.cam.dashboard.models;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -19,7 +20,8 @@ public class Settings {
 	private boolean questionsOptIn = true;
 	private boolean handinsOptIn = true;
 	
-	@OneToOne
+	@OneToOne (mappedBy="settings")
+	@JoinColumn(name="USER_CRSID")
 	private User user;
 	
 	public Settings() {}
