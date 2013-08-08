@@ -16,7 +16,7 @@ import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 
-@Path("/api/keys")
+@Path("/dashboard/auth")
 @Produces(MediaType.APPLICATION_JSON)
 public class ApiController extends ApplicationController {
 	

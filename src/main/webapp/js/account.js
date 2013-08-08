@@ -14,6 +14,7 @@ function bindSaveSettingsListener() {
 	    			errorNotification(data.errors);
 	    		} else {
 	    			successNotification("RedirectTo: " + data.redirectTo);
+	    			location.reload();
 	    		}
 	    	},
 	    	error: function(jqXHR, textStatus, error) {

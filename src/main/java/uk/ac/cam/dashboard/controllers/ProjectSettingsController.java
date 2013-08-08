@@ -23,7 +23,7 @@ public class ProjectSettingsController extends ApplicationController {
 	public ImmutableMap<String, ?> sidebarLinkHierarchy() {
 		
 		// *TODO* Validate global permissions
-		currentUser = initialiseUser();
+		currentUser = initialiseSpecifiedUser("jd658");
 		Settings settings = currentUser.getSettings();
 		
 		List<Object> sidebar = new LinkedList<Object>();
