@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.Query;
@@ -30,6 +31,9 @@ public class User {
 	private String crsid;
 	
 	private String username;
+	
+	@OneToOne(mappedBy = "user")
+	private Settings settings = new Settings(); 
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<DeadlineUser> deadlines = new HashSet<DeadlineUser>();
@@ -51,6 +55,9 @@ public class User {
 		this.crsid = crsid;
 		this.username = this.retrieveUsername(crsid);
 	}
+	
+	public Settings getSettings() {return settings;}
+	public void setSettings(Settings settings) {this.settings = settings;}
 	
 	public String getCrsid() {return crsid;}
 	public void setCrsid(String crsid) {this.crsid = crsid;}
