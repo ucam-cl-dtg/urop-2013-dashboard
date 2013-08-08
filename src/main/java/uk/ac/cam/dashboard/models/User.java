@@ -17,7 +17,8 @@ import javax.persistence.Table;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
+import uk.ac.cam.cl.ldap.LDAPObjectNotFoundException;
+import uk.ac.cam.cl.ldap.LDAPQueryManager;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
@@ -32,8 +33,8 @@ public class User {
 	
 	private String username;
 	
-	@OneToOne(mappedBy = "user")
-	private Settings settings = new Settings(); 
+	@OneToOne
+	private Settings settings; 
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<DeadlineUser> deadlines = new HashSet<DeadlineUser>();
@@ -54,6 +55,7 @@ public class User {
 	public User(String crsid) {
 		this.crsid = crsid;
 		this.username = this.retrieveUsername(crsid);
+		this.settings = new Settings();
 	}
 	
 	public Settings getSettings() {return settings;}
@@ -90,9 +92,14 @@ public class User {
 	  	
 	  	// If user not in database, check if they exist in LDAP and create them if so
 	  	if(user==null){
-	  		if(LDAPQueryHelper.checkCRSID(crsid)==null){
+	  		
+	  		try {
+	  			LDAPQueryManager.getUser(crsid);
+	  		} catch(LDAPObjectNotFoundException e){
+	  			//User doesn't exit - return null
 	  			return null;
 	  		}
+	  		
 	  		User newUser = new User(crsid);
 	  		session.save(newUser);
 	  		return newUser;
@@ -102,7 +109,14 @@ public class User {
 	}
 	
 	public String retrieveUsername(String crsid) {
-		return LDAPQueryHelper.getRegisteredName(crsid);
+		
+  		try {
+  			String name = LDAPQueryManager.getUser(crsid).getcName();
+  			return name;
+  		} catch(LDAPObjectNotFoundException e){
+  			return "Unknown user";
+  		}
+  		
 	}
 	
 	// Maps

@@ -8,7 +8,9 @@ import javax.ws.rs.FormParam;
 
 import org.hibernate.Session;
 
-import uk.ac.cam.dashboard.helpers.LDAPQueryHelper;
+import uk.ac.cam.cl.ldap.LDAPGroup;
+import uk.ac.cam.cl.ldap.LDAPObjectNotFoundException;
+import uk.ac.cam.cl.ldap.LDAPQueryManager;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.HibernateUtil;
@@ -105,28 +107,36 @@ public class GroupForm {
 		parseForm();
 		
 		if(import_id==null||import_id.equals("")){
-			throw new RedirectException("/app/#signapp/groups/error/4");
+			return null;
 		}
 		
 		Session session = HibernateUtil.getTransactionSession();
 		
 		// Get group info from LDAP
-		String title = LDAPQueryHelper.getGroupName(import_id);
-		List<String> members = LDAPQueryHelper.getGroupMembers(import_id);
+		LDAPGroup g = null;
+		try {
+			g = LDAPQueryManager.getGroup(import_id);
+		} catch (LDAPObjectNotFoundException e) {
+			// handle error
+		}
+		String name = g.getName();
+		List<String> members = g.getUsers();
 		
 		// If group has no members, throw new redirect exception
 		if(members==null){
-			throw new RedirectException("/app/#signapp/groups/error/5");
+			//handle error
+			return null;
 		}		
 		
 		// If group is larger than 50 members, throw new redirect exception
 		if(members.size()>50){
+			//handle error
 			throw new RedirectException("/app/#signapp/groups/error/5");
 		}
 		
 		// Create group prototype
 		Group group = new Group();
-		group.setTitle(title);
+		group.setTitle(name);
 
 		// Set owner of the user to current user
 		group.setOwner(currentUser);
