@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -15,13 +16,13 @@ import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 
-@Path("/api")
+@Path("/api/keys")
+@Produces(MediaType.APPLICATION_JSON)
 public class ApiController extends ApplicationController {
 	
 	// Creation
 	
 	@GET @Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
 	public ImmutableMap<String, ?> getUserApiKeys() {
 		User currentUser = initialiseUser();
 		
@@ -29,7 +30,6 @@ public class ApiController extends ApplicationController {
 	}
 	
 	@GET @Path("/new")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, String> getNewApiKey() {
 		Session s = HibernateUtil.getTransactionSession();
 
@@ -44,7 +44,6 @@ public class ApiController extends ApplicationController {
 	}
 	
 	@GET @Path("/newGlobal")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, String> getNewGlobalApiKey() {
 		Session s = HibernateUtil.getTransactionSession();
 
@@ -54,6 +53,24 @@ public class ApiController extends ApplicationController {
 		s.save(api);
 		
 		return ImmutableMap.of("key", api.getKey());
+	}
+	
+	// Verification
+	
+	@GET @Path("/type/{key}")
+	public Map<String, String> checkApiKeyType(@PathParam("key") String key) {
+		Session s = HibernateUtil.getTransactionSession();
+		
+		Api api = (Api) s.createQuery("from Api where key = :key").setParameter("key", key).uniqueResult();
+		
+		if (api == null) {
+			return ImmutableMap.of("error", "Invalid key");
+		} else if (api.isGlobalPermissions()) {
+			return ImmutableMap.of("type", "global");
+		} else {
+			return ImmutableMap.of("type", "user", "user", api.getUser().getCrsid());
+		}
+		
 	}
 	
 }

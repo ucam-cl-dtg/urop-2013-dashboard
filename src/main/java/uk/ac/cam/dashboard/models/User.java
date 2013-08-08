@@ -99,7 +99,10 @@ public class User {
 	  			return null;
 	  		}
 	  		
+	  		Settings s = new Settings();
+	  		session.save(s);
 	  		User newUser = new User(crsid);
+	  		newUser.setSettings(s);
 	  		session.save(newUser);
 	  		return newUser;
 	  	}
