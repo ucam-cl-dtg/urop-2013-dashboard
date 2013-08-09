@@ -181,13 +181,6 @@ public class GroupForm {
 	
 	public ArrayListMultimap<String, String> validateImport() {
 		ArrayListMultimap<String, String> errors = ArrayListMultimap.create();
-
-		// title
-		if (title.equals("") || title == null){
-			errors.put("title", "Please give your group a name");
-		} else if(title.length()>255){
-			errors.put("title", "Name cannot be longer than 255 characters");
-		}
 		
 		// users
 		if((import_id==null||import_id.equals(""))){ 

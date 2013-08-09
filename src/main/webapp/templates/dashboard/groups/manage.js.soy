@@ -4,6 +4,7 @@
  * Supervisor panel - manage a deadline and view stats
  * @param group
  * @param target
+ * @param errors
  */
 {template .manage }
 
@@ -20,10 +21,11 @@
             </section>
             <section {if $target=='edit'}class="active"{/if}>
             <p class="title" data-section-title><a href="#panel2">Edit Group</a></p>
-            <div class="content" data-section-content>
+            <div class="content" data-section-content id="editGroupSection">
 
                 {call .edit}
                 {param group: $group /}
+                {param errors: $errors /}
                 {/call}          
 
             </div>
@@ -35,7 +37,7 @@
 /**
  * Edit group
  * @param group
- * 
+ * @param errors
  */
 {template .edit }
     
@@ -43,14 +45,17 @@
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Group name</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" placeholder="Group name" name="title" id="title" value="{$group.name}"/>
+                    {if $errors != 'undefined' and $errors.title}<label class="error">Error</label>{/if}
+                    <input type="text" placeholder="Group name" name="title" id="title" value="{$group.name}" {if $errors != 'undefined' and $errors.title}class="error"{/if}/>
+                 	{if $errors != 'undefined' and $errors.title}<small class="error">{$errors.title}</small>{/if}
                 </div>
             </div>
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Group members</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="user-token-input" name="users" data-prepopulate='{lb}"users":[{foreach $user in $group.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'/>
-                    
+                    {if $errors != 'undefined' and $errors.users}<label class="error">Error</label>{/if}
+                    <input type="text" class="user-token-input {if $errors != 'undefined' and $errors.users}error{/if}" name="users" data-prepopulate='{lb}"users":[{foreach $user in $group.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'/>                   
+                 	{if $errors != 'undefined' and $errors.users}<small class="error">{$errors.users}</small>{/if} 
                 </div>
             </div>
             <div class="row">

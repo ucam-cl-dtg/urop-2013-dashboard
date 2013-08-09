@@ -62,7 +62,7 @@ public class GroupsController extends ApplicationController {
 				groupForm.handle(currentUser);
 				return ImmutableMap.of("redirectTo", "dashboard/groups/");
 			} else {
-				return ImmutableMap.of("data", groupForm.toMap(-1), "errors", actualErrors);
+				return ImmutableMap.of("group", groupForm.toMap(-1), "errors", actualErrors);
 			}
 		}
 		
@@ -78,7 +78,7 @@ public class GroupsController extends ApplicationController {
 				groupForm.handleImport(currentUser);
 				return ImmutableMap.of("redirectTo", "dashboard/supervisor/");
 			} else {
-				return ImmutableMap.of("data", groupForm.toMap(-1), "errors", actualErrors);
+				return ImmutableMap.of("group", groupForm.toMap(-1), "errors", actualErrors);
 			}
 		}
 		
@@ -90,7 +90,7 @@ public class GroupsController extends ApplicationController {
 
 			Group group = Group.getGroup(id);
 			
-			return ImmutableMap.of("group", group.toMap());
+			return ImmutableMap.of("group", group.toMap(), "errors", "undefined");
 		}
 		
 		// Update
@@ -105,7 +105,7 @@ public class GroupsController extends ApplicationController {
 				groupForm.handleUpdate(currentUser, id);
 				return ImmutableMap.of("redirectTo", "dashboard/groups/"+id);
 			} else {
-				return ImmutableMap.of("data", groupForm.toMap(id), "errors", actualErrors);
+				return ImmutableMap.of("group", groupForm.toMap(id), "errors", actualErrors);
 			}
 		}
 		
