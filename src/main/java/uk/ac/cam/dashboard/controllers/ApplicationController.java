@@ -19,29 +19,23 @@ public class ApplicationController {
 	@Context
 	HttpServletRequest sRequest;
 
-	protected Permissions getPermissions() {
-		
-		String userId = (String) sRequest.getAttribute("userId");
-		
-		if (userId == null) {
-			return Permissions.GLOBAL;
-		} else {
-			return Permissions.USER;
-		}
-		
-	}
-	
 	public static enum Permissions {
 		USER,
 		GLOBAL
 	}
 	
-	protected User getUser() {
-		
+	protected Permissions getPermissions() {
 		String userId = (String) sRequest.getAttribute("userId");
-		
+		if (userId == null) {
+			return Permissions.GLOBAL;
+		} else {
+			return Permissions.USER;
+		}	
+	}
+	
+	protected User getUser() {
+		String userId = (String) sRequest.getAttribute("userId");
 		return User.registerUser(userId);
-		
 	}
 	
 }
