@@ -20,7 +20,7 @@ function deleteDeadline() {
         var deadline_id = str_id.substring(2);
         var deleteData = $.ajax({
             type: 'DELETE',
-            url: prepareURL("dashboard/deadlines/") + deadline_id,
+            url: prepareURL("deadlines/") + deadline_id,
             success: function(resultData) {
                 if(resultData.success==true){
                     $("#d_"+resultData.id).hide(2000, function() {
@@ -39,7 +39,7 @@ function deleteGroup() {
         alert("group id" + group_id);
         var deleteData = $.ajax({
             type: 'DELETE',
-            url: prepareURL("dashboard/groups/") + group_id,
+            url: prepareURL("groups/") + group_id,
             success: function(resultData) {
                 if(resultData.success==true){
                     $("#g_"+resultData.id).hide(2000, function() {

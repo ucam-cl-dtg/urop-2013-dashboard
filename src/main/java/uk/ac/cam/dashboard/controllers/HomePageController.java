@@ -32,7 +32,7 @@ public class HomePageController extends ApplicationController{
 	
 	private User currentUser;
 	
-	@GET @Path("/dashboard")
+	@GET @Path("/")
 	public Map<String, ?> homePage() {
 		
 		currentUser = getUser();
@@ -53,10 +53,10 @@ public class HomePageController extends ApplicationController{
 		return ImmutableMap.of("user", userData, "deadlines", currentUser.deadlinesToMap(), "userNotifications", notificationForm.handle(currentUser, false));
 	}
 	
-	@GET @Path("/")
-	public void localhostRedirect() {
-		throw new RedirectException("/dashboard/");
-	}
+//	@GET @Path("/")
+//	public void localhostRedirect() {
+//		throw new RedirectException("/dashboard/");
+//	}
 	
 	// TODO: Authenticate staff
 	public boolean isStaff() {

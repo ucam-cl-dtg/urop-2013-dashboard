@@ -28,7 +28,7 @@ import uk.ac.cam.dashboard.util.Util;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 
-@Path("/api/dashboard/deadlines")
+@Path("/api/deadlines")
 @Produces(MediaType.APPLICATION_JSON)
 public class DeadlinesController extends ApplicationController {
 	

@@ -8,7 +8,7 @@ function bindSaveSettingsListener() {
 		
 	    $.ajax({
 	    	type: 'PUT',
-	    	url: prepareURL("dashboard/account?signups=" + signups + "&questions=" + questions + "&handins=" + handins),
+	    	url: prepareURL("account?signups=" + signups + "&questions=" + questions + "&handins=" + handins),
 	    	success: function(data) {
 	    		if (data.errors) {
 	    			errorNotification(data.errors);
