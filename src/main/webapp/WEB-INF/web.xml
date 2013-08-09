@@ -72,7 +72,7 @@
 	
 	<context-param>
 		<param-name>dashboardUrl</param-name>
-		<param-value>http://localhost:8080/</param-value>
+		<param-value>http://www.cl.cam.ac.uk/research/dtg/berrycider/dashboard</param-value>
 	</context-param>
 	
 	<context-param>
