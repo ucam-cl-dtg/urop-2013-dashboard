@@ -50,13 +50,15 @@ public class AccountController extends ApplicationController {
 			} else {
 				return ImmutableMap.of("error", "Cannot get account settings for a global key");
 			}
-		} else {
+		} else if (currentPermissions == Permissions.USER) {
 			currentUser = getUser();
 			if (currentUser != null) {
 				return ImmutableMap.of("user", currentUser.getSettings(), "sidebar", getSidebarLinkHierarchy(currentUser));
 			} else {
 				return ImmutableMap.of("error", "Could not find settings for user " + currentUser.getCrsid());
 			}
+		} else {
+			return ImmutableMap.of("error", "Could not validate permissions");
 		}
 		
 	}
