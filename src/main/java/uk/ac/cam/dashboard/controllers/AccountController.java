@@ -1,5 +1,7 @@
 package uk.ac.cam.dashboard.controllers;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.GET;
@@ -20,7 +22,7 @@ import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 
-@Path("api/dashboard/account")
+@Path("/api/dashboard/account")
 @Produces(MediaType.APPLICATION_JSON)
 public class AccountController extends ApplicationController {
 
@@ -29,34 +31,33 @@ public class AccountController extends ApplicationController {
 
 	// Get current user from raven session
 	private User currentUser;
+	private Permissions currentPermissions;
 
 	@GET
 	@Path("/")
-	public Map<String, ?> getAccountSettings() {
+	public Map<String, ?> getAccountSettings(@QueryParam("userId") String userId) {
 		
-		currentUser = initialiseUser();
+		currentPermissions = getPermissions();
 		
-		return ImmutableMap.of("user", currentUser.getSettings());
-		
-	}
-	
-	@GET
-	@Path("/{user}")
-	public Map<String, ?> getUserAccountSettings(@PathParam("user") String user) {
-		
-		// *TODO* Check if global permissions
-		ImmutableMap<String, String> error = ImmutableMap.of("error", "Could not find settings for the specified user");
-		
-		try {
-			currentUser = initialiseSpecifiedUser(user);
-			if (currentUser != null) {
-				return ImmutableMap.of("user", currentUser.getSettings());
+		if (currentPermissions == Permissions.GLOBAL) {
+			if (userId != null) {
+				currentUser = getSpecifiedUser(userId);
+				if (currentUser != null) {
+					return ImmutableMap.of("user", currentUser.getSettings(), "sidebar", getSidebarLinkHierarchy(currentUser));
+				} else {
+					return ImmutableMap.of("error", "Could not find settings for user " + currentUser.getCrsid());
+				}
+			} else {
+				return ImmutableMap.of("error", "Cannot get account settings for a global key");
 			}
-		} catch (Exception e) {
-			return error;
+		} else {
+			currentUser = getUser();
+			if (currentUser != null) {
+				return ImmutableMap.of("user", currentUser.getSettings(), "sidebar", getSidebarLinkHierarchy(currentUser));
+			} else {
+				return ImmutableMap.of("error", "Could not find settings for user " + currentUser.getCrsid());
+			}
 		}
-		
-		return error;
 		
 	}
 
@@ -64,7 +65,7 @@ public class AccountController extends ApplicationController {
 	public Map<String, ?> changeAccountSettings(@QueryParam("signups") Boolean signups,
 												@QueryParam("questions") Boolean questions,
 												@QueryParam("handins") Boolean handins) {
-		currentUser = initialiseUser();
+		currentUser = getUser();
 		Session session = HibernateUtil.getTransactionSession();
 		Settings newUserSettings = currentUser.getSettings();
 		
@@ -82,4 +83,52 @@ public class AccountController extends ApplicationController {
 		
 		return ImmutableMap.of("redirectTo", "dasboard/account");
 	}
+		
+	private List<Object> getSidebarLinkHierarchy(User user) {
+
+		Settings settings = user.getSettings();
+		
+		List<Object> sidebar = new LinkedList<Object>();
+		
+		// Dashboard
+		List<Object> dashboard = new LinkedList<Object>();
+		dashboard.add(ImmutableMap.of("name", "Home", "link", "dashboard", "icon", "icon-globe", "iconType", 1, "notificationCount", 2));
+		dashboard.add(ImmutableMap.of("name", "Notifications", "link", "dashboard/notifications", "icon", "icon-newspaper", "iconType", 1, "notificationCount", 2));
+		dashboard.add(ImmutableMap.of("name", "Deadlines","link", "dashboard/deadlines", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 2));
+		dashboard.add(ImmutableMap.of("name", "Groups", "link", "dashboard/groups", "icon", "icon-users", "iconType", 1, "notificationCount", 2));
+		dashboard.add(ImmutableMap.of("name", "Supervisor Homepage", "link", "dashboard/supervisor", "icon", "icon-users", "iconType", 1, "notificationCount", 2));
+		sidebar.add(ImmutableMap.of("name", "Dashboard", "links", dashboard, "icon", "a", "iconType", 2, "notificationCount", 2));
+		
+		// Signups
+		if (settings.isSignupsOptIn()) {
+			List<Object> signups = new LinkedList<Object>();
+			signups.add(ImmutableMap.of("name", "Events", "link", "signapp/events", "icon", "?", "iconType", 2, "notificationCount", 2));
+			signups.add(ImmutableMap.of("name", "Create new event", "link", "signapp/events/new", "icon", "?", "iconType", 2, "notificationCount", 2));
+			sidebar.add(ImmutableMap.of("name", "Timetable/Signups", "links", signups, "icon", "P", "iconType", 2, "notificationCount", 2));
+		}
+		
+		// Questions
+		if (settings.isQuestionsOptIn()) {
+			List<Object> questions = new LinkedList<Object>();
+			questions.add(ImmutableMap.of("name", "Browse questions", "link", "q/search", "icon", "icon-list", "iconType", 1, "notificationCount", 2));
+			questions.add(ImmutableMap.of("name", "Browse question sets", "link", "sets", "icon", "icon-file_open", "iconType", 1, "notificationCount", 2));
+			questions.add(ImmutableMap.of("name", "Browse own content", "link", "users/me", "icon", "icon-file_open", "iconType", 1, "notificationCount", 2));
+			questions.add(ImmutableMap.of("name", "Create question set", "link", "sets/add", "icon", "icon-plus", "iconType", 1, "notificationCount", 2));
+			questions.add(ImmutableMap.of("name", "Fairytale land", "link", "fairytale", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 2));
+			sidebar.add(ImmutableMap.of("name", "Setting Work", "links", questions, "icon", "a", "iconType", 2, "notificationCount", 2));
+		}
+		
+		// Handins
+		if (settings.isHandinsOptIn()) {
+			List<Object> handins = new LinkedList<Object>();
+			handins.add(ImmutableMap.of("name", "Create bin", "link", "bins/create", "icon", ",", "iconType", 2, "notificationCount", 2));
+			handins.add(ImmutableMap.of("name", "Upload answers", "link", "bins", "icon", ",", "iconType", 2, "notificationCount", 2));
+			handins.add(ImmutableMap.of("name", "Mark answers", "link", "marking", "icon", "C", "iconType", 2, "notificationCount", 2));
+			sidebar.add(ImmutableMap.of("name", "Marking Work", "links", handins, "icon", "F", "iconType", 2, "notificationCount", 2));
+		}
+		
+		return sidebar;
+		
+	} 
+	
 }

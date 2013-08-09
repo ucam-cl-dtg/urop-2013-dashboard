@@ -28,7 +28,7 @@ import uk.ac.cam.dashboard.util.Util;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 
-@Path("api/dashboard/deadlines")
+@Path("/api/dashboard/deadlines")
 @Produces(MediaType.APPLICATION_JSON)
 public class DeadlinesController extends ApplicationController {
 	
@@ -38,7 +38,7 @@ public class DeadlinesController extends ApplicationController {
 	@GET @Path("/") 
 	public ImmutableMap<String, ?> indexDeadlines() {
 
-		currentUser = initialiseUser();
+		currentUser = getUser();
 		
 		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.deadlinesToMap());
 	}
@@ -47,7 +47,7 @@ public class DeadlinesController extends ApplicationController {
 	@GET @Path("/{id}") 
 	public Map<String, ?> getDeadline(@PathParam("id") int id) {
 		
-		currentUser = initialiseUser();
+		currentUser = getUser();
 		
 	  	Deadline deadline = Deadline.getDeadline(id);
 	  	
@@ -57,7 +57,7 @@ public class DeadlinesController extends ApplicationController {
 	// Create
 	@POST @Path("/") 
 	public Map<String, ?> createDeadline(@Form DeadlineForm deadlineForm) throws Exception {
-		currentUser = initialiseUser();
+		currentUser = getUser();
 		
 		ArrayListMultimap<String, String> errors = deadlineForm.validate();
 		ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
@@ -74,7 +74,7 @@ public class DeadlinesController extends ApplicationController {
 	@POST @Path("/{id}")
 	public Map<String, ?> updateDeadline(@Form DeadlineForm deadlineForm, @PathParam("id") int id) {
 		
-		currentUser = initialiseUser();
+		currentUser = getUser();
 		
 		ArrayListMultimap<String, String> errors = deadlineForm.validate();
 		ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
@@ -105,7 +105,7 @@ public class DeadlinesController extends ApplicationController {
 	@PUT @Path("/{id}/complete")
 	public Map<String, ?> updateComplete(@PathParam("id") int id) {
 		
-		currentUser = initialiseUser();
+		currentUser = getUser();
 		
 		DeadlineUser d = DeadlineQuery.getDUser(id);
 		
@@ -119,7 +119,7 @@ public class DeadlinesController extends ApplicationController {
 	@PUT @Path("/{id}/archive")
 	public Map<String, ?> updateArchive(@PathParam("id") int id) {
 		
-		currentUser = initialiseUser();
+		currentUser = getUser();
 		
 		DeadlineUser d = DeadlineQuery.getDUser(id);
 		
@@ -132,7 +132,7 @@ public class DeadlinesController extends ApplicationController {
 	// Find groups AJAX
 	@POST @Path("/queryGroup")
 	public List<ImmutableMap<String, ?>> queryCRSID(String q) {
-		currentUser = initialiseUser();
+		currentUser = getUser();
 		
 		//Remove q= prefix
 		String x = q.substring(2);

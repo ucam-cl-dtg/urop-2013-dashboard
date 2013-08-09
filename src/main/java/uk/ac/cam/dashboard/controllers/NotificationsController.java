@@ -25,7 +25,7 @@ import uk.ac.cam.dashboard.queries.NotificationQuery;
 
 import com.google.common.collect.ImmutableMap;
 
-@Path("api/dashboard/notifications")
+@Path("/api/dashboard/notifications")
 @Produces(MediaType.APPLICATION_JSON)
 public class NotificationsController extends ApplicationController {
 	
@@ -38,7 +38,7 @@ public class NotificationsController extends ApplicationController {
 		// Get notifications
 		public Map<String, ?> getNotifications(GetNotificationForm notificationForm, boolean read) {
 			
-			currentUser = initialiseUser();
+			currentUser = getUser();
 			ImmutableMap<String, List<String>> errors = notificationForm.validate();
 
 			if (errors.isEmpty()) {
@@ -69,7 +69,7 @@ public class NotificationsController extends ApplicationController {
 		@GET @Path("/{id}")
 		public Map<String, ?> getNotification(@PathParam("id") int id) {
 			
-			currentUser = initialiseUser();
+			currentUser = getUser();
 			Notification notification = NotificationQuery.get(id);
 			
 			if (notification != null) {
@@ -99,7 +99,7 @@ public class NotificationsController extends ApplicationController {
 		@PUT @Path("/{id}")
 		public ImmutableMap<String, String> markNotificationAsRead(@PathParam("id") int id, @QueryParam("read") boolean read) {
 	
-			currentUser = initialiseUser();
+			currentUser = getUser();
 			
 			ImmutableMap<String, String> error;
 			if (read == true) {

@@ -33,7 +33,7 @@ import uk.ac.cam.dashboard.util.Util;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 
-@Path("api/dashboard/groups")
+@Path("/api/dashboard/groups")
 @Produces(MediaType.APPLICATION_JSON)
 public class GroupsController extends ApplicationController {
 	
@@ -47,7 +47,7 @@ public class GroupsController extends ApplicationController {
 		@GET @Path("/") 
 		public Map<String, ?> indexGroups() {
 
-			currentUser = initialiseUser();
+			currentUser = getUser();
 			
 			return ImmutableMap.of("user", currentUser.toMap(), "groups", currentUser.subscriptionsToMap());
 		}
@@ -55,7 +55,7 @@ public class GroupsController extends ApplicationController {
 		// Create
 		@POST @Path("/") 
 		public Map<String, ?> createGroup(@Form GroupForm groupForm) throws Exception {
-			currentUser = initialiseUser();
+			currentUser = getUser();
 			
 			ArrayListMultimap<String, String> errors = groupForm.validate();
 			ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
@@ -71,7 +71,7 @@ public class GroupsController extends ApplicationController {
 		// Import from LDAP
 		@POST @Path("/import") 
 		public Map<String, ?> importGroup(@Form GroupForm groupForm) throws Exception {
-			currentUser = initialiseUser();
+			currentUser = getUser();
 			
 			ArrayListMultimap<String, String> errors = groupForm.validateImport();
 			ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
@@ -88,7 +88,7 @@ public class GroupsController extends ApplicationController {
 		@GET @Path("/{id}") 
 		public Map<String, ?> getGroup(@PathParam("id") int id) {
 			
-			currentUser = initialiseUser();
+			currentUser = getUser();
 
 			Group group = Group.getGroup(id);
 			
@@ -111,7 +111,7 @@ public class GroupsController extends ApplicationController {
 		// Update
 		@POST @Path("/{id}")
 		public Map<String, ?> updateGroup(@Form GroupForm groupForm, @PathParam("id") int id) {	
-			currentUser = initialiseUser();
+			currentUser = getUser();
 			
 			ArrayListMultimap<String, String> errors = groupForm.validate();
 			ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);

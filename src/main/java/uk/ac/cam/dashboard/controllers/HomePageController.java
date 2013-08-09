@@ -23,7 +23,7 @@ import uk.ac.cam.dashboard.models.User;
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
 
-@Path("api/")
+@Path("/api/")
 @Produces(MediaType.APPLICATION_JSON)
 public class HomePageController extends ApplicationController{
 	
@@ -35,7 +35,7 @@ public class HomePageController extends ApplicationController{
 	@GET @Path("/dashboard")
 	public Map<String, ?> homePage() {
 		
-		currentUser = initialiseUser();
+		currentUser = getUser();
 		
 		LDAPUser user = null;
 		try {

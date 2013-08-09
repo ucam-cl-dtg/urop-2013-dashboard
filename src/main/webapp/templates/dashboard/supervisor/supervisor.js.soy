@@ -29,7 +29,7 @@
                     
                         {call .deadline}
                             {param deadline: $deadline /}
-                            {param errors: $errors /}
+                           // {param errors: $errors /}
                         {/call}
                         
                     {ifempty}
@@ -62,7 +62,7 @@
                     
                         {call .group}
                             {param group: $group /}
-                            {param errors: $errors /}
+                            //{param errors: $errors /}
                         {/call}
                         
                     {ifempty}
@@ -93,8 +93,10 @@
             <p class="title" data-section-title><a>New Group</a></p>
             <div id="newGroupSection" class="content" data-section-content>    
 				{call .newgroup}
+				
 					{param errors: $errors /}
 					{param group: $group /}
+
 				{/call}
             </div>
         </section>

@@ -16,7 +16,7 @@ import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 
-@Path("/dashboard/auth")
+@Path("/api/keys")
 @Produces(MediaType.APPLICATION_JSON)
 public class ApiController extends ApplicationController {
 	
@@ -24,7 +24,7 @@ public class ApiController extends ApplicationController {
 	
 	@GET @Path("/")
 	public ImmutableMap<String, ?> getUserApiKeys() {
-		User currentUser = initialiseUser();
+		User currentUser = getUser();
 		
 		return ImmutableMap.of("user", currentUser.getCrsid(), "keys", currentUser.apisToMap());
 	}
@@ -33,7 +33,7 @@ public class ApiController extends ApplicationController {
 	public Map<String, String> getNewApiKey() {
 		Session s = HibernateUtil.getTransactionSession();
 
-		User currentUser = initialiseUser();
+		User currentUser = getUser();
 		
 		Api api = new Api();
 		api.setUser(currentUser);
@@ -58,11 +58,13 @@ public class ApiController extends ApplicationController {
 	// Verification
 	
 	@GET @Path("/type/{key}")
-	public Map<String, String> checkApiKeyType(@PathParam("key") String key) {
-		
-		// *TODO* Check if global permissions
+	public static Map<String, String> checkApiKeyType(@PathParam("key") String key) {
 		
 		Session s = HibernateUtil.getTransactionSession();
+		
+		if (key == null || key == "") {
+			return ImmutableMap.of("error", "A key must be provided");
+		}
 		
 		Api api = (Api) s.createQuery("from Api where key = :key").setParameter("key", key).uniqueResult();
 		
@@ -71,7 +73,7 @@ public class ApiController extends ApplicationController {
 		} else if (api.isGlobalPermissions()) {
 			return ImmutableMap.of("type", "global");
 		} else {
-			return ImmutableMap.of("type", "user", "user", api.getUser().getCrsid());
+			return ImmutableMap.of("type", "user", "userId", api.getUser().getCrsid());
 		}
 		
 	}

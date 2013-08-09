@@ -7,6 +7,8 @@
      xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
      version="2.5">
      
+     <!-- For frontend main.soy -->
+     
 	<context-param>
 		<param-name>cssNamespace</param-name>
 		<param-value>dashboard</param-value>
@@ -17,11 +19,6 @@
 		<param-value>
 			/css/account.css
 		</param-value>
-	</context-param>
-
-	<context-param>
-		<param-name>dashboardUrl</param-name>
-		<param-value>http://www.cl.cam.ac.uk/research/dtg/berrycider/dashboard/api/dashboard</param-value>
 	</context-param>
 	
 	<context-param>
@@ -70,7 +67,26 @@
         <![CDATA[<script src="/soy/js/3/dashboard.supervisor.js"></script>]]>
 	</custom_templates>
  	-->
+
+	<!-- For API filter -->
+	
+	<context-param>
+		<param-name>dashboardUrl</param-name>
+		<param-value>http://localhost:8080/</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>excludePrefixes</param-name>
+		<param-value>/api/keys/type/</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>apiKey</param-name>
+		<param-value>4870v534lmomthfssb27ho4vjtidhujlmmssasuf</param-value>
+	</context-param>
  	
+ 	<!-- Filters -->
+
 	<filter>
 		<filter-name>Hibernate</filter-name>
 		<filter-class>uk.ac.cam.dashboard.util.HibernateSessionRequestFilter</filter-class>
@@ -85,15 +101,27 @@
 		</init-param>
 	</filter>
 
+	<filter>
+		<filter-name>apiauth</filter-name>
+		<filter-class>uk.ac.cam.cl.dtg.teaching.APIFilter</filter-class>
+	</filter>
+	
+	<!-- Filter mappings -->
+	
+	<filter-mapping>
+		<filter-name>apiauth</filter-name>
+		<url-pattern>/api/*</url-pattern>
+	</filter-mapping>
+	
 	<filter-mapping>
 		<filter-name>Hibernate</filter-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/api/*</url-pattern>
 	</filter-mapping>
 
 	<filter-mapping>
 		<filter-name>Htmleasy</filter-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/api/*</url-pattern>
 	</filter-mapping>
-
+	
 	&frontend;
 </web-app>

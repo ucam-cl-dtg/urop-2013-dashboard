@@ -13,7 +13,6 @@ import uk.ac.cam.dashboard.controllers.DeadlinesController;
 import uk.ac.cam.dashboard.controllers.GroupsController;
 import uk.ac.cam.dashboard.controllers.HomePageController;
 import uk.ac.cam.dashboard.controllers.NotificationsController;
-import uk.ac.cam.dashboard.controllers.ProjectSettingsController;
 import uk.ac.cam.dashboard.controllers.SupervisorController;
 
 import com.googlecode.htmleasy.HtmleasyProviders;
@@ -27,7 +26,6 @@ public class Dashboard extends Application {
     
     // Add controllers    
     log.debug("Adding controllers to main application");
-    myServices.add(ProjectSettingsController.class);
     myServices.add(AccountController.class);
     myServices.add(DeadlinesController.class);
     myServices.add(GroupsController.class);
