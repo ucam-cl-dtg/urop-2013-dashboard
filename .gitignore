@@ -1,10 +1,8 @@
 target
-logs/main.log
+logs
 .project
 .settings
-/target
-/target
-
+.classpath
 Gemfile
 Gemfile.lock
 Guardfile
