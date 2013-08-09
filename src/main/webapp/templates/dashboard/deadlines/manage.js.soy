@@ -6,6 +6,7 @@
  * @param deadlineEdit
  * @param target
  * @param errors
+ * @param users
  */
 {template .manage }
 
@@ -16,7 +17,10 @@
             <p class="title" data-section-title><a href="#statistics">Statistics</a></p>
             <div class="content" data-section-content>
             
-      			Deadline statistics
+      			{call .stats}
+                	{param deadline: $deadline /}
+                	{param users: $users /}
+                {/call}
                 
             </div>
             </section>
@@ -35,15 +39,39 @@
 
 /**
  * Deadline details
- * 
+ * @param deadline
+ * @param users
  */
 {template .stats }
+<div class="row">
+<ul class="panels">
+	<li class="panel-wrapper columns large-12">
+		<div class="row list-inner-sub-panel">                           
+			<div class="columns large-11 small-11 text-left">
+				<div class="row">
+					<div class="columns large-11 small-11 text-left">
+						<div class="progress large-6 success round"><span class="meter" style="width: {$deadline.pComplete}%"></span></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</li>
+	{foreach $user in $users}
+	<li class="panel-wrapper columns large-12">
+		<div class="row list-inner-sub-panel">                           
+			<div class="columns large-11 small-11 text-left">
+				<div class="row">
+					<div class="columns large-11 small-11 text-left">
+					<strong>{$user.name} ({$user.crsid}) {if $user.complete}<span class="success label">complete</span>{else}<span class="round alert label">not complete</span>{/if}</strong>
+					</div>
+				</div>
+			</div>
+		</div>
+	</li> 
+	{/foreach}
+</ul>		
+</div>	
 
-	Deadline members:
-	
-	Completed:
-		
-				
 {/template}
 
 /**

@@ -51,7 +51,7 @@ public class DeadlinesController extends ApplicationController {
 		
 	  	Deadline deadline = Deadline.getDeadline(id);
 	  	
-		return ImmutableMap.of("errors", "undefined","deadline", deadline.toMap(), "deadlineEdit", deadline.toMap());		
+		return ImmutableMap.of("errors", "undefined","deadline", deadline.toMap(), "deadlineEdit", deadline.toMap(), "users", deadline.usersToMap());		
 	}
 	
 	// Create
