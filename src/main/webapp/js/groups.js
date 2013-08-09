@@ -4,7 +4,7 @@ function groupsIndex() {
   // Ajax delete request
       var deleteData = $.ajax({
             type: 'DELETE',
-            url: prepareURL("dashboard/groups/" + group_id),
+            url: prepareURL("groups/" + group_id),
             success: function(resultData) {
                 $("#"+group_id).hide(2000, function() {
                     $(this).remove();

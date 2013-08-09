@@ -29,27 +29,27 @@ $(document).ready(function() {
     router = Router({
         
         // Home page
-        "dashboard": "dashboard.home.index",
+        "/": "dashboard.home.index",
         
         // Account
-        "dashboard/account": "dashboard.account.index",
+        "/account": "dashboard.account.index",
 
         // Deadlines
-        "dashboard/deadlines" : "dashboard.deadlines.index",
-        "dashboard/deadlines/:id" : "dashboard.deadlines.manage",
-        "dashboard/deadlines/:id/edit" : "dashboard.deadlines.edit",
+        "/deadlines" : "dashboard.deadlines.index",
+        "/deadlines/:id" : "dashboard.deadlines.manage",
+        "/deadlines/:id/edit" : "dashboard.deadlines.edit",
         
         // Groups
-        "dashboard/groups": "dashboard.groups.index",
-        "dashboard/groups/:id" : "dashboard.groups.manage",
-        "dashboard/groups/:id/edit" : "dashboard.groups.edit",
+        "/groups": "dashboard.groups.index",
+        "/groups/:id" : "dashboard.groups.manage",
+        "/groups/:id/edit" : "dashboard.groups.edit",
         
         // Notifications
-        "dashboard/notifications(:params*)": "dashboard.notifications.index",
-        "dashboard/notifications/archive(:params*)": "dashboard.notifications.index",
+        "/notifications(:params*)": "dashboard.notifications.index",
+        "/notifications/archive(:params*)": "dashboard.notifications.index",
         
         // Supervisor
-        "dashboard/supervisor" : "dashboard.supervisor.index"
+        "/supervisor" : "dashboard.supervisor.index"
         
         //For getting params in get requests
         // Use the last line to redirect unmatched routes to an error page

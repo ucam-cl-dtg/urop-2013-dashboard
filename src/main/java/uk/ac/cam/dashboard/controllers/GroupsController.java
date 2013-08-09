@@ -33,7 +33,7 @@ import uk.ac.cam.dashboard.util.Util;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 
-@Path("/api/dashboard/groups")
+@Path("/api/groups")
 @Produces(MediaType.APPLICATION_JSON)
 public class GroupsController extends ApplicationController {
 	

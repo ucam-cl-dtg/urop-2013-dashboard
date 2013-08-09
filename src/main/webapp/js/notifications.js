@@ -16,7 +16,7 @@ function bindNotificationShowMoreListener() {
 			
 			var queryString = 'offset=' + newOffset + '&limit=' + limit;
 			var elem = $('#new-notifications-wrapper');
-			var location = 'dashboard/notifications?' + queryString;
+			var location = 'notifications?' + queryString;
 			var template = 'shared.dashboard.getNotifications';	
 			
 			loadModule(elem, location, template, function() {
@@ -57,7 +57,7 @@ function markNotificationAsReadUnread() {
 		var markAsRead = $(this).children('a').hasClass('mark-as-read');
 	    $.ajax({
 	    	type: 'PUT',
-	    	url: prepareURL("dashboard/notifications/" + target + "?read=" + markAsRead),
+	    	url: prepareURL("notifications/" + target + "?read=" + markAsRead),
 	    	success: function(data) {
 	    		if (data.errors) {
 	    			alert(data.errors);

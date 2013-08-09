@@ -12,7 +12,7 @@ import uk.ac.cam.dashboard.models.User;
 
 import com.google.common.collect.ImmutableMap;
 
-@Path("/api/dashboard/supervisor")
+@Path("/api/supervisor")
 @Produces(MediaType.APPLICATION_JSON)
 public class SupervisorController extends ApplicationController {
 	

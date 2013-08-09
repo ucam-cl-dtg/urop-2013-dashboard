@@ -3,7 +3,7 @@ function applyDatepicker() {
 }
 
 function userTokenInput() {
-	$(".user-token-input").tokenInput(prepareURL("dashboard/groups/queryCRSID"), {
+	$(".user-token-input").tokenInput(prepareURL("groups/queryCRSID"), {
 		theme: "facebook",
 		method: "post",
         tokenValue: "crsid",
@@ -26,7 +26,7 @@ function userTokenInput() {
 }
 
 function userSurnameTokenInput() {
-	$(".user-surname-token-input").tokenInput(prepareURL("dashboard/groups/querySurname"), {
+	$(".user-surname-token-input").tokenInput(prepareURL("groups/querySurname"), {
 		theme: "facebook",
 		method: "post",
         tokenValue: "crsid",
@@ -49,7 +49,7 @@ function userSurnameTokenInput() {
 }
 
 function groupTokenInput() {
-	$(".group-token-input").tokenInput(prepareURL("dashboard/deadlines/queryGroup"), {
+	$(".group-token-input").tokenInput(prepareURL("deadlines/queryGroup"), {
 		theme: "facebook",
 		method: "post",
         tokenValue: "group_id",
@@ -79,7 +79,7 @@ function tokenInputType() {
 }
 
 function groupImportTokenInput() {
-	$(".group-import-token-input").tokenInput(prepareURL("dashboard/groups/queryGroup"), {
+	$(".group-import-token-input").tokenInput(prepareURL("groups/queryGroup"), {
 		theme: "facebook",
 		method: "post",
         tokenValue: "id",

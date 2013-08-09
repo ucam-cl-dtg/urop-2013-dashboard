@@ -25,7 +25,7 @@ import uk.ac.cam.dashboard.queries.NotificationQuery;
 
 import com.google.common.collect.ImmutableMap;
 
-@Path("/api/dashboard/notifications")
+@Path("/api/notifications")
 @Produces(MediaType.APPLICATION_JSON)
 public class NotificationsController extends ApplicationController {
 	
