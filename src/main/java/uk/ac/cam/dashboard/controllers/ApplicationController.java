@@ -18,27 +18,30 @@ public class ApplicationController {
 	// Raven session
 	@Context
 	HttpServletRequest sRequest;
-	
-	protected User initialiseUser() throws RedirectException { 
-		
-		//log.debug("Getting crsid from raven");
-		
-		//sRequest = ResteasyProviderFactory.getContextData(HttpServletRequest.class);
-		String crsid = (String) sRequest.getSession().getAttribute("RavenRemoteUser");
 
+	protected Permissions getPermissions() {
 		
-		if (crsid != null) {
-			return User.registerUser(crsid);
+		String userId = (String) sRequest.getAttribute("userId");
+		
+		if (userId == null) {
+			return Permissions.GLOBAL;
+		} else {
+			return Permissions.USER;
 		}
 		
-		throw new RedirectException("/dashboard/");
 	}
 	
-	// temporary for testing
-	protected User initialiseSpecifiedUser(String crsid) {
-			
-		// Register or return the user
-		return User.registerUser(crsid);
+	public static enum Permissions {
+		USER,
+		GLOBAL
+	}
+	
+	protected User getUser() {
+		
+		String userId = (String) sRequest.getAttribute("userId");
+		
+		return User.registerUser(userId);
+		
 	}
 	
 }

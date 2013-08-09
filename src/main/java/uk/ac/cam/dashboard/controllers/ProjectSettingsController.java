@@ -13,7 +13,7 @@ import uk.ac.cam.dashboard.models.User;
 
 import com.google.common.collect.ImmutableMap;
 
-@Path("api/dashboard/settings")
+@Path("/api/dashboard/settings")
 @Produces(MediaType.APPLICATION_JSON)
 public class ProjectSettingsController extends ApplicationController {
 

@@ -20,7 +20,7 @@ import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 
-@Path("api/dashboard/account")
+@Path("/api/dashboard/account")
 @Produces(MediaType.APPLICATION_JSON)
 public class AccountController extends ApplicationController {
 

@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cam.dashboard.models.Api;
 import uk.ac.cam.dashboard.models.User;
 
-public class ApiFilter implements Filter {
+public class ApiFilterOld implements Filter {
 	
 	public static enum Permissions {
 		NONE,
@@ -31,7 +31,7 @@ public class ApiFilter implements Filter {
 		GLOBAL
 	}
 	
-	private static Logger log = LoggerFactory.getLogger(ApiFilter.class);
+	private static Logger log = LoggerFactory.getLogger(ApiFilterOld.class);
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -47,12 +47,12 @@ public class ApiFilter implements Filter {
 		HttpSession session = request.getSession();
 		
 		String user = (String) request.getParameter("user");
-		String auth = (String) request.getParameter("auth");
+		String key = (String) request.getParameter("key");
 		String ravenUser = (String) session.getAttribute("RavenRemoteUser");
 		
 		System.out.println(Arrays.toString(request.getParameterMap().keySet().toArray()));
 		System.out.println("User: " + user);
-		System.out.println("Auth: " + auth);
+		System.out.println("Key: " + key);
 		System.out.println("RavenUser: " + ravenUser);
 		
 		if (ravenUser != null) {
@@ -61,15 +61,15 @@ public class ApiFilter implements Filter {
 			
 			chain.doFilter(request, response);
 			return;
-		} else if (auth != null) {
-			if ( validateGlobalApiKey(auth) ) {
+		} else if (key != null) {
+			if ( validateGlobalApiKey(key) ) {
 				log.debug("Passed API validation...");
 				session.setAttribute("permissions", Permissions.GLOBAL);
 				
 				chain.doFilter(request, response);
 				return;
 			} else if (user != null) { 
-				if ( validateApiKeyForUser(auth, user) ) {
+				if ( validateApiKeyForUser(key, user) ) {
 					log.debug("Passed API validation...");
 					session.setAttribute("permissions", Permissions.USER);
 					
