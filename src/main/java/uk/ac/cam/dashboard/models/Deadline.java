@@ -132,6 +132,7 @@ public class Deadline implements Mappable {
 			
 			HashSet<ImmutableMap<String,?>> deadlineUsers = new HashSet<ImmutableMap<String,?>>();
 			String crsid;
+			int totalComplete = 0;
 			for(DeadlineUser du : users){
 				// Get users crsid
 				crsid = du.getUser().getCrsid();
@@ -142,14 +143,22 @@ public class Deadline implements Mappable {
 					// handle error - set default name or something
 				}
 				
+				if(du.getComplete()){
+					totalComplete++;
+				}
+				
 				String name = u.getcName();
 				deadlineUsers.add(ImmutableMap.of("crsid",crsid, "name", name));
 			}		
 			
+			// compute percentage complete
+			int completePercent = (totalComplete*100)/users.size();			
 			builder = builder
 					.put("datetime", getFormattedDate())
 					.put("date", getDateMap())
-					.put("users", deadlineUsers);
+					.put("users", deadlineUsers)
+					.put("pComplete", completePercent);
+				
 			
 		} catch(NullPointerException e){
 			builder  = new ImmutableMap.Builder<String, Object>();
@@ -174,16 +183,16 @@ public class Deadline implements Mappable {
 		for(DeadlineUser du : users){
 			String crsid = du.getUser().getCrsid();
 			
+			String name;
 			LDAPUser u = null;
 			try {
 				u = LDAPQueryManager.getUser(crsid);
+				name = u.getcName();
 			} catch(LDAPObjectNotFoundException e){
-				// handle error - set default name or something
-			}	
+				name = "Unknown user";
+			}
 			
-			String name = u.getcName();
-			
-			deadlineUsers.add(ImmutableMap.of("crsid", crsid, "name", name));
+			deadlineUsers.add(ImmutableMap.of("crsid", crsid, "name", name, "complete", du.getComplete()));
 		}
 		
 		return deadlineUsers;

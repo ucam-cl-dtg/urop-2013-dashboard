@@ -1,5 +1,6 @@
 package uk.ac.cam.dashboard.queries;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -80,6 +81,20 @@ public class DeadlineQuery {
 		log.debug("Getting Deadlines created by user: " + user.getCrsid());
 		criteria.add(Restrictions.eq("owner", user));
 	return this;
+	}
+	
+	public DeadlineQuery byMonth(int month){
+		log.debug("Getting Deadlines in month: " + month);	
+		Calendar start = Calendar.getInstance();
+		Calendar end = Calendar.getInstance();
+		start.set(Calendar.MONTH, month);
+		start.set(Calendar.DAY_OF_MONTH, 1);
+		end.set(Calendar.MONTH, month);
+		end.set(Calendar.DAY_OF_MONTH, end.getActualMaximum(Calendar.DAY_OF_MONTH));
+		criteria.createAlias("deadline", "d")
+		.addOrder(Order.asc("d.datetime"))
+		.add(Restrictions.between("d.datetime",start, end));
+		return this;
 	}
 	
 	public DeadlineQuery isRead(boolean read) {

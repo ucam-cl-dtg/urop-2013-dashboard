@@ -1,12 +1,16 @@
 package uk.ac.cam.dashboard.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+
 
 
 //Import the following for logging
@@ -19,6 +23,7 @@ import uk.ac.cam.cl.dtg.ldap.LDAPUser;
 import uk.ac.cam.dashboard.forms.GetNotificationForm;
 //Import models
 import uk.ac.cam.dashboard.models.User;
+import uk.ac.cam.dashboard.queries.DeadlineQuery;
 
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.htmleasy.RedirectException;
@@ -49,6 +54,17 @@ public class HomePageController extends ApplicationController{
 		// Get notifications
 		GetNotificationForm notificationForm = new GetNotificationForm();
 		notificationForm.validate();
+		
+		// Get deadlines for each month
+		List<ImmutableMap<String, ?>> calendar =new ArrayList<ImmutableMap<String, ?>>();
+		
+//		for(int i=0; i<12;i++){
+//			DeadlineQuery dq = DeadlineQuery.set();
+//			dq.byUser(currentUser);
+//			dq.byMonth(i);
+//			calendar.add(ImmutableMap.of("month", i, "deadlines", dq.setList()));
+//			System.out.println("Added " + dq.setList().size() + " deadlines to month " + i);
+//		}
 		
 		return ImmutableMap.of("user", userData, "deadlines", currentUser.deadlinesToMap(), "userNotifications", notificationForm.handle(currentUser, false));
 	}

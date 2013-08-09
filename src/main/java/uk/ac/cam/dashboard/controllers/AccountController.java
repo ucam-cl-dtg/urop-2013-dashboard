@@ -84,7 +84,7 @@ public class AccountController extends ApplicationController {
 		
 		// Dashboard
 		List<Object> dashboard = new LinkedList<Object>();
-		dashboard.add(ImmutableMap.of("name", "Home", "link", "/dashboard/dashboard", "icon", "icon-globe", "iconType", 1, "notificationCount", 2));
+		dashboard.add(ImmutableMap.of("name", "Home", "link", "/dashboard/", "icon", "icon-globe", "iconType", 1, "notificationCount", 2));
 		dashboard.add(ImmutableMap.of("name", "Notifications", "link", "/dashboard/notifications", "icon", "icon-newspaper", "iconType", 1, "notificationCount", 2));
 		dashboard.add(ImmutableMap.of("name", "Deadlines", "link", "/dashboard/deadlines", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 2));
 		dashboard.add(ImmutableMap.of("name", "Groups", "link", "/dashboard/groups", "icon", "icon-users", "iconType", 1, "notificationCount", 2));

@@ -87,6 +87,19 @@ public class DeadlineUser implements Mappable{
 		
 		return map.build();
 	}
+	
+	public ImmutableMap<String, ?> usersToMap() {
+		
+		ImmutableMap.Builder<String, Object> map = new ImmutableMap.Builder<String, Object>();
+
+		map.put("id", this.id);
+		map.put("complete", this.complete);
+		map.put("archived", this.archived);
+		map.put("crsid", this.user.getCrsid());
+		map.put("name", this.user.getName());
+		
+		return map.build();
+	}
 
 	
 }
