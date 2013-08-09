@@ -38,7 +38,7 @@ public class DeadlinesController extends ApplicationController {
 	@GET @Path("/") 
 	public ImmutableMap<String, ?> indexDeadlines() {
 
-		currentUser = initialiseUser();
+		currentUser = getUser();
 		
 		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.deadlinesToMap());
 	}
