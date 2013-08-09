@@ -10,7 +10,7 @@ function createGroup() {
 }
 function importGroup() {
 	$("#importGroupForm").ajaxForm(function(data) {
-		applyTemplate($('#newGroupSection'), "dashboard.supervisor.newgroup", data);
+		applyTemplate($('#importGroupSection'), "dashboard.supervisor.importgroup", data);
 	});
 }
 
@@ -49,29 +49,5 @@ function deleteGroup() {
             }
         });
     });
-}
-
-function autocomplete() {
-
-    $(".deadline_group_token_input").tokenInput(prepareURL("dashboard/deadlines/queryGroup"), {
-        method: "post",
-        tokenValue: "group_id",
-        propertyToSearch: "group_name",
-        theme: "facebook",
-        hintText: "Search your groups",
-        resultsLimit: 10,
-        preventDuplicates: true           
-    });
-    $(".exgroup_token_input").tokenInput(prepareURL("dashboard/groups/queryGroup"), {
-        method: "post",
-        tokenValue: "id",
-        propertyToSearch: "name",
-        theme: "facebook",
-        tokenLimit : 1,
-        
-        resultsFormatter: function(item){ return "<li>" + "<div style='display: inline-block; padding-left: 10px;'><div class='full_name'>" + item.name + "</div><div class='email'>" + item.description + "</div></div></li>" },
-        tokenFormatter: function(item) { return "<li><p>" + item.name + "</p></li>" },
-    });
-      
 }
 

@@ -39,7 +39,6 @@ moduleScripts['dashboard'] = {
 			deadlinesIndex
 		],
 		'manage' : [
-			function(){this.foundation()},
 			editDeadline,
 			applyDatepicker,
 			userTokenInput,
@@ -79,12 +78,14 @@ moduleScripts['dashboard'] = {
 		],
 		'newgroup' : [
 			createGroup,	
-	      	importGroup,
 	        applyDatepicker,
 			userTokenInput,
 			userSurnameTokenInput,
-			groupImportTokenInput, 
 			tokenInputType	
-		]
+		], 
+		'importgroup' : [
+		    importGroup,
+		    groupImportTokenInput
+		],
 	}
 };

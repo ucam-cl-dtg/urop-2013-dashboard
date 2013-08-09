@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPPartialQuery;
+import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
+import uk.ac.cam.cl.dtg.ldap.LDAPUser;
 import uk.ac.cam.dashboard.forms.GroupForm;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
@@ -71,7 +73,7 @@ public class GroupsController extends ApplicationController {
 		public Map<String, ?> importGroup(@Form GroupForm groupForm) throws Exception {
 			currentUser = initialiseUser();
 			
-			ArrayListMultimap<String, String> errors = groupForm.validate();
+			ArrayListMultimap<String, String> errors = groupForm.validateImport();
 			ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
 			
 			if(errors.isEmpty()){
@@ -82,7 +84,7 @@ public class GroupsController extends ApplicationController {
 			}
 		}
 		
-		// Get
+		// Manage
 		@GET @Path("/{id}") 
 		public Map<String, ?> getGroup(@PathParam("id") int id) {
 			
@@ -90,7 +92,20 @@ public class GroupsController extends ApplicationController {
 
 			Group group = Group.getGroup(id);
 			
-			return ImmutableMap.of("group", group.toMap(), "errors", "undefined");
+			// Perform LDAP search
+			List<HashMap<String, String>> users = null;
+			try {
+				users = new ArrayList<HashMap<String, String>>();
+				for(User u : group.getUsers()){
+					LDAPUser user = LDAPQueryManager.getUser(u.getCrsid());
+					users.add(user.getAll());
+				}
+			} catch(LDAPObjectNotFoundException e){
+				log.error("Error performing LDAPQuery: " + e.getMessage());
+				users = new ArrayList<HashMap<String, String>>();
+			}
+			
+			return ImmutableMap.of("group", group.toMap(), "errors", "undefined", "users", users);
 		}
 		
 		// Update

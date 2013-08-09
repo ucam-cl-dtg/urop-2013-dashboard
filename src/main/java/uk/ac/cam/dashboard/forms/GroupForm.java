@@ -184,7 +184,7 @@ public class GroupForm {
 		
 		// users
 		if((import_id==null||import_id.equals(""))){ 
-			errors.put("users", "Please choose at least one group to import"); 
+			errors.put("import_id", "Please choose at least one group to import"); 
 		}	
 		
 		return errors;	
@@ -193,9 +193,10 @@ public class GroupForm {
 	public ImmutableMap<String, ?> toMap(int id) {
 		ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>();
 		builder.put("id", id);
-		builder.put("name", title);
-		
-		if(!users.equals("")){
+		if(!(title==null||title.equals(""))){
+			builder.put("name", title);
+		}
+		if(!(users==null||users.equals(""))){
 			List<ImmutableMap<String,String>> userMaps = new ArrayList<ImmutableMap<String,String>>();
 			String[] crsids = users.split(",");
 			for(String s: crsids){

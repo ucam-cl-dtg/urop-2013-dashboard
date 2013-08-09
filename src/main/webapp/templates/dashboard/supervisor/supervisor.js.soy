@@ -6,6 +6,8 @@
  * @param cgroups
  * @param target
  * @param errors
+ * @param group
+ * @param deadline
  */
 {template .index }
       
@@ -83,6 +85,7 @@
             <div id="newDeadlineSection" class="content" data-section-content>        
                 {call .newdeadline}
 		            {param errors: $errors /}
+		            {param deadline: $deadline /}
 				{/call}
             </div>
         </section>
@@ -91,6 +94,7 @@
             <div id="newGroupSection" class="content" data-section-content>    
 				{call .newgroup}
 					{param errors: $errors /}
+					{param group: $group /}
 				{/call}
             </div>
         </section>
@@ -99,6 +103,7 @@
             <div id="importGroupSection" class="content" data-section-content>    
 				{call .importgroup}
 					{param errors: $errors /}
+					{param group: $group /}
 				{/call}
             </div>
         </section>
@@ -246,7 +251,7 @@
  */
 {template .newdeadline }
     
-    <form id="newDeadlineForm" action="/api/dashboard/deadlines" method="post" class="custom">
+    <form id="newDeadlineForm" action="/dashboard/api/dashboard/deadlines" method="post" class="custom">
         <div class="row">
             <div class="columns large-2 small-4 field-label" >Deadline name</div>
             <div class="columns large-10 small-8">
@@ -344,16 +349,19 @@
 
 /**
  * Dashboard: supervisor page, create groups
- *
+ * @param errors
+ * @param group
  */
 {template .newgroup }
 
         <h3>Create new group</h3>       
-        <form id="newGroupForm" action="/api/dashboard/groups" method="post">
+        <form id="newGroupForm" action="/dashboard/api/dashboard/groups" method="post">
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Group name</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" placeholder="Group name" name="title" id="title" required/>
+                	{if $errors != 'undefined'  and $errors.title}<label class="error">Error</label>{/if}
+                    <input type="text" placeholder="Group name" name="title" {if $errors != 'undefined' and $errors.title}class="error" value="{$group.title}"{/if}/>
+                {if $errors != 'undefined'  and $errors.title}<small class="error">{$errors.title}</small>{/if}
                 </div>
             </div>
             <div class="row">
@@ -366,7 +374,9 @@
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Group members</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="user-token-input" name="users"/>
+                	{if $errors != 'undefined'  and $errors.users}<label class="error">Error</label>{/if}
+                    <input type="text" class="user-token-input {if $errors != 'undefined' and $errors.name}error{/if}" {if $errors != 'undefined' and $errors.name}value='{lb}"users":[{foreach $user in $group.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'{/if} name="users"/>
+                	{if $errors != 'undefined'  and $errors.users}<small class="error">{$errors.users}</small>{/if}
                 </div>
             </div>
             <div class="row">
@@ -374,47 +384,33 @@
                     <input type="submit" value="Save" id="group_submit" />
                 </div>
             </div>
-        </form>
-        
-        <h3>Import Existing Group (LDAP)</h3>    
-        <h6 class="subheader">Small public groups only</h6>         
-        <form id="importGroupForm" action="/dashboard/groups/import" method="post" data-abide>
-            <div class="row">
-                <div class="columns large-2 small-4 field-label">Import Group</div>
-                <div class="columns large-10 small-8">
-                    <input type="text" class="group-import-token-input" name="import_id"/>          
-                </div>
-            </div>
-            <div class="row">
-                <div class="columns large-12 small-12">
-                    <input type="submit" value="Save" id="import_group_submit" />
-                </div>
-            </div>
-        </form>   
+        </form> 
 
 {/template}
 
 /**
  * Dashboard: supervisor page, import group
- *
+ * @param errors
+ * @param group
  */
 {template .importgroup }
         
         <h3>Import Existing Group (LDAP)</h3>    
         <h6 class="subheader">Small public groups only</h6>         
-        <form id="importGroupForm" action="/api/dashboard/groups/import" method="post">
+        <form id="importGroupForm" action="/dashboard/api/dashboard/groups/import" method="post">
             <div class="row">
                 <div class="columns large-2 small-4 field-label">Import Group</div>
                 <div class="columns large-10 small-8">
-                    <input type="text" class="group-import-token-input" name="import_id"/>          
+                 	{if $errors != 'undefined'  and $errors.import_id}<label class="error">Error</label>{/if}
+                    <input type="text" class="group-import-token-input {if $errors != 'undefined' and $errors.import_id}error{/if}" name="import_id"{if $errors != 'undefined'}value='{lb}"users":[{foreach $user in $group.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'{/if}/>          
+                	{if $errors != 'undefined'  and $errors.import_id}<small class="error">{$errors.import_id}</small>{/if}
                 </div>
             </div>
             <div class="row">
                 <div class="columns large-12 small-12">
-                    <input type="submit" value="Save" id="import_group_submit" />
+                    <input type="submit" value="Save"/>
                 </div>
             </div>
         </form>   
 
 {/template}
-
