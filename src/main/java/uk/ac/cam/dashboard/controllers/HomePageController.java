@@ -35,7 +35,7 @@ public class HomePageController extends ApplicationController{
 	@GET @Path("/dashboard")
 	public Map<String, ?> homePage() {
 		
-		currentUser = initialiseUser();
+		currentUser = getUser();
 		
 		LDAPUser user = null;
 		try {

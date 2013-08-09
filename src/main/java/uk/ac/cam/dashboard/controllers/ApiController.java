@@ -24,7 +24,7 @@ public class ApiController extends ApplicationController {
 	
 	@GET @Path("/")
 	public ImmutableMap<String, ?> getUserApiKeys() {
-		User currentUser = initialiseUser();
+		User currentUser = getUser();
 		
 		return ImmutableMap.of("user", currentUser.getCrsid(), "keys", currentUser.apisToMap());
 	}
@@ -33,7 +33,7 @@ public class ApiController extends ApplicationController {
 	public Map<String, String> getNewApiKey() {
 		Session s = HibernateUtil.getTransactionSession();
 
-		User currentUser = initialiseUser();
+		User currentUser = getUser();
 		
 		Api api = new Api();
 		api.setUser(currentUser);

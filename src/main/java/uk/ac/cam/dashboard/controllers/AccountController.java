@@ -29,14 +29,33 @@ public class AccountController extends ApplicationController {
 
 	// Get current user from raven session
 	private User currentUser;
+	private Permissions currentPermissions;
 
 	@GET
 	@Path("/")
-	public Map<String, ?> getAccountSettings() {
+	public Map<String, ?> getAccountSettings(String userId) {
 		
-		currentUser = initialiseUser();
+		currentPermissions = getPermissions();
 		
-		return ImmutableMap.of("user", currentUser.getSettings());
+		if (currentPermissions == Permissions.GLOBAL) {
+			if (userId != null) {
+				currentUser = getSpecifiedUser(userId);
+				if (currentUser != null) {
+					return ImmutableMap.of("user", currentUser.getSettings());
+				} else {
+					return ImmutableMap.of("error", "Could not find settings for user " + currentUser.getCrsid());
+				}
+			} else {
+				return ImmutableMap.of("error", "Cannot get account settings for a global key");
+			}
+		} else {
+			currentUser = getUser();
+			if (currentUser != null) {
+				return ImmutableMap.of("user", currentUser.getSettings());
+			} else {
+				return ImmutableMap.of("error", "Could not find settings for user " + currentUser.getCrsid());
+			}
+		}
 		
 	}
 	
@@ -44,19 +63,7 @@ public class AccountController extends ApplicationController {
 	@Path("/{user}")
 	public Map<String, ?> getUserAccountSettings(@PathParam("user") String user) {
 		
-		// *TODO* Check if global permissions
-		ImmutableMap<String, String> error = ImmutableMap.of("error", "Could not find settings for the specified user");
-		
-		try {
-			currentUser = initialiseSpecifiedUser(user);
-			if (currentUser != null) {
-				return ImmutableMap.of("user", currentUser.getSettings());
-			}
-		} catch (Exception e) {
-			return error;
-		}
-		
-		return error;
+		return getAccountSettings(user);
 		
 	}
 
@@ -64,7 +71,7 @@ public class AccountController extends ApplicationController {
 	public Map<String, ?> changeAccountSettings(@QueryParam("signups") Boolean signups,
 												@QueryParam("questions") Boolean questions,
 												@QueryParam("handins") Boolean handins) {
-		currentUser = initialiseUser();
+		currentUser = getUser();
 		Session session = HibernateUtil.getTransactionSession();
 		Settings newUserSettings = currentUser.getSettings();
 		

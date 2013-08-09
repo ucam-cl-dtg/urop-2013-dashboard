@@ -38,4 +38,8 @@ public class ApplicationController {
 		return User.registerUser(userId);
 	}
 	
+	protected User getSpecifiedUser(String userId) {
+		return User.registerUser(userId);
+	}
+	
 }
