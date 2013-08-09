@@ -36,46 +36,59 @@ public class NotificationsController extends ApplicationController {
 		private User currentUser;
 		
 		// Get notifications
-		public Map<String, ?> getNotifications(GetNotificationForm notificationForm, boolean read) {
+		public Map<String, ?> getNotifications(GetNotificationForm notificationForm, boolean read, String userId) {
 			
-			currentUser = getUser();
+			try {
+				currentUser = validateUserOrApiUser(userId);
+			} catch (Exception e) {
+				return ImmutableMap.of("error", e.getMessage());
+			}
+			
 			ImmutableMap<String, List<String>> errors = notificationForm.validate();
 
 			if (errors.isEmpty()) {
 				return notificationForm.handle(currentUser, read);
 			} else {
-				return ImmutableMap.of("errors", errors, "data", notificationForm.toMap());
+				return ImmutableMap.of("formErrors", errors, "data", notificationForm.toMap());
 			}
 			
 		}
 		
 		// Unread notifications
 		@GET @Path("/")
-		public Map<String, ?> getUnreadNotifications(@Form GetNotificationForm notificationForm) {
+		public Map<String, ?> getUnreadNotifications(@Form GetNotificationForm notificationForm,
+													 @QueryParam("userId") String userId) {
 			
-			return getNotifications(notificationForm, false);
+			return getNotifications(notificationForm, false, userId);
 			
 		}
 
 		// Read notifications
 		@GET @Path("/archive")
-		public Map<String, ?> getReadNotifications(@Form GetNotificationForm notificationForm) {
+		public Map<String, ?> getReadNotifications(@Form GetNotificationForm notificationForm,
+												   @QueryParam("userId") String userId) {
 			
-			return getNotifications(notificationForm, true);
+			return getNotifications(notificationForm, true, userId);
 			
 		}
 		
 		// Individual notification
 		@GET @Path("/{id}")
-		public Map<String, ?> getNotification(@PathParam("id") int id) {
+		public Map<String, ?> getNotification(@PathParam("id") int id,
+											  @QueryParam("userId") String userId) {
 			
-			currentUser = getUser();
+			try {
+				currentUser = validateUserOrApiUser(userId);
+			} catch (Exception e) {
+				return ImmutableMap.of("error", e.getMessage());
+			}
+			
 			Notification notification = NotificationQuery.get(id);
 			
 			if (notification != null) {
 				return notification.toMap();
 			} else {
-				return ImmutableMap.of("errors", "Could not find a notification with id " + id);
+				return ImmutableMap.of("error", "Could not find a notification with id " + id);
 			}
 			
 		}
@@ -84,18 +97,25 @@ public class NotificationsController extends ApplicationController {
 		@POST @Path("/")
 		public Map<String, ?> createNotification(@Form CreateNotificationForm notificationForm) {
 			
+			try {
+				validateGlobal();
+			} catch (Exception e) {
+				return ImmutableMap.of("error", e.getMessage());
+			}
+			
 			ImmutableMap<String, List<String>> errors = notificationForm.validate();
 
 			if (errors.isEmpty()) {
 				notificationForm.handle();
-				return ImmutableMap.of("redirectTo", "dashboard/notifications");
+				return ImmutableMap.of("success", true);
 			} else {
-				return ImmutableMap.of("errors", errors, "data", notificationForm.toMap());
+				return ImmutableMap.of("formErrors", errors, "data", notificationForm.toMap());
 			}
 			
 		}
 		
 		// Update
+		// *TODO* validate permissions
 		@PUT @Path("/{id}")
 		public ImmutableMap<String, String> markNotificationAsRead(@PathParam("id") int id, @QueryParam("read") boolean read) {
 	
@@ -103,9 +123,9 @@ public class NotificationsController extends ApplicationController {
 			
 			ImmutableMap<String, String> error;
 			if (read == true) {
-				error = ImmutableMap.of("errors", "Could not mark notification as read");
+				error = ImmutableMap.of("formErrors", "Could not mark notification as read");
 			} else {
-				error = ImmutableMap.of("errors", "Could not mark notification as unread");
+				error = ImmutableMap.of("formErrors", "Could not mark notification as unread");
 			}
 			
 			try {

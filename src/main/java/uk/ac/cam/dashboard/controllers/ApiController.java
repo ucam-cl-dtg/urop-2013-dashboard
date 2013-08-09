@@ -20,6 +20,8 @@ import com.google.common.collect.ImmutableMap;
 @Produces(MediaType.APPLICATION_JSON)
 public class ApiController extends ApplicationController {
 	
+	/* TODO Validation */
+	
 	// Creation
 	
 	@GET @Path("/")
@@ -55,7 +57,8 @@ public class ApiController extends ApplicationController {
 		return ImmutableMap.of("key", api.getKey());
 	}
 	
-	// Verification
+	// Does not require verification
+	// Excluded from API filter
 	
 	@GET @Path("/type/{key}")
 	public static Map<String, String> checkApiKeyType(@PathParam("key") String key) {

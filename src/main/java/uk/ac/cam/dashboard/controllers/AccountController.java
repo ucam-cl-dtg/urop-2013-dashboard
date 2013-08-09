@@ -31,43 +31,33 @@ public class AccountController extends ApplicationController {
 
 	// Get current user from raven session
 	private User currentUser;
-	private Permissions currentPermissions;
 
 	@GET
 	@Path("/")
 	public Map<String, ?> getAccountSettings(@QueryParam("userId") String userId) {
 		
-		currentPermissions = getPermissions();
-		
-		if (currentPermissions == Permissions.GLOBAL) {
-			if (userId != null) {
-				currentUser = getSpecifiedUser(userId);
-				if (currentUser != null) {
-					return ImmutableMap.of("user", currentUser.getSettings(), "sidebar", getSidebarLinkHierarchy(currentUser));
-				} else {
-					return ImmutableMap.of("error", "Could not find settings for user " + currentUser.getCrsid());
-				}
-			} else {
-				return ImmutableMap.of("error", "Cannot get account settings for a global key");
-			}
-		} else if (currentPermissions == Permissions.USER) {
-			currentUser = getUser();
-			if (currentUser != null) {
-				return ImmutableMap.of("user", currentUser.getSettings(), "sidebar", getSidebarLinkHierarchy(currentUser));
-			} else {
-				return ImmutableMap.of("error", "Could not find settings for user " + currentUser.getCrsid());
-			}
-		} else {
-			return ImmutableMap.of("error", "Could not validate permissions");
+		try {
+			currentUser = validateUserOrApiUser(userId);
+		} catch (Exception e) {
+			return ImmutableMap.of("error", e.getMessage());
 		}
 		
+		return ImmutableMap.of("user", currentUser.getSettings(), "sidebar", getSidebarLinkHierarchy(currentUser));
+
 	}
 
 	@PUT @Path("/")
 	public Map<String, ?> changeAccountSettings(@QueryParam("signups") Boolean signups,
 												@QueryParam("questions") Boolean questions,
-												@QueryParam("handins") Boolean handins) {
-		currentUser = getUser();
+												@QueryParam("handins") Boolean handins,
+												@QueryParam("userId") String userId) {
+		
+		try {
+			currentUser = validateUserOrApiUser(userId);
+		} catch (Exception e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
+		
 		Session session = HibernateUtil.getTransactionSession();
 		Settings newUserSettings = currentUser.getSettings();
 		
@@ -80,10 +70,10 @@ public class AccountController extends ApplicationController {
 			session.save(newUserSettings);
 			session.update(currentUser);
 		} catch (Exception e) {
-			return ImmutableMap.of("errors", e.getMessage());
+			return ImmutableMap.of("error", e.getMessage());
 		}
 		
-		return ImmutableMap.of("redirectTo", "dasboard/account");
+		return ImmutableMap.of("success", true);
 	}
 		
 	private List<Object> getSidebarLinkHierarchy(User user) {
@@ -94,11 +84,11 @@ public class AccountController extends ApplicationController {
 		
 		// Dashboard
 		List<Object> dashboard = new LinkedList<Object>();
-		dashboard.add(ImmutableMap.of("name", "Home", "link", "dashboard", "icon", "icon-globe", "iconType", 1, "notificationCount", 2));
-		dashboard.add(ImmutableMap.of("name", "Notifications", "link", "dashboard/notifications", "icon", "icon-newspaper", "iconType", 1, "notificationCount", 2));
-		dashboard.add(ImmutableMap.of("name", "Deadlines","link", "dashboard/deadlines", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 2));
-		dashboard.add(ImmutableMap.of("name", "Groups", "link", "dashboard/groups", "icon", "icon-users", "iconType", 1, "notificationCount", 2));
-		dashboard.add(ImmutableMap.of("name", "Supervisor Homepage", "link", "dashboard/supervisor", "icon", "icon-users", "iconType", 1, "notificationCount", 2));
+		dashboard.add(ImmutableMap.of("name", "Home", "link", "/dashboard/dashboard", "icon", "icon-globe", "iconType", 1, "notificationCount", 2));
+		dashboard.add(ImmutableMap.of("name", "Notifications", "link", "/dashboard/notifications", "icon", "icon-newspaper", "iconType", 1, "notificationCount", 2));
+		dashboard.add(ImmutableMap.of("name", "Deadlines", "link", "/dashboard/deadlines", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 2));
+		dashboard.add(ImmutableMap.of("name", "Groups", "link", "/dashboard/groups", "icon", "icon-users", "iconType", 1, "notificationCount", 2));
+		dashboard.add(ImmutableMap.of("name", "Supervisor Homepage", "/dashboard/link", "supervisor", "icon", "icon-users", "iconType", 1, "notificationCount", 2));
 		sidebar.add(ImmutableMap.of("name", "Dashboard", "links", dashboard, "icon", "a", "iconType", 2, "notificationCount", 2));
 		
 		// Signups
