@@ -5,7 +5,7 @@
  * @param user
  * @param deadlines
  * @param userNotifications
- * @param calendar
+ * 
  */
 {template .index}
    
@@ -114,20 +114,6 @@
         	 		{param read: $userNotifications.read /}
         		{/call}
         	</div>
-        </section>
-        <section>
-            <p class="title" data-section-title><a><i class="icon icon-calendar"></i></a></p>
-            <div class="content" data-section-content>
-                <p>Calendar</p>
-                
-                {foreach $month in $calendar}
-                	{$month.month}
-                	{foreach $deadline in $month.deadlines}
-                		{$deadline.name}
-                	{/foreach}
-                {/foreach}
-                
-            </div>
         </section>
     </div>
         

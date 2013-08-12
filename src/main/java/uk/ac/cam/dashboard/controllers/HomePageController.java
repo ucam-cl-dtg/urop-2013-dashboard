@@ -55,17 +55,6 @@ public class HomePageController extends ApplicationController{
 		GetNotificationForm notificationForm = new GetNotificationForm();
 		notificationForm.validate();
 		
-		// Get deadlines for each month
-		List<ImmutableMap<String, ?>> calendar =new ArrayList<ImmutableMap<String, ?>>();
-		
-//		for(int i=0; i<12;i++){
-//			DeadlineQuery dq = DeadlineQuery.set();
-//			dq.byUser(currentUser);
-//			dq.byMonth(i);
-//			calendar.add(ImmutableMap.of("month", i, "deadlines", dq.setList()));
-//			System.out.println("Added " + dq.setList().size() + " deadlines to month " + i);
-//		}
-		
 		return ImmutableMap.of("user", userData, "deadlines", currentUser.deadlinesToMap(), "userNotifications", notificationForm.handle(currentUser, false));
 	}
 	

@@ -40,7 +40,6 @@ public class Deadline implements Mappable {
 	private String message;
 	private String url;
 	
-	//@Temporal(TemporalType.TIMESTAMP)
 	private Calendar datetime;
 
 	@OneToMany(mappedBy = "deadline", cascade = CascadeType.ALL, orphanRemoval=true)
@@ -82,15 +81,6 @@ public class Deadline implements Mappable {
 		SimpleDateFormat tf = new SimpleDateFormat("HH:mm");
 		return df.format(datetime.getTime()) + " at " + tf.format(datetime.getTime());
 	}
-	public Map<String, ?> getDateMap() { 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
-		SimpleDateFormat minuteFormat = new SimpleDateFormat("mm");
-		String dateString = dateFormat.format(datetime.getTime());
-		String hourString = hourFormat.format(datetime.getTime());
-		String minuteString = minuteFormat.format(datetime.getTime());	
-		return ImmutableMap.of("date", dateString, "hour", hourString, "minute", minuteString);
-	}
 	
 	public User getOwner() { return this.owner; }
 	public void setOwner(User owner) { this.owner= owner; }
@@ -115,7 +105,39 @@ public class Deadline implements Mappable {
 	  	return deadline;
 	}
 	
-	// Map builder
+	// toMap
+	public Map<String, ?> dateToMap() { 
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
+		SimpleDateFormat minuteFormat = new SimpleDateFormat("mm");
+		String dateString = dateFormat.format(datetime.getTime());
+		String hourString = hourFormat.format(datetime.getTime());
+		String minuteString = minuteFormat.format(datetime.getTime());	
+		return ImmutableMap.of("date", dateString, "hour", hourString, "minute", minuteString);
+	}
+	
+	public List<ImmutableMap<String, ?>> usersToMap(){
+		
+		List<ImmutableMap<String, ?>> deadlineUsers =new ArrayList<ImmutableMap<String, ?>>();
+		
+		for(DeadlineUser du : users){
+			String crsid = du.getUser().getCrsid();
+			
+			String name;
+			LDAPUser u = null;
+			try {
+				u = LDAPQueryManager.getUser(crsid);
+				name = u.getcName();
+			} catch(LDAPObjectNotFoundException e){
+				name = "Unknown user";
+			}
+			
+			deadlineUsers.add(ImmutableMap.of("crsid", crsid, "name", name, "complete", du.getComplete()));
+		}
+		
+		return deadlineUsers;
+	}
+	
 	@Override
 	public Map<String, ?> toMap() {
 		
@@ -155,7 +177,7 @@ public class Deadline implements Mappable {
 			int completePercent = (totalComplete*100)/users.size();			
 			builder = builder
 					.put("datetime", getFormattedDate())
-					.put("date", getDateMap())
+					.put("date", dateToMap())
 					.put("users", deadlineUsers)
 					.put("pComplete", completePercent);
 				
@@ -169,33 +191,11 @@ public class Deadline implements Mappable {
 					.put("url", "")
 					.put("owner", "")
 					.put("datetime", getFormattedDate())
-					.put("date", getDateMap())
+					.put("date", dateToMap())
 					.put("users", "");
 			return builder.build();
 		}
 		return builder.build();
-	}
-	
-	public List<ImmutableMap<String, ?>> usersToMap(){
-		
-		List<ImmutableMap<String, ?>> deadlineUsers =new ArrayList<ImmutableMap<String, ?>>();
-		
-		for(DeadlineUser du : users){
-			String crsid = du.getUser().getCrsid();
-			
-			String name;
-			LDAPUser u = null;
-			try {
-				u = LDAPQueryManager.getUser(crsid);
-				name = u.getcName();
-			} catch(LDAPObjectNotFoundException e){
-				name = "Unknown user";
-			}
-			
-			deadlineUsers.add(ImmutableMap.of("crsid", crsid, "name", name, "complete", du.getComplete()));
-		}
-		
-		return deadlineUsers;
 	}
 	
 }

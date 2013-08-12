@@ -19,6 +19,7 @@ import org.hibernate.Session;
 
 import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
+import uk.ac.cam.cl.dtg.ldap.LDAPUser;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
@@ -65,6 +66,17 @@ public class User {
 	
 	public String getUsername() {return username;}
 	public void setUsername(String username) {this.username = username;}
+	public String getName() {
+		if(this.username==null){
+			try {
+				LDAPUser u = LDAPQueryManager.getUser(crsid);
+				this.username = u.getcName();
+			} catch(LDAPObjectNotFoundException e){
+				this.username = "Anonnymous";
+			}			
+		}
+		return this.username;
+	}
 	
 	public Set<DeadlineUser> getDeadlines() { return deadlines; }
 	public void clearDeadlines() { deadlines.clear(); }
@@ -108,17 +120,6 @@ public class User {
 	  	}
 		
 		return user;
-	}
-	
-	public String getName() {
-		
-  		try {
-  			String name = LDAPQueryManager.getUser(crsid).getcName();
-  			return name;
-  		} catch(LDAPObjectNotFoundException e){
-  			return "Unknown user";
-  		}
-  		
 	}
 	
 	// Maps

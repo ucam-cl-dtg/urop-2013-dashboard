@@ -83,20 +83,6 @@ public class DeadlineQuery {
 	return this;
 	}
 	
-	public DeadlineQuery byMonth(int month){
-		log.debug("Getting Deadlines in month: " + month);	
-		Calendar start = Calendar.getInstance();
-		Calendar end = Calendar.getInstance();
-		start.set(Calendar.MONTH, month);
-		start.set(Calendar.DAY_OF_MONTH, 1);
-		end.set(Calendar.MONTH, month);
-		end.set(Calendar.DAY_OF_MONTH, end.getActualMaximum(Calendar.DAY_OF_MONTH));
-		criteria.createAlias("deadline", "d")
-		.addOrder(Order.asc("d.datetime"))
-		.add(Restrictions.between("d.datetime",start, end));
-		return this;
-	}
-	
 	public DeadlineQuery isRead(boolean read) {
 		criteria.createAlias("users", "nu")
 				.add(Restrictions.eq("nu.read", true));
