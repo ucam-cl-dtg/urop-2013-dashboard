@@ -109,7 +109,7 @@ public class GetNotificationForm {
 		}
 		
 		// Section
-		String[] validSections = {"dashboard", "signups", "handins", "events"}; // Shared with CreateNotificationForm
+		String[] validSections = {"dashboard", "signups", "questions", "handins"}; // Shared with CreateNotificationForm
 		if (section != null && !section.equals("") && !Arrays.asList(validSections).contains(section)) {
 			errors.put("section", "Invalid section field.");
 		}

@@ -9,7 +9,7 @@
 		<div class="row" id="{$notification.id}">
 			<div class="columns large-9 small-8 module-loader" data-target="{$notification.link}">
 				<div>{$notification.message}</div>
-				<div>Section: {$notification.section} | Time: {$notification.timestamp}</div>
+				<div class="notification-info"><i class="icon icon-globe"></i>&nbsp;&nbsp;{$notification.section} &nbsp;&nbsp; <span class="websymbols-icon">P</span> {$notification.timestamp}</div>
 			</div>
 			<div class="columns large-3 small-4 text-right mark-notification-as-read" data-notification-target="{$notification.id}">
 				{if $notification.read}

@@ -124,7 +124,7 @@ public class DeadlinesController extends ApplicationController {
 
 	  	session.delete(d);
 		
-		return ImmutableMap.of("success", true, "id", id);
+		return ImmutableMap.of("redirectTo", "dashboard/deadlines", "id", id);
 		
 	}
 	
