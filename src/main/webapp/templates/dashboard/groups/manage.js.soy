@@ -113,7 +113,7 @@
                 <div class="columns large-2 small-4 field-label">Group members</div>
                 <div class="columns large-10 small-8">
                     {if $errors != 'undefined' and $errors.users}<label class="error">Error</label>{/if}
-                    <input type="text" class="user-token-input {if $errors != 'undefined' and $errors.users}error{/if}" name="users" data-prepopulate='{lb}"users":[{foreach $user in $group.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'/>                   
+                    <input type="text" class="group-user-token-input {if $errors != 'undefined' and $errors.users}error{/if}" name="users" data-prepopulate='{lb}"users":[{foreach $user in $group.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'/>                   
                  	{if $errors != 'undefined' and $errors.users}<small class="error">{$errors.users}</small>{/if} 
                 </div>
             </div>

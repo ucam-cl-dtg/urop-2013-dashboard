@@ -60,6 +60,8 @@ public class DeadlineForm {
 		Set<User> userSet = createUserSet();
 		Set<DeadlineUser> deadlineUsers = saveDeadlineUsers(userSet, deadline);
 		
+		System.out.println("ok so far");
+		
 		Set<Group> groupList = new HashSet<Group>();
 		for(String s : parseGroups()){
 			groupList.add(GroupQuery.get(Integer.parseInt(s)));
@@ -130,12 +132,12 @@ public class DeadlineForm {
 		}	
 		
 		// message (optional)
-		if(!(message.equals("")||message==null)){
+		if((message.equals("")||message==null)){
 			message = Strings.DEADLINE_NOMESSAGE;
 		} 
 		
 		// url (optional)
-		if(!(url.equals("")||url==null)){
+		if((url.equals("")||url==null)){
 			url = Strings.DEADLINE_NOURL;
 		} 
 		

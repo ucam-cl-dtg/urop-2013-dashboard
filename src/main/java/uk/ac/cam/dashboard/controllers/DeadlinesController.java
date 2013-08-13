@@ -87,7 +87,7 @@ public class DeadlinesController extends ApplicationController {
 		
 		if(errors.isEmpty()){
 			int id = deadlineForm.handleCreate(currentUser);
-			return ImmutableMap.of("redirectTo", "dashboard/deadlines/"+id);
+			return ImmutableMap.of("redirectTo", "deadlines/"+id);
 		} else {
 			return ImmutableMap.of("deadline", deadlineForm.toMap(-1), "errors", actualErrors);
 		}
@@ -108,7 +108,7 @@ public class DeadlinesController extends ApplicationController {
 		
 		if(errors.isEmpty()){
 			deadlineForm.handleUpdate(currentUser, id);
-			return ImmutableMap.of("redirectTo", "dashboard/deadlines/"+id);
+			return ImmutableMap.of("redirectTo", "deadlines/"+id);
 		} else {
 			return ImmutableMap.of("errors", actualErrors, "deadlineEdit", deadlineForm.toMap(id), "target", "edit");
 		}
@@ -180,9 +180,7 @@ public class DeadlinesController extends ApplicationController {
 		ArrayList<ImmutableMap<String,?>> matches = new ArrayList<ImmutableMap<String, ?>>();
 		
 		for(Group g : currentUser.getGroups()){
-			if(g.getTitle().contains(x)){
 				matches.add(ImmutableMap.of("group_id", g.getId(), "group_name", g.getTitle()));
-			}
 		}
 		
 		return matches;

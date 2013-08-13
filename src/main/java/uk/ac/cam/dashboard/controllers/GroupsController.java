@@ -61,14 +61,14 @@ public class GroupsController extends ApplicationController {
 			ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
 			
 			if(errors.isEmpty()){
-				groupForm.handle(currentUser);
-				return ImmutableMap.of("redirectTo", "dashboard/groups/");
+				int id = groupForm.handle(currentUser);
+				return ImmutableMap.of("redirectTo", "groups/"+id);
 			} else {
 				return ImmutableMap.of("group", groupForm.toMap(-1), "errors", actualErrors);
 			}
 		}
 		
-		// Import from LDAP
+		// Import 
 		@POST @Path("/import") 
 		public Map<String, ?> importGroup(@Form GroupForm groupForm) throws Exception {
 			currentUser = getUser();
@@ -77,8 +77,8 @@ public class GroupsController extends ApplicationController {
 			ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
 			
 			if(errors.isEmpty()){
-				groupForm.handleImport(currentUser);
-				return ImmutableMap.of("redirectTo", "dashboard/supervisor/");
+				int id = groupForm.handleImport(currentUser);
+				return ImmutableMap.of("redirectTo", "supervisor/"+id);
 			} else {
 				return ImmutableMap.of("group", groupForm.toMap(-1), "errors", actualErrors);
 			}
@@ -104,7 +104,7 @@ public class GroupsController extends ApplicationController {
 				users = new ArrayList<HashMap<String, String>>();
 			}
 			
-			return ImmutableMap.of("group", group.toMap(), "groupEdits", group.toMap(), "errors", "undefined", "users", users);
+			return ImmutableMap.of("group", group.toMap(),"errors", "undefined", "users", users);
 		}
 		
 		// Update
@@ -119,7 +119,7 @@ public class GroupsController extends ApplicationController {
 				groupForm.handleUpdate(currentUser, id);
 				return ImmutableMap.of("redirectTo", "dashboard/groups/"+id);
 			} else {
-				return ImmutableMap.of("groupEdits", groupForm.toMap(id), "errors", actualErrors);
+				return ImmutableMap.of("group", groupForm.toMap(id), "errors", actualErrors);
 			}
 		}
 		
