@@ -47,7 +47,17 @@ public class NotificationQuery {
 			.setParameter("id", id)
 			.uniqueResult();
 			
-			return n;
+		return n;
+	}
+	
+	public static NotificationUser getNU(int id) {
+		Session session = HibernateUtil.getTransactionSession();
+		NotificationUser nu = (NotificationUser) session
+			.createQuery("from NotificationUser where id = :id")
+			.setParameter("id", id)
+			.uniqueResult();
+			
+		return nu;
 	}
 	
 	public NotificationQuery byNotification(Notification notification) {

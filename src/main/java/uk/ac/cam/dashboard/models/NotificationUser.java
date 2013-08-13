@@ -52,32 +52,9 @@ public class NotificationUser implements Mappable{
 	public boolean getRead() { return read; }
 	public void setRead(boolean read) { this.read = read; }
 	
-	public static boolean markAsRead(User user, int notificationId){
-		
-		Notification notification = NotificationQuery.get(notificationId);
-		
-		NotificationQuery nq = NotificationQuery.all();
-		nq.byUser(user);
-		nq.byNotification(notification);
-		
-		NotificationUser nu = nq.uniqueResult();
-		
-		Session session = HibernateUtil.getTransactionSession();
-		nu.setRead(true);
-		session.update(nu);
-		
-		return nu.getRead();
-	}
-	
 	public static boolean markAsReadUnread(User user, int notificationId, boolean read) {
 		
-		Notification notification = NotificationQuery.get(notificationId);
-		
-		NotificationQuery nq = NotificationQuery.all();
-		nq.byUser(user);
-		nq.byNotification(notification);
-		
-		NotificationUser nu = nq.uniqueResult();
+		NotificationUser nu = NotificationQuery.getNU(notificationId);
 		
 		Session session = HibernateUtil.getTransactionSession();
 		nu.setRead(read);

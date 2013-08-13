@@ -7,7 +7,10 @@
 	{foreach $notification in $notifications}
 	<li class="notification-feed-item">
 		<div class="row" id="{$notification.id}">
-			<div class="columns large-9 small-8">Message: {$notification.message} | Section: {$notification.section} | Link: {$notification.link} | Read: {$notification.read} | Time: {$notification.timestamp}</div>
+			<div class="columns large-9 small-8 module-loader" data-target="{$notification.link}">
+				<div>{$notification.message}</div>
+				<div>Section: {$notification.section} | Time: {$notification.timestamp}</div>
+			</div>
 			<div class="columns large-3 small-4 text-right mark-notification-as-read" data-notification-target="{$notification.id}">
 				{if $notification.read}
 					<a class="mark-as-unread">Mark as unread</a>
