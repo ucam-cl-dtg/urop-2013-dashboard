@@ -81,7 +81,7 @@
  */
 {template .edit }
     
-    <form class="custom" id="editDeadlineForm" method="post" action="/dashboard/api/dashboard/deadlines/{$deadline.id}">
+    <form class="custom" id="editDeadlineForm" method="post" action="{$ij.path}deadlines/{$deadline.id}">
         <div class="row">
             <div class="columns large-2 small-4 field-label">Deadline name</div>
             <div class="columns large-10 small-8">

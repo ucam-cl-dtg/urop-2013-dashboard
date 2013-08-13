@@ -141,7 +141,6 @@ public class GroupsController extends ApplicationController {
 		@POST @Path("/queryCRSID")
 		public List<HashMap<String, String>> queryCRSId(@FormParam("q") String x) {
 			
-			// Perform LDAP search
 			List<HashMap<String, String>> matches = null;
 			try {
 				matches = LDAPPartialQuery.partialUserByCrsid(x);
@@ -173,7 +172,6 @@ public class GroupsController extends ApplicationController {
 		@POST @Path("/queryGroup")
 		public List<HashMap<String, String>> queryGroup(@FormParam("q") String x) {
 			
-			// Perform LDAP search
 			List<HashMap<String, String>> matches = null;
 			try {
 				matches = LDAPPartialQuery.partialGroupByName(x);

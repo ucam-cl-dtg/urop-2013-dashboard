@@ -1,10 +1,12 @@
 package uk.ac.cam.dashboard.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -15,7 +17,11 @@ import javax.ws.rs.core.MediaType;
 
 import org.hibernate.Session;
 import org.jboss.resteasy.annotations.Form;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
+import uk.ac.cam.cl.dtg.ldap.LDAPPartialQuery;
 import uk.ac.cam.dashboard.exceptions.AuthException;
 import uk.ac.cam.dashboard.forms.DeadlineForm;
 import uk.ac.cam.dashboard.models.Deadline;
@@ -32,6 +38,9 @@ import com.google.common.collect.ImmutableMap;
 @Path("/api/deadlines")
 @Produces(MediaType.APPLICATION_JSON)
 public class DeadlinesController extends ApplicationController {
+	
+	// Create the logger
+	private static Logger log = LoggerFactory.getLogger(GroupsController.class);
 	
 	private User currentUser;
 	
@@ -143,20 +152,33 @@ public class DeadlinesController extends ApplicationController {
 		return d.toMap();
 	}
 	
-	// Find groups AJAX
+	// Find users by crsid
+	@POST @Path("/queryCRSID")
+	public List<HashMap<String, String>> queryCRSId(@FormParam("q") String x) {
+		
+		List<HashMap<String, String>> matches = null;
+		try {
+			matches = LDAPPartialQuery.partialUserByCrsid(x);
+		} catch (LDAPObjectNotFoundException e){
+			log.error("Error performing LDAPQuery: " + e.getMessage());
+			return new ArrayList<HashMap<String, String>>();
+		}
+		
+		return matches;
+	}
+	
+	// Find groups
 	@POST @Path("/queryGroup")
-	public List<ImmutableMap<String, ?>> queryCRSID(String q) {
-		currentUser = getUser();
+	public List<ImmutableMap<String, ?>> queryCRSID(@FormParam("q") String x) {
 		
-		//Remove q= prefix
-		String x = q.substring(2);
-		System.out.println("test");
-		System.out.println(x);
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return new ArrayList<ImmutableMap<String, ?>>();
+		}
 		
-		//List of group matches
 		ArrayList<ImmutableMap<String,?>> matches = new ArrayList<ImmutableMap<String, ?>>();
 		
-		//Get matching group names.. is this too slow? 
 		for(Group g : currentUser.getGroups()){
 			if(g.getTitle().contains(x)){
 				matches.add(ImmutableMap.of("group_id", g.getId(), "group_name", g.getTitle()));

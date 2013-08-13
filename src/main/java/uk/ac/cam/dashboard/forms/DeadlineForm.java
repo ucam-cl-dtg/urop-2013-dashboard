@@ -57,18 +57,18 @@ public class DeadlineForm {
 		
 		session.save(deadline);
 		
-		Set<DeadlineUser> deadlineUsers = createUserSet(deadline);
+		Set<User> userSet = createUserSet();
+		Set<DeadlineUser> deadlineUsers = saveDeadlineUsers(userSet, deadline);
 		
-		//TODO: Add groups
-//		Set<Group> groupList = new HashSet<Group>();
-//		for(String s : parseGroups()){
-//			groupList.add(GroupQuery.get(Integer.parseInt(s)));
-//		}
-//		
-//		for(Group g : groupList){
-//			Set<DeadlineUser> groupUsers = createUserSet(deadline);
-//			deadlineUsers.addAll(groupUsers);
-//		}
+		Set<Group> groupList = new HashSet<Group>();
+		for(String s : parseGroups()){
+			groupList.add(GroupQuery.get(Integer.parseInt(s)));
+		}
+		
+		for(Group g : groupList){
+			Set<User> groupUsers = g.getUsers();
+			deadlineUsers.addAll(saveDeadlineUsers(groupUsers, deadline));
+		}
 
 		return deadline.getId();			
 	}
@@ -86,18 +86,18 @@ public class DeadlineForm {
 		deadline.setMessage(message);
 		deadline.setURL(url);
 		
-		Set<DeadlineUser> deadlineUsers = createUserSet(deadline);
+		Set<User> userSet = createUserSet();
+		Set<DeadlineUser> deadlineUsers = saveDeadlineUsers(userSet, deadline);
 		
-		//TODO: Add groups
-//		Set<Group> groupList = new HashSet<Group>();
-//		for(String s : parseGroups()){
-//			groupList.add(GroupQuery.get(Integer.parseInt(s)));
-//		}
-//		
-//		for(Group g : groupList){
-//			Set<DeadlineUser> groupUsers = createUserSet(deadline);
-//			deadlineUsers.addAll(groupUsers);
-//		}
+		Set<Group> groupList = new HashSet<Group>();
+		for(String s : parseGroups()){
+			groupList.add(GroupQuery.get(Integer.parseInt(s)));
+		}
+		
+		for(Group g : groupList){
+			Set<User> groupUsers = g.getUsers();
+			deadlineUsers.addAll(saveDeadlineUsers(groupUsers, deadline));
+		}
 		
 		deadline.clearUsers();
 		deadline.setUsers(deadlineUsers);
@@ -161,9 +161,15 @@ public class DeadlineForm {
 	
 	public Calendar parseDate(){
 		
+		if(date==""||date==null){
+			return Calendar.getInstance();
+		}
+		
 		String datetime = date+ " " + hour + ":" + minute;
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		
 		
 		try {
 			cal.setTime(sdf.parse(datetime));
@@ -199,14 +205,25 @@ public class DeadlineForm {
 		else { return new String[0]; }
 	}
 	
-	public Set<DeadlineUser> createUserSet(Deadline deadline){
+	public Set<User> createUserSet(){
+
+		Set<User> userSet = new HashSet<User>();
+		for(String c : parseUsers()){
+			User user = User.registerUser(c);
+			if(user!=null){
+				userSet.add(user);
+			}
+		}
+		return userSet;
+	}
+	
+	public Set<DeadlineUser> saveDeadlineUsers(Set<User> userSet, Deadline deadline){
 		Session session = HibernateUtil.getTransactionSession();
 
 		Set<DeadlineUser> deadlineUsers = new HashSet<DeadlineUser>();
-		for(String c : parseUsers()){
-			User user = User.registerUser(c);
-			if(user!=null) { 
-				DeadlineUser d = new DeadlineUser(user, deadline);
+		for(User u : userSet){
+			if(u!=null) { 
+				DeadlineUser d = new DeadlineUser(u, deadline);
 				session.save(d);
 				deadlineUsers.add(d);
 			}

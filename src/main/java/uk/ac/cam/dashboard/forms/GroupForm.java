@@ -76,7 +76,7 @@ public class GroupForm {
 		Group group = new Group(currentUser, title);
 
 		Set<User> groupMembers = new HashSet<User>();
-		for(String c : parseUsers()){
+		for(String c : members){
 			User user = User.registerUser(c);
 			if(user!=null) { groupMembers.add(user); }
 		}	

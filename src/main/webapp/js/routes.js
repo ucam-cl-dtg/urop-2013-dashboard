@@ -24,6 +24,7 @@ function supportRedirect(templateName) {
     };
 }
 
+var SOY_GLOBALS = {path:BASE_PATH};
 
 $(document).ready(function() {
     router = Router({
