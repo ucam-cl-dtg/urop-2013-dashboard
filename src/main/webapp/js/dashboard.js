@@ -27,11 +27,13 @@ moduleScripts['dashboard'] = {
 		],
 		'manage' : [
 			editGroup,
-//			userTokenInput,		
+			gUserTokenInput,
+			tokenInputType
 		],
 		'edit' : [
 			editGroup,
-//			userTokenInput
+			gUserTokenInput,
+			tokenInputType
 		]
 	},
 	'deadlines' : {
@@ -42,13 +44,15 @@ moduleScripts['dashboard'] = {
 			editDeadline,
 			applyDatepicker,
 			dUserTokenInput,
-			dGroupTokenInput
+			dGroupTokenInput,
+			tokenInputType
 		],
 		'edit' : [
 			editDeadline,
 			applyDatepicker,
 			dUserTokenInput,
-			dGroupTokenInput
+			dGroupTokenInput,
+			tokenInputType
 		]
 	},
 	'supervisor' : {
@@ -62,7 +66,6 @@ moduleScripts['dashboard'] = {
 	        dUserTokenInput,
 			dGroupTokenInput,
 			gUserTokenInput,
-//			gUserSurnameTokenInput,
 			gGroupTokenInput,
 			tokenInputType
 		],
@@ -76,13 +79,14 @@ moduleScripts['dashboard'] = {
 			createDeadline,	
 	        applyDatepicker,
 			dUserTokenInput,
-			dGroupTokenInput
+			dGroupTokenInput,
+			tokenInputType
 		],
 		'newgroup' : [
 			createGroup,	
 	        applyDatepicker,
 			gUserTokenInput,
-//			gUserSurnameTokenInput,
+			tokenInputType
 		], 
 		'importgroup' : [
 		    importGroup,

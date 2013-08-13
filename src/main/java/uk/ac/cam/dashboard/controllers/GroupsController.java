@@ -135,7 +135,7 @@ public class GroupsController extends ApplicationController {
 			
 			return ImmutableMap.of("success", true, "id", id);
 			
-		}
+		}		
 		
 		// Find users by crsid
 		@POST @Path("/queryCRSID")

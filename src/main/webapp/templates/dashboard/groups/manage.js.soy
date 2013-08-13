@@ -110,6 +110,13 @@
                 </div>
             </div>
             <div class="row">
+            <div class="columns large-2 small-4 field-label"></div>
+            <div class="columns large-10 small-8">
+                <input type="radio" class="token-type-radio" value="crsid" name="lookup-type" checked/> By Crsid &nbsp; &nbsp;
+                <input type="radio" class="token-type-radio" value="surname" name="lookup-type"/> By Surname
+            </div>
+        	</div>	
+            <div class="row">
                 <div class="columns large-2 small-4 field-label">Group members</div>
                 <div class="columns large-10 small-8">
                     {if $errors != 'undefined' and $errors.users}<label class="error">Error</label>{/if}

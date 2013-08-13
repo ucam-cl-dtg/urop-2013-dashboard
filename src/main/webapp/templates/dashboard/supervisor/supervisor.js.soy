@@ -315,7 +315,13 @@
             <div class="columns large-2 small-4 field-label">Recipients</div>
         </div>
          <!-- START ADD USERS AS RECIPIENTS -->
-
+        <div class="row">
+            <div class="columns large-2 small-4 field-label"></div>
+            <div class="columns large-10 small-8">
+                <input type="radio" class="token-type-radio" value="crsid" name="lookup-type" checked/> By Crsid &nbsp; &nbsp;
+                <input type="radio" class="token-type-radio" value="surname" name="lookup-type"/> By Surname
+            </div>
+        </div>		
         <div class="row">
                 <div class="columns large-2 small-4 field-label">Add users</div>
                 <div class="columns large-10 small-8">
@@ -324,7 +330,6 @@
                 {if $errors != 'undefined'  and $errors.users}<small class="error">{$errors.users}</small>{/if}
                 </div>
             </div>
-
          <!-- END ADD USERS AS RECIPIENTS -->
             
          <!-- START ADD GROUPS AS RECIPIENTS -->
@@ -368,8 +373,8 @@
             <div class="row">
                 <div class="columns large-2 small-4 field-label"></div>
                 <div class="columns large-10 small-8">
-                    <input type="radio" class="token-type-radio" value="crsid"/> By Crsid
-                    <input type="radio" class="token-type-radio" value="surname"/> By Surname
+                    <input type="radio" class="token-type-radio" value="crsid" name="lookup-type" checked/> By Crsid &nbsp; &nbsp;
+                    <input type="radio" class="token-type-radio" value="surname" name="lookup-type"/> By Surname
                 </div>
             </div>
             <div class="row">

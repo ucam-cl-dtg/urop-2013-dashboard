@@ -56,13 +56,6 @@ function dUserTokenInput() {
 	applyTokenInput("deadline-user-token-input", "user", "groups/queryCRSID", "crsid", "crsid", resultFormat, tokenFormat);
 }
 
-function gUserSurnameTokenInput() {
-	var resultFormat = function(item){ return "<li>" + "<div style='display: inline-block; padding-left: 10px;'><div class='full_name'>" + item.name + " (" + item.crsid + ")</div><div class='email'>" + item.crsid + "@cam.ac.uk</div></div></li>"; };
-	var tokenFormat = function(item) { return "<li><p>" + item.name + " (" + item.crsid + ")</p></li>"; };
-	
-	applyTokenInput("group-user-token-input", "user", "groups/querySurname", "crsid", "surname", resultFormat, tokenFormat);
-}
-
 function dGroupTokenInput() {
 	var resultFormat = function(item){ return "<li>" + "<div style='display: inline-block; padding-left: 10px;'><div class='full_name'>" + item.group_name + "</div></div></li>";};
 	var tokenFormat = function(item) { return "<li><p>" + item.group_name + "</p></li>"; };   
@@ -78,13 +71,18 @@ function gGroupTokenInput() {
 }
 
 function tokenInputType() {
-	$(".token-type-radio").click(function() {
-		var type = $(this).val();
-		alert(type);
-		if(type=="surname"){
-			//
-		} else {
-			//
+	var path = "groups/queryCRSID"; //default path
+	var property = "crsid";
+	$(".token-type-radio").change(function() {
+		var type = $(this).val();	
+		if(type=="crsid"){
+			path = "groups/queryCRSID";
+			property = "crsid";
+		} else if(type=="surname"){
+			path = "groups/querySurname";
+			property = "surname";
 		}
+		
+		$(this).parents("form").find("input[name='users']").tokenInput("setOptions", {url: prepareURL(path), propertyToSearch: property});
 	});
 }
