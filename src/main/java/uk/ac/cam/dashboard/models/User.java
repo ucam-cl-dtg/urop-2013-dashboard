@@ -1,6 +1,7 @@
 package uk.ac.cam.dashboard.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -14,14 +15,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 
 import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
 import uk.ac.cam.cl.dtg.ldap.LDAPUser;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
+import uk.ac.cam.dashboard.queries.UserQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.dashboard.util.Strings;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -53,8 +55,9 @@ public class User {
 	private Set<NotificationUser> notifications = new HashSet<NotificationUser>();
 	
 	public User() {}
-	public User(String crsid) {
+	public User(String crsid, Settings settings) {
 		this.crsid = crsid;
+		this.settings = settings;
 		this.username = this.getName();
 	}
 	
@@ -72,7 +75,7 @@ public class User {
 				LDAPUser u = LDAPQueryManager.getUser(crsid);
 				this.username = u.getcName();
 			} catch(LDAPObjectNotFoundException e){
-				this.username = "Anonnymous";
+				this.username = Strings.USER_NOUSERNAME;
 			}			
 		}
 		return this.username;
@@ -96,61 +99,71 @@ public class User {
 	
 	public static User registerUser(String crsid){
 
-		Session session = HibernateUtil.getTransactionSession();
-		
-		Query userQuery = session.createQuery("from User where id = :id").setParameter("id", crsid);
-	  	User user = (User) userQuery.uniqueResult();
+	  	UserQuery uq = UserQuery.all();
+	  	uq.byCrsid(crsid);
+	  	User user = uq.uniqueResult();
 	  	
-	  	// If user not in database, check if they exist in LDAP and create them if so
-	  	if(user==null){
-	  		
-	  		try {
-	  			LDAPQueryManager.getUser(crsid);
-	  		} catch(LDAPObjectNotFoundException e){
-	  			//User doesn't exit - return null
-	  			return null;
-	  		}
-	  		
+	  	if(user==null){	  		
+			try { LDAPQueryManager.getUser(crsid); } 
+			catch(LDAPObjectNotFoundException e){ return null;}
+			
+	  		Session session = HibernateUtil.getTransactionSession();
 	  		Settings s = new Settings();
-	  		session.save(s);
-	  		User newUser = new User(crsid);
-	  		newUser.setSettings(s);
-	  		session.save(newUser);
-	  		return newUser;
+	  		session.save(s);	
+	  		user = new User(crsid, s);
+	  		session.save(user);
 	  	}
 		
 		return user;
 	}
 	
-	// Maps
-	public Set<Map<String, ?>> groupsToMap() {
-		HashSet<Map<String, ?>> userGroups = new HashSet<Map<String, ?>>();
-		
-		if(groups==null){
-			return new HashSet<Map<String, ?>>();
+	public Map<String, String> getUserDetails(){
+
+		try {
+			LDAPUser user = LDAPQueryManager.getUser(crsid);
+			return user.getAll();
+		} catch (LDAPObjectNotFoundException e){
+			HashMap<String, String> defaultUser = new HashMap<String, String>();
+			
+			defaultUser.put("crsid", crsid);
+			defaultUser.put("name", username);
+			defaultUser.put("surname", Strings.USER_NOSURNAME);
+			defaultUser.put("email", Strings.USER_NOEMAIL);
+			defaultUser.put("institution", Strings.USER_NOINST);
+			defaultUser.put("status", Strings.USER_NOSTATUS);
+			defaultUser.put("photo", Strings.USER_NOPHOTO);
+
+			return defaultUser;
 		}
+		
+	}
+	
+	// Maps
+	public List<Map<String, ?>> groupsToMap() {
+		List<Map<String, ?>> userGroups = new ArrayList<Map<String, ?>>();
+
+		if(groups==null){ return new ArrayList<Map<String, ?>>();}
 		
 		for(Group g : groups)  {
 			userGroups.add(g.toMap());
 		}
+		
 		return userGroups;
 	}
 	
-	public Set<Map<String, ?>> subscriptionsToMap() {
-		HashSet<Map<String, ?>> userSubscriptions = new HashSet<Map<String, ?>>();
+	public List<Map<String, ?>> subscriptionsToMap() {
+		List<Map<String, ?>> userSubscriptions = new ArrayList<Map<String, ?>>();
 		
-		if(subscriptions==null){
-			return new HashSet<Map<String, ?>>();
-		}
+		if(subscriptions==null){ return new ArrayList<Map<String, ?>>(); }
 		
 		for(Group g : subscriptions)  {
 			userSubscriptions.add(g.toMap());
 		}
+		
 		return userSubscriptions;
 	}
 	
-	public List<Map<String, ?>> deadlinesToMap() {
-		
+	public List<Map<String, ?>> setDeadlinesToMap() {
 		List<Map<String, ?>> userDeadlines = new ArrayList<Map<String, ?>>();
 		
 		DeadlineQuery dq = DeadlineQuery.set();
@@ -176,9 +189,7 @@ public class User {
 		DeadlineQuery dq = DeadlineQuery.created();
 		dq.byOwner(this);
 		
-		if(deadlines==null){
-			return new ArrayList<Map<String, ?>>();
-		}
+		if(deadlines==null){ return new ArrayList<Map<String, ?>>();}
 		
 		List<Deadline> results = dq.createdList();
 		
@@ -192,6 +203,8 @@ public class User {
 	public List<String> apisToMap(){
 		List<String> userApis = new ArrayList<String>();
 		
+		if(apis==null){ return new ArrayList<String>();}
+		
 		for(Api a : apis){
 			userApis.add(a.getKey());
 		}
@@ -199,20 +212,8 @@ public class User {
 		return userApis;
 	}
 	
-	// equals
-	@Override
-	public boolean equals(Object object){
-		//check for self-comparison
-		if(this == object) return true;
-		
-		//check that the object is a user
-		if(!(object instanceof User)) return false;
-		
-		//compare crsids
-		return (((User) object).getCrsid().equals(this.crsid));
+	public ImmutableMap<String, ?> toMap() {
+		return ImmutableMap.of("crsid", crsid, "name", getName());
 	}
 	
-	public ImmutableMap<String, ?> toMap() {
-		return ImmutableMap.of("crsid", crsid);
-	}
 }

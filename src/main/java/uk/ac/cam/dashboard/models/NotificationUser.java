@@ -103,5 +103,4 @@ public class NotificationUser implements Mappable{
 		return map.build();
 	}
 
-	
 }

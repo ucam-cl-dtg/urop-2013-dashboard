@@ -6,17 +6,15 @@ import javax.ws.rs.core.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.dashboard.exceptions.AuthException;
 import uk.ac.cam.dashboard.models.User;
-
-import com.google.common.collect.ImmutableMap;
-import com.googlecode.htmleasy.RedirectException;
+import uk.ac.cam.dashboard.util.Strings;
 
 public class ApplicationController {
 	
 	// Logger
 	private static Logger log = LoggerFactory.getLogger(ApplicationController.class);
 	
-	// Raven session
 	@Context
 	HttpServletRequest sRequest;
 
@@ -27,15 +25,13 @@ public class ApplicationController {
 	
 	protected Permissions getPermissions() {
 		String userId = (String) sRequest.getAttribute("userId");
-		if (userId == null) {
-			return Permissions.GLOBAL;
-		} else {
-			return Permissions.USER;
-		}	
+		if (userId == null) { return Permissions.GLOBAL; } 
+		else { return Permissions.USER; }	
 	}
 	
 	protected User getUser() {
 		String userId = (String) sRequest.getAttribute("userId");
+		if(userId==null){ return null; }
 		return User.registerUser(userId);
 	}
 	
@@ -43,33 +39,22 @@ public class ApplicationController {
 		return User.registerUser(userId);
 	}
 	
-	protected User validateUserOrApiUser(String userId) throws Exception {
+	protected User validateUser() throws AuthException {
 		
-		User user;
+		User user = getUser();
 		Permissions permissions = getPermissions();
 		
-		if (permissions == Permissions.GLOBAL) {
-			if (userId != null) {
-				user = getSpecifiedUser(userId);
-				if (user != null) {
-					return user;
-				} else {
-					throw new Exception("Could not find information for user");
-				}
+		if (user == null) {
+			if(permissions == Permissions.GLOBAL){
+				throw new AuthException(Strings.AUTHEXCEPTION_GLOBAL);
+			} else if(permissions == Permissions.USER) {
+				throw new AuthException(Strings.AUTHEXCEPTION_USER);
 			} else {
-				throw new Exception("Cannot retrieve user specific information for a global key - include a userId in the query string");
+				throw new AuthException(Strings.AUTHEXCEPTION_GENERAL);
 			}
-		} else if (permissions == Permissions.USER) {
-			user = getUser();
-			if (user != null) {
-				return user;
-			} else {
-				throw new Exception("Could not find information for user");
-			}
-		} else {
-			throw new Exception("Could not validate permissions");
 		}
 		
+		return user;
 	}
 	
 	protected boolean validateGlobal() throws Exception {

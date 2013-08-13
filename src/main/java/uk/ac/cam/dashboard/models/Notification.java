@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableMap;
 
 @Entity
 @Table(name="NOTIFICATIONS")
-public class Notification {
+public class Notification implements Mappable {
 	
 	@Id
 	@GeneratedValue(generator="increment")
@@ -47,21 +47,9 @@ public class Notification {
 		this.link = link;
 		this.timestamp = Calendar.getInstance();
 	}
-
-	public ImmutableMap<String, Object> toMap() {
-		
-		ImmutableMap.Builder<String, Object> map = new ImmutableMap.Builder<String, Object>();
-		
-		map = map.put("id", this.id);
-		map = map.put("message", this.message);
-		map = map.put("section", this.section);
-		map = map.put("link", this.link);
-		map = map.put("timestamp", this.timestamp.getTime().toString());
-		
-		return map.build();
-	}
 	
 	public int getId() {return id;}
+	public void setId(int id) { this.id = id; }
 	
 	public String getMessage() { return message; }
 	public void setMessage(String message) { this.message = message; }
@@ -74,5 +62,19 @@ public class Notification {
 	
 	public String getLink() {return link;}
 	public void setLink(String link) {this.link = link;}
+	
+	@Override
+	public ImmutableMap<String, Object> toMap() {
+		
+		ImmutableMap.Builder<String, Object> map = new ImmutableMap.Builder<String, Object>();
+		
+		map = map.put("id", this.id);
+		map = map.put("message", this.message);
+		map = map.put("section", this.section);
+		map = map.put("link", this.link);
+		map = map.put("timestamp", this.timestamp.getTime().toString());
+		
+		return map.build();
+	}
 		
 }

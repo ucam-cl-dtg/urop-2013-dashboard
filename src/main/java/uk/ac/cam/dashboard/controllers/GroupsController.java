@@ -90,9 +90,8 @@ public class GroupsController extends ApplicationController {
 			
 			currentUser = getUser();
 
-			Group group = Group.getGroup(id);
-			
-			// Perform LDAP search
+			Group group = GroupQuery.get(id);
+
 			List<HashMap<String, String>> users = null;
 			try {
 				users = new ArrayList<HashMap<String, String>>();
@@ -105,7 +104,7 @@ public class GroupsController extends ApplicationController {
 				users = new ArrayList<HashMap<String, String>>();
 			}
 			
-			return ImmutableMap.of("group", group.toMap(), "errors", "undefined", "users", users);
+			return ImmutableMap.of("group", group.toMap(), "groupEdits", group.toMap(), "errors", "undefined", "users", users);
 		}
 		
 		// Update
@@ -120,7 +119,7 @@ public class GroupsController extends ApplicationController {
 				groupForm.handleUpdate(currentUser, id);
 				return ImmutableMap.of("redirectTo", "dashboard/groups/"+id);
 			} else {
-				return ImmutableMap.of("group", groupForm.toMap(id), "errors", actualErrors);
+				return ImmutableMap.of("groupEdits", groupForm.toMap(id), "errors", actualErrors);
 			}
 		}
 		

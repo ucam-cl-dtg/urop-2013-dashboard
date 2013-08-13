@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import org.hibernate.Session;
 import org.jboss.resteasy.annotations.Form;
 
+import uk.ac.cam.dashboard.exceptions.AuthException;
 import uk.ac.cam.dashboard.forms.DeadlineForm;
 import uk.ac.cam.dashboard.models.Deadline;
 import uk.ac.cam.dashboard.models.DeadlineUser;
@@ -38,26 +39,39 @@ public class DeadlinesController extends ApplicationController {
 	@GET @Path("/") 
 	public ImmutableMap<String, ?> indexDeadlines() {
 
-		currentUser = getUser();
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
 		
-		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.deadlinesToMap());
+		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.setDeadlinesToMap());
 	}
 	
-	// Get
+	// Manage
 	@GET @Path("/{id}") 
 	public Map<String, ?> getDeadline(@PathParam("id") int id) {
 		
-		currentUser = getUser();
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
 		
-	  	Deadline deadline = Deadline.getDeadline(id);
+	  	Deadline deadline = DeadlineQuery.get(id);
 	  	
-		return ImmutableMap.of("errors", "undefined","deadline", deadline.toMap(), "deadlineEdit", deadline.toMap(), "users", deadline.usersToMap());		
+		return ImmutableMap.of("deadline", deadline.toMap(), "deadlineEdit", deadline.toMap(), "users", deadline.usersToMap(), "errors", "undefined");		
 	}
 	
 	// Create
 	@POST @Path("/") 
 	public Map<String, ?> createDeadline(@Form DeadlineForm deadlineForm) throws Exception {
-		currentUser = getUser();
+
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
 		
 		ArrayListMultimap<String, String> errors = deadlineForm.validate();
 		ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
@@ -74,7 +88,11 @@ public class DeadlinesController extends ApplicationController {
 	@POST @Path("/{id}")
 	public Map<String, ?> updateDeadline(@Form DeadlineForm deadlineForm, @PathParam("id") int id) {
 		
-		currentUser = getUser();
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
 		
 		ArrayListMultimap<String, String> errors = deadlineForm.validate();
 		ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
@@ -83,7 +101,7 @@ public class DeadlinesController extends ApplicationController {
 			deadlineForm.handleUpdate(currentUser, id);
 			return ImmutableMap.of("redirectTo", "dashboard/deadlines/"+id);
 		} else {
-			return ImmutableMap.of("errors", actualErrors, "deadline", deadlineForm.toMap(id), "target", "edit");
+			return ImmutableMap.of("errors", actualErrors, "deadlineEdit", deadlineForm.toMap(id), "target", "edit");
 		}
 	}
 	
@@ -101,11 +119,9 @@ public class DeadlinesController extends ApplicationController {
 		
 	}
 	
-	// Change completed status
+	// Mark as complete/not complete
 	@PUT @Path("/{id}/complete")
 	public Map<String, ?> updateComplete(@PathParam("id") int id) {
-		
-		currentUser = getUser();
 		
 		DeadlineUser d = DeadlineQuery.getDUser(id);
 		
@@ -115,11 +131,9 @@ public class DeadlinesController extends ApplicationController {
 		return d.toMap();
 	}
 	
-	// Change archived status	
+	// Mark as archived
 	@PUT @Path("/{id}/archive")
 	public Map<String, ?> updateArchive(@PathParam("id") int id) {
-		
-		currentUser = getUser();
 		
 		DeadlineUser d = DeadlineQuery.getDUser(id);
 		

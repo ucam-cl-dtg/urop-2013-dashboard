@@ -14,6 +14,9 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
+import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
+import uk.ac.cam.cl.dtg.ldap.LDAPUser;
 import uk.ac.cam.dashboard.models.Deadline;
 import uk.ac.cam.dashboard.models.DeadlineUser;
 import uk.ac.cam.dashboard.models.Group;
@@ -21,7 +24,9 @@ import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
+import uk.ac.cam.dashboard.queries.GroupQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.dashboard.util.Strings;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
@@ -43,82 +48,28 @@ public class DeadlineForm {
 		
 		Session session = HibernateUtil.getTransactionSession();
 		
-		// Create deadline 
-		Deadline deadline = new Deadline();
+		Deadline deadline = new Deadline(currentUser, title);
 		
-		// Set mandatory fields
-		deadline.setTitle(title);
-		deadline.setOwner(currentUser);
+		deadline.setDatetime(parseDate());
 		
-		// Format and set date
-		String datetime = date+ " " + hour + ":" + minute;
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		try {
-			cal.setTime(sdf.parse(datetime));
-		} catch (Exception e) {
-			log.error("e.getMessage()" +  ": error parsing date");
-			cal = Calendar.getInstance();
-		}
-		deadline.setDatetime(cal);
-		
-		// Set optional fields
-		if(!(message.equals("")||message==null)){
-			deadline.setMessage(message);
-		} else {
-			deadline.setMessage("No message");
-		}
-		if(!(message.equals("")||message==null)){
-			deadline.setURL(url);
-		} else {
-			deadline.setURL("#");
-		}
+		deadline.setMessage(message);
+		deadline.setURL(url);
 		
 		session.save(deadline);
 		
-		// Add users from users field
-		List<DeadlineUser> dUsers = new ArrayList<DeadlineUser>();
-		if(!users.equals("")){
-			User user;
-			DeadlineUser dUser;
-			String[] crsids = users.split(",");
-			for(String u : crsids){
-				user = User.registerUser(u);
-				dUser = new DeadlineUser(user, deadline);
-				dUsers.add(dUser);
-				session.save(dUser);
-			}		
-		}
+		Set<DeadlineUser> deadlineUsers = createUserSet(deadline);
 		
-		// Add users from groups field
-		if(!groups.equals("")){
-			Set<User> groupUsers;
-			DeadlineUser dUser;
-			String[] groupIds = groups.split(",");
-			for(String g : groupIds){
-				// Get group users
-				groupUsers = Group.getGroup(Integer.parseInt(g)).getUsers();
-			  	for(User u : groupUsers){
-					dUser = new DeadlineUser(u, deadline);
-					dUsers.add(dUser);
-					session.save(dUser);
-			  	}
-			}	
-		}
-		// Create notification
-		Notification n = new Notification();
-		n.setMessage(currentUser.getCrsid() + " set you a deadline: " + deadline.getTitle());
-		n.setSection("deadlines");
-		n.setLink("/#dashboard/deadlines");
-		n.setTimestamp(Calendar.getInstance());
-		session.save(n);
-		// Associate notification with users
-		for(DeadlineUser d : dUsers){
-			System.out.println("User " + d.getUser().getCrsid());
-			session.save(new NotificationUser(d.getUser(), n));
-		}
-		
-		
+		//TODO: Add groups
+//		Set<Group> groupList = new HashSet<Group>();
+//		for(String s : parseGroups()){
+//			groupList.add(GroupQuery.get(Integer.parseInt(s)));
+//		}
+//		
+//		for(Group g : groupList){
+//			Set<DeadlineUser> groupUsers = createUserSet(deadline);
+//			deadlineUsers.addAll(groupUsers);
+//		}
+
 		return deadline.getId();			
 	}
 	
@@ -126,63 +77,29 @@ public class DeadlineForm {
 		
 		Session session = HibernateUtil.getTransactionSession();
 		
-		// Get the deadline to edit
 		Deadline deadline = DeadlineQuery.get(id);
 		
-		// Set new mandatory values
 		deadline.setTitle(title);
 		
-		// Format and set date
-		String datetime = date+ " " + hour + ":" + minute;
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		try {
-			cal.setTime(sdf.parse(datetime));
-		} catch (Exception e) {
-			log.error("e.getMessage()" +  ": error parsing date");
-			cal = Calendar.getInstance();
-		}
-		deadline.setDatetime(cal);
+		deadline.setDatetime(parseDate());
 
-		// Set new optional fields
-		if(!(message.equals("")||message==null)){
-			deadline.setMessage(message);
-		} else {
-			deadline.setMessage("No message");
-		}
-		if(!(message.equals("")||message==null)){
-			deadline.setURL(url);
-		} else {
-			deadline.setURL("#");
-		}
+		deadline.setMessage(message);
+		deadline.setURL(url);
 		
-		// Add users from users field
-		Set<DeadlineUser> deadlineUsers = new HashSet<DeadlineUser>();
-		if(!users.equals("")){
-			User user;
-			String[] crsids = users.split(",");
-			for(String u : crsids){
-				user = User.registerUser(u);
-				deadlineUsers.add(new DeadlineUser(user, deadline));
-			}		
-		}	
-		// Add users from groups field
-		if(!groups.equals("")){
-			Set<User> groupUsers;
-			String[] groupIds = groups.split(",");
-			
-			for(String g : groupIds){
-				// Get group users
-				groupUsers = Group.getGroup(Integer.parseInt(g)).getUsers();
-			  	for(User u : groupUsers){
-					deadlineUsers.add(new DeadlineUser(u, deadline));
-			  	}
-			}	
-		}
+		Set<DeadlineUser> deadlineUsers = createUserSet(deadline);
 		
-		// Clear old users
+		//TODO: Add groups
+//		Set<Group> groupList = new HashSet<Group>();
+//		for(String s : parseGroups()){
+//			groupList.add(GroupQuery.get(Integer.parseInt(s)));
+//		}
+//		
+//		for(Group g : groupList){
+//			Set<DeadlineUser> groupUsers = createUserSet(deadline);
+//			deadlineUsers.addAll(groupUsers);
+//		}
+		
 		deadline.clearUsers();
-		// Set new users
 		deadline.setUsers(deadlineUsers);
 		
 		session.update(deadline);
@@ -193,7 +110,6 @@ public class DeadlineForm {
 	public ArrayListMultimap<String, String> validate() {
 		ArrayListMultimap<String, String> errors = ArrayListMultimap.create();
 
-		
 		// title
 		if (title.equals("") || title == null){
 			errors.put("title", "Please give your deadline a name");
@@ -205,54 +121,97 @@ public class DeadlineForm {
 		if((date==null||date.equals(""))){ 
 			errors.put("date", "Please choose a due date for the deadline"); 
 		}	
-		//check its not in the past
-		String datetime = date;
-		datetime += " " + hour + ":" + minute;
-		
-		Calendar cal = Calendar.getInstance();
+
+		Calendar cal = parseDate();
 		Calendar today = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		try {
-			cal.setTime(sdf.parse(datetime));
-		} catch (ParseException e){
-			log.error("Error parsing datetime string");
-			cal = Calendar.getInstance();
-		}
 		
 		if(cal.getTime().before(today.getTime())){
-			errors.put("datepast", "Deadline due date cannot be in the past");
+			errors.put("date", "Deadline due date cannot be in the past");
 		}	
+		
+		// message (optional)
+		if(!(message.equals("")||message==null)){
+			message = Strings.DEADLINE_NOMESSAGE;
+		} 
+		
+		// url (optional)
+		if(!(url.equals("")||url==null)){
+			url = Strings.DEADLINE_NOURL;
+		} 
 		
 		// users/groups
 		if((users==null||users.equals(""))&&(groups==null||groups.equals(""))){ 
 			errors.put("users", "You must assign at least one user to this deadline"); 
 		}	
-		
+
 		return errors;	
 	}
 	
 	public ImmutableMap<String, ?> toMap(int id) {
-		ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>();
-		builder.put("id", id);
-		builder.put("name", title);
-		builder.put("date", ImmutableMap.of("date", date, "hour", hour, "minute", minute));
-		builder.put("message", message);
-		builder.put("url", url);
+		ImmutableMap.Builder<String, Object> map = new ImmutableMap.Builder<String, Object>();
+		map.put("id", id);
+		map.put("name", title);
+		map.put("date", ImmutableMap.of("date", date, "hour", hour, "minute", minute));
+		map.put("message", message);
+		map.put("url", url);
+		map.put("users", usersToMap(parseUsers()));
+		map.put("groups", groups);
+		return map.build();
+	}
+	
+	public Calendar parseDate(){
 		
-		if(!users.equals("")){
-			List<ImmutableMap<String,String>> userMaps = new ArrayList<ImmutableMap<String,String>>();
-			String[] crsids = users.split(",");
-			for(String s: crsids){
-				User user = User.registerUser(s);
-				userMaps.add(ImmutableMap.of("crsid", user.getCrsid(), "name", user.getName()));
-			}
-			builder.put("users", userMaps);
-		} else {
-			builder.put("users", "");
+		String datetime = date+ " " + hour + ":" + minute;
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		try {
+			cal.setTime(sdf.parse(datetime));
+		} catch (ParseException e) {
+			log.error("e.getMessage()" +  ": error parsing date");
+			cal = Calendar.getInstance();
 		}
 		
-		builder.put("groups", groups);
-		return builder.build();
+		return cal;
+	}
+	
+	public List<ImmutableMap<String, String>> usersToMap(String[] crsids) {
+		List<ImmutableMap<String, String>> users = new ArrayList<ImmutableMap<String, String>>();
+
+		for(String c : crsids){
+			try {
+				LDAPUser u = LDAPQueryManager.getUser(c);
+				users.add(ImmutableMap.of("crsid", c, "name", u.getcName()));
+			} catch (LDAPObjectNotFoundException e) {
+				users.add(ImmutableMap.of("crsid", c, "name", Strings.USER_NOUSERNAME));				
+			}
+		}
+		
+		return users;
+	}
+	
+	public String[] parseUsers(){
+		if(!(users==null||users.equals(""))){ return users.split(","); }
+		else { return new String[0]; }
+	}
+	public String[] parseGroups(){
+		if(!(groups==null||groups.equals(""))){ return groups.split(","); }
+		else { return new String[0]; }
+	}
+	
+	public Set<DeadlineUser> createUserSet(Deadline deadline){
+		Session session = HibernateUtil.getTransactionSession();
+
+		Set<DeadlineUser> deadlineUsers = new HashSet<DeadlineUser>();
+		for(String c : parseUsers()){
+			User user = User.registerUser(c);
+			if(user!=null) { 
+				DeadlineUser d = new DeadlineUser(user, deadline);
+				session.save(d);
+				deadlineUsers.add(d);
+			}
+		}
+		return deadlineUsers;
 	}
 	
 }

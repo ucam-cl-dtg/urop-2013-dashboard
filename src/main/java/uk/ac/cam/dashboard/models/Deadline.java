@@ -17,20 +17,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.annotations.GenericGenerator;
-
-import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
-import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
-import uk.ac.cam.cl.dtg.ldap.LDAPUser;
-import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 
 @Entity
 @Table(name="DEADLINES")
 public class Deadline implements Mappable {
+	
 	@Id
 	@GeneratedValue(generator="increment")
 	@GenericGenerator(name="increment", strategy = "increment")
@@ -39,7 +33,7 @@ public class Deadline implements Mappable {
 	private String title;
 	private String message;
 	private String url;
-	
+
 	private Calendar datetime;
 
 	@OneToMany(mappedBy = "deadline", cascade = CascadeType.ALL, orphanRemoval=true)
@@ -50,16 +44,9 @@ public class Deadline implements Mappable {
 	private User owner;
 	
 	public Deadline() {}
-	public Deadline(int id, 
-									String title, 
-									String message, 
-									Set<DeadlineUser> users, 
-									User owner) {
-		this.id = id;
-		this.title = title;
-		this.message = message;
-		this.users = users;
+	public Deadline(User owner, String title) {
 		this.owner = owner;
+		this.title = title;
 	}
 	
 	public int getId() { return this.id; }
@@ -95,14 +82,13 @@ public class Deadline implements Mappable {
 		return (this.datetime.before(tomorrow));
 	}
 	
-	// Queries
-	public static Deadline getDeadline(int id){
-		
-		Session session = HibernateUtil.getTransactionSession();
-		
-		Query getDeadline = session.createQuery("from Deadline where id = :id").setParameter("id", id);
-	  	Deadline deadline = (Deadline) getDeadline.uniqueResult();	
-	  	return deadline;
+	public int getCompletion() {
+		int total = 0;
+		for(DeadlineUser u : users){
+			if(u.getComplete()){ total++;}
+		}	
+		if(users.size()!=0){ return (total*100)/users.size(); }
+		else { return 100; }
 	}
 	
 	// toMap
@@ -116,86 +102,29 @@ public class Deadline implements Mappable {
 		return ImmutableMap.of("date", dateString, "hour", hourString, "minute", minuteString);
 	}
 	
-	public List<ImmutableMap<String, ?>> usersToMap(){
-		
-		List<ImmutableMap<String, ?>> deadlineUsers =new ArrayList<ImmutableMap<String, ?>>();
-		
-		for(DeadlineUser du : users){
-			String crsid = du.getUser().getCrsid();
-			
-			String name;
-			LDAPUser u = null;
-			try {
-				u = LDAPQueryManager.getUser(crsid);
-				name = u.getcName();
-			} catch(LDAPObjectNotFoundException e){
-				name = "Unknown user";
-			}
-			
-			deadlineUsers.add(ImmutableMap.of("crsid", crsid, "name", name, "complete", du.getComplete()));
+	public List<ImmutableMap<String, ?>> usersToMap() {
+		List<ImmutableMap<String, ?>> deadlineUsers = new ArrayList<ImmutableMap<String, ?>>();
+		for(DeadlineUser u : users){
+			deadlineUsers.add(u.userToMap());
 		}
-		
 		return deadlineUsers;
 	}
 	
 	@Override
 	public Map<String, ?> toMap() {
 		
-		ImmutableMap.Builder<String, Object> builder; 
+		ImmutableMap.Builder<String, Object> map = new ImmutableMap.Builder<String, Object>();
 		
-		try {
-			builder = new ImmutableMap.Builder<String, Object>();
-			builder =builder
-				.put("id", id)
-				.put("name", title)
-				.put("message", message)
-				.put("url", url)
-				.put("owner", owner.toMap());
-			
-			HashSet<ImmutableMap<String,?>> deadlineUsers = new HashSet<ImmutableMap<String,?>>();
-			String crsid;
-			int totalComplete = 0;
-			for(DeadlineUser du : users){
-				// Get users crsid
-				crsid = du.getUser().getCrsid();
-				LDAPUser u = null;
-				try {
-					u = LDAPQueryManager.getUser(crsid);
-				} catch(LDAPObjectNotFoundException e){
-					// handle error - set default name or something
-				}
-				
-				if(du.getComplete()){
-					totalComplete++;
-				}
-				
-				String name = u.getcName();
-				deadlineUsers.add(ImmutableMap.of("crsid",crsid, "name", name));
-			}		
-			
-			// compute percentage complete
-			int completePercent = (totalComplete*100)/users.size();			
-			builder = builder
-					.put("datetime", getFormattedDate())
-					.put("date", dateToMap())
-					.put("users", deadlineUsers)
-					.put("pComplete", completePercent);
-				
-			
-		} catch(NullPointerException e){
-			builder  = new ImmutableMap.Builder<String, Object>();
-			builder =builder
-					.put("id", id)
-					.put("name", "Error getting deadline")
-					.put("message", "")
-					.put("url", "")
-					.put("owner", "")
-					.put("datetime", getFormattedDate())
-					.put("date", dateToMap())
-					.put("users", "");
-			return builder.build();
-		}
-		return builder.build();
+			map.put("id", id);
+			map.put("name", title);
+			map.put("message", message);
+			map.put("url", url);
+			map.put("owner", owner.toMap());
+			map.put("datetime", getFormattedDate());
+			map.put("date", dateToMap());
+			map.put("users", usersToMap());
+			map.put("pComplete", getCompletion());
+
+			return map.build();		
 	}
-	
 }

@@ -30,7 +30,7 @@ public class DeadlineQuery {
 
 	public static DeadlineQuery created() {
 		return new DeadlineQuery (
-			HibernateUtil.getTransactionSession()
+			HibernateUtil.getTransactionSession()	
 			.createCriteria(Deadline.class)
 			.addOrder(Order.asc("datetime"))
 		);

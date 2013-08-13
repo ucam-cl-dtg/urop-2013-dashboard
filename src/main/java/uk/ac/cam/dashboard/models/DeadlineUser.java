@@ -58,37 +58,15 @@ public class DeadlineUser implements Mappable{
 	
 	public void toggleComplete(boolean complete){
 		this.setComplete(complete);
-		
 		HibernateUtil.getTransactionSession().update(this);
 	}
 	
 	public void toggleArchived(boolean archived){
 		this.setArchived(archived);
-		
 		HibernateUtil.getTransactionSession().update(this);
 	}
 	
-	@Override
-	public ImmutableMap<String, ?> toMap() {
-		
-		ImmutableMap.Builder<String, Object> map = new ImmutableMap.Builder<String, Object>();
-		
-		map.put("id", this.id);
-		map.put("complete", this.complete);
-		map.put("archived", this.archived);
-		map.put("user", this.user.getCrsid());
-		map.put("deadline_id", this.deadline.getId());
-		map.put("name", this.deadline.getTitle());
-		map.put("message", this.deadline.getMessage());
-		map.put("url", this.deadline.getURL());
-		map.put("owner", this.deadline.getOwner().toMap());
-		map.put("datetime", this.deadline.getFormattedDate());
-		map.put("imminent", this.deadline.getImminence());
-		
-		return map.build();
-	}
-	
-	public ImmutableMap<String, ?> usersToMap() {
+	public ImmutableMap<String, ?> userToMap() {
 		
 		ImmutableMap.Builder<String, Object> map = new ImmutableMap.Builder<String, Object>();
 
@@ -100,6 +78,25 @@ public class DeadlineUser implements Mappable{
 		
 		return map.build();
 	}
-
+	
+	@Override
+	public ImmutableMap<String, ?> toMap() {
+		
+		ImmutableMap.Builder<String, Object> map = new ImmutableMap.Builder<String, Object>();
+		
+		map.put("id", this.id);
+		map.put("user", this.user.toMap());
+		map.put("deadline_id", this.deadline.getId());
+		map.put("name", this.deadline.getTitle());
+		map.put("message", this.deadline.getMessage());
+		map.put("url", this.deadline.getURL());
+		map.put("owner", this.deadline.getOwner().toMap());
+		map.put("datetime", this.deadline.getFormattedDate());
+		map.put("imminent", this.deadline.getImminence());
+		map.put("complete", this.complete);
+		map.put("archived", this.archived);
+		
+		return map.build();
+	}
 	
 }

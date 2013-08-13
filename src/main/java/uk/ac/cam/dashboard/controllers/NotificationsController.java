@@ -16,6 +16,7 @@ import org.jboss.resteasy.annotations.Form;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.dashboard.exceptions.AuthException;
 import uk.ac.cam.dashboard.forms.CreateNotificationForm;
 import uk.ac.cam.dashboard.forms.GetNotificationForm;
 import uk.ac.cam.dashboard.models.Notification;
@@ -36,11 +37,11 @@ public class NotificationsController extends ApplicationController {
 		private User currentUser;
 		
 		// Get notifications
-		public Map<String, ?> getNotifications(GetNotificationForm notificationForm, boolean read, String userId) {
+		public Map<String, ?> getNotifications(GetNotificationForm notificationForm, boolean read) {
 			
 			try {
-				currentUser = validateUserOrApiUser(userId);
-			} catch (Exception e) {
+				currentUser = validateUser();
+			} catch (AuthException e) {
 				return ImmutableMap.of("error", e.getMessage());
 			}
 			
@@ -56,29 +57,26 @@ public class NotificationsController extends ApplicationController {
 		
 		// Unread notifications
 		@GET @Path("/")
-		public Map<String, ?> getUnreadNotifications(@Form GetNotificationForm notificationForm,
-													 @QueryParam("userId") String userId) {
+		public Map<String, ?> getUnreadNotifications(@Form GetNotificationForm notificationForm) {
 			
-			return getNotifications(notificationForm, false, userId);
+			return getNotifications(notificationForm, false);
 			
 		}
 
 		// Read notifications
 		@GET @Path("/archive")
-		public Map<String, ?> getReadNotifications(@Form GetNotificationForm notificationForm,
-												   @QueryParam("userId") String userId) {
+		public Map<String, ?> getReadNotifications(@Form GetNotificationForm notificationForm) {
 			
-			return getNotifications(notificationForm, true, userId);
+			return getNotifications(notificationForm, true);
 			
 		}
 		
 		// Individual notification
 		@GET @Path("/{id}")
-		public Map<String, ?> getNotification(@PathParam("id") int id,
-											  @QueryParam("userId") String userId) {
+		public Map<String, ?> getNotification(@PathParam("id") int id) {
 			
 			try {
-				currentUser = validateUserOrApiUser(userId);
+				currentUser = validateUser();
 			} catch (Exception e) {
 				return ImmutableMap.of("error", e.getMessage());
 			}

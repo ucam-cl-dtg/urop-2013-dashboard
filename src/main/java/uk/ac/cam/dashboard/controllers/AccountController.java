@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -37,7 +36,7 @@ public class AccountController extends ApplicationController {
 	public Map<String, ?> getAccountSettings(@QueryParam("userId") String userId) {
 		
 		try {
-			currentUser = validateUserOrApiUser(userId);
+			currentUser = validateUser();
 		} catch (Exception e) {
 			return ImmutableMap.of("error", e.getMessage());
 		}
@@ -53,7 +52,7 @@ public class AccountController extends ApplicationController {
 												@QueryParam("userId") String userId) {
 		
 		try {
-			currentUser = validateUserOrApiUser(userId);
+			currentUser = validateUser();
 		} catch (Exception e) {
 			return ImmutableMap.of("error", e.getMessage());
 		}

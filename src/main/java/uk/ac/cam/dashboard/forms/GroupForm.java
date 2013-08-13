@@ -12,49 +12,34 @@ import org.hibernate.Session;
 import uk.ac.cam.cl.dtg.ldap.LDAPGroup;
 import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
+import uk.ac.cam.cl.dtg.ldap.LDAPUser;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
+import uk.ac.cam.dashboard.queries.GroupQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.dashboard.util.Strings;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
-import com.googlecode.htmleasy.RedirectException;
 
 public class GroupForm {
 	@FormParam("title") String title;
 	@FormParam("users") String users;
-	@FormParam("import_id") String import_id;
+	@FormParam("import_id") String importID;
+	LDAPGroup importedGroup;
 	
 	public int handle(User currentUser) {		
 		
 		Session session = HibernateUtil.getTransactionSession();
 		
-		// Create group prototype
-		Group group = new Group();
-		group.setTitle(title);
+		Group group = new Group(currentUser, title);
 
-		// Set owner of the user to current user
-		group.setOwner(currentUser);
-
-		
-		// Create set of users for group
-		Set<User> groupMembers = new HashSet<User>();
-		if(!users.equals("")){
-			User user;		
-			String[] crsids = users.split(",");
-			for(int i=0;i<crsids.length;i++){
-				// Register user (adds user to database if they don't exist
-				user = User.registerUser(crsids[i]);
-				// Add to set of users
-				groupMembers.add(user);
-			}		
-		}
+		Set<User> groupMembers = createUserSet();
 		
 		group.setUsers(groupMembers);
 		
 		session.save(group);
 		
-		// Add this group to the group members groups
 		for(User u : groupMembers){
 			Set<Group> subscriptions = u.getSubscriptions();
 			subscriptions.add(group);
@@ -62,103 +47,50 @@ public class GroupForm {
 		}
 		
 		return group.getId();
-				
 	}
 
-	public Group handleUpdate(User currentUser, int id) {		
+	public int handleUpdate(User currentUser, int id) {		
 		
 		Session session = HibernateUtil.getTransactionSession();
-		
-		// Get the group to edit
-		Group group = Group.getGroup(id);
-	  	
-		// Check the owner is current user
-		if(!group.getOwner().equals(currentUser)){
-			throw new RedirectException("/app/#signapp/groups/2");
-		}
-		
-		// Set new values
+
+		Group group = GroupQuery.get(id);
 		group.setTitle(title);
 		
-		// Create new set of users for group
-		Set<User> groupMembers = new HashSet<User>();
-		if(!users.equals("")){
-			User user;		
-			String[] crsids = users.split(",");
-			for(int i=0;i<crsids.length;i++){
-				// Register user (adds user to database if they don't exist
-				user = User.registerUser(crsids[i]);
-				// Add to set of users
-				groupMembers.add(user);
-			}		
-		}
+		Set<User> groupMembers = createUserSet();
 		
 		group.setUsers(groupMembers);
 		
 		session.update(group);
 		
-		return group;
+		return group.getId();
 				
 	}
 	
-	public Group handleImport(User currentUser) {	
-		
+	public int handleImport(User currentUser) {	
 
-		
 		Session session = HibernateUtil.getTransactionSession();
 		
-		// Get group info from LDAP
-		LDAPGroup g = null;
-		try {
-			g = LDAPQueryManager.getGroup(import_id);
-		} catch (LDAPObjectNotFoundException e) {
-			// handle error
-		}
-		String name = g.getName();
-		List<String> members = g.getUsers();
-		
-		// If group has no members, throw new redirect exception
-		if(members==null){
-			//handle error
-			return null;
-		}		
-		
-		// If group is larger than 50 members, throw new redirect exception
-		if(members.size()>50){
-			//handle error
-			throw new RedirectException("/app/#signapp/groups/error/5");
-		}
-		
-		// Create group prototype
-		Group group = new Group();
-		group.setTitle(name);
+		String title = importedGroup.getName();
+		List<String> members = importedGroup.getUsers();
 
-		// Set owner of the user to current user
-		group.setOwner(currentUser);
-		
-		// Create set of users for group
-		User user;
+		Group group = new Group(currentUser, title);
+
 		Set<User> groupMembers = new HashSet<User>();
-		for(String m : members){
-			// Register user (adds user to database if they don't exist
-			user = User.registerUser(m);
-			// Add to set of users
-			groupMembers.add(user);
+		for(String c : parseUsers()){
+			User user = User.registerUser(c);
+			if(user!=null) { groupMembers.add(user); }
 		}	
 		
 		group.setUsers(groupMembers);
-		
 		session.save(group);
 		
-		// Add this group to the group members groups
 		for(User u : groupMembers){
 			Set<Group> subscriptions = u.getSubscriptions();
 			subscriptions.add(group);
 			session.update(u);
 		}
 		
-		return group;
-				
+		return group.getId();		
 	}
 
 	public ArrayListMultimap<String, String> validate() {
@@ -174,41 +106,82 @@ public class GroupForm {
 		// users
 		if((users==null||users.equals(""))){ 
 			errors.put("users", "You must add at least one user to this group"); 
-		}	
+		} 
 		
 		return errors;	
+	}
+	
+	public ArrayListMultimap<String, String> validateUpdate(int id, User currentUser) {
+		ArrayListMultimap<String, String> errors = validate();
+		
+		Group group = GroupQuery.get(id);
+		
+		if(!group.getOwner().equals(currentUser)){
+			errors.put("auth", Strings.GROUP_AUTHEDIT);
+		}
+		
+		return errors;
 	}
 	
 	public ArrayListMultimap<String, String> validateImport() {
 		ArrayListMultimap<String, String> errors = ArrayListMultimap.create();
 		
-		// users
-		if((import_id==null||import_id.equals(""))){ 
+		if((importID==null||importID.equals(""))){ 
 			errors.put("import_id", "Please choose at least one group to import"); 
 		}	
+		
+		try { 
+			importedGroup = LDAPQueryManager.getGroup(importID); 
+			if(importedGroup.getUsers().size()>100){
+				errors.put("import_id", "Group size too large: maximum group size is 100 members");
+			}
+			if(importedGroup.getUsers().size()==0){
+				errors.put("import_id", "Group contains no members");
+			}
+		} 
+		catch (LDAPObjectNotFoundException e) {
+			errors.put("import_id", "Group cannot be retrieved from LDAP");
+		}
 		
 		return errors;	
 	}
 	
 	public ImmutableMap<String, ?> toMap(int id) {
-		ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>();
-		builder.put("id", id);
-		if(!(title==null||title.equals(""))){
-			builder.put("name", title);
-		}
-		if(!(users==null||users.equals(""))){
-			List<ImmutableMap<String,String>> userMaps = new ArrayList<ImmutableMap<String,String>>();
-			String[] crsids = users.split(",");
-			for(String s: crsids){
-				User user = User.registerUser(s);
-				userMaps.add(ImmutableMap.of("crsid", user.getCrsid(), "name", user.getName()));
-			}
-			builder.put("users", userMaps);
-		} else {
-			builder.put("users", "");
-		}
+		ImmutableMap.Builder<String, Object> map = new ImmutableMap.Builder<String, Object>();
 		
-		return builder.build();
+		map.put("id", id);
+		map.put("name", title);
+		map.put("users", usersToMap(parseUsers()));
+		
+		return map.build();
 	}
 	
+	public List<ImmutableMap<String, String>> usersToMap(String[] crsids) {
+		List<ImmutableMap<String, String>> users = new ArrayList<ImmutableMap<String, String>>();
+
+		for(String c : crsids){
+			try {
+				LDAPUser u = LDAPQueryManager.getUser(c);
+				users.add(ImmutableMap.of("crsid", c, "name", u.getcName()));
+			} catch (LDAPObjectNotFoundException e) {
+				users.add(ImmutableMap.of("crsid", c, "name", Strings.USER_NOUSERNAME));				
+			}
+		}
+		
+		return users;
+	}
+
+	public String[] parseUsers(){
+		if(!(users==null||users.equals(""))){ return users.split(","); }
+		else { return new String[0]; }
+	}
+	
+	public Set<User> createUserSet(){
+		Set<User> groupMembers = new HashSet<User>();
+		for(String c : parseUsers()){
+			User user = User.registerUser(c);
+			if(user!=null) { groupMembers.add(user); };
+		}
+		return groupMembers;
+	}
 }
