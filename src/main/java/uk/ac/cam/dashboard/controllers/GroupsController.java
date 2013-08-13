@@ -133,7 +133,7 @@ public class GroupsController extends ApplicationController {
 
 		  	session.delete(g);
 			
-			return ImmutableMap.of("success", true, "id", id);
+			return ImmutableMap.of("redirectTo", "dashboard/groups", "id", id);
 			
 		}		
 		

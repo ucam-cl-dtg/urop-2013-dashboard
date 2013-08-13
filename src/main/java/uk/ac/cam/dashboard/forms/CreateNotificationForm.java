@@ -67,7 +67,7 @@ public class CreateNotificationForm {
 		}
 
 		// Section
-		String[] validSections = {"dashboard", "signups", "handins", "events"}; // Shared with GetNotificationForm
+		String[] validSections = {"dashboard", "signups", "questions", "handins"}; // Shared with GetNotificationForm
 		if (section == null || section.equals("")) {
 			errors.put("section", "Section field cannot be empty.");
 		} else if (!Arrays.asList(validSections).contains(section)) {
