@@ -26,7 +26,7 @@ public class ApplicationController {
 	protected Permissions getPermissions() {
 		String userId = (String) sRequest.getAttribute("userId");
 		if (userId == null) { return Permissions.GLOBAL; } 
-		else { return Permissions.USER; }	
+		else { return Permissions.USER; }
 	}
 	
 	protected User getUser() {
@@ -46,7 +46,12 @@ public class ApplicationController {
 		
 		if (user == null) {
 			if(permissions == Permissions.GLOBAL){
-				throw new AuthException(Strings.AUTHEXCEPTION_GLOBAL_USER);
+				String queryUser = sRequest.getParameter("userId");
+				if (queryUser != null && getSpecifiedUser(queryUser) != null) {
+					user = getSpecifiedUser(queryUser);
+				} else {
+					throw new AuthException(Strings.AUTHEXCEPTION_GLOBAL_USER);
+				}
 			} else if(permissions == Permissions.USER) {
 				throw new AuthException(Strings.AUTHEXCEPTION_USER);
 			} else {

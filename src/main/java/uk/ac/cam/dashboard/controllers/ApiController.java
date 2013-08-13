@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.hibernate.Session;
 
+import uk.ac.cam.dashboard.exceptions.AuthException;
 import uk.ac.cam.dashboard.models.Api;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.HibernateUtil;
@@ -20,22 +21,33 @@ import com.google.common.collect.ImmutableMap;
 @Produces(MediaType.APPLICATION_JSON)
 public class ApiController extends ApplicationController {
 	
-	/* TODO Validation */
+	private User currentUser;
 	
-	// Creation
+	// Get
 	
 	@GET @Path("/")
 	public ImmutableMap<String, ?> getUserApiKeys() {
-		User currentUser = getUser();
+
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
 		
 		return ImmutableMap.of("user", currentUser.getCrsid(), "keys", currentUser.apisToMap());
 	}
+	
+	// Creation
 	
 	@GET @Path("/new")
 	public Map<String, String> getNewApiKey() {
 		Session s = HibernateUtil.getTransactionSession();
 
-		User currentUser = getUser();
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
 		
 		Api api = new Api();
 		api.setUser(currentUser);
@@ -47,6 +59,13 @@ public class ApiController extends ApplicationController {
 	
 	@GET @Path("/newGlobal")
 	public Map<String, String> getNewGlobalApiKey() {
+		
+		try {
+			validateGlobal();
+		} catch (Exception e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
+		
 		Session s = HibernateUtil.getTransactionSession();
 
 		Api api = new Api();
@@ -56,6 +75,8 @@ public class ApiController extends ApplicationController {
 		
 		return ImmutableMap.of("key", api.getKey());
 	}
+	
+	// Validation
 	
 	// Does not require verification
 	// Excluded from API filter
