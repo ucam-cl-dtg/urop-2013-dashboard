@@ -46,7 +46,7 @@ public class ApplicationController {
 		
 		if (user == null) {
 			if(permissions == Permissions.GLOBAL){
-				throw new AuthException(Strings.AUTHEXCEPTION_GLOBAL);
+				throw new AuthException(Strings.AUTHEXCEPTION_GLOBAL_USER);
 			} else if(permissions == Permissions.USER) {
 				throw new AuthException(Strings.AUTHEXCEPTION_USER);
 			} else {
@@ -57,14 +57,14 @@ public class ApplicationController {
 		return user;
 	}
 	
-	protected boolean validateGlobal() throws Exception {
+	protected boolean validateGlobal() throws AuthException {
 		
 		Permissions permissions = getPermissions();
 		
 		if (permissions == Permissions.GLOBAL) {
 			return true;
 		} else {
-			throw new Exception("Could not validate global permissions");
+			throw new AuthException(Strings.AUTHEXCEPTION_GLOBAL);
 		}
 		
 	}

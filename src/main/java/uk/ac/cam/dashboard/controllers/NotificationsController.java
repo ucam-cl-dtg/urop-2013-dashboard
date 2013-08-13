@@ -113,12 +113,17 @@ public class NotificationsController extends ApplicationController {
 		}
 		
 		// Update
-		// *TODO* validate permissions
 		@PUT @Path("/{id}")
 		public ImmutableMap<String, String> markNotificationAsRead(@PathParam("id") int id, @QueryParam("read") boolean read) {
 	
-			currentUser = getUser();
+			// Validate user
+			try {
+				currentUser = validateUser();
+			} catch (Exception e) {
+				return ImmutableMap.of("error", e.getMessage());
+			}
 			
+			// Initialise possible errors
 			ImmutableMap<String, String> error;
 			if (read == true) {
 				error = ImmutableMap.of("formErrors", "Could not mark notification as read");
@@ -126,6 +131,8 @@ public class NotificationsController extends ApplicationController {
 				error = ImmutableMap.of("formErrors", "Could not mark notification as unread");
 			}
 			
+			// Attempt to mark notification as read
+			//*TODO* validation
 			try {
 				if ( NotificationUser.markAsReadUnread(currentUser, id, read) != read ) {
 					return error;
