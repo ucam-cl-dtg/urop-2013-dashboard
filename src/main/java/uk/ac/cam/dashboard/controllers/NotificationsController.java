@@ -105,7 +105,7 @@ public class NotificationsController extends ApplicationController {
 
 			if (errors.isEmpty()) {
 				notificationForm.handle();
-				return ImmutableMap.of("success", true);
+				return ImmutableMap.of("redirectTo", "dashboard/notifications");
 			} else {
 				return ImmutableMap.of("formErrors", errors, "data", notificationForm.toMap());
 			}
@@ -114,8 +114,8 @@ public class NotificationsController extends ApplicationController {
 		
 		// Update
 		@PUT @Path("/{id}")
-		public ImmutableMap<String, String> markNotificationAsRead(@PathParam("id") int id, @QueryParam("read") boolean read) {
-	
+		public ImmutableMap<String, String> markNotificationAsRead(@PathParam("id") int id, @QueryParam("read") Boolean read) {
+			
 			// Validate user
 			try {
 				currentUser = validateUser();
@@ -125,19 +125,22 @@ public class NotificationsController extends ApplicationController {
 			
 			// Initialise possible errors
 			ImmutableMap<String, String> error;
-			if (read == true) {
-				error = ImmutableMap.of("formErrors", "Could not mark notification as read");
+			if (read != null) {
+				if (read == true) {
+					error = ImmutableMap.of("formErrors", "Could not mark notification as read");
+				} else {
+					error = ImmutableMap.of("formErrors", "Could not mark notification as unread");
+				}
 			} else {
-				error = ImmutableMap.of("formErrors", "Could not mark notification as unread");
+				error = ImmutableMap.of("formErrors", "Please include a value for the query parameter 'read'");
+				return error;
 			}
 			
 			// Attempt to mark notification as read
-			//*TODO* validation
 			try {
-				if ( NotificationUser.markAsReadUnread(currentUser, id, read) != read ) {
-					return error;
-				}
+				NotificationUser.markAsReadUnread(currentUser, id, read);
 			} catch (Exception e) {
+				log.error(e.getMessage());
 				return error;
 			}
 			
