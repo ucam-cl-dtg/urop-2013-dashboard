@@ -42,6 +42,7 @@ $(document).ready(function() {
         
         // Groups
         "groups": "dashboard.groups.index",
+        "groups/:id/members" : "dashboard.groups.members",
         "groups/:id" : "dashboard.groups.manage",
         "groups/:id/edit" : "dashboard.groups.edit",
         

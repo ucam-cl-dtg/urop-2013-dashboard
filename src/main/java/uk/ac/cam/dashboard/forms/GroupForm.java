@@ -13,7 +13,6 @@ import uk.ac.cam.cl.dtg.ldap.LDAPGroup;
 import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
 import uk.ac.cam.cl.dtg.ldap.LDAPUser;
-import uk.ac.cam.dashboard.models.DeadlineUser;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.NotificationUser;
@@ -190,15 +189,14 @@ public class GroupForm {
 		
 		map.put("id", id);
 		map.put("name", title);
-		map.put("users", usersToMap(parseUsers()));
 		
 		return map.build();
 	}
 	
-	public List<ImmutableMap<String, String>> usersToMap(String[] crsids) {
+	public List<ImmutableMap<String, String>> usersToMap() {
 		List<ImmutableMap<String, String>> users = new ArrayList<ImmutableMap<String, String>>();
 
-		for(String c : crsids){
+		for(String c : parseUsers()){
 			try {
 				LDAPUser u = LDAPQueryManager.getUser(c);
 				users.add(ImmutableMap.of("crsid", c, "name", u.getcName()));

@@ -128,56 +128,17 @@
                             <div class="columns large-9 small-9"><strong>{$deadline.name}</strong> - due {$deadline.datetime}<br/><em>{$deadline.message}</em></div>
                             <div class="columns large-3 small-3 text-right">
                                 <div class="icon-button-wrapper">
-                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array expand-sub-panel">&#43;</a>
                                     <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader" data-target="deadlines/{$deadline.id}">&#83;</a>
                                     <a class="icon-button panel-icon-button websymbols-icon deadline_delete">&#39;</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <ul class="sub-panel deadline_subpanel">
-                    
-                    {call .dusers}
-                    {param users: $deadline.users /}
-                    {/call}    
-                        
-                    </ul>
                 </li>
                 </form>    
 
 {/template}
 
-/**
- * Display deadline users
- * @param users
- */
-{template .dusers }
-
-    <li class="list-sub-panel">
-        <div class="row list-inner-sub-panel">
-                                    
-            <!-- display members loop -->
-            <div class="columns large-12">                       
-            {foreach $user in $users}
-            <div class="row">
-                <div class="columns large-12">
-                {$user.name} ({$user.crsid})
-                </div>
-            </div>
-            {ifempty}
-            <div class="row">
-                <div class="columns large-12">
-                No users associated with this deadline
-                </div>
-            </div>    
-            {/foreach}
-            </div>
-            <!-- end display members loop -->
-
-        </div>
-    </li>
-                
-{/template}
 
 /**
  * Manage groups
@@ -194,55 +155,15 @@
                             <div class="columns large-9 small-9"><strong>{$group.name}</strong></div>
                             <div class="columns large-3 small-3 text-right">
                                 <div class="icon-button-wrapper">
-                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array expand-sub-panel">&#43;</a>
                                     <a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader" data-target="groups/{$group.id}">&#83;</a>
                                     <a class="icon-button panel-icon-button websymbols-icon group_delete">&#39;</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <ul class="sub-panel group_subpanel">
-                        
-                    {call .gusers}
-                    {param users: $group.users /}
-                    {/call}    
-                        
-                    </ul>
                 </li>
                 </form>    
 
-{/template}
-
-/**
- * Display group users
- * @param users
- */
-{template .gusers }
-
-    <li class="list-sub-panel">
-        <div class="row list-inner-sub-panel">
-                                    
-            <!-- display members loop -->
-            <div class="columns large-12">                       
-            {foreach $user in $users}
-            <div class="row">
-                <div class="columns large-12">
-                {$user.name} ({$user.crsid})
-                </div>
-            </div>
-            {ifempty}
-            <div class="row">
-                <div class="columns large-12">
-                No users associated with this group
-                </div>
-            </div>    
-            {/foreach}
-            </div>
-            <!-- end display members loop -->
-
-        </div>
-    </li>
-                
 {/template}
 
 /**
