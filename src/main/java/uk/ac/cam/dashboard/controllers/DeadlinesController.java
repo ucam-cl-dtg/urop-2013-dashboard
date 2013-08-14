@@ -50,6 +50,20 @@ public class DeadlinesController extends ApplicationController {
 	private User currentUser;
 	
 	// Get deadlines
+	@GET @Path("/")
+	public Map<String, ?> getSetDeadlines(@Form GetDeadlineForm deadlineForm) {
+		
+		return getDeadlines(deadlineForm, false);
+		
+	}
+	
+	@GET @Path("/archive")
+	public Map<String, ?> getArchivedSetDeadlines(@Form GetDeadlineForm deadlineForm) {
+		
+		return getDeadlines(deadlineForm, true);
+		
+	}
+	
 	public Map<String, ?> getDeadlines(GetDeadlineForm deadlineForm, boolean archived) {
 
 		try {
@@ -65,20 +79,6 @@ public class DeadlinesController extends ApplicationController {
 		} else {
 			return ImmutableMap.of("formErrors", errors, "data", deadlineForm.toMap());
 		}
-		
-	}
-	
-	@GET @Path("/")
-	public Map<String, ?> getSetDeadlines(@Form GetDeadlineForm deadlineForm) {
-		
-		return getDeadlines(deadlineForm, false);
-		
-	}
-	
-	@GET @Path("/archive")
-	public Map<String, ?> getArchivedSetDeadlines(@Form GetDeadlineForm deadlineForm) {
-		
-		return getDeadlines(deadlineForm, true);
 		
 	}
 	

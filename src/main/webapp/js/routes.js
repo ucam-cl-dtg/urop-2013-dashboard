@@ -36,7 +36,8 @@ $(document).ready(function() {
         "account": "dashboard.account.index",
 
         // Deadlines
-        "deadlines" : "dashboard.deadlines.index",
+        "deadlines(:params*)" : "dashboard.deadlines.index",
+        "deadlines/archive(:params*)" : "dashboard.deadlines.index",
         "deadlines/:id" : "dashboard.deadlines.manage",
         "deadlines/:id/edit" : "dashboard.deadlines.edit",
         
