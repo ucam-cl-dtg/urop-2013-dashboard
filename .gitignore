@@ -7,3 +7,4 @@ Gemfile
 Gemfile.lock
 Guardfile
 src/main/webapp/WEB-INF/frontend.xml
+.externalToolBuilders/*

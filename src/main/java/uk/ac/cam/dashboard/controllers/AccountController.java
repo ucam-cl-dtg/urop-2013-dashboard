@@ -81,11 +81,11 @@ public class AccountController extends ApplicationController {
 		Settings settings = user.getSettings();
 		
 		// Get notifications associated with sections
-		int signupsNotifications = NotificationQuery.all().byUser(user).inSection("signups").totalRows();
-		int questionsNotifications = NotificationQuery.all().byUser(user).inSection("questions").totalRows();
-		int handinsNotifications = NotificationQuery.all().byUser(user).inSection("handins").totalRows();
+		int signupsNotifications = NotificationQuery.all().byUser(user).inSection("signups").isRead(false).totalRows();
+		int questionsNotifications = NotificationQuery.all().byUser(user).inSection("questions").isRead(false).totalRows();
+		int handinsNotifications = NotificationQuery.all().byUser(user).inSection("handins").isRead(false).totalRows();
 		
-		int dashboardNotifications = NotificationQuery.all().byUser(user).inSection("dashboard").totalRows() + signupsNotifications 
+		int dashboardNotifications = NotificationQuery.all().byUser(user).inSection("dashboard").isRead(false).totalRows() + signupsNotifications 
 																											 + questionsNotifications 
 																											 + handinsNotifications;
 		
