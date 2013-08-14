@@ -1,6 +1,5 @@
 package uk.ac.cam.dashboard.queries;
 
-import java.util.Calendar;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -15,12 +14,10 @@ import uk.ac.cam.dashboard.models.DeadlineUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
-public class DeadlineQuery {
+public class DeadlineQuery extends PaginationQuery<DeadlineQuery> {
 	
 	// Create the logger
 	private static Logger log = LoggerFactory.getLogger(DeadlineQuery.class);
-	
-	private Criteria criteria;
 	
 	public DeadlineQuery() {}
 	
@@ -32,7 +29,6 @@ public class DeadlineQuery {
 		return new DeadlineQuery (
 			HibernateUtil.getTransactionSession()	
 			.createCriteria(Deadline.class)
-			.addOrder(Order.asc("datetime"))
 		);
 	}
 	
@@ -41,7 +37,6 @@ public class DeadlineQuery {
 			HibernateUtil.getTransactionSession()
 			.createCriteria(DeadlineUser.class)
 			.createAlias("deadline", "d")
-			.addOrder(Order.asc("d.datetime"))
 		);
 	}
 	
@@ -83,20 +78,14 @@ public class DeadlineQuery {
 	return this;
 	}
 	
-	public DeadlineQuery isRead(boolean read) {
-		criteria.createAlias("users", "nu")
-				.add(Restrictions.eq("nu.read", true));
-		return this;
-	}
-	
 	@SuppressWarnings("unchecked")
 	public List<DeadlineUser> setList() {
-		return this.criteria.list();
+		return this.criteria.addOrder(Order.asc("d.datetime")).list();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Deadline> createdList() {
-		return this.criteria.list();
+		return this.criteria.addOrder(Order.asc("d.datetime")).list();
 	}
 
 	public DeadlineUser uniqueResult() {

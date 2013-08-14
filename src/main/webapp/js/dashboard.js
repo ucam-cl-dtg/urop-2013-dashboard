@@ -1,7 +1,7 @@
 moduleScripts['dashboard'] = {
 	'home' : {
 		'index': [
-            bindNotificationShowMoreListener,
+            bindPaginationShowMoreListener,
             markNotificationAsReadUnread
         ]
 	},
@@ -12,7 +12,7 @@ moduleScripts['dashboard'] = {
 	},
 	'notifications' : {
 		'index': [
-			bindNotificationShowMoreListener,
+			bindPaginationShowMoreListener,
             markNotificationAsReadUnread
 		]
 	},
@@ -38,7 +38,8 @@ moduleScripts['dashboard'] = {
 	},
 	'deadlines' : {
 		'index' : [
-			deadlinesIndex
+			deadlinesIndex,
+			bindPaginationShowMoreListener
 		],
 		'manage' : [
 			editDeadline,

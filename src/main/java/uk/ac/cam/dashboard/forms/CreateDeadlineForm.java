@@ -20,8 +20,6 @@ import uk.ac.cam.cl.dtg.ldap.LDAPUser;
 import uk.ac.cam.dashboard.models.Deadline;
 import uk.ac.cam.dashboard.models.DeadlineUser;
 import uk.ac.cam.dashboard.models.Group;
-import uk.ac.cam.dashboard.models.Notification;
-import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.queries.GroupQuery;
@@ -32,7 +30,7 @@ import uk.ac.cam.dashboard.util.Strings;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 
-public class DeadlineForm {
+public class CreateDeadlineForm {
 	@FormParam("title") String title;
 	@FormParam("date") String date;
 	@FormParam("hour") String hour;
@@ -44,7 +42,7 @@ public class DeadlineForm {
 	@FormParam("send-email") String sendMail;
 	
 	//Logger
-	private static Logger log = LoggerFactory.getLogger(DeadlineForm.class);
+	private static Logger log = LoggerFactory.getLogger(CreateDeadlineForm.class);
 	
 	public int handleCreate(User currentUser) {		
 		

@@ -1,3 +1,55 @@
+function bindPaginationShowMoreListener() {
+	
+	$(document).on('click', '.show-more-pagination', function(e) {
+		e.preventDefault();
+		
+		if (!$(this).hasClass('disabled')) {
+			$(this).addClass('disabled');
+			
+			var $elem = $('.pagination-feed');
+			var offset = Number($elem.attr('data-offset'));
+			var limit = Number($elem.attr('data-limit'));
+			var total = Number($elem.attr('data-total'));
+			var newOffset = offset + limit;
+			
+			$elem.attr('data-offset', newOffset);	
+			
+			var queryString = 'offset=' + newOffset + '&limit=' + limit;
+			var $targetElem = $('#new-pagination-wrapper');
+			var location = $elem.attr('data-location') + '?' + queryString;
+			var template = $elem.attr('data-template');	
+			
+			loadModule($targetElem, location, template, function() {
+				var $newItems = $targetElem.clone();
+				$targetElem.empty();
+				$('.pagination-feed').append($newItems.html());
+				
+				// Check if the number of items returned is the limit, otherwise
+				// the number returned must be lower than the limit, and therefore
+				// the list is exhausted.
+				if ($newItems.children().length == limit) {
+					// If the number returned is the limit, check if the total has
+					// been reached.
+					if (newOffset + limit == total) {
+						noMoreNotifications();
+					} else {
+						$('.show-more-pagination').removeClass('disabled');
+					}
+				} else {
+					noMorePagination();
+				}
+			});
+			
+		}
+		
+	});
+	
+}
+
+function noMorePagination() {
+	$('.show-more-pagination').text('No more results');
+}
+
 function applyDatepicker() {
 	$(".datepicker").datepicker({dateFormat: "dd/mm/yy"});
 }
