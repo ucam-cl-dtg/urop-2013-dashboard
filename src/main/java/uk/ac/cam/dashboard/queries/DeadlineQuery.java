@@ -85,7 +85,7 @@ public class DeadlineQuery extends PaginationQuery<DeadlineQuery> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Deadline> createdList() {
-		return this.criteria.addOrder(Order.asc("d.datetime")).list();
+		return this.criteria.addOrder(Order.asc("datetime")).list();
 	}
 
 	public DeadlineUser uniqueResult() {

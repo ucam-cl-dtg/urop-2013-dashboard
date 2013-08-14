@@ -22,8 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPPartialQuery;
-import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
-import uk.ac.cam.cl.dtg.ldap.LDAPUser;
 import uk.ac.cam.dashboard.exceptions.AuthException;
 import uk.ac.cam.dashboard.forms.CreateDeadlineForm;
 import uk.ac.cam.dashboard.forms.GetDeadlineForm;
@@ -33,8 +31,6 @@ import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
-import uk.ac.cam.dashboard.util.Mail;
-import uk.ac.cam.dashboard.util.Strings;
 import uk.ac.cam.dashboard.util.Util;
 
 import com.google.common.collect.ArrayListMultimap;
