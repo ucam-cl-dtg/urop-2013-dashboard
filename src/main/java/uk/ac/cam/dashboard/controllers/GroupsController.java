@@ -86,7 +86,7 @@ public class GroupsController extends ApplicationController {
 				int id = groupForm.handle(currentUser);
 				return ImmutableMap.of("redirectTo", "groups/"+id);
 			} else {
-				return ImmutableMap.of("group", groupForm.toMap(-1), "errors", actualErrors);
+				return ImmutableMap.of("group", groupForm.toMap(-1), "errors", actualErrors, "users", groupForm.usersToMap());
 			}
 		}
 		

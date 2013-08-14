@@ -129,11 +129,7 @@ public class DeadlinesController extends ApplicationController {
 		Session session = HibernateUtil.getTransactionSession();
 				
 		Deadline deadline = DeadlineQuery.get(id);
-		
-	  	if(!deadline.getOwner().equals(currentUser)){
-	  		return ImmutableMap.of("redirectTo", "supervisor");
-	  	}
-
+	
 	  	session.delete(deadline);
 		
 		return ImmutableMap.of("success", "true", "id", id);

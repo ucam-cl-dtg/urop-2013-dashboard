@@ -27,7 +27,6 @@
                     
                         {call .deadline}
                             {param deadline: $deadline /}
-                            {param errors: $errors /}
                         {/call}
                         
                     {ifempty}
@@ -60,7 +59,6 @@
                     
                         {call .group}
                             {param group: $group /}
-                            {param errors: $errors /}
                         {/call}
                         
                     {ifempty}
@@ -84,6 +82,7 @@
                 {call .newdeadline}
 		            {param errors: $errors /}
 		            {param deadline: 'undefined' /}
+		            
 				{/call}
             </div>
         </section>
@@ -94,6 +93,7 @@
 				
 					{param errors: $errors /}
 					{param group: 'undefined' /}
+					{param users: 'undefined' /}
 
 				{/call}
             </div>
@@ -274,6 +274,7 @@
  * Dashboard: supervisor page, create groups
  * @param errors
  * @param group
+ * @param users
  */
 {template .newgroup }
 
@@ -298,7 +299,7 @@
                 <div class="columns large-2 small-4 field-label">Group members</div>
                 <div class="columns large-10 small-8">
                 	{if $errors != 'undefined'  and $errors.users}<label class="error">Error</label>{/if}
-                    <input type="text" class="group-user-token-input {if $errors != 'undefined' and $errors.name}error{/if}" name="users" {if $group != 'undefined'}data-prepopulate='{lb}"users":[{foreach $user in $group.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'{/if}/>
+                    <input type="text" class="group-user-token-input {if $errors != 'undefined' and $errors.name}error{/if}" name="users" {if $users != 'undefined'}data-prepopulate='{lb}"users":[{foreach $user in $users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'{/if}/>
                 	{if $errors != 'undefined'  and $errors.users}<small class="error">{$errors.users}</small>{/if}
                 </div>
             </div>
