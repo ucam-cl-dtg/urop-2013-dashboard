@@ -84,7 +84,7 @@ public class GroupsController extends ApplicationController {
 			
 			if(errors.isEmpty()){
 				int id = groupForm.handle(currentUser);
-				return ImmutableMap.of("redirectTo", "groups/"+id);
+				return ImmutableMap.of("redirectTo", "groups/manage/"+id);
 			} else {
 				return ImmutableMap.of("group", groupForm.toMap(-1), "errors", actualErrors, "users", groupForm.usersToMap());
 			}
@@ -107,7 +107,7 @@ public class GroupsController extends ApplicationController {
 		}
 		
 		// Manage
-		@GET @Path("/{id}") 
+		@GET @Path("/manage/{id}") 
 		public Map<String, ?> getGroup(@PathParam("id") int id) {
 			
 			currentUser = getUser();

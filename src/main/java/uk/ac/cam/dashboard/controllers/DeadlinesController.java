@@ -56,8 +56,7 @@ public class DeadlinesController extends ApplicationController {
 	@GET @Path("/archive")
 	public Map<String, ?> getArchivedSetDeadlines(@Form GetDeadlineForm deadlineForm) {
 		
-		return getDeadlines(deadlineForm, true);
-		
+		return getDeadlines(deadlineForm, true);	
 	}
 	
 	public Map<String, ?> getDeadlines(GetDeadlineForm deadlineForm, boolean archived) {
@@ -79,7 +78,7 @@ public class DeadlinesController extends ApplicationController {
 	}
 	
 	// Manage
-	@GET @Path("/{id}") 
+	@GET @Path("/manage/{id}") 
 	public Map<String, ?> getDeadline(@PathParam("id") int id) {
 		
 		try {
@@ -112,7 +111,7 @@ public class DeadlinesController extends ApplicationController {
 		
 		if(errors.isEmpty()){
 			int id = deadlineForm.handleCreate(currentUser);
-			return ImmutableMap.of("redirectTo", "deadlines/"+id);
+			return ImmutableMap.of("redirectTo", "deadlines/manage/"+id);
 		} else {
 			return ImmutableMap.of("deadline", deadlineForm.toMap(-1), "errors", actualErrors);
 		}

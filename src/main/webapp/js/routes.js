@@ -38,13 +38,13 @@ $(document).ready(function() {
         // Deadlines
         "deadlines(:params*)" : "dashboard.deadlines.index",
         "deadlines/archive(:params*)" : "dashboard.deadlines.index",
-        "deadlines/:id" : "dashboard.deadlines.manage",
+        "deadlines/manage/:id" : "dashboard.deadlines.manage",
         "deadlines/:id/edit" : "dashboard.deadlines.edit",
         
         // Groups
         "groups": "dashboard.groups.index",
         "groups/:id/members" : "dashboard.groups.members",
-        "groups/:id" : "dashboard.groups.manage",
+        "groups/manage/:id" : "dashboard.groups.manage",
         "groups/:id/edit" : "dashboard.groups.edit",
         
         // Notifications
