@@ -91,6 +91,10 @@ public class GroupsController extends ApplicationController {
 			currentUser = getUser();
 
 			Group group = GroupQuery.get(id);
+			
+		  	if(!group.getOwner().equals(currentUser)){
+		  		return ImmutableMap.of("redirectTo", "groups");
+		  	}
 
 			List<HashMap<String, String>> users = null;
 			try {
@@ -129,9 +133,13 @@ public class GroupsController extends ApplicationController {
 			
 			Session session = HibernateUtil.getTransactionSession();
 			
-			Group g = GroupQuery.get(id);
+			Group group = GroupQuery.get(id);
+			
+		  	if(!group.getOwner().equals(currentUser)){
+		  		return ImmutableMap.of("redirectTo", "groups");
+		  	}
 
-		  	session.delete(g);
+		  	session.delete(group);
 			
 			return ImmutableMap.of("success", "true", "id", id);
 			

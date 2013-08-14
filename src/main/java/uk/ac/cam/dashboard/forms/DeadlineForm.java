@@ -41,6 +41,7 @@ public class DeadlineForm {
 	@FormParam("url") String url;
 	@FormParam("users") String users;
 	@FormParam("groups") String groups;
+	@FormParam("send-email") String sendMail;
 	
 	//Logger
 	private static Logger log = LoggerFactory.getLogger(DeadlineForm.class);
@@ -74,7 +75,7 @@ public class DeadlineForm {
 		// send notification
 		Notification notification = new Notification(); 
 		notification.setMessage(currentUser.getName() + " ("+currentUser.getCrsid()+")" +Strings.NOTIFICATION_SETDEADLINE + deadline.getTitle());
-		notification.setSection("deadlines");
+		notification.setSection("dashboard");
 		notification.setLink("deadlines/");
 		session.save(notification);
 		for(DeadlineUser du : deadlineUsers){
@@ -85,39 +86,9 @@ public class DeadlineForm {
 		}
 		
 		// send email
-		String[] recipients = new String[deadlineUsers.size()];
-		int i=0;
-		for(DeadlineUser du : deadlineUsers){
-			String email;
-			try{
-				LDAPUser u = LDAPQueryManager.getUser(du.getUser().getCrsid());
-				email = u.getEmail();
-				if(email==null){ email = du.getUser().getCrsid()+"@cam.ac.uk"; }
-			} catch (LDAPObjectNotFoundException e){
-				email = du.getUser().getCrsid()+"@cam.ac.uk"; 
-			}
-			recipients[i] = email;
-			i++;
+		if(sendMail.equals("true")){
+			Mail.setDeadline(currentUser, deadline, deadlineUsers);
 		}
-		String subject = currentUser.getName() + " ("+currentUser.getCrsid()+")" + Strings.MAIL_SETDEADLINE_SUBJECT;
-		String eol = System.getProperty("line.separator"); 
-		String body = Strings.MAIL_SETDEADLINE_HEADER + eol +
-						"Deadline: " + deadline.getTitle() + eol +
-						"Due: " + deadline.getFormattedDate() + eol +
-						"Message: " + deadline.getMessage() + eol +
-						"http://localhost:8080/dashboard/deadlines/" + eol +
-						Strings.MAIL_SETDEADLINE_FOOTER;
-				
-		String sender;
-		try{
-			LDAPUser u = LDAPQueryManager.getUser(currentUser.getCrsid());
-			sender = u.getEmail();
-			if(sender==null){ sender = currentUser.getCrsid()+"@cam.ac.uk"; }
-		} catch(LDAPObjectNotFoundException e){
-			sender = currentUser.getCrsid()+"@cam.ac.uk";
-		}
-		
-		Mail.sendMail(recipients, sender, body, subject);
 		
 		return deadline.getId();			
 	}
@@ -155,7 +126,7 @@ public class DeadlineForm {
 		
 		Notification notification = new Notification(); 
 		notification.setMessage(currentUser.getName() + " ("+currentUser.getCrsid()+")" +Strings.NOTIFICATION_UPDATEDEADLINE + deadline.getTitle());
-		notification.setSection("deadlines");
+		notification.setSection("dashboard");
 		notification.setLink("deadlines/");
 		session.save(notification);
 		for(DeadlineUser du : deadlineUsers){
@@ -164,6 +135,8 @@ public class DeadlineForm {
 			nu.setNotification(notification);
 			session.save(nu);
 		}
+		
+		
 		
 		return deadline.getId();	
 	}
@@ -203,6 +176,11 @@ public class DeadlineForm {
 		// users/groups
 		if((users==null||users.equals(""))&&(groups==null||groups.equals(""))){ 
 			errors.put("users", "You must assign at least one user to this deadline"); 
+		}
+		
+		// send mail
+		if(sendMail==null||sendMail.equals("")){ 
+			sendMail="false";
 		}	
 
 		return errors;	
@@ -291,5 +269,7 @@ public class DeadlineForm {
 		}
 		return deadlineUsers;
 	}
+	
+
 	
 }

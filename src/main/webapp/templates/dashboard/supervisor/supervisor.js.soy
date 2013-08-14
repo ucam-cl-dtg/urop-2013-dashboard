@@ -310,16 +310,12 @@
                 <textarea name="message" placeholder="(optional) Deadline description eg. sign up for OOP supervisions" {if $deadline != 'undefined'}value="{$deadline.message}"{/if}></textarea>
             </div>
         </div>
-        
-         <div class="row">
-            <div class="columns large-2 small-4 field-label">Recipients</div>
-        </div>
-         <!-- START ADD USERS AS RECIPIENTS -->
         <div class="row">
             <div class="columns large-2 small-4 field-label"></div>
             <div class="columns large-10 small-8">
-                <input type="radio" class="token-type-radio" value="crsid" name="lookup-type" checked/> By Crsid &nbsp; &nbsp;
-                <input type="radio" class="token-type-radio" value="surname" name="lookup-type"/> By Surname
+            	Search by &nbsp; &nbsp;
+                <input type="radio" class="token-type-radio" value="crsid" name="lookup-type" checked/> Crsid &nbsp; &nbsp;
+                <input type="radio" class="token-type-radio" value="surname" name="lookup-type"/> Surname
             </div>
         </div>		
         <div class="row">
@@ -330,19 +326,19 @@
                 {if $errors != 'undefined'  and $errors.users}<small class="error">{$errors.users}</small>{/if}
                 </div>
             </div>
-         <!-- END ADD USERS AS RECIPIENTS -->
-            
-         <!-- START ADD GROUPS AS RECIPIENTS -->
-         
         <div class="row">
                 <div class="columns large-2 small-4 field-label">Add groups</div>
                 <div class="columns large-10 small-8">
                     <input type="text" class="deadline-group-token-input" name="groups" {if $deadline != 'undefined'}data-prepopulate="{$deadline.groups}"{/if}/>
                 </div>
             </div>
-            
-         <!-- END ADD GROUPS AS RECIPIENTS -->
-         
+        <div class="row">
+            <div class="columns large-2 small-4 field-label"></div>
+            <div class="columns large-10 small-8">
+                <input type="radio" class="token-type-radio" value="true" name="send-email"/> Email users &nbsp; &nbsp;
+                <input type="radio" class="token-type-radio" value="false" name="send-email" checked/> Don't email
+            </div>
+        </div>		
          <div class="row">
             <div class="columns large-12 small-12">
                 <input type="submit" value="Create deadline" class="button"/>

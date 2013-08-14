@@ -1,7 +1,7 @@
 package uk.ac.cam.dashboard.util;
 
-import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -13,6 +13,13 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
+import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
+import uk.ac.cam.cl.dtg.ldap.LDAPUser;
+import uk.ac.cam.dashboard.models.Deadline;
+import uk.ac.cam.dashboard.models.DeadlineUser;
+import uk.ac.cam.dashboard.models.User;
 
 public class Mail {
 
@@ -71,6 +78,41 @@ public class Mail {
         }
     }
 
-
+	public static void setDeadline(User currentUser, Deadline deadline, Set<DeadlineUser> deadlineUsers){
+		
+		String[] recipients = new String[deadlineUsers.size()];
+		int i=0;
+		for(DeadlineUser du : deadlineUsers){
+			String email;
+			try{
+				LDAPUser u = LDAPQueryManager.getUser(du.getUser().getCrsid());
+				email = u.getEmail();
+				if(email==null){ email = du.getUser().getCrsid()+"@cam.ac.uk"; }
+			} catch (LDAPObjectNotFoundException e){
+				email = du.getUser().getCrsid()+"@cam.ac.uk"; 
+			}
+			recipients[i] = email;
+			i++;
+		}
+		String subject = currentUser.getName() + " ("+currentUser.getCrsid()+")" + Strings.MAIL_SETDEADLINE_SUBJECT;
+		String eol = System.getProperty("line.separator"); 
+		String body = Strings.MAIL_SETDEADLINE_HEADER + eol +
+						"Deadline: " + deadline.getTitle() + eol +
+						"Due: " + deadline.getFormattedDate() + eol +
+						"Message: " + deadline.getMessage() + eol +
+						"http://localhost:8080/dashboard/deadlines/" + eol +
+						Strings.MAIL_SETDEADLINE_FOOTER;
+				
+		String sender;
+		try{
+			LDAPUser u = LDAPQueryManager.getUser(currentUser.getCrsid());
+			sender = u.getEmail();
+			if(sender==null){ sender = currentUser.getCrsid()+"@cam.ac.uk"; }
+		} catch(LDAPObjectNotFoundException e){
+			sender = currentUser.getCrsid()+"@cam.ac.uk";
+		}
+		
+		Mail.sendMail(recipients, sender, body, subject);	
+	}
 	
 }

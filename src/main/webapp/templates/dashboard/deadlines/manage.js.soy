@@ -149,7 +149,6 @@
          <div class="row">
             <div class="columns large-2 small-4 field-label">Recipients</div>
         </div>
-         <!-- START ADD USERS AS RECIPIENTS -->
 		 <div class="row">
             <div class="columns large-2 small-4 field-label"></div>
             <div class="columns large-10 small-8">
@@ -163,20 +162,12 @@
                     <input type="text" class="deadline-user-token-input" name="users" data-prepopulate='{lb}"users":[{foreach $user in $deadline.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'/>
                 </div>
             </div>
-
-         <!-- END ADD USERS AS RECIPIENTS -->
-            
-         <!-- START ADD GROUPS AS RECIPIENTS -->
-         
         <div class="row">
                 <div class="columns large-2 small-4 field-label">Add groups</div>
                 <div class="columns large-10 small-8">
                     <input type="text" class="group-token-input" name="groups"/>
                 </div>
-            </div>
-
-         <!-- END ADD GROUPS AS RECIPIENTS -->
-         
+            </div>       
          <div class="row">
             <div class="columns large-12 small-12">
                 <input type="submit" value="Save deadline" class="button"/>

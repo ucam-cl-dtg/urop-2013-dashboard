@@ -51,7 +51,7 @@ public class GroupForm {
 		
 		Notification notification = new Notification(); 
 		notification.setMessage(currentUser.getName() + " ("+currentUser.getCrsid()+")" +Strings.NOTIFICATION_SETGROUP + group.getTitle());
-		notification.setSection("groups");
+		notification.setSection("dashboard");
 		notification.setLink("groups/");
 		session.save(notification);
 		for(User u : groupMembers){
@@ -79,7 +79,7 @@ public class GroupForm {
 		
 		Notification notification = new Notification(); 
 		notification.setMessage(currentUser.getName() + " ("+currentUser.getCrsid()+")" +Strings.NOTIFICATION_UPDATEGROUP + group.getTitle());
-		notification.setSection("groups");
+		notification.setSection("dashboard");
 		notification.setLink("groups/");
 		session.save(notification);
 		for(User u : groupMembers){
@@ -119,7 +119,7 @@ public class GroupForm {
 		
 		Notification notification = new Notification(); 
 		notification.setMessage(currentUser.getName() + " ("+currentUser.getCrsid()+")" +Strings.NOTIFICATION_SETGROUP + group.getTitle());
-		notification.setSection("groups");
+		notification.setSection("dashboard");
 		notification.setLink("groups/");
 		session.save(notification);
 		for(User u : groupMembers){
