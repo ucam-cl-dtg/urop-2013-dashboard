@@ -47,7 +47,7 @@ public class NotificationUser implements Mappable{
 	public void setUser(User user) { this.user = user; }
 	
 	public Notification getNotification() { return notification; }
-	public void addNotification(Notification notification) { this.notification = notification; }
+	public void setNotification(Notification notification) { this.notification = notification; }
 	
 	public boolean getRead() { return read; }
 	public void setRead(boolean read) { this.read = read; }

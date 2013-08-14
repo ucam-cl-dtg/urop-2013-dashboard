@@ -22,6 +22,8 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPPartialQuery;
+import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
+import uk.ac.cam.cl.dtg.ldap.LDAPUser;
 import uk.ac.cam.dashboard.exceptions.AuthException;
 import uk.ac.cam.dashboard.forms.CreateDeadlineForm;
 import uk.ac.cam.dashboard.forms.GetDeadlineForm;
@@ -31,6 +33,8 @@ import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.dashboard.util.Mail;
+import uk.ac.cam.dashboard.util.Strings;
 import uk.ac.cam.dashboard.util.Util;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -90,6 +94,10 @@ public class DeadlinesController extends ApplicationController {
 		
 	  	Deadline deadline = DeadlineQuery.get(id);
 	  	
+	  	if(!deadline.getOwner().equals(currentUser)){
+	  		return ImmutableMap.of("redirectTo", "deadlines");
+	  	}
+	  	
 		return ImmutableMap.of("deadline", deadline.toMap(), "deadlineEdit", deadline.toMap(), "users", deadline.usersToMap(), "errors", "undefined");		
 	}
 	
@@ -141,11 +149,15 @@ public class DeadlinesController extends ApplicationController {
 
 		Session session = HibernateUtil.getTransactionSession();
 				
-		Deadline d = DeadlineQuery.get(id);
-
-	  	session.delete(d);
+		Deadline deadline = DeadlineQuery.get(id);
 		
-		return ImmutableMap.of("redirectTo", "dashboard/deadlines", "id", id);
+	  	if(!deadline.getOwner().equals(currentUser)){
+	  		return ImmutableMap.of("redirectTo", "supervisor");
+	  	}
+
+	  	session.delete(deadline);
+		
+		return ImmutableMap.of("success", "true", "id", id);
 		
 	}
 	
@@ -206,4 +218,5 @@ public class DeadlinesController extends ApplicationController {
 		
 		return matches;
 	}
+	
 }

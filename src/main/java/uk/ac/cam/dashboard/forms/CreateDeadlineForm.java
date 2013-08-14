@@ -24,6 +24,7 @@ import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.queries.GroupQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.dashboard.util.Mail;
 import uk.ac.cam.dashboard.util.Strings;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -38,6 +39,7 @@ public class CreateDeadlineForm {
 	@FormParam("url") String url;
 	@FormParam("users") String users;
 	@FormParam("groups") String groups;
+	@FormParam("send-email") String sendMail;
 	
 	//Logger
 	private static Logger log = LoggerFactory.getLogger(CreateDeadlineForm.class);
@@ -57,9 +59,7 @@ public class CreateDeadlineForm {
 		
 		Set<User> userSet = createUserSet();
 		Set<DeadlineUser> deadlineUsers = saveDeadlineUsers(userSet, deadline);
-		
-		System.out.println("ok so far");
-		
+			
 		Set<Group> groupList = new HashSet<Group>();
 		for(String s : parseGroups()){
 			groupList.add(GroupQuery.get(Integer.parseInt(s)));
@@ -69,7 +69,25 @@ public class CreateDeadlineForm {
 			Set<User> groupUsers = g.getUsers();
 			deadlineUsers.addAll(saveDeadlineUsers(groupUsers, deadline));
 		}
-
+		
+		// send notification
+		Notification notification = new Notification(); 
+		notification.setMessage(currentUser.getName() + " ("+currentUser.getCrsid()+")" +Strings.NOTIFICATION_SETDEADLINE + deadline.getTitle());
+		notification.setSection("dashboard");
+		notification.setLink("deadlines/");
+		session.save(notification);
+		for(DeadlineUser du : deadlineUsers){
+			NotificationUser nu = new NotificationUser();
+			nu.setUser(du.getUser());
+			nu.setNotification(notification);
+			session.save(nu);
+		}
+		
+		// send email
+		if(sendMail.equals("true")){
+			Mail.setDeadline(currentUser, deadline, deadlineUsers);
+		}
+		
 		return deadline.getId();			
 	}
 	
@@ -103,6 +121,20 @@ public class CreateDeadlineForm {
 		deadline.setUsers(deadlineUsers);
 		
 		session.update(deadline);
+		
+		Notification notification = new Notification(); 
+		notification.setMessage(currentUser.getName() + " ("+currentUser.getCrsid()+")" +Strings.NOTIFICATION_UPDATEDEADLINE + deadline.getTitle());
+		notification.setSection("dashboard");
+		notification.setLink("deadlines/");
+		session.save(notification);
+		for(DeadlineUser du : deadlineUsers){
+			NotificationUser nu = new NotificationUser();
+			nu.setUser(du.getUser());
+			nu.setNotification(notification);
+			session.save(nu);
+		}
+		
+		
 		
 		return deadline.getId();	
 	}
@@ -142,6 +174,11 @@ public class CreateDeadlineForm {
 		// users/groups
 		if((users==null||users.equals(""))&&(groups==null||groups.equals(""))){ 
 			errors.put("users", "You must assign at least one user to this deadline"); 
+		}
+		
+		// send mail
+		if(sendMail==null||sendMail.equals("")){ 
+			sendMail="false";
 		}	
 
 		return errors;	
@@ -230,5 +267,7 @@ public class CreateDeadlineForm {
 		}
 		return deadlineUsers;
 	}
+	
+
 	
 }

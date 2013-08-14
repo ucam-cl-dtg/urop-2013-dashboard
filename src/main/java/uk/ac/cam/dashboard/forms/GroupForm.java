@@ -14,6 +14,8 @@ import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
 import uk.ac.cam.cl.dtg.ldap.LDAPUser;
 import uk.ac.cam.dashboard.models.Group;
+import uk.ac.cam.dashboard.models.Notification;
+import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.GroupQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
@@ -46,6 +48,18 @@ public class GroupForm {
 			session.update(u);
 		}
 		
+		Notification notification = new Notification(); 
+		notification.setMessage(currentUser.getName() + " ("+currentUser.getCrsid()+")" +Strings.NOTIFICATION_SETGROUP + group.getTitle());
+		notification.setSection("dashboard");
+		notification.setLink("groups/");
+		session.save(notification);
+		for(User u : groupMembers){
+			NotificationUser nu = new NotificationUser();
+			nu.setUser(u);
+			nu.setNotification(notification);
+			session.save(nu);
+		}
+		
 		return group.getId();
 	}
 
@@ -61,6 +75,18 @@ public class GroupForm {
 		group.setUsers(groupMembers);
 		
 		session.update(group);
+		
+		Notification notification = new Notification(); 
+		notification.setMessage(currentUser.getName() + " ("+currentUser.getCrsid()+")" +Strings.NOTIFICATION_UPDATEGROUP + group.getTitle());
+		notification.setSection("dashboard");
+		notification.setLink("groups/");
+		session.save(notification);
+		for(User u : groupMembers){
+			NotificationUser nu = new NotificationUser();
+			nu.setUser(u);
+			nu.setNotification(notification);
+			session.save(nu);
+		}
 		
 		return group.getId();
 				
@@ -88,6 +114,18 @@ public class GroupForm {
 			Set<Group> subscriptions = u.getSubscriptions();
 			subscriptions.add(group);
 			session.update(u);
+		}
+		
+		Notification notification = new Notification(); 
+		notification.setMessage(currentUser.getName() + " ("+currentUser.getCrsid()+")" +Strings.NOTIFICATION_SETGROUP + group.getTitle());
+		notification.setSection("dashboard");
+		notification.setLink("groups/");
+		session.save(notification);
+		for(User u : groupMembers){
+			NotificationUser nu = new NotificationUser();
+			nu.setUser(u);
+			nu.setNotification(notification);
+			session.save(nu);
 		}
 		
 		return group.getId();		
@@ -151,15 +189,14 @@ public class GroupForm {
 		
 		map.put("id", id);
 		map.put("name", title);
-		map.put("users", usersToMap(parseUsers()));
 		
 		return map.build();
 	}
 	
-	public List<ImmutableMap<String, String>> usersToMap(String[] crsids) {
+	public List<ImmutableMap<String, String>> usersToMap() {
 		List<ImmutableMap<String, String>> users = new ArrayList<ImmutableMap<String, String>>();
 
-		for(String c : crsids){
+		for(String c : parseUsers()){
 			try {
 				LDAPUser u = LDAPQueryManager.getUser(c);
 				users.add(ImmutableMap.of("crsid", c, "name", u.getcName()));

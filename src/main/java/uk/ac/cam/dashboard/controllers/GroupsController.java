@@ -46,10 +46,32 @@ public class GroupsController extends ApplicationController {
 		// Index
 		@GET @Path("/") 
 		public Map<String, ?> indexGroups() {
-
+			
+			//TODO: change to validate user
 			currentUser = getUser();
 			
 			return ImmutableMap.of("user", currentUser.toMap(), "groups", currentUser.subscriptionsToMap());
+		}
+		
+		// Members
+		@GET @Path("/{id}/members") 
+		public Map<String, ?> groupMembers(@PathParam("id") int id) {
+
+			Group group = GroupQuery.get(id);
+	
+			List<HashMap<String, String>> users = null;
+			try {
+				users = new ArrayList<HashMap<String, String>>();
+				for(User u : group.getUsers()){
+					LDAPUser user = LDAPQueryManager.getUser(u.getCrsid());
+					users.add(user.getAll());
+				}
+			} catch(LDAPObjectNotFoundException e){
+				log.error("Error performing LDAPQuery: " + e.getMessage());
+				users = new ArrayList<HashMap<String, String>>();
+			}
+			
+			return ImmutableMap.of("group", group.toMap(), "users", users);
 		}
 		
 		// Create
@@ -91,6 +113,10 @@ public class GroupsController extends ApplicationController {
 			currentUser = getUser();
 
 			Group group = GroupQuery.get(id);
+			
+		  	if(!group.getOwner().equals(currentUser)){
+		  		return ImmutableMap.of("redirectTo", "groups");
+		  	}
 
 			List<HashMap<String, String>> users = null;
 			try {
@@ -104,7 +130,7 @@ public class GroupsController extends ApplicationController {
 				users = new ArrayList<HashMap<String, String>>();
 			}
 			
-			return ImmutableMap.of("group", group.toMap(),"errors", "undefined", "users", users);
+			return ImmutableMap.of("group", group.toMap(), "errors", "undefined", "users", users);
 		}
 		
 		// Update
@@ -117,9 +143,9 @@ public class GroupsController extends ApplicationController {
 			
 			if(errors.isEmpty()){
 				groupForm.handleUpdate(currentUser, id);
-				return ImmutableMap.of("redirectTo", "dashboard/groups/"+id);
+				return ImmutableMap.of("redirectTo", "groups/"+id);
 			} else {
-				return ImmutableMap.of("group", groupForm.toMap(id), "errors", actualErrors);
+				return ImmutableMap.of("group", groupForm.toMap(id), "users", groupForm.usersToMap(), "errors", actualErrors);
 			}
 		}
 		
@@ -129,11 +155,15 @@ public class GroupsController extends ApplicationController {
 			
 			Session session = HibernateUtil.getTransactionSession();
 			
-			Group g = GroupQuery.get(id);
-
-		  	session.delete(g);
+			Group group = GroupQuery.get(id);
 			
-			return ImmutableMap.of("redirectTo", "dashboard/groups", "id", id);
+		  	if(!group.getOwner().equals(currentUser)){
+		  		return ImmutableMap.of("redirectTo", "groups");
+		  	}
+
+		  	session.delete(group);
+			
+			return ImmutableMap.of("success", "true", "id", id);
 			
 		}		
 		

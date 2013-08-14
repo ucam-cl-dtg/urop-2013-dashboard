@@ -76,7 +76,6 @@ public class Group implements Mappable {
 		map.put("id",id);
 		map.put("name",title);
 		map.put("owner",owner.toMap());
-		map.put("users", usersToMap());
 		
 		return map.build();	
 	} 

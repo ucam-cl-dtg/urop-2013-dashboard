@@ -18,10 +18,10 @@
                 <li class="panel-wrapper columns large-12">
                     <div class="list-panel">
                         <div class="row list-inner-panel">
-                            <div class="columns large-7 small-7" ><strong>{$group.name}</strong> (managed by {$group.owner.crsid}) </div>
+                            <div class="columns large-7 small-7" ><strong>{$group.name}</strong> (managed by {$group.owner.crsid})</div>
                             <div class="columns large-5 small-5 text-right">
                                 <div class="icon-button-wrapper">
-                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array expand-sub-panel">&#43;</a>
+                                	<a class="icon-button panel-icon-button websymbols-icon icon-button-array module-loader" data-target="groups/{$group.id}/members">&#85;</a>
                                 </div>
                             </div>
                         </div>
@@ -33,16 +33,13 @@
                                 <!-- display members loop -->
                             
                                 
-                                
-                                {foreach $user in $group.users}
-                                <div class="columns large-7 small-7">
-                                {$user.name} ({$user.crsid})
-                                </div>
-                                {ifempty}
-                                <div class="columns large-7 small-7">
-                                No users in this group
-                                </div>
-                                {/foreach}
+                                <div class="columns large-10 small-10">
+                                //{foreach $user in $users}
+                               // <div class="round label">{$user.name} ({$user.crsid})</div>
+                                //{ifempty}
+                                //This group has no users
+                               // {/foreach}
+                                //</div>
 
                                 
                                 <!-- end display members loop -->
@@ -64,6 +61,65 @@
                 
                 <!-- end groups display loop-->
                 
+            </ul>
+        </div>
+				
+{/template}
+
+/**
+ * Group page for timetables
+ * @param group
+ * @param users
+ */
+{template .members }
+        
+	<h3>{$group.name}</h3>
+
+     <div class="row">
+            <ul class="panels">
+                <li class="panel-wrapper columns large-12">
+                    <div class="list-panel">
+                        <div class="row list-inner-panel">
+                            <div class="columns large-7 small-7"><h6>Group Manager:  {$group.owner.name} ({$group.owner.crsid})</h6></div>
+                            <div class="columns large-5 small-5 text-right">
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="sub-panel expanded">
+                    	{foreach $user in $users}
+                        <li class="list-sub-panel">
+                            <div class="row list-inner-sub-panel">                           
+                                <div class="columns large-11 small-11 text-left">
+                                    <div class="row">
+                                        <div class="columns large-11 small-11 text-left">
+                                        <strong>User: </strong>{$user.name} ({$user.crsid}) - <em>{$user.email}</em>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="columns large-11 small-11 text-left">
+                                        &nbsp;
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="columns large-11 small-11 text-left">
+                                        <span class="label round">User status: {$user.status} </span>  <span class="round secondary label">User institution: {$user.institution} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="columns large-1 small-1">
+                                    <!--user picture-->
+                                    {if $user.photo == 'undefined'}
+                                        <img src="/dashboard/img/nophoto.jpeg"/>
+                                     {else}
+                                        <img src="data:image/jpeg;base64,{$user.photo}"/>
+                                    {/if}                                      
+                                    <!--end user picture-->
+                                </div>
+                            </div>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </li>
             </ul>
         </div>
 				
