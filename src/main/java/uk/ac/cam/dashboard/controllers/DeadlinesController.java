@@ -23,7 +23,8 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPPartialQuery;
 import uk.ac.cam.dashboard.exceptions.AuthException;
-import uk.ac.cam.dashboard.forms.DeadlineForm;
+import uk.ac.cam.dashboard.forms.CreateDeadlineForm;
+import uk.ac.cam.dashboard.forms.GetDeadlineForm;
 import uk.ac.cam.dashboard.models.Deadline;
 import uk.ac.cam.dashboard.models.DeadlineUser;
 import uk.ac.cam.dashboard.models.Group;
@@ -44,9 +45,8 @@ public class DeadlinesController extends ApplicationController {
 	
 	private User currentUser;
 	
-	// Index 
-	@GET @Path("/") 
-	public ImmutableMap<String, ?> indexDeadlines() {
+	// Get deadlines
+	public Map<String, ?> getDeadlines(GetDeadlineForm deadlineForm, boolean archived) {
 
 		try {
 			currentUser = validateUser();
@@ -54,7 +54,28 @@ public class DeadlinesController extends ApplicationController {
 			return ImmutableMap.of("error", e.getMessage());
 		}
 		
-		return ImmutableMap.of("user", currentUser.toMap(), "deadlines", currentUser.setDeadlinesToMap());
+		ImmutableMap<String, List<String>> errors = deadlineForm.validate();
+
+		if (errors.isEmpty()) {
+			return deadlineForm.handle(currentUser, archived);
+		} else {
+			return ImmutableMap.of("formErrors", errors, "data", deadlineForm.toMap());
+		}
+		
+	}
+	
+	@GET @Path("/")
+	public Map<String, ?> getSetDeadlines(@Form GetDeadlineForm deadlineForm) {
+		
+		return getDeadlines(deadlineForm, false);
+		
+	}
+	
+	@GET @Path("/archive")
+	public Map<String, ?> getArchivedSetDeadlines(@Form GetDeadlineForm deadlineForm) {
+		
+		return getDeadlines(deadlineForm, true);
+		
 	}
 	
 	// Manage
@@ -74,7 +95,7 @@ public class DeadlinesController extends ApplicationController {
 	
 	// Create
 	@POST @Path("/") 
-	public Map<String, ?> createDeadline(@Form DeadlineForm deadlineForm) throws Exception {
+	public Map<String, ?> createDeadline(@Form CreateDeadlineForm deadlineForm) throws Exception {
 
 		try {
 			currentUser = validateUser();
@@ -95,7 +116,7 @@ public class DeadlinesController extends ApplicationController {
 	
 	// Update
 	@POST @Path("/{id}")
-	public Map<String, ?> updateDeadline(@Form DeadlineForm deadlineForm, @PathParam("id") int id) {
+	public Map<String, ?> updateDeadline(@Form CreateDeadlineForm deadlineForm, @PathParam("id") int id) {
 		
 		try {
 			currentUser = validateUser();

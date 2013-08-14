@@ -2,57 +2,57 @@
 
 /**
  * Deadlines display page
- * @param deadlines
+ * @param user
+ * @param deadlines The deadlines associated with the user
+ * @param offset
+ * @param limit
+ * @param total // param section and param read are also passed
  */
 {template .index }
-
-    <h3>Upcoming deadlines</h3>
-
-        <div class="row">
-            <ul class="panels">
-
-           <!--start display deadlines loop-->
-            
-            {foreach $deadline in $deadlines}
-                {call .deadline}
-                	{param deadline: $deadline /}
-                {/call}
-            {ifempty}
-            
-                <div class="columns large-12 small-12">
-                    You have no upcoming deadlines
-                </div>
-                
-            {/foreach}
-                
-                <!-- end display deadlines--> 
-                
-            </ul>
-        </div>
-				
+	<h3>Upcoming deadlines for {$user.crsid}</h3>
+	<div class="row">
+		<div class="columns large-12 small-12">
+			<ul class="pagination-feed panels row" data-limit="{$limit}" data-offset="{$offset}" data-total="{$total}" data-location="deadlines" data-template="dashboard.deadlines.deadlines">
+				{call .deadlines}
+					{param deadlines: $deadlines /}
+				{/call}
+			</ul>
+		</div>
+	</div>
+	<div class="row">
+		<div class="columns large-12 small-12">
+			{if ($total <= 10)}
+			<a class="large button expand disabled show-more-pagination">No more results</a>
+			{else}
+			<a class="large button expand show-more-pagination">Show more deadlines</a>
+			{/if}
+		</div>
+	</div>
+	<div class="hide" id="new-pagination-wrapper"></div>	
 {/template}
+	
 
 /**
  * Deadlines display page
- * @param deadline
+ * @param deadlines
  */
-{template .deadline }
-
-            <form id="{$deadline.id}"> 
-                <li class="panel-wrapper columns large-12">
-                    <div class="list-panel">
-                    <div class="row list-inner-panel">
-                        <div class="columns large-9 small-9"><strong>{$deadline.name}</strong> - due <span class="{if $deadline.imminent}round alert label{else}label{/if}">{$deadline.datetime}</span><br/><em>{$deadline.message}</em></div>
-                        <div class="columns large-3 small-3 text-right">
-                            <div class="icon-button-wrapper">
-                                <a class="icon-button panel-icon-button websymbols-icon icon-button-array" href="{$deadline.url}">&#88;</a>
-                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array complete_deadline">{if $deadline.complete}&#47;{else}&#46;{/if}</a>
-                                    <a class="icon-button panel-icon-button websymbols-icon icon-button-array archive_deadline"><i class="icon-trash_can">&nbsp;</i></a>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                </li>
-               </form>
-
+{template .deadlines }
+	{foreach $deadline in $deadlines}
+	<form id="{$deadline.id}"> 
+		<li class="panel-wrapper columns large-12">
+			<div class="list-panel">
+				<div class="row list-inner-panel">
+					<div class="columns large-9 small-9"><strong>{$deadline.name}</strong> - due <span class="{if $deadline.imminent}round alert label{else}label{/if}">{$deadline.datetime}</span><br/><em>{$deadline.message}</em></div>
+					<div class="columns large-3 small-3 text-right">
+						<div class="icon-button-wrapper">
+							<a class="icon-button panel-icon-button websymbols-icon icon-button-array" href="{$deadline.url}">&#88;</a>
+							<a class="icon-button panel-icon-button websymbols-icon icon-button-array complete_deadline">{if $deadline.complete}&#47;{else}&#46;{/if}</a>
+							<a class="icon-button panel-icon-button websymbols-icon icon-button-array archive_deadline"><i class="icon-trash_can">&nbsp;</i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</li>
+	</form>
+	{/foreach}
 {/template}

@@ -163,25 +163,6 @@ public class User {
 		return userSubscriptions;
 	}
 	
-	public List<Map<String, ?>> setDeadlinesToMap() {
-		List<Map<String, ?>> userDeadlines = new ArrayList<Map<String, ?>>();
-		
-		DeadlineQuery dq = DeadlineQuery.set();
-		dq.byUser(this);
-		
-		if(deadlines==null){
-			return new ArrayList<Map<String, ?>>();
-		}
-		
-		List<DeadlineUser> results = dq.setList();
-		
-		for (DeadlineUser d : results) {
-			userDeadlines.add(d.toMap());
-		}
-		
-		return userDeadlines;	
-	}
-	
 	public List<Map<String, ?>> createdDeadlinesToMap() {
 		
 		List<Map<String, ?>> userDeadlines = new ArrayList<Map<String, ?>>();
