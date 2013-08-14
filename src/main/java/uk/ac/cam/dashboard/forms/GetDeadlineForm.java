@@ -31,11 +31,12 @@ public class GetDeadlineForm {
 	
 	public Map<String, ?> handle(User user, boolean archived) {
 		
-		// TODO filter based on archived
-		
 		Map<String, Object> userDeadlines = new HashMap<String, Object>();
 
 		DeadlineQuery dq = DeadlineQuery.set().byUser(user);
+		
+		dq.isArchived(archived);
+		userDeadlines.put("archived", archived);
 		
 		// Get number of rows before offset or limit is set
 		

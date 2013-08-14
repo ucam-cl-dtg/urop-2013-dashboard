@@ -63,19 +63,25 @@ public class DeadlineQuery extends PaginationQuery<DeadlineQuery> {
 	public DeadlineQuery byDeadline(Deadline Deadline) {
 		log.debug("Getting Deadline id: " + Deadline.getId());
 		criteria.add(Restrictions.eq("Deadline", Deadline));
-	return this;
+		return this;
 	}
 	
 	public DeadlineQuery byUser(User user) {
-			log.debug("Getting Deadlines for user: " + user.getCrsid());
-			criteria.add(Restrictions.eq("user", user));
+		log.debug("Getting Deadlines for user: " + user.getCrsid());
+		criteria.add(Restrictions.eq("user", user));
 		return this;
 	}
 	
 	public DeadlineQuery byOwner(User user) {
 		log.debug("Getting Deadlines created by user: " + user.getCrsid());
 		criteria.add(Restrictions.eq("owner", user));
-	return this;
+		return this;
+	}
+	
+	public DeadlineQuery isArchived(boolean archived) {
+		log.debug("Getting archived Deadlines");
+		criteria.add(Restrictions.eq("archived", archived));
+		return this;
 	}
 	
 	@SuppressWarnings("unchecked")
