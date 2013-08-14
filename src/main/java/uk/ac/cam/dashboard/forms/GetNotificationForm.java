@@ -94,6 +94,9 @@ public class GetNotificationForm {
 		if (offset != null && !offset.equals("")) {
 			try {
 				intOffset = Integer.parseInt(offset);
+				if (intOffset < 0) {
+					errors.put("limit", "Limit must be greater than or equal to 0");
+				}
 			} catch(Exception e) {
 				errors.put("offset", "Offset must be an integer");
 			}
@@ -103,6 +106,9 @@ public class GetNotificationForm {
 		if (limit != null && !limit.equals("")) {
 			try {
 				intLimit = Integer.parseInt(limit);
+				if (intLimit < 0) {
+					errors.put("limit", "Limit must be greater than or equal to 0");
+				}
 			} catch(Exception e) {
 				errors.put("limit", "Limit must be an integer");
 			}
