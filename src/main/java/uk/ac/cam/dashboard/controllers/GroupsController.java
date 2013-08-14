@@ -117,7 +117,7 @@ public class GroupsController extends ApplicationController {
 			
 			if(errors.isEmpty()){
 				groupForm.handleUpdate(currentUser, id);
-				return ImmutableMap.of("redirectTo", "dashboard/groups/"+id);
+				return ImmutableMap.of("redirectTo", "groups/"+id);
 			} else {
 				return ImmutableMap.of("group", groupForm.toMap(id), "errors", actualErrors);
 			}
@@ -133,7 +133,7 @@ public class GroupsController extends ApplicationController {
 
 		  	session.delete(g);
 			
-			return ImmutableMap.of("redirectTo", "dashboard/groups", "id", id);
+			return ImmutableMap.of("success", "true", "id", id);
 			
 		}		
 		

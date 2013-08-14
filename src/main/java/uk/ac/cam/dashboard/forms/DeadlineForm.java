@@ -26,6 +26,7 @@ import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.queries.GroupQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.dashboard.util.Mail;
 import uk.ac.cam.dashboard.util.Strings;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -59,9 +60,7 @@ public class DeadlineForm {
 		
 		Set<User> userSet = createUserSet();
 		Set<DeadlineUser> deadlineUsers = saveDeadlineUsers(userSet, deadline);
-		
-		System.out.println("ok so far");
-		
+			
 		Set<Group> groupList = new HashSet<Group>();
 		for(String s : parseGroups()){
 			groupList.add(GroupQuery.get(Integer.parseInt(s)));
@@ -71,7 +70,55 @@ public class DeadlineForm {
 			Set<User> groupUsers = g.getUsers();
 			deadlineUsers.addAll(saveDeadlineUsers(groupUsers, deadline));
 		}
-
+		
+		// send notification
+		Notification notification = new Notification(); 
+		notification.setMessage(currentUser.getName() + " ("+currentUser.getCrsid()+")" +Strings.NOTIFICATION_SETDEADLINE + deadline.getTitle());
+		notification.setSection("deadlines");
+		notification.setLink("deadlines/");
+		session.save(notification);
+		for(DeadlineUser du : deadlineUsers){
+			NotificationUser nu = new NotificationUser();
+			nu.setUser(du.getUser());
+			nu.setNotification(notification);
+			session.save(nu);
+		}
+		
+		// send email
+		String[] recipients = new String[deadlineUsers.size()];
+		int i=0;
+		for(DeadlineUser du : deadlineUsers){
+			String email;
+			try{
+				LDAPUser u = LDAPQueryManager.getUser(du.getUser().getCrsid());
+				email = u.getEmail();
+				if(email==null){ email = du.getUser().getCrsid()+"@cam.ac.uk"; }
+			} catch (LDAPObjectNotFoundException e){
+				email = du.getUser().getCrsid()+"@cam.ac.uk"; 
+			}
+			recipients[i] = email;
+			i++;
+		}
+		String subject = currentUser.getName() + " ("+currentUser.getCrsid()+")" + Strings.MAIL_SETDEADLINE_SUBJECT;
+		String eol = System.getProperty("line.separator"); 
+		String body = Strings.MAIL_SETDEADLINE_HEADER + eol +
+						"Deadline: " + deadline.getTitle() + eol +
+						"Due: " + deadline.getFormattedDate() + eol +
+						"Message: " + deadline.getMessage() + eol +
+						"http://localhost:8080/dashboard/deadlines/" + eol +
+						Strings.MAIL_SETDEADLINE_FOOTER;
+				
+		String sender;
+		try{
+			LDAPUser u = LDAPQueryManager.getUser(currentUser.getCrsid());
+			sender = u.getEmail();
+			if(sender==null){ sender = currentUser.getCrsid()+"@cam.ac.uk"; }
+		} catch(LDAPObjectNotFoundException e){
+			sender = currentUser.getCrsid()+"@cam.ac.uk";
+		}
+		
+		Mail.sendMail(recipients, sender, body, subject);
+		
 		return deadline.getId();			
 	}
 	
@@ -105,6 +152,18 @@ public class DeadlineForm {
 		deadline.setUsers(deadlineUsers);
 		
 		session.update(deadline);
+		
+		Notification notification = new Notification(); 
+		notification.setMessage(currentUser.getName() + " ("+currentUser.getCrsid()+")" +Strings.NOTIFICATION_UPDATEDEADLINE + deadline.getTitle());
+		notification.setSection("deadlines");
+		notification.setLink("deadlines/");
+		session.save(notification);
+		for(DeadlineUser du : deadlineUsers){
+			NotificationUser nu = new NotificationUser();
+			nu.setUser(du.getUser());
+			nu.setNotification(notification);
+			session.save(nu);
+		}
 		
 		return deadline.getId();	
 	}
