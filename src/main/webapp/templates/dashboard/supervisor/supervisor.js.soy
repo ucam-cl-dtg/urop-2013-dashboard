@@ -248,7 +248,7 @@
 			<div class="columns large-2 small-4 field-label">Group members</div>
 			<div class="columns large-10 small-8">
 				{if $errors != 'undefined'  and $errors.users}<label class="error">Error</label>{/if}
-				<input type="text" class="group-user-token-input {if $errors != 'undefined' and $errors.name}error{/if}" name="users" {if $users != 'undefined'}data-prepopulate='{lb}"users":[{foreach $user in $users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'{/if}/>
+				<input type="text" placeholder="Group members" class="group-user-token-input {if $errors != 'undefined' and $errors.name}error{/if}" name="users" {if $users != 'undefined'}data-prepopulate='{lb}"users":[{foreach $user in $users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'{/if}/>
 				{if $errors != 'undefined'  and $errors.users}<small class="error">{$errors.users}</small>{/if}
 			</div>
 		</div>
@@ -273,7 +273,7 @@
 			<div class="columns large-2 small-4 field-label">Import Group</div>
 			<div class="columns large-10 small-8">
 				{if $errors != 'undefined'  and $errors.import_id}<label class="error">Error</label>{/if}
-				<input type="text" class="import-group-token-input {if $errors != 'undefined' and $errors.import_id}error{/if}" name="import_id"{if $errors != 'undefined'}data-prepopulate='{lb}"users":[{foreach $user in $group.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'{/if}/>          
+				<input type="text" placeholder="Import Group" class="import-group-token-input {if $errors != 'undefined' and $errors.import_id}error{/if}" name="import_id"{if $errors != 'undefined'}data-prepopulate='{lb}"users":[{foreach $user in $group.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'{/if}/>          
 				{if $errors != 'undefined'  and $errors.import_id}<small class="error">{$errors.import_id}</small>{/if}
 			</div>
 		</div>

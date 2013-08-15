@@ -1,7 +1,9 @@
 function tabMemory() {
 	$(document).on('click', 'section .title', function() {
-		var location = $(this).parent().parent().attr('data-base-path') + "/" + $(this).children('a').attr('data-target');
-		router.navigate(location, {trigger: false});
+		if ( $(this).parent().parent().attr('data-base-path') ) {
+			var location = $(this).parent().parent().attr('data-base-path') + "/" + $(this).children('a').attr('data-target');
+			router.navigate(location, {trigger: false});
+		}
 	});
 }
 
