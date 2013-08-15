@@ -26,31 +26,6 @@
                             </div>
                         </div>
                     </div>
-                    <ul class="sub-panel">
-                        <li class="list-sub-panel">
-                            <div class="row list-inner-sub-panel">
-                            
-                                <!-- display members loop -->
-                            
-                                
-                                <div class="columns large-10 small-10">
-                                //{foreach $user in $users}
-                               // <div class="round label">{$user.name} ({$user.crsid})</div>
-                                //{ifempty}
-                                //This group has no users
-                               // {/foreach}
-                                //</div>
-
-                                
-                                <!-- end display members loop -->
-                                <div class="columns large-5 small-5 text-right">
-                                    <div class="icon-button-wrapper">
-                                        <!--edit members buttons?-->
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
                 </li>
                 </form>
                 {ifempty}
@@ -102,7 +77,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="columns large-11 small-11 text-left">
-                                        <span class="label round">User status: {$user.status} </span>  <span class="round secondary label">User institution: {$user.institution} </span>
+                                        <span class="label round">User status: {if $user.supervisor}Supervisor{else}Student{/if} </span>  <span class="round secondary label">User institution: {$user.institution} </span>
                                         </div>
                                     </div>
                                 </div>

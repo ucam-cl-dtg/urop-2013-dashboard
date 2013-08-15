@@ -123,13 +123,16 @@ public class User {
 		return user;
 	}
 	
-	public Map<String, String> getUserDetails(){
+	public Map<String, Object> getUserDetails(){
 
 		try {
+			HashMap<String, Object> userMap = new HashMap<String, Object>();
 			LDAPUser user = LDAPQueryManager.getUser(crsid);
-			return user.getAll();
+			userMap.putAll(user.getAll());
+			userMap.put("supervisor", this.supervisor);
+			return userMap;
 		} catch (LDAPObjectNotFoundException e){
-			HashMap<String, String> defaultUser = new HashMap<String, String>();
+			HashMap<String, Object> defaultUser = new HashMap<String, Object>();
 			
 			defaultUser.put("crsid", crsid);
 			defaultUser.put("name", username);
@@ -138,6 +141,7 @@ public class User {
 			defaultUser.put("institution", Strings.USER_NOINST);
 			defaultUser.put("status", Strings.USER_NOSTATUS);
 			defaultUser.put("photo", Strings.USER_NOPHOTO);
+			defaultUser.put("supervisor", this.supervisor);
 
 			return defaultUser;
 		}

@@ -64,7 +64,9 @@ public class GroupsController extends ApplicationController {
 				users = new ArrayList<HashMap<String, String>>();
 				for(User u : group.getUsers()){
 					LDAPUser user = LDAPQueryManager.getUser(u.getCrsid());
-					users.add(user.getAll());
+					HashMap<String, String> userMap = user.getAll();
+					userMap.put("supervisor", Boolean.toString(u.getSupervisor()));
+					users.add(userMap);
 				}
 			} catch(LDAPObjectNotFoundException e){
 				log.error("Error performing LDAPQuery: " + e.getMessage());
@@ -118,17 +120,11 @@ public class GroupsController extends ApplicationController {
 		  		return ImmutableMap.of("redirectTo", "groups");
 		  	}
 
-			List<HashMap<String, String>> users = null;
-			try {
-				users = new ArrayList<HashMap<String, String>>();
+			List<Map<String, Object>> users = null;
+				users = new ArrayList<Map<String, Object>>();
 				for(User u : group.getUsers()){
-					LDAPUser user = LDAPQueryManager.getUser(u.getCrsid());
-					users.add(user.getAll());
+					users.add(u.getUserDetails());
 				}
-			} catch(LDAPObjectNotFoundException e){
-				log.error("Error performing LDAPQuery: " + e.getMessage());
-				users = new ArrayList<HashMap<String, String>>();
-			}
 			
 			return ImmutableMap.of("group", group.toMap(), "errors", "undefined", "users", users);
 		}
