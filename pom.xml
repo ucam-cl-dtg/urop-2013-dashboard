@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.cam.cl.dtg.teaching</groupId>
 	<artifactId>dashboard</artifactId>
 	<packaging>war</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>Dashboard</name>
 
 	<repositories>
@@ -130,6 +129,11 @@
 		</dependency>
 	</dependencies>
 
+
+	<scm>
+		<developerConnection>scm:git:ssh://git@github.com/ucam-cl-dtg/urop-2013-dashboard</developerConnection>
+	</scm>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -151,6 +155,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
 				<configuration>
 					<overlays>
 						<overlay>
@@ -164,4 +169,19 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<distributionManagement>
+		<!-- use the following if you're not using a snapshot version. -->
+		<repository>
+			<id>dtg-code</id>
+			<name>RepositoryProxy</name>
+			<url>http://dtg-maven.cl.cam.ac.uk/content/repositories/releases</url>
+		</repository>
+		<!-- use the following if you ARE using a snapshot version. -->
+		<snapshotRepository>
+			<id>dtg-code</id>
+			<name>RepositoryProxy</name>
+			<url>http://dtg-maven.cl.cam.ac.uk/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
