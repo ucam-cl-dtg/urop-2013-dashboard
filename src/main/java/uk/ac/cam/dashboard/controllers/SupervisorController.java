@@ -2,6 +2,7 @@ package uk.ac.cam.dashboard.controllers;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -22,12 +23,19 @@ public class SupervisorController extends ApplicationController {
 	private static Logger log = LoggerFactory.getLogger(SupervisorController.class);
 	
 	// Index 
-	@GET @Path("/") 
+	@GET @Path("/")
 	public ImmutableMap<String, ?> indexSupervisor() {
+		return indexSupervisorTab("");
+	}
+	
+	@GET @Path("/{tab}") 
+	public ImmutableMap<String, ?> indexSupervisorTab(@PathParam("tab") String tab) {
 
 		currentUser = getUser();
 		
 		log.debug("Returning JSON of user, user created deadlines and user created groups");
-		return ImmutableMap.of("user", currentUser.toMap(), "target", "deadlines", "cdeadlines", currentUser.createdDeadlinesToMap(), "cgroups", currentUser.groupsToMap(), "errors", "undefined");
+		
+		tab = (tab == null || tab == "" ? "undefined" : tab);
+		return ImmutableMap.of("user", currentUser.toMap(), "target", tab, "cdeadlines", currentUser.createdDeadlinesToMap(), "cgroups", currentUser.groupsToMap(), "errors", "undefined");
 	}
 }

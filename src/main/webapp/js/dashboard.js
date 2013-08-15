@@ -58,6 +58,7 @@ moduleScripts['dashboard'] = {
 	},
 	'supervisor' : {
 		'index' : [
+		    tabMemory,
 			createDeadline,	
 	        deleteDeadline,
 	      	createGroup,
