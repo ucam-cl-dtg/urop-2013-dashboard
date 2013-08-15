@@ -101,7 +101,7 @@ public class DeadlinesController extends ApplicationController {
 		
 		if(errors.isEmpty()){
 			int id = deadlineForm.handleCreate(currentUser);
-			return ImmutableMap.of("redirectTo", "deadlines/");
+			return ImmutableMap.of("redirectTo", "deadlines/manage/"+id);
 		} else {
 			return ImmutableMap.of("deadline", deadlineForm.toMap(-1), "errors", actualErrors);
 		}
@@ -122,7 +122,7 @@ public class DeadlinesController extends ApplicationController {
 		
 		if(errors.isEmpty()){
 			deadlineForm.handleUpdate(currentUser, id);
-			return ImmutableMap.of("redirectTo", "deadlines/"+id);
+			return ImmutableMap.of("redirectTo", "deadlines/");
 		} else {
 			return ImmutableMap.of("errors", actualErrors, "deadlineEdit", deadlineForm.toMap(id), "target", "edit");
 		}
