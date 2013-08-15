@@ -13,6 +13,7 @@ public class Strings {
 	// Deadlines
 	public static final String DEADLINE_NOMESSAGE = "No message";
 	public static final String DEADLINE_NOURL = "#";
+	public static final String DEADLINE_DELETED = "Deadline deleted by owner";
 	
 	// Groups
 	public static final String GROUP_AUTHEDIT = "You are not authorised to edit this group";

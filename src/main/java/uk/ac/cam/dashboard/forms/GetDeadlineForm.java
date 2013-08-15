@@ -1,6 +1,7 @@
 package uk.ac.cam.dashboard.forms;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,13 +30,18 @@ public class GetDeadlineForm {
 	// Logger
 	private static Logger log = LoggerFactory.getLogger(GetNotificationForm.class);
 	
-	public Map<String, ?> handle(User user, boolean archived) {
+	public Map<String, ?> handle(User user, boolean complete, Boolean archived) {
+		
+		// Archive old deadline on get
+		archiveOld(user);
 		
 		Map<String, Object> userDeadlines = new HashMap<String, Object>();
 
 		DeadlineQuery dq = DeadlineQuery.set().byUser(user);
 		
 		dq.isArchived(archived);
+		if(!archived && complete){dq.isComplete(complete); userDeadlines.put("complete", complete); }
+		else { userDeadlines.put("complete", false); }
 		userDeadlines.put("archived", archived);
 		
 		// Get number of rows before offset or limit is set
@@ -74,6 +80,14 @@ public class GetDeadlineForm {
 
 		log.debug("Returning JSON of user deadlines");
 		return userDeadlines;
+	}
+	
+	public void archiveOld(User user){
+		
+		DeadlineQuery dq = DeadlineQuery.set().byUser(user).beforeDate(Calendar.getInstance());;
+		for(DeadlineUser du : dq.setList()){
+			du.setArchived(true);
+		}
 	}
 	
 	public ImmutableMap<String, List<String>> validate() {

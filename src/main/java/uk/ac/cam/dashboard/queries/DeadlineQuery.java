@@ -1,5 +1,6 @@
 package uk.ac.cam.dashboard.queries;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -28,7 +29,7 @@ public class DeadlineQuery extends PaginationQuery<DeadlineQuery> {
 	public static DeadlineQuery created() {
 		return new DeadlineQuery (
 			HibernateUtil.getTransactionSession()	
-			.createCriteria(Deadline.class)
+			.createCriteria(Deadline.class, "d")
 		);
 	}
 	
@@ -62,7 +63,7 @@ public class DeadlineQuery extends PaginationQuery<DeadlineQuery> {
 	
 	public DeadlineQuery byDeadline(Deadline Deadline) {
 		log.debug("Getting Deadline id: " + Deadline.getId());
-		criteria.add(Restrictions.eq("Deadline", Deadline));
+		criteria.add(Restrictions.eq("d", Deadline));
 		return this;
 	}
 	
@@ -83,6 +84,21 @@ public class DeadlineQuery extends PaginationQuery<DeadlineQuery> {
 		criteria.add(Restrictions.eq("archived", archived));
 		return this;
 	}
+	public DeadlineQuery isComplete(boolean complete) {
+		log.debug("Getting completed Deadlines");
+		criteria.add(Restrictions.eq("complete", complete));
+		return this;
+	}
+	public DeadlineQuery beforeDate(Calendar date) {
+		log.info("Getting deadlines before " + date.getTime().toString());
+		criteria.add(Restrictions.le("d.datetime", date));
+		return this;
+	}
+	public DeadlineQuery afterDate(Calendar date) {
+		log.info("Getting deadlines after " + date.getTime().toString());
+		criteria.add(Restrictions.ge("d.datetime", date));
+		return this;
+	}
 	
 	@SuppressWarnings("unchecked")
 	public List<DeadlineUser> setList() {
@@ -91,7 +107,7 @@ public class DeadlineQuery extends PaginationQuery<DeadlineQuery> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Deadline> createdList() {
-		return this.criteria.addOrder(Order.asc("datetime")).list();
+		return this.criteria.addOrder(Order.asc("d.datetime")).list();
 	}
 
 	public DeadlineUser uniqueResult() {

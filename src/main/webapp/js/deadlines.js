@@ -1,31 +1,22 @@
 function deadlinesIndex() {
-      
-        // Toggle deadline archived
-        $(".archive_deadline").click(function() {
-        var deadline_id = $(this).parents("form").attr("id");
-        // Ajax update request
-            var archiveData = $.ajax({
-                  type: 'PUT',
-                  url: prepareURL("deadlines/" + deadline_id + "/archive"),
-                  success: function(resultData) {
-                      alert("archived");
-                  }
-            });
-        });
-        
+
         // Toggle deadline complete
         $(".complete_deadline").click(function() {
         var deadline_id = $(this).parents("form").attr("id");
         // Ajax update request
-            var archiveData = $.ajax({
+            $.ajax({
                   type: 'PUT',
                   url: prepareURL("deadlines/" + deadline_id + "/complete"),
                   success: function(resultData) {
-                      alert("complete");
+                	  console.log(resultData);
+                	  if(resultData.complete){
+                		  $("#"+deadline_id).find(".complete_deadline").addClass("button success");
+                	  } else {
+                		  $("#"+deadline_id).find(".complete_deadline").removeClass("success");                		  
+                	  }
                   }
             });
         });
-  
 }
 
 function editDeadline() {

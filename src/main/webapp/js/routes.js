@@ -38,6 +38,7 @@ $(document).ready(function() {
         // Deadlines
         "deadlines(:params*)" : "dashboard.deadlines.index",
         "deadlines/archive(:params*)" : "dashboard.deadlines.index",
+        "deadlines/complete(:params*)" : "dashboard.deadlines.index",
         "deadlines/manage/:id" : "dashboard.deadlines.manage",
         "deadlines/:id/edit" : "dashboard.deadlines.edit",
         

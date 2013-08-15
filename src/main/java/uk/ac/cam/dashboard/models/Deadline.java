@@ -91,6 +91,12 @@ public class Deadline implements Mappable {
 		else { return 100; }
 	}
 	
+	public void archiveAll(){
+		for(DeadlineUser u : users){
+			u.setArchived(true);
+		}
+	}
+	
 	// toMap
 	public Map<String, ?> dateToMap() { 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
