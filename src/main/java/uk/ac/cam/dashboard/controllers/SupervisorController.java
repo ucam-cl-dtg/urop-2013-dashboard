@@ -33,9 +33,12 @@ public class SupervisorController extends ApplicationController {
 
 		currentUser = getUser();
 		
-		log.debug("Returning JSON of user, user created deadlines and user created groups");
+		if(currentUser.getSupervisor()){
+			log.debug("Returning JSON of user, user created deadlines and user created groups");
+			tab = (tab == null || tab == "" ? "undefined" : tab);
+			return ImmutableMap.of("user", currentUser.toMap(), "target", tab, "cdeadlines", currentUser.createdDeadlinesToMap(), "cgroups", currentUser.groupsToMap(), "errors", "undefined");
+		}
 		
-		tab = (tab == null || tab == "" ? "undefined" : tab);
-		return ImmutableMap.of("user", currentUser.toMap(), "target", tab, "cdeadlines", currentUser.createdDeadlinesToMap(), "cgroups", currentUser.groupsToMap(), "errors", "undefined");
+		return ImmutableMap.of("redirectTo", "/");
 	}
 }
