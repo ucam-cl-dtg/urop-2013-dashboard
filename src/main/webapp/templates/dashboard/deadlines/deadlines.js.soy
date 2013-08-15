@@ -6,10 +6,25 @@
  * @param deadlines The deadlines associated with the user
  * @param offset
  * @param limit
- * @param total // param section and param read are also passed
+ * @param total 
+ * @param archived
+ * @param complete
  */
 {template .index }
-	<h3>Upcoming deadlines for {$user.crsid}</h3>
+	<h3>Upcoming deadlines for {$user.name} ({$user.crsid})</h3>
+	<div class="row">
+		<div class="columns large-6 small-6">
+			{if $archived  or $complete }<a class="module-loader" data-target="deadlines/" >All</a>{else}All{/if} | {if $archived  or not $complete  }<a class="module-loader" data-target="deadlines/complete" >Complete</a>{else}Complete{/if}
+		</div>
+		<div class="columns large-6 small-6 text-right">
+			{if not $archived }<a class="module-loader" data-target="deadlines/archive" >Archive</a>{else}Archive{/if}
+		</div>
+	</div>
+	<div class="row">
+		<div class="columns large-12 small-12">
+			&nbsp;
+		</div>
+	</div>
 	<div class="row">
 		<div class="columns large-12 small-12">
 			<ul class="pagination-feed panels row" data-limit="{$limit}" data-offset="{$offset}" data-total="{$total}" data-location="deadlines" data-template="dashboard.deadlines.deadlines">
@@ -42,12 +57,13 @@
 		<li class="panel-wrapper columns large-12">
 			<div class="list-panel">
 				<div class="row list-inner-panel">
-					<div class="columns large-9 small-9"><strong>{$deadline.name}</strong> - due <span class="{if $deadline.imminent}round alert label{else}label{/if}">{$deadline.datetime}</span><br/><em>{$deadline.message}</em></div>
+					<div class="columns large-9 small-9"><strong>{$deadline.name} </strong> {if not $deadline.archived}<span class="{if $deadline.imminent}round alert label{else}label{/if}">due {$deadline.datetime}</span>{else}{if $deadline.complete} Completed {else} [Deadline past - due on {$deadline.datetime}]{/if}{/if}<br/><em>{$deadline.message}</em></div>
 					<div class="columns large-3 small-3 text-right">
 						<div class="icon-button-wrapper">
+							{if not $deadline.archived}
 							<a class="icon-button panel-icon-button websymbols-icon icon-button-array" href="{$deadline.url}">&#88;</a>
-							<a class="icon-button panel-icon-button websymbols-icon icon-button-array complete_deadline">{if $deadline.complete}&#47;{else}&#46;{/if}</a>
-							<a class="icon-button panel-icon-button websymbols-icon icon-button-array archive_deadline"><i class="icon-trash_can">&nbsp;</i></a>
+							<a class="icon-button panel-icon-button websymbols-icon icon-button-array complete_deadline button {if $deadline.complete}success{/if}">&#46;</a>
+							{/if}
 						</div>
 					</div>
 				</div>

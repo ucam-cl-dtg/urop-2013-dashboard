@@ -23,10 +23,10 @@ moduleScripts['dashboard'] = {
 	},
 	'groups' : {
 		'index': [
-			groupsIndex
 		],
 		'manage' : [
 			editGroup,
+			deleteGroup,
 			gUserTokenInput,
 			tokenInputType
 		],
@@ -34,6 +34,9 @@ moduleScripts['dashboard'] = {
 			editGroup,
 			gUserTokenInput,
 			tokenInputType
+		],
+		'delete' : [
+			deleteGroup
 		]
 	},
 	'deadlines' : {
@@ -43,6 +46,7 @@ moduleScripts['dashboard'] = {
 		],
 		'manage' : [
 			editDeadline,
+			deleteDeadline,
 			applyDatepicker,
 			dUserTokenInput,
 			dGroupTokenInput,
@@ -54,16 +58,17 @@ moduleScripts['dashboard'] = {
 			dUserTokenInput,
 			dGroupTokenInput,
 			tokenInputType
+		],
+		'delete' : [
+		    deleteDeadline
 		]
 	},
 	'supervisor' : {
 		'index' : [
 		    tabMemory,
 			createDeadline,	
-	        deleteDeadline,
 	      	createGroup,
 	      	importGroup,
-	        deleteGroup,
 	        applyDatepicker,
 	        dUserTokenInput,
 			dGroupTokenInput,
@@ -71,21 +76,15 @@ moduleScripts['dashboard'] = {
 			gGroupTokenInput,
 			tokenInputType
 		],
-		'deadline' : [
-			deleteDeadline
-		],
-		'group' : [
-			deleteGroup
-		],
 		'newdeadline' : [
-			createDeadline,	
+			createDeadline,
 	        applyDatepicker,
 			dUserTokenInput,
 			dGroupTokenInput,
 			tokenInputType
 		],
 		'newgroup' : [
-			createGroup,	
+			createGroup,
 	        applyDatepicker,
 			gUserTokenInput,
 			tokenInputType

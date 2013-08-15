@@ -1,6 +1,7 @@
 package uk.ac.cam.dashboard.models;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -169,6 +170,7 @@ public class User {
 		
 		DeadlineQuery dq = DeadlineQuery.created();
 		dq.byOwner(this);
+		dq.afterDate(Calendar.getInstance());
 		
 		if(deadlines==null){ return new ArrayList<Map<String, ?>>();}
 		

@@ -33,6 +33,16 @@
                 {/call}
             </div>
         </section>
+        <section>
+            <p class="title" data-section-title><a><i class="icon icon-trash_can"></i></a></p>
+            <div class="content" data-section-content>
+
+                {call .delete}
+                {param deadline: $deadline /}
+                {/call}          
+
+            </div>
+        </section>
     </div>
 				
 {/template}
@@ -175,4 +185,17 @@
         </div>
         </form>
 
+{/template}
+
+/**
+ * Delete Deadline
+ * @param deadline
+ */
+{template .delete }
+            <div class="row">
+                <div class="columns large-10 small-8">
+                    <h5>Are you sure you want to delete the deadline {$deadline.name}? </h5><br/>
+                    <input type="button" class="button alert delete-deadline" value="Delete deadline" id="{$deadline.id}"/>
+                </div>
+            </div>
 {/template}

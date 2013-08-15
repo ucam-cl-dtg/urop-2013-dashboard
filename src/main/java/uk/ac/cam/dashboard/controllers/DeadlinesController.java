@@ -31,6 +31,7 @@ import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.dashboard.util.Strings;
 import uk.ac.cam.dashboard.util.Util;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -45,36 +46,25 @@ public class DeadlinesController extends ApplicationController {
 	
 	private User currentUser;
 	
-	// Get deadlines
+	// Get : not archived, not complete
 	@GET @Path("/")
 	public Map<String, ?> getSetDeadlines(@Form GetDeadlineForm deadlineForm) {
 		
-		return getDeadlines(deadlineForm, false);
-		
+		return getDeadlines(deadlineForm, false, false);		
 	}
 	
+	// Get : complete
+	@GET @Path("/complete")
+	public Map<String, ?> getCompletedDeadlines(@Form GetDeadlineForm deadlineForm) {
+		
+		return getDeadlines(deadlineForm, true, false);		
+	}
+	
+	// Get : archived
 	@GET @Path("/archive")
 	public Map<String, ?> getArchivedSetDeadlines(@Form GetDeadlineForm deadlineForm) {
 		
-		return getDeadlines(deadlineForm, true);	
-	}
-	
-	public Map<String, ?> getDeadlines(GetDeadlineForm deadlineForm, boolean archived) {
-
-		try {
-			currentUser = validateUser();
-		} catch (AuthException e) {
-			return ImmutableMap.of("error", e.getMessage());
-		}
-		
-		ImmutableMap<String, List<String>> errors = deadlineForm.validate();
-
-		if (errors.isEmpty()) {
-			return deadlineForm.handle(currentUser, archived);
-		} else {
-			return ImmutableMap.of("formErrors", errors, "data", deadlineForm.toMap());
-		}
-		
+		return getDeadlines(deadlineForm, true, true);	
 	}
 	
 	// Manage
@@ -145,10 +135,10 @@ public class DeadlinesController extends ApplicationController {
 		Session session = HibernateUtil.getTransactionSession();
 				
 		Deadline deadline = DeadlineQuery.get(id);
-	
+		
 	  	session.delete(deadline);
 		
-		return ImmutableMap.of("success", "true", "id", id);
+		return ImmutableMap.of("redirectTo", "supervisor/");
 		
 	}
 	
@@ -161,19 +151,7 @@ public class DeadlinesController extends ApplicationController {
 		if(d.getComplete()){ d.toggleComplete(false);
 		} else { d.toggleComplete(true); }
 
-		return d.toMap();
-	}
-	
-	// Mark as archived
-	@PUT @Path("/{id}/archive")
-	public Map<String, ?> updateArchive(@PathParam("id") int id) {
-		
-		DeadlineUser d = DeadlineQuery.getDUser(id);
-		
-		if(d.getArchived()){ d.toggleArchived(false);
-		} else { d.toggleArchived(true); }
-
-		return d.toMap();
+		return ImmutableMap.of("complete", d.getComplete());
 	}
 	
 	// Find users by crsid
@@ -209,5 +187,25 @@ public class DeadlinesController extends ApplicationController {
 		
 		return matches;
 	}
+	
+	public Map<String, ?> getDeadlines(GetDeadlineForm deadlineForm, boolean complete, boolean archived) {
+
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
+		
+		ImmutableMap<String, List<String>> errors = deadlineForm.validate();
+
+		if (errors.isEmpty()) {
+			return deadlineForm.handle(currentUser, complete, archived);
+		} else {
+			return ImmutableMap.of("formErrors", errors, "data", deadlineForm.toMap());
+		}
+		
+	}
+	
+
 	
 }

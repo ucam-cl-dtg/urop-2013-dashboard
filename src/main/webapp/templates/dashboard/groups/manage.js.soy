@@ -9,7 +9,7 @@
  */
 {template .manage }
 
-	<h2>{$group.name}</h2>
+	<h2>Group: {$group.name}</h2>
         
     <div class="section-container auto" data-section>
         <section {if $target=='statistics'}class="active"{/if}>
@@ -31,6 +31,16 @@
                 {param group: $group /}
                 {param errors: $errors /}
                 {param users: $users /}
+                {/call}          
+
+            </div>
+        </section>
+        <section>
+            <p class="title" data-section-title><a><i class="icon icon-trash_can"></i></a></p>
+            <div class="content" data-section-content>
+
+                {call .delete}
+                {param group: $group /}
                 {/call}          
 
             </div>
@@ -133,4 +143,17 @@
             </div>
         </form>
 
+{/template}
+
+/**
+ * Delete group
+ * @param group
+ */
+{template .delete }
+            <div class="row">
+                <div class="columns large-10 small-8">
+                    <h5>Are you sure you want to delete the group {$group.name}? </h5><br/>
+                    <input type="button" class="button alert delete-group" value="Delete group" id="{$group.id}"/>
+                </div>
+            </div>
 {/template}

@@ -86,8 +86,7 @@
 					<div class="columns large-9 small-9"><strong>{$deadline.name}</strong> - due {$deadline.datetime}<br/><em>{$deadline.message}</em></div>
 					<div class="columns large-3 small-3 text-right">
 						<div class="icon-button-wrapper">
-							<a class="icon-button panel-icon-button websymbols-icon icon-button-array black-link" href="deadlines/manage/{$deadline.id}">&#83;</a>
-							<a class="icon-button panel-icon-button websymbols-icon deadline_delete">&#39;</a>
+							<a class="icon-button panel-icon-button websymbols-icon black-link" href="deadlines/manage/{$deadline.id}">&#83;</a>
 						</div>
 					</div>
 				</div>
@@ -110,8 +109,7 @@
 					<div class="columns large-9 small-9"><strong>{$group.name}</strong></div>
 					<div class="columns large-3 small-3 text-right">
 						<div class="icon-button-wrapper">
-							<a class="icon-button panel-icon-button websymbols-icon icon-button-array black-link" href="groups/manage/{$group.id}">&#83;</a>
-							<a class="icon-button panel-icon-button websymbols-icon group_delete">&#39;</a>
+							<a class="icon-button panel-icon-button websymbols-icon black-link" href="groups/manage/{$group.id}">&#83;</a>
 						</div>
 					</div>
 				</div>
@@ -254,7 +252,7 @@
 		</div>
 		<div class="row">
 			<div class="columns large-12 small-12">
-				<input type="submit" value="Save" id="group_submit" />
+				<input type="submit" value="Save" id="group_submit" class="button"/>
 			</div>
 		</div>
 	</form>
@@ -268,7 +266,7 @@
 {template .importgroup }
 	<h3>Import Existing Group (LDAP)</h3>    
 	<h6 class="subheader">Small public groups only</h6>         
-	<form id="importGroupForm" action="{$ij.path}groups/import" method="post">
+	<form id="importGroupForm" action="{$ij.path}groups/import" method="post" class="custom">
 		<div class="row">
 			<div class="columns large-2 small-4 field-label">Import Group</div>
 			<div class="columns large-10 small-8">
@@ -279,7 +277,7 @@
 		</div>
 		<div class="row">
 			<div class="columns large-12 small-12">
-				<input type="submit" value="Save"/>
+				<input type="submit" value="Save"/ class="button">
 			</div>
 		</div>
 	</form>   

@@ -46,7 +46,7 @@ public class HomePageController extends ApplicationController{
 		GetNotificationForm notificationForm = new GetNotificationForm();
 		notificationForm.validate();
 		
-		return ImmutableMap.of("user", userData, "deadlines", deadlineForm.handle(currentUser, false), "userNotifications", notificationForm.handle(currentUser, false));
+		return ImmutableMap.of("user", userData, "deadlines", deadlineForm.handle(currentUser, false, false), "userNotifications", notificationForm.handle(currentUser, false));
 	}
 
 }
