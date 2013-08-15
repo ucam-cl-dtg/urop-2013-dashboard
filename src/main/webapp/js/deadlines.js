@@ -23,7 +23,10 @@ function deleteDeadline() {
 		var deadlineID = $(this).attr("id");
 		$.ajax({
             type: 'DELETE',
-            url: prepareURL("deadlines/" + deadlineID)
+            url: prepareURL("deadlines/" + deadlineID),
+            success: function(data) {
+            	router.navigate(data.redirectTo, {trigger: true});
+            } 
 		});	
 	});
 }
