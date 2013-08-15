@@ -12,17 +12,12 @@
  */
 {template .index }
 	<h3>Upcoming deadlines for {$user.name} ({$user.crsid})</h3>
-	<div class="row">
+	<div class="row pagination-header">
 		<div class="columns large-6 small-6">
-			{if $archived  or $complete }<a class="module-loader" data-target="deadlines/" >All</a>{else}All{/if} | {if $archived  or not $complete  }<a class="module-loader" data-target="deadlines/complete" >Complete</a>{else}Complete{/if}
+			{if $archived  or $complete }<a href="deadlines/" >All</a>{else}All{/if} | {if $archived  or not $complete  }<a href="deadlines/complete" >Complete</a>{else}Complete{/if}
 		</div>
 		<div class="columns large-6 small-6 text-right">
-			{if not $archived }<a class="module-loader" data-target="deadlines/archive" >Archive</a>{else}Archive{/if}
-		</div>
-	</div>
-	<div class="row">
-		<div class="columns large-12 small-12">
-			&nbsp;
+			{if not $archived }<a href="deadlines/archive" >Archive</a>{else}Archive{/if}
 		</div>
 	</div>
 	<div class="row">
