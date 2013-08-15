@@ -1,21 +1,13 @@
-function groupsIndex() {
-  $(".group_delete").click(function() {
-  var group_id = $(this).parents("form").attr("id");
-  // Ajax delete request
-      var deleteData = $.ajax({
+function deleteGroup() {
+	$(".delete-group").click(function() {
+		var groupID = $(this).attr("id");
+		$.ajax({
             type: 'DELETE',
-            url: prepareURL("groups/" + group_id),
-            success: function(resultData) {
-                $("#"+group_id).hide(2000, function() {
-                    $(this).remove();
-                });
-            }
-      });
-  });
+            url: prepareURL("groups/" + groupID)
+		});	
+	});
 }
 
 function editGroup() {
-	$("#editGroupForm").ajaxForm(function(data) {
-		applyTemplate($('#editGroupSection'), "dashboard.groups.edit", data);
-	});
+	submitAjaxForm("editGroupForm", "editGroupSection", "dashboard.groups.edit");
 }

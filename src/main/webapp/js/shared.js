@@ -7,6 +7,19 @@ function tabMemory() {
 	});
 }
 
+function submitAjaxForm(form, section, template){
+	var options = {
+			beforeSubmit: function(){
+				$('input[type=submit]', '#'+form).attr('disabled', 'disabled');
+				$('input[type=submit]', '#'+form).addClass('secondary');
+			},
+			success: function(data) {
+				applyTemplate($('#'+section), template, data);
+			}		
+	};
+	$('#'+form).ajaxForm(options);	
+}
+
 function bindPaginationShowMoreListener() {
 	
 	$(document).on('click', '.show-more-pagination', function(e) {

@@ -149,21 +149,17 @@ public class GroupsController extends ApplicationController {
 			}
 		}
 		
-		// Destroy 
+		// Delete
 		@DELETE @Path("/{id}")
 		public Map<String, ?> deleteGroup(@PathParam("id") int id) {
 			
 			Session session = HibernateUtil.getTransactionSession();
 			
 			Group group = GroupQuery.get(id);
-			
-		  	if(!group.getOwner().equals(currentUser)){
-		  		return ImmutableMap.of("redirectTo", "groups");
-		  	}
 
 		  	session.delete(group);
 			
-			return ImmutableMap.of("success", "true", "id", id);
+			return ImmutableMap.of("redirectTo", "supervisor/");
 			
 		}		
 		

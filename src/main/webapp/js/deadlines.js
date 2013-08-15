@@ -1,5 +1,4 @@
 function deadlinesIndex() {
-
         // Toggle deadline complete
         $(".complete_deadline").click(function() {
         var deadline_id = $(this).parents("form").attr("id");
@@ -19,8 +18,16 @@ function deadlinesIndex() {
         });
 }
 
-function editDeadline() {
-	$("#editDeadlineForm").ajaxForm(function(data) {
-		applyTemplate($('#editDeadlineSection'), "dashboard.deadlines.edit", data);
+function deleteDeadline() {
+	$(".delete-deadline").click(function() {
+		var deadlineID = $(this).attr("id");
+		$.ajax({
+            type: 'DELETE',
+            url: prepareURL("deadlines/" + deadlineID)
+		});	
 	});
+}
+
+function editDeadline() {
+	submitAjaxForm("editDeadlineForm", "editDeadlineSection", "dashboard.deadlines.edit");
 }
