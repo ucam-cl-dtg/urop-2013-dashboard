@@ -1,6 +1,6 @@
 function tabMemory() {
 	$(document).on('click', 'section .title', function() {
-		var location = $(this).children('a').attr('data-target');
+		var location = $(this).parent().parent().attr('data-base-path') + "/" + $(this).children('a').attr('data-target');
 		router.navigate(location, {trigger: false});
 	});
 }

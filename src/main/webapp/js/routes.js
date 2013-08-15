@@ -52,6 +52,7 @@ $(document).ready(function() {
         "notifications/archive(:params*)": "dashboard.notifications.index",
         
         // Supervisor
+        "supervisor" : "dashboard.supervisor.index",
         "supervisor/:tab" : "dashboard.supervisor.index"
         
         //For getting params in get requests
