@@ -1,3 +1,10 @@
+function tabMemory() {
+	$(document).on('click', 'section .title', function() {
+		var location = $(this).children('a').attr('data-target');
+		router.navigate(location, {trigger: false});
+	});
+}
+
 function bindPaginationShowMoreListener() {
 	
 	$(document).on('click', '.show-more-pagination', function(e) {

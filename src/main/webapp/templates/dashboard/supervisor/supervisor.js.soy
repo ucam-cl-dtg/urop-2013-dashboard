@@ -13,7 +13,7 @@
         
     <div class="section-container auto" data-section>
         <section {if $target=='deadlines'}class="active"{/if}>
-            <p class="title" data-section-title><a>Manage Deadlines</a></p>
+            <p class="title" data-section-title><a data-target="deadlines">Manage Deadlines</a></p>
             <div class="content" data-section-content>
             
                 <!--deadlines-->
@@ -45,8 +45,8 @@
             </div>
             </section>
             <section {if $target=='groups'}class="active"{/if}>
-			<p class="title" data-section-title><a>Manage Groups</a></p>
-            <div class="content" data-section-content>
+				<p class="title" data-section-title><a data-target="groups">Manage Groups</a></p>
+            	<div class="content" data-section-content>
 
                 <!--groups-->
                 
@@ -76,8 +76,8 @@
 
             </div>
         </section>
-        <section {if $target=='newdeadline'}class="active"{/if}>
-            <p class="title" data-section-title><a>New Deadline</a></p>
+        <section {if $target=='newDeadline'}class="active"{/if}>
+            <p class="title" data-section-title><a data-target="newDeadline">New Deadline</a></p>
             <div id="newDeadlineSection" class="content" data-section-content>        
                 {call .newdeadline}
 		            {param errors: $errors /}
@@ -86,8 +86,8 @@
 				{/call}
             </div>
         </section>
-        <section {if $target=='newgroup'}class="active"{/if}>
-            <p class="title" data-section-title><a>New Group</a></p>
+        <section {if $target=='newGroup'}class="active"{/if}>
+            <p class="title" data-section-title><a data-target="newGroup">New Group</a></p>
             <div id="newGroupSection" class="content" data-section-content>    
 				{call .newgroup}
 				
@@ -98,8 +98,8 @@
 				{/call}
             </div>
         </section>
-        <section {if $target=='importgroup'}class="active"{/if}>
-            <p class="title" data-section-title><a>Import Group</a></p>
+        <section {if $target=='importGroup'}class="active"{/if}>
+            <p class="title" data-section-title><a data-target="importGroup">Import Group</a></p>
             <div id="importGroupSection" class="content" data-section-content>    
 				{call .importgroup}
 					{param errors: $errors /}
