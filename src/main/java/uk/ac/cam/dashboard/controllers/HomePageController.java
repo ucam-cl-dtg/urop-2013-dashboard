@@ -11,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.dashboard.exceptions.AuthException;
-import uk.ac.cam.dashboard.forms.GetDeadlineForm;
-import uk.ac.cam.dashboard.forms.GetNotificationForm;
 //Import models
 import uk.ac.cam.dashboard.models.User;
 
@@ -43,15 +41,7 @@ public class HomePageController extends ApplicationController{
 		
 		Map<String, String> userData = currentUser.getUserDetails();
 		
-		// Get deadlines
-		GetDeadlineForm deadlineForm = new GetDeadlineForm();
-		deadlineForm.validate();
-		
-		// Get notifications
-		GetNotificationForm notificationForm = new GetNotificationForm();
-		notificationForm.validate();
-		
-		return ImmutableMap.of("user", userData, "deadlines", deadlineForm.handle(currentUser, false, false), "userNotifications", notificationForm.handle(currentUser, false), "supervisor", currentUser.getSupervisor());
+		return ImmutableMap.of("user", userData, "supervisor", currentUser.getSupervisor());
 	}
 
 }
