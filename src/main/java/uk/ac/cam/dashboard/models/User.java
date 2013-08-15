@@ -37,6 +37,8 @@ public class User {
 	
 	private String username;
 	
+	private boolean supervisor;
+	
 	@OneToOne
 	private Settings settings; 
 	
@@ -60,6 +62,7 @@ public class User {
 		this.crsid = crsid;
 		this.settings = settings;
 		this.username = this.getName();
+		this.supervisor = false;
 	}
 	
 	public Settings getSettings() {return settings;}
@@ -81,6 +84,8 @@ public class User {
 		}
 		return this.username;
 	}
+	
+	public boolean getSupervisor() {return supervisor;}
 	
 	public Set<DeadlineUser> getDeadlines() { return deadlines; }
 	public void clearDeadlines() { deadlines.clear(); }

@@ -34,4 +34,5 @@ public class Strings {
 	public static final String AUTHEXCEPTION_GLOBAL_USER = "Could not validate API permissions for this user. Please include a valid crsid with your query.";
 	public static final String AUTHEXCEPTION_USER = "Could not validate permissions for this user.";
 	public static final String AUTHEXCEPTION_GENERAL = "Error validating permissions.";
+	
 }
