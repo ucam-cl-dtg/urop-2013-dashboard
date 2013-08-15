@@ -39,6 +39,7 @@ public class SupervisorController extends ApplicationController {
 			return ImmutableMap.of("user", currentUser.toMap(), "target", tab, "cdeadlines", currentUser.createdDeadlinesToMap(), "cgroups", currentUser.groupsToMap(), "errors", "undefined");
 		}
 		
-		return ImmutableMap.of("redirectTo", "/");
+		return ImmutableMap.of("redirectTo", "error");
 	}
+	
 }

@@ -27,6 +27,11 @@ public class HomePageController extends ApplicationController{
 	
 	private User currentUser;
 	
+	@GET @Path("/error")
+	public ImmutableMap<String, ?> accessDenied() {
+		return ImmutableMap.of();
+	}
+	
 	@GET @Path("/")
 	public Map<String, ?> homePage() {
 		
@@ -46,7 +51,7 @@ public class HomePageController extends ApplicationController{
 		GetNotificationForm notificationForm = new GetNotificationForm();
 		notificationForm.validate();
 		
-		return ImmutableMap.of("user", userData, "deadlines", deadlineForm.handle(currentUser, false, false), "userNotifications", notificationForm.handle(currentUser, false));
+		return ImmutableMap.of("user", userData, "deadlines", deadlineForm.handle(currentUser, false, false), "userNotifications", notificationForm.handle(currentUser, false), "supervisor", currentUser.getSupervisor());
 	}
 
 }

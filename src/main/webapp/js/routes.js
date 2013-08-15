@@ -54,7 +54,10 @@ $(document).ready(function() {
         
         // Supervisor
         "supervisor" : "dashboard.supervisor.index",
-        "supervisor/:tab" : "dashboard.supervisor.index"
+        "supervisor/:tab" : "dashboard.supervisor.index",
+        	
+        // Errors
+        "error" : "dashboard.errors.auth",
         
         //For getting params in get requests
         // Use the last line to redirect unmatched routes to an error page

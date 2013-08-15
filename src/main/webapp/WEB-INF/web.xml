@@ -38,7 +38,8 @@
 			/soy/js/3/dashboard.account.js,
 			/soy/js/3/dashboard.errors.js,
 			/soy/js/3/dashboard.notifications.js,
-			/soy/js/3/dashboard.supervisor.js
+			/soy/js/3/dashboard.supervisor.js,
+			/soy/js/3/dashboard.errors.js
 		</param-value>
 	</context-param>
 

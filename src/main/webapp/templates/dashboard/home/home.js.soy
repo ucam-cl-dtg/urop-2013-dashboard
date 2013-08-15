@@ -34,14 +34,14 @@
                                 </div>
                                 <div class="row">
                                     <div class="columns large-11 small-11 text-left">
-                                    <span class="label round">User status: {$user.status} </span>  <span class="round secondary label">User institution: {$user.institution} </span>
+                                    <span class="label round">User status: {if $user.supervisor}Supervisor{else}Student{/if} </span>  <span class="round secondary label">User institution: {$user.institution} </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="columns large-1 small-1">
                                 <!--user picture-->
-                                {if $user.photo == 'none'}
-                                    <img src="/images/nophoto.jpeg"/>
+                                {if $user.photo == 'undefined'}
+                                    <img src="/dashboard/img/nophoto.jpeg"/>
                                  {else}
                                     <img src="data:image/jpeg;base64,{$user.photo}"/>
                                 {/if}                                      
