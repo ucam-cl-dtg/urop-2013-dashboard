@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>uk.ac.cam.cl.dtg.teaching</groupId>
 			<artifactId>supervision-api</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
 		
 		<dependency>

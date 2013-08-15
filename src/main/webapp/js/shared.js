@@ -53,7 +53,7 @@ function bindPaginationShowMoreListener() {
 					// If the number returned is the limit, check if the total has
 					// been reached.
 					if (newOffset + limit == total) {
-						noMoreNotifications();
+						noMorePagination();
 					} else {
 						$('.show-more-pagination').removeClass('disabled');
 					}
