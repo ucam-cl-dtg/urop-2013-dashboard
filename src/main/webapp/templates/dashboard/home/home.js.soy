@@ -3,12 +3,11 @@
 /**
  * Home Page for timetables
  * @param user
- * @param deadlines
- * @param userNotifications
  * 
  */
 {template .index}
-   <div class="row">
+	<h3>Supervisions</h3>
+	<div class="row">
         <ul class="panels">
             <li class="panel-wrapper columns large-12">
                 <div class="list-panel">
@@ -52,33 +51,5 @@
                 </ul>
             </li>
         </ul>
-    </div>
-    <div class="section-container auto" data-section>
-        <section>
-            <p class="title" data-section-title><a>Everything</a></p>
-            <div class="content" data-section-content>
-            	{call dashboard.deadlines.index}
-					{param user: $deadlines.user /}
-					{param deadlines: $deadlines.deadlines /}
-					{param offset: $deadlines.offset /}
-					{param limit: $deadlines.limit /}
-					{param total: $deadlines.total /}
-				{/call}
-            </div>            
-        </section>
-        <section>
-        	<p class="title" data-section-title><a>Notifications</a></p>
-        	<div class="content" data-section-content>
-        	 	{call dashboard.notifications.index}
-        	 		{param user: $userNotifications.user /}
-        	 		{param notifications: $userNotifications.notifications /}
-        	 		{param offset: $userNotifications.offset /}
-        	 		{param limit: $userNotifications.limit /}
-        	 		{param total: $userNotifications.total /}
-        	 		{param section: $userNotifications.section /}
-        	 		{param read: $userNotifications.read /}
-        		{/call}
-        	</div>
-        </section>
     </div>
 {/template}
