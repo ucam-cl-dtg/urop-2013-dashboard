@@ -1,3 +1,12 @@
 label.checkbox-label {
 	margin-bottom: 12px;
 }
+
+.complete_deadline {
+	margin-bottom: 0;
+	
+}
+
+.row.pagination-header {
+	margin-bottom: 12px;
+}
