@@ -93,29 +93,29 @@ public class AccountController extends ApplicationController {
 		
 		// Dashboard
 		List<Object> dashboard = new LinkedList<Object>();
-		dashboard.add(ImmutableMap.of("name", "Home", "link", "/", "icon", "icon-globe", "iconType", 1, "notificationCount", 0));
-		dashboard.add(ImmutableMap.of("name", "Notifications", "link", "notifications", "icon", "icon-newspaper", "iconType", 1, "notificationCount", 0));
-		dashboard.add(ImmutableMap.of("name", "Deadlines", "link", "deadlines", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 0));
-		dashboard.add(ImmutableMap.of("name", "Groups", "link", "groups", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
-		dashboard.add(ImmutableMap.of("name", "Supervisor Homepage", "link", "supervisor", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
+		dashboard.add(ImmutableMap.of("name", "Home", "link", "/dashboard", "icon", "icon-globe", "iconType", 1, "notificationCount", 0));
+		dashboard.add(ImmutableMap.of("name", "Notifications", "link", "/dashboard/notifications", "icon", "icon-newspaper", "iconType", 1, "notificationCount", 0));
+		dashboard.add(ImmutableMap.of("name", "Deadlines", "link", "/dashboard/deadlines", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 0));
+		dashboard.add(ImmutableMap.of("name", "Groups", "link", "/dashboard/groups", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
+		dashboard.add(ImmutableMap.of("name", "Supervisor Homepage", "link", "/dashboard/supervisor", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
 		sidebar.add(ImmutableMap.of("name", "Dashboard", "links", dashboard, "icon", "a", "iconType", 2, "notificationCount", dashboardNotifications));
 		
 		// Signups
 		if (settings.isSignupsOptIn()) {
 			List<Object> signups = new LinkedList<Object>();
-			signups.add(ImmutableMap.of("name", "Events", "link", "signapp/events", "icon", "?", "iconType", 2, "notificationCount", 0));
-			signups.add(ImmutableMap.of("name", "Create new event", "link", "signapp/events/new", "icon", "?", "iconType", 2, "notificationCount", 0));
+			signups.add(ImmutableMap.of("name", "Events", "link", "/signapp/events", "icon", "?", "iconType", 2, "notificationCount", 0));
+			signups.add(ImmutableMap.of("name", "Create new event", "link", "/signapp/events/new", "icon", "?", "iconType", 2, "notificationCount", 0));
 			sidebar.add(ImmutableMap.of("name", "Timetable/Signups", "links", signups, "icon", "P", "iconType", 2, "notificationCount", signupsNotifications));
 		}
 		
 		// Questions
 		if (settings.isQuestionsOptIn()) {
 			List<Object> questions = new LinkedList<Object>();
-			questions.add(ImmutableMap.of("name", "Browse questions", "link", "q/search", "icon", "icon-list", "iconType", 1, "notificationCount", 0));
-			questions.add(ImmutableMap.of("name", "Browse question sets", "link", "sets", "icon", "icon-file_open", "iconType", 1, "notificationCount", 0));
-			questions.add(ImmutableMap.of("name", "Browse own content", "link", "users/me", "icon", "icon-file_open", "iconType", 1, "notificationCount", 0));
-			questions.add(ImmutableMap.of("name", "Create question set", "link", "sets/add", "icon", "icon-plus", "iconType", 1, "notificationCount", 0));
-			questions.add(ImmutableMap.of("name", "Fairytale land", "link", "fairytale", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 0));
+			questions.add(ImmutableMap.of("name", "Browse questions", "link", "/questions/q/search", "icon", "icon-list", "iconType", 1, "notificationCount", 0));
+			questions.add(ImmutableMap.of("name", "Browse question sets", "link", "/questions/sets", "icon", "icon-file_open", "iconType", 1, "notificationCount", 0));
+			questions.add(ImmutableMap.of("name", "Browse own content", "link", "/questions/users/me", "icon", "icon-file_open", "iconType", 1, "notificationCount", 0));
+			questions.add(ImmutableMap.of("name", "Create question set", "link", "/questions/sets/add", "icon", "icon-plus", "iconType", 1, "notificationCount", 0));
+			questions.add(ImmutableMap.of("name", "Fairytale land", "link", "/questions/fairytale", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 0));
 			sidebar.add(ImmutableMap.of("name", "Setting Work", "links", questions, "icon", "a", "iconType", 2, "notificationCount", questionsNotifications));
 		}
 		
