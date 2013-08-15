@@ -14,10 +14,10 @@
 	<h3>Upcoming deadlines for {$user.name} ({$user.crsid})</h3>
 	<div class="row pagination-header">
 		<div class="columns large-6 small-6">
-			{if $archived  or $complete }<a href="deadlines/" >All</a>{else}All{/if} | {if $archived  or not $complete  }<a href="deadlines/complete" >Complete</a>{else}Complete{/if}
+			<a href="deadlines/" {if not ($archived or $complete)}class="black-link"{/if}>All</a> | <a href="deadlines/complete" {if $complete}class="black-link"{/if}>Complete</a>
 		</div>
 		<div class="columns large-6 small-6 text-right">
-			{if not $archived }<a href="deadlines/archive" >Archive</a>{else}Archive{/if}
+			<a href="deadlines/archive" {if $archived}class="black-link"{/if}>Archive</a>
 		</div>
 	</div>
 	<div class="row">
