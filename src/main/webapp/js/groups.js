@@ -3,7 +3,10 @@ function deleteGroup() {
 		var groupID = $(this).attr("id");
 		$.ajax({
             type: 'DELETE',
-            url: prepareURL("groups/" + groupID)
+            url: prepareURL("groups/" + groupID),
+            success: function(data) {
+            	router.navigate(data.redirectTo, {trigger: true});
+            }
 		});	
 	});
 }
