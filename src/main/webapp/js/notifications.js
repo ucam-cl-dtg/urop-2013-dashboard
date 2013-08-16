@@ -8,15 +8,16 @@ function markNotificationAsReadUnread() {
 	    	url: prepareURL("notifications/" + target + "?read=" + markAsRead),
 	    	success: function(data) {
 	    		if (data.errors) {
-	    			alert(data.errors);
+	    			console.log(data.errors);
 	    		} else {
 	    			$("#" + target).parent().slideUp(500, function() {
 	    				$(this).remove();
 	    			});
+	    			refreshNotificationCount(["dashboard", "signups", "questions", "handins"]);
 	    		}
 	    	},
 	    	error: function() {
-	    		alert('Error: could not perform AJAX request');
+	    		console.log('Error: could not perform AJAX request');
 	    	}
 	    });
 	});

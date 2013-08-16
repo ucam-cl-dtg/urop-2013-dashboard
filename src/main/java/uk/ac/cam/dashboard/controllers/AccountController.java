@@ -98,14 +98,31 @@ public class AccountController extends ApplicationController {
 		dashboard.add(ImmutableMap.of("name", "Deadlines", "link", "/dashboard/deadlines", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 0));
 		dashboard.add(ImmutableMap.of("name", "Groups", "link", "/dashboard/groups", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
 		dashboard.add(ImmutableMap.of("name", "Supervisor Homepage", "link", "/dashboard/supervisor", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
-		sidebar.add(ImmutableMap.of("name", "Dashboard", "links", dashboard, "icon", "a", "iconType", 2, "notificationCount", dashboardNotifications));
+		
+		ImmutableMap.Builder<String, Object> dashboardMap = new ImmutableMap.Builder<String, Object>();
+		dashboardMap.put("name", "Dashboard");
+		dashboardMap.put("links", dashboard);
+		dashboardMap.put("section", "dashboard");
+		dashboardMap.put("icon", "a");
+		dashboardMap.put("iconType", 2);
+		dashboardMap.put("notificationCount", dashboardNotifications);
+		sidebar.add(dashboardMap.build());
 		
 		// Signups
 		if (settings.isSignupsOptIn()) {
 			List<Object> signups = new LinkedList<Object>();
 			signups.add(ImmutableMap.of("name", "Events", "link", "/signapp/events", "icon", "?", "iconType", 2, "notificationCount", 0));
 			signups.add(ImmutableMap.of("name", "Create new event", "link", "/signapp/events/new", "icon", "?", "iconType", 2, "notificationCount", 0));
-			sidebar.add(ImmutableMap.of("name", "Timetable/Signups", "links", signups, "icon", "P", "iconType", 2, "notificationCount", signupsNotifications));
+			signups.add(ImmutableMap.of("name", "Walker vision", "link", "/signapp/events/walker_vision", "icon", "?", "iconType", 2, "notificationCount", 0));
+			
+			ImmutableMap.Builder<String, Object> sidebarMap = new ImmutableMap.Builder<String, Object>();
+			sidebarMap.put("name", "Timetable/Signups");
+			sidebarMap.put("links", signups);
+			sidebarMap.put("section", "signups");
+			sidebarMap.put("icon", "P");
+			sidebarMap.put("iconType", 2);
+			sidebarMap.put("notificationCount", signupsNotifications);
+			sidebar.add(sidebarMap.build());
 		}
 		
 		// Questions
@@ -116,7 +133,15 @@ public class AccountController extends ApplicationController {
 			questions.add(ImmutableMap.of("name", "Browse own content", "link", "/questions/users/me", "icon", "icon-file_open", "iconType", 1, "notificationCount", 0));
 			questions.add(ImmutableMap.of("name", "Create question set", "link", "/questions/sets/add", "icon", "icon-plus", "iconType", 1, "notificationCount", 0));
 			questions.add(ImmutableMap.of("name", "Fairytale land", "link", "/questions/fairytale", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 0));
-			sidebar.add(ImmutableMap.of("name", "Setting Work", "links", questions, "icon", "a", "iconType", 2, "notificationCount", questionsNotifications));
+			
+			ImmutableMap.Builder<String, Object> questionsMap = new ImmutableMap.Builder<String, Object>();
+			questionsMap.put("name", "Setting Work");
+			questionsMap.put("links", questions);
+			questionsMap.put("section", "questions");
+			questionsMap.put("icon", "a");
+			questionsMap.put("iconType", 2);
+			questionsMap.put("notificationCount", questionsNotifications);
+			sidebar.add(questionsMap.build());
 		}
 		
 		// Handins
@@ -125,7 +150,15 @@ public class AccountController extends ApplicationController {
 			handins.add(ImmutableMap.of("name", "Create bin", "link", "bins/create", "icon", ",", "iconType", 2, "notificationCount", 0));
 			handins.add(ImmutableMap.of("name", "Upload answers", "link", "bins", "icon", ",", "iconType", 2, "notificationCount", 0));
 			handins.add(ImmutableMap.of("name", "Mark answers", "link", "marking", "icon", "C", "iconType", 2, "notificationCount", 0));
-			sidebar.add(ImmutableMap.of("name", "Marking Work", "links", handins, "icon", "F", "iconType", 2, "notificationCount", handinsNotifications));
+			
+			ImmutableMap.Builder<String, Object> handinsMap = new ImmutableMap.Builder<String, Object>();
+			handinsMap.put("name", "Marking Work");
+			handinsMap.put("links", handins);
+			handinsMap.put("section", "handins");
+			handinsMap.put("icon", "F");
+			handinsMap.put("iconType", 2);
+			handinsMap.put("notificationCount", handinsNotifications);
+			sidebar.add(handinsMap.build());
 		}
 		
 		return sidebar;
