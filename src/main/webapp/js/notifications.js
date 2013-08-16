@@ -1,6 +1,7 @@
 function markNotificationAsReadUnread() {
 	$(document).on('click', '.mark-notification-as-read', function() {
 		var target = $(this).attr('data-notification-target');
+		var clickedSection = $(this).parent().attr('data-section');
 		// Implicitly checking whether markAsUnread is true or false
 		var markAsRead = $(this).children('a').hasClass('mark-as-read');
 	    $.ajax({
@@ -13,7 +14,7 @@ function markNotificationAsReadUnread() {
 	    			$("#" + target).parent().slideUp(500, function() {
 	    				$(this).remove();
 	    			});
-	    			refreshNotificationCount(["dashboard", "signups", "questions", "handins"]);
+	    			refreshNotificationCount([clickedSection]);
 	    		}
 	    	},
 	    	error: function() {

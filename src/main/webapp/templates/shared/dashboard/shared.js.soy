@@ -6,7 +6,7 @@
 {template .getNotifications}
 	{foreach $notification in $notifications}
 	<li class="notification-feed-item">
-		<div class="row" id="{$notification.id}">
+		<div class="row" id="{$notification.id}" data-section="{$notification.section}">
 			<a href="{$notification.link}" class="black-link">
 				<div class="columns large-9 small-8">
 					<div class="notification-message">{$notification.message}</div>
