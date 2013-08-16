@@ -1,5 +1,7 @@
 package uk.ac.cam.dashboard.models;
 
+import java.util.Map;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -7,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import com.google.common.collect.ImmutableMap;
 
 @Entity
 public class Settings {
@@ -36,4 +40,7 @@ public class Settings {
 	public boolean isHandinsOptIn() {return handinsOptIn;}
 	public void setHandinsOptIn(boolean handinsOptIn) {this.handinsOptIn = handinsOptIn;}
 	
+	public Map<String, Boolean> toMap() {
+		return ImmutableMap.of("signups", signupsOptIn, "questions", questionsOptIn, "handins", handinsOptIn);
+	}
 }
