@@ -3,7 +3,7 @@
 /**
  * Home Page for timetables
  * @param user
- * 
+ * @param services
  */
 {template .index}
 	<h3>Supervisions</h3>
@@ -45,6 +45,22 @@
                                     <img src="data:image/jpeg;base64,{$user.photo}"/>
                                 {/if}                                      
                                 <!--end user picture-->
+                            </div>
+                        </div>
+                    </li>
+					<li class="list-sub-panel">
+                        <div class="row list-inner-sub-panel">                           
+                            <div class="columns large-11 small-11 text-left">
+                                <div class="row">
+                                    <div class="columns large-2 small-2 text-left">
+                                    	<strong>Active services:</strong>
+                                    </div>
+                                     <div class="columns large-10 small-10 text-left">
+                                    	<span class="label {if $services.signups}success{else}error{/if}">Signups</span>
+                                        <span class="label {if $services.questions}success{else}error{/if}">Questions</span>
+                                    	<span class="label {if $services.handins}success{else}error{/if}">Handins</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </li>

@@ -3,11 +3,9 @@ package uk.ac.cam.dashboard.util;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
@@ -23,36 +21,27 @@ import uk.ac.cam.dashboard.models.User;
 
 public class Mail {
 
-	private final static String SMTP_ADDRESS = "smtp.gmail.com";
-	private final static String SMTP_PORT = "587";
+	private final static String SMTP_ADDRESS = "mail-serv.cl.cam.ac.uk";
 	
 	public static void sendMail(String[] recipients, String from, String contents, String subject){
 		
-		final String username = "uropdashboardapp@gmail.com";
-		final String password = "XxxYyyZzz99";
-		
-		Authenticator auth = new Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username, password);
-			}
-		 };
+		final String MAIL_ADDRESS = "ott-admin@cl.cam.ac.uk";
 		
 		Properties p = new Properties();
-		p.put("mail.smtp.auth", "true");
-		p.put("mail.smtp.starttls.enable", "true");
         p.put("mail.smtp.host", SMTP_ADDRESS);
-        p.put("mail.smtp.port", SMTP_PORT);
-
+        //p.put("mail.smtp.port", SMTP_PORT);
+        p.put("mail.smtp.starttls.enable", "true");
         
-        Session s = Session.getDefaultInstance(p, auth);
+        Session s = Session.getDefaultInstance(p);
         Message msg = new MimeMessage(s);
 
+        InternetAddress sentBy = null;
         InternetAddress[] sender = new InternetAddress[1];
         InternetAddress[] recievers = new InternetAddress[recipients.length];
         
         try {
-        	
-            sender[0] = new InternetAddress(from);
+        	sentBy = new InternetAddress(MAIL_ADDRESS);
+            sender[0]  = new InternetAddress(from);
             for(int i=0; i<recipients.length; i++){
             	recievers[i] = new InternetAddress(recipients[i]);
             }
@@ -63,13 +52,15 @@ public class Mail {
         }
         
         try {
-            msg.setFrom(sender[0]);            
-            msg.setReplyTo(sender);
-            msg.setRecipients(RecipientType.TO, recievers);
-            msg.setSubject(subject);
-            msg.setText(contents);
- 
-            Transport.send(msg);
+        	if(sentBy!=null&&sender!=null&&recievers!=null){
+	            msg.setFrom(sentBy);            
+	            msg.setReplyTo(sender);
+	            msg.setRecipients(RecipientType.TO, recievers);
+	            msg.setSubject(subject);
+	            msg.setText(contents);
+	 
+	            Transport.send(msg);
+        	}
             
         } catch (MessagingException e) {
             // TODO Auto-generated catch block
@@ -77,8 +68,8 @@ public class Mail {
             e.printStackTrace();
         }
     }
-
-	public static void setDeadline(User currentUser, Deadline deadline, Set<DeadlineUser> deadlineUsers){
+	
+	public static void buildDeadlineEmail(User currentUser, Set<DeadlineUser> deadlineUsers, String body){
 		
 		String[] recipients = new String[deadlineUsers.size()];
 		int i=0;
@@ -94,15 +85,7 @@ public class Mail {
 			recipients[i] = email;
 			i++;
 		}
-		String subject = currentUser.getName() + " ("+currentUser.getCrsid()+")" + Strings.MAIL_SETDEADLINE_SUBJECT;
-		String eol = System.getProperty("line.separator"); 
-		String body = Strings.MAIL_SETDEADLINE_HEADER + eol +
-						"Deadline: " + deadline.getTitle() + eol +
-						"Due: " + deadline.getFormattedDate() + eol +
-						"Message: " + deadline.getMessage() + eol +
-						"http://localhost:8080/dashboard/deadlines/" + eol +
-						Strings.MAIL_SETDEADLINE_FOOTER;
-				
+		String subject = currentUser.getName() + " ("+currentUser.getCrsid()+")" + Strings.MAIL_SETDEADLINE_SUBJECT;				
 		String sender;
 		try{
 			LDAPUser u = LDAPQueryManager.getUser(currentUser.getCrsid());
@@ -113,6 +96,39 @@ public class Mail {
 		}
 		
 		Mail.sendMail(recipients, sender, body, subject);	
+	}
+	
+	public static void setDeadline(User currentUser, Deadline deadline, Set<DeadlineUser> deadlineUsers){
+		String eol = System.getProperty("line.separator"); 
+		String body = Strings.MAIL_SETDEADLINE_HEADER + eol +
+						"Deadline: " + deadline.getTitle() + eol +
+						"Due: " + deadline.getFormattedDate() + eol +
+						"Message: " + deadline.getMessage() + eol +
+						"http://localhost:8080/dashboard/deadlines/" + eol +
+						Strings.MAIL_SETDEADLINE_FOOTER + " ("+currentUser.getCrsid()+"@cam.ac.uk)";
+		buildDeadlineEmail(currentUser, deadlineUsers, body);
+	}
+	
+	public static void remindDeadline(User currentUser, Deadline deadline, Set<DeadlineUser> deadlineUsers){
+		String eol = System.getProperty("line.separator"); 
+		String body = Strings.MAIL_REMINDDEADLINE_HEADER + eol +
+						"Deadline: " + deadline.getTitle() + eol +
+						"Due: " + deadline.getFormattedDate() + eol +
+						"Message: " + deadline.getMessage() + eol +
+						"http://localhost:8080/dashboard/deadlines/" + eol +
+						Strings.MAIL_REMINDDEADLINE_FOOTER + " ("+currentUser.getCrsid()+"@cam.ac.uk)";
+		buildDeadlineEmail(currentUser, deadlineUsers, body);
+	}
+	
+	public static void updateDeadline(User currentUser, Deadline deadline, Set<DeadlineUser> deadlineUsers){
+		String eol = System.getProperty("line.separator"); 
+		String body = Strings.MAIL_UPDATEDEADLINE_HEADER + eol +
+						"Deadline: " + deadline.getTitle() + eol +
+						"Due: " + deadline.getFormattedDate() + eol +
+						"Message: " + deadline.getMessage() + eol +
+						"http://localhost:8080/dashboard/deadlines/" + eol +
+						Strings.MAIL_UPDATEDEADLINE_FOOTER + " ("+currentUser.getCrsid()+"@cam.ac.uk)";
+		buildDeadlineEmail(currentUser, deadlineUsers, body);
 	}
 	
 }

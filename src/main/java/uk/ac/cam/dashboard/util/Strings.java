@@ -14,6 +14,18 @@ public class Strings {
 	public static final String DEADLINE_NOMESSAGE = "No message";
 	public static final String DEADLINE_NOURL = "#";
 	public static final String DEADLINE_DELETED = "Deadline deleted by owner";
+	// Deadlines set mail
+	public static final String MAIL_SETDEADLINE_SUBJECT = " set you a deadline on OTTer ";
+	public static final String MAIL_SETDEADLINE_HEADER = "You have been set a new deadline on Cam OTTer (Online teaching tools). The deadline details are below. To view the deadline, click the link to go to the CAM Supervisions app.";	
+	public static final String MAIL_SETDEADLINE_FOOTER = "This is an automatically generated message. All replies will be directed to the setter of this deadline.";		
+	// Deadlines update mail
+	public static final String MAIL_UPDATEDEADLINE_SUBJECT = " has updated a deadline on OTTer ";
+	public static final String MAIL_UPDATEDEADLINE_HEADER = "A deadline you have been set has been updated Cam OTTer (Online teaching tools). The deadline details are below. To view the deadline, click the link to go to the CAM Supervisions app.";	
+	public static final String MAIL_UPDATEDEADLINE_FOOTER = "This is an automatically generated message. All replies will be directed to the setter of this deadline.";		
+	// Deadlines remind mail
+	public static final String MAIL_REMINDDEADLINE_SUBJECT = " reminded you about a deadline on OTTer ";
+	public static final String MAIL_REMINDDEADLINE_HEADER = "You have been sent a reminder about a deadline on Cam OTTer (Online teaching tools). The deadline details are below. To view the deadline, click the link to go to the CAM Supervisions app.";	
+	public static final String MAIL_REMINDDEADLINE_FOOTER = "This is an automatically generated message. All replies will be directed to the setter of this deadline.";		
 	
 	// Groups
 	public static final String GROUP_AUTHEDIT = "You are not authorised to edit this group";
@@ -24,10 +36,6 @@ public class Strings {
 	public static final String NOTIFICATION_SETDEADLINE = " set you a deadline: ";
 	public static final String NOTIFICATION_UPDATEDEADLINE = " updated a deadline: ";
 	
-	// Mail
-	public static final String MAIL_SETDEADLINE_SUBJECT = " set you a deadline on CAM Supervisions";
-	public static final String MAIL_SETDEADLINE_HEADER = "You have been set a new deadline on CAM Supervisions. The deadline details are below. To view the deadline, click the link to go to the CAM Supervisions app.";	
-	public static final String MAIL_SETDEADLINE_FOOTER = "This is an automatically generated message. All replies will be directed to the setter of this deadline.";	
 	
 	// Authorisation exceptions
 	public static final String AUTHEXCEPTION_GLOBAL = "Could not validate global API permissions.";
