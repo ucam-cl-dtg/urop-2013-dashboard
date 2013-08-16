@@ -12,5 +12,5 @@ function deleteGroup() {
 }
 
 function editGroup() {
-	submitAjaxForm("editGroupForm", "editGroupSection", "dashboard.groups.edit");
+	submitAjaxForm("editGroupForm", ".main", "dashboard.groups.manage");
 }

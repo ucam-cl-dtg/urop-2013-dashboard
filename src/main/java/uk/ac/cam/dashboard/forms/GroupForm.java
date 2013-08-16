@@ -63,7 +63,7 @@ public class GroupForm {
 		return group.getId();
 	}
 
-	public int handleUpdate(User currentUser, int id) {		
+	public Group handleUpdate(User currentUser, int id) {		
 		
 		Session session = HibernateUtil.getTransactionSession();
 
@@ -88,7 +88,7 @@ public class GroupForm {
 			session.save(nu);
 		}
 		
-		return group.getId();
+		return group;
 				
 	}
 	

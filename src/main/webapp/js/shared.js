@@ -14,7 +14,7 @@ function submitAjaxForm(form, section, template){
 				$('input[type=submit]', '#'+form).addClass('secondary');
 			},
 			success: function(data) {
-				applyTemplate($('#'+section), template, data);
+				applyTemplate($(section), template, data);
 			}		
 	};
 	$('#'+form).ajaxForm(options);	

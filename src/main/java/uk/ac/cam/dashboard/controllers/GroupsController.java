@@ -138,8 +138,14 @@ public class GroupsController extends ApplicationController {
 			ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
 			
 			if(errors.isEmpty()){
-				groupForm.handleUpdate(currentUser, id);
-				return ImmutableMap.of("redirectTo", "groups/manage/"+id);
+				Group group = groupForm.handleUpdate(currentUser, id);
+				List<Map<String, Object>> users = null;
+				users = new ArrayList<Map<String, Object>>();
+				for(User u : group.getUsers()){
+					users.add(u.getUserDetails());
+				}
+				return ImmutableMap.of("group", group.toMap(), "users", users, "errors", "undefined", "target", "statistics");
+				
 			} else {
 				return ImmutableMap.of("group", groupForm.toMap(id), "users", groupForm.usersToMap(), "errors", actualErrors);
 			}

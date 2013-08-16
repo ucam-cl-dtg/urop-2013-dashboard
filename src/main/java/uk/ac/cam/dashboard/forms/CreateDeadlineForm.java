@@ -93,7 +93,7 @@ public class CreateDeadlineForm {
 		return deadline.getId();			
 	}
 	
-	public int handleUpdate(User currentUser, int id) {		
+	public Deadline handleUpdate(User currentUser, int id) {		
 		
 		Session session = HibernateUtil.getTransactionSession();
 		
@@ -138,7 +138,7 @@ public class CreateDeadlineForm {
 		
 		
 		
-		return deadline.getId();	
+		return deadline;	
 	}
 	
 	public ArrayListMultimap<String, String> validate() {

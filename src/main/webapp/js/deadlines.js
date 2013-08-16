@@ -32,5 +32,5 @@ function deleteDeadline() {
 }
 
 function editDeadline() {
-	submitAjaxForm("editDeadlineForm", "editDeadlineSection", "dashboard.deadlines.edit");
+	submitAjaxForm("editDeadlineForm", ".main", "dashboard.deadlines.manage");
 }

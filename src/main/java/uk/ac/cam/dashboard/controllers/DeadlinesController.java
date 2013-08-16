@@ -31,7 +31,6 @@ import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
-import uk.ac.cam.dashboard.util.Strings;
 import uk.ac.cam.dashboard.util.Util;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -121,10 +120,10 @@ public class DeadlinesController extends ApplicationController {
 		ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
 		
 		if(errors.isEmpty()){
-			deadlineForm.handleUpdate(currentUser, id);
-			return ImmutableMap.of("redirectTo", "deadlines/");
+			Deadline deadline = deadlineForm.handleUpdate(currentUser, id);
+			return ImmutableMap.of("deadline", deadline.toMap(), "users", deadline.usersToMap(), "errors", "undefined", "target", "statistics");
 		} else {
-			return ImmutableMap.of("errors", actualErrors, "deadlineEdit", deadlineForm.toMap(id), "target", "edit");
+			return ImmutableMap.of("errors", actualErrors, "deadline", deadlineForm.toMap(id), "target", "edit");
 		}
 	}
 	

@@ -3,7 +3,6 @@
 /**
  * Supervisor panel - manage a deadline and view stats
  * @param deadline
- * @param deadlineEdit
  * @param target
  * @param errors
  * @param users
@@ -13,7 +12,7 @@
 	<h2>{$deadline.name}</h2>
         
     <div class="section-container auto" data-section>
-        <section {if $target == 'undefined'}class="active"{/if}>
+        <section {if $target == 'statistics'}class="active"{/if}>
             <p class="title" data-section-title><a>Statistics</a></p>
             <div class="content" data-section-content>
             
@@ -28,7 +27,7 @@
             <p class="title" data-section-title><a>Edit Deadline</a></p>
             <div class="content" data-section-content id="editDeadlineSection">
                 {call .edit}
-                	{param deadline: $deadlineEdit /}
+                	{param deadline: $deadline /}
                 	{param errors: $errors /}
                 {/call}
             </div>
