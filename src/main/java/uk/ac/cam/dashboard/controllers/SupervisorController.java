@@ -34,11 +34,12 @@ public class SupervisorController extends ApplicationController {
 		currentUser = getUser();
 		
 		if(currentUser.getSupervisor()){
-			log.debug("Returning JSON of user, user created deadlines and user created groups");
+			log.debug("User authorised, returning group and deadline management data JSON");
 			tab = (tab == null || tab == "" ? "undefined" : tab);
 			return ImmutableMap.of("user", currentUser.toMap(), "target", tab, "cdeadlines", currentUser.createdDeadlinesToMap(), "cgroups", currentUser.groupsToMap(), "errors", "undefined");
 		}
 		
+		log.debug("User is not authorised to view supervision homepage, redirecting");
 		return ImmutableMap.of("redirectTo", "error");
 	}
 	

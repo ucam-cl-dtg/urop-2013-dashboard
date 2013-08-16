@@ -42,14 +42,17 @@ public class NotificationsController extends ApplicationController {
 			try {
 				currentUser = validateUser();
 			} catch (AuthException e) {
+				log.error("Error validating user: " +e.getMessage());
 				return ImmutableMap.of("error", e.getMessage());
 			}
 			
 			ImmutableMap<String, List<String>> errors = notificationForm.validate();
 
 			if (errors.isEmpty()) {
+				log.debug("No errors in form, getting notifications");
 				return notificationForm.handle(currentUser, read);
 			} else {
+				log.debug("Errors in form, returning form data with error flags");
 				return ImmutableMap.of("formErrors", errors, "data", notificationForm.toMap());
 			}
 			
@@ -59,16 +62,14 @@ public class NotificationsController extends ApplicationController {
 		@GET @Path("/")
 		public Map<String, ?> getUnreadNotifications(@Form GetNotificationForm notificationForm) {
 			
-			return getNotifications(notificationForm, false);
-			
+			return getNotifications(notificationForm, false);		
 		}
 
 		// Read notifications
 		@GET @Path("/archive")
 		public Map<String, ?> getReadNotifications(@Form GetNotificationForm notificationForm) {
-			
-			return getNotifications(notificationForm, true);
-			
+
+			return getNotifications(notificationForm, true);	
 		}
 		
 		// Individual notification
@@ -77,15 +78,18 @@ public class NotificationsController extends ApplicationController {
 			
 			try {
 				currentUser = validateUser();
-			} catch (Exception e) {
+			} catch (AuthException e) {
+				log.error("Error validating user: " +e.getMessage());
 				return ImmutableMap.of("error", e.getMessage());
 			}
 			
 			Notification notification = NotificationQuery.get(id);
 			
 			if (notification != null) {
+				log.debug("Notification with id " + id + " retrieved, returning JSON");
 				return notification.toMap();
 			} else {
+				log.debug("Notification with id " + id + " does not exist, returning error");
 				return ImmutableMap.of("error", "Could not find a notification with id " + id);
 			}
 			
@@ -98,6 +102,7 @@ public class NotificationsController extends ApplicationController {
 			try {
 				validateGlobal();
 			} catch (Exception e) {
+				log.error("Error validating global: " +e.getMessage());
 				return ImmutableMap.of("error", e.getMessage());
 			}
 			
@@ -105,8 +110,10 @@ public class NotificationsController extends ApplicationController {
 
 			if (errors.isEmpty()) {
 				notificationForm.handle();
+				log.debug("Notification created successfully, redirecting");
 				return ImmutableMap.of("redirectTo", "dashboard/notifications");
 			} else {
+				log.debug("Errors in form, returning form data with error flags");
 				return ImmutableMap.of("formErrors", errors, "data", notificationForm.toMap());
 			}
 			
@@ -116,34 +123,30 @@ public class NotificationsController extends ApplicationController {
 		@PUT @Path("/{id}")
 		public ImmutableMap<String, String> markNotificationAsRead(@PathParam("id") int id, @QueryParam("read") Boolean read) {
 			
-			// Validate user
 			try {
 				currentUser = validateUser();
-			} catch (Exception e) {
+			} catch (AuthException e) {
+				log.error("Error validating user: " +e.getMessage());
 				return ImmutableMap.of("error", e.getMessage());
 			}
 			
-			// Initialise possible errors
 			ImmutableMap<String, String> error;
 			if (read != null) {
 				if (read == true) {
+					log.error("Error marking notification as read");
 					error = ImmutableMap.of("formErrors", "Could not mark notification as read");
 				} else {
+					log.error("Error marking notification as read");
 					error = ImmutableMap.of("formErrors", "Could not mark notification as unread");
 				}
 			} else {
+				log.error("Errors in form, no value provide for read");
 				error = ImmutableMap.of("formErrors", "Please include a value for the query parameter 'read'");
 				return error;
 			}
 			
-			// Attempt to mark notification as read
-			try {
-				NotificationUser.markAsReadUnread(currentUser, id, read);
-			} catch (Exception e) {
-				log.error(e.getMessage());
-				return error;
-			}
-			
+			NotificationUser.markAsReadUnread(currentUser, id, read);
+			log.debug("Marked notification "+id+" to " + read);			
 			return ImmutableMap.of("redirectTo", "dashboard/notifications");
 		}
 		
