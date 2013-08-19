@@ -193,7 +193,7 @@
 				<div class="columns large-2 small-4 field-label">Add users</div>
 				<div class="columns large-10 small-8">
 				{if $errors != 'undefined'  and $errors.users}<label class="error">Error</label>{/if}
-					<input type="text" placeholder="Group members" class="deadline-user-token-input {if $errors != 'undefined' and $errors.users}error{/if}" name="users" {if $deadline != 'undefined'}data-prepopulate="{$deadline.users}"{/if}/>
+					<input type="text" placeholder="Add users" class="deadline-user-token-input {if $errors != 'undefined' and $errors.users}error{/if}" name="users" {if $deadline != 'undefined'}data-prepopulate="{$deadline.users}"{/if}/>
 				{if $errors != 'undefined'  and $errors.users}<small class="error">{$errors.users}</small>{/if}
 				</div>
 			</div>
