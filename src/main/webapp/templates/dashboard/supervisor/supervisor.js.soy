@@ -66,7 +66,6 @@
 			<div id="importGroupSection" class="content" data-section-content>    
 				{call .importgroup}
 					{param errors: $errors /}
-					{param group: 'undefined' /}
 				{/call}
 			</div>
 		</section>
@@ -261,7 +260,6 @@
 /**
  * Dashboard: supervisor page, import group
  * @param errors
- * @param group
  */
 {template .importgroup }
 	<h3>Import Existing Group (LDAP)</h3>    
@@ -271,7 +269,7 @@
 			<div class="columns large-2 small-4 field-label">Import Group</div>
 			<div class="columns large-10 small-8">
 				{if $errors != 'undefined'  and $errors.import_id}<label class="error">Error</label>{/if}
-				<input type="text" placeholder="Import Group" class="import-group-token-input {if $errors != 'undefined' and $errors.import_id}error{/if}" name="import_id"{if $errors != 'undefined'}data-prepopulate='{lb}"users":[{foreach $user in $group.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'{/if}/>          
+				<input type="text" placeholder="Import Group" class="import-group-token-input {if $errors != 'undefined' and $errors.import_id}error{/if}" name="import_id"/>          
 				{if $errors != 'undefined'  and $errors.import_id}<small class="error">{$errors.import_id}</small>{/if}
 			</div>
 		</div>

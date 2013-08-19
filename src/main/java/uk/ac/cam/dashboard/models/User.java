@@ -22,6 +22,7 @@ import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
 import uk.ac.cam.cl.dtg.ldap.LDAPUser;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
+import uk.ac.cam.dashboard.queries.GroupQuery;
 import uk.ac.cam.dashboard.queries.UserQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 import uk.ac.cam.dashboard.util.Strings;
@@ -151,6 +152,8 @@ public class User {
 	// Maps
 	public List<Map<String, ?>> groupsToMap() {
 		List<Map<String, ?>> userGroups = new ArrayList<Map<String, ?>>();
+		
+		List<Group> groups = GroupQuery.all().byOwner(this).list();
 
 		if(groups==null){ return new ArrayList<Map<String, ?>>();}
 		
@@ -163,6 +166,8 @@ public class User {
 	
 	public List<Map<String, ?>> subscriptionsToMap() {
 		List<Map<String, ?>> userSubscriptions = new ArrayList<Map<String, ?>>();
+				
+		List<Group> subscriptions = GroupQuery.all().byMember(this).list();
 		
 		if(subscriptions==null){ return new ArrayList<Map<String, ?>>(); }
 		

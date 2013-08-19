@@ -30,7 +30,7 @@ public class GroupQuery {
 		return new GroupQuery (
 			HibernateUtil.getTransactionSession()
 			.createCriteria(Group.class)
-			.addOrder(Order.asc("name"))
+			.addOrder(Order.asc("title"))
 		);
 	}
 	

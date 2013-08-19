@@ -139,7 +139,7 @@ function dGroupTokenInput() {
 
 function gGroupTokenInput() {
 	var resultFormat = function(item){ return "<li>" + "<div style='display: inline-block; padding-left: 10px;'><div class='full_name'>" + item.name + "</div></div></li>";};
-	var tokenFormat = function(item) { return "<li><p>" + item.name + " (" + item.crsid + ")</p></li>"; };   
+	var tokenFormat = function(item) { return "<li><p>" + item.name + " (" + item.id + ")</p></li>"; };   
 	
 	applyTokenInput("import-group-token-input", "group", "groups/queryGroup", "id", "name", resultFormat, tokenFormat);
 }
