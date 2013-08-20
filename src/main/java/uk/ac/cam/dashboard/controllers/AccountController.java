@@ -113,7 +113,7 @@ public class AccountController extends ApplicationController {
 			List<Object> signups = new LinkedList<Object>();
 			signups.add(ImmutableMap.of("name", "Events", "link", "/signapp/events", "icon", "?", "iconType", 2, "notificationCount", 0));
 			signups.add(ImmutableMap.of("name", "Create new event", "link", "/signapp/events/new", "icon", "?", "iconType", 2, "notificationCount", 0));
-			signups.add(ImmutableMap.of("name", "Walker vision", "link", "/signapp/events/walker_vision", "icon", "?", "iconType", 2, "notificationCount", 0));
+			signups.add(ImmutableMap.of("name", "Walker vision", "link", "/signapp/events/walkerVision", "icon", "?", "iconType", 2, "notificationCount", 0));
 			
 			ImmutableMap.Builder<String, Object> sidebarMap = new ImmutableMap.Builder<String, Object>();
 			sidebarMap.put("name", "Timetable/Signups");
