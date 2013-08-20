@@ -14,9 +14,9 @@
 	<div class="row pagination-header">
 		<div class="columns large-10 small-10">
 			{if $read}
-			<a href="notifications/archive?section=dashboard" {if $section == 'dashboard'}class="black-link"{/if}>Dashboard</a> | <a href="notifications/archive?section=signups" {if $section == 'signups'}class="black-link"{/if}>Signups</a> | <a href="notifications/archive?section=questions" {if $section == 'questions'}class="black-link"{/if}>Questions</a> | <a href="notifications/archive?section=handins" {if $section == 'handins'}class="black-link"{/if}>Handins</a> 
+			<a href="notifications/archive" {if $section == 'none'}class="black-link"{/if}>All</a> | <a href="notifications/archive?section=dashboard" {if $section == 'dashboard'}class="black-link"{/if}>Dashboard</a> | <a href="notifications/archive?section=signups" {if $section == 'signups'}class="black-link"{/if}>Signups</a> | <a href="notifications/archive?section=questions" {if $section == 'questions'}class="black-link"{/if}>Questions</a> | <a href="notifications/archive?section=handins" {if $section == 'handins'}class="black-link"{/if}>Handins</a> 
 			{else}
-			<a href="notifications?section=dashboard" {if $section == 'dashboard'}class="black-link"{/if}>Dashboard</a> | <a href="notifications?section=signups" {if $section == 'signups'}class="black-link"{/if}>Signups</a> | <a href="notifications?section=questions" {if $section == 'questions'}class="black-link"{/if}>Questions</a> | <a href="notifications?section=handins" {if $section == 'handins'}class="black-link"{/if}>Handins</a>
+			<a href="notifications" {if $section == 'none'}class="black-link"{/if}>All</a> | <a href="notifications?section=dashboard" {if $section == 'dashboard'}class="black-link"{/if}>Dashboard</a> | <a href="notifications?section=signups" {if $section == 'signups'}class="black-link"{/if}>Signups</a> | <a href="notifications?section=questions" {if $section == 'questions'}class="black-link"{/if}>Questions</a> | <a href="notifications?section=handins" {if $section == 'handins'}class="black-link"{/if}>Handins</a>
 			{/if}
 		</div>
 		<div class="columns large-2 small-2 text-right">

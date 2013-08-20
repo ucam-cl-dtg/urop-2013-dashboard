@@ -34,7 +34,7 @@ public class CreateNotificationForm {
 		Notification notification = new Notification();
 		notification.setMessage(message);
 		notification.setSection(section);
-		notification.setLink(link);
+		notification.setLink(section + "/" + link);
 		
 		session.save(notification);
 		
