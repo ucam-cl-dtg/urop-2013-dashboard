@@ -128,11 +128,11 @@ public class AccountController extends ApplicationController {
 		// Questions
 		if (settings.isQuestionsOptIn()) {
 			List<Object> questions = new LinkedList<Object>();
-			questions.add(ImmutableMap.of("name", "Browse questions", "link", "/questions/q/search", "icon", "icon-list", "iconType", 1, "notificationCount", 0));
-			questions.add(ImmutableMap.of("name", "Browse question sets", "link", "/questions/sets", "icon", "icon-file_open", "iconType", 1, "notificationCount", 0));
 			questions.add(ImmutableMap.of("name", "Browse own content", "link", "/questions/users/me", "icon", "icon-file_open", "iconType", 1, "notificationCount", 0));
+			questions.add(ImmutableMap.of("name", "Browse questions", "link", "/questions/q/search", "icon", "icon-list", "iconType", 1, "notificationCount", 0));
+			questions.add(ImmutableMap.of("name", "Browse question sets", "link", "/questions/sets", "icon", "icon-list", "iconType", 1, "notificationCount", 0));
+			questions.add(ImmutableMap.of("name", "Create question", "link", "/questions/q/add", "icon", "icon-plus", "iconType", 1, "notificationCount", 0));
 			questions.add(ImmutableMap.of("name", "Create question set", "link", "/questions/sets/add", "icon", "icon-plus", "iconType", 1, "notificationCount", 0));
-			questions.add(ImmutableMap.of("name", "Fairytale land", "link", "/questions/fairytale", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 0));
 			
 			ImmutableMap.Builder<String, Object> questionsMap = new ImmutableMap.Builder<String, Object>();
 			questionsMap.put("name", "Setting Work");
