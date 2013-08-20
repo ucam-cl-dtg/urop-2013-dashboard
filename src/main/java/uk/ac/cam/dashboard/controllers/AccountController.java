@@ -97,7 +97,7 @@ public class AccountController extends ApplicationController {
 		dashboard.add(ImmutableMap.of("name", "Notifications", "link", "/dashboard/notifications", "icon", "icon-newspaper", "iconType", 1, "notificationCount", 0));
 		dashboard.add(ImmutableMap.of("name", "Deadlines", "link", "/dashboard/deadlines", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 0));
 		dashboard.add(ImmutableMap.of("name", "Groups", "link", "/dashboard/groups", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
-		dashboard.add(ImmutableMap.of("name", "Supervisor Homepage", "link", "/dashboard/supervisor", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
+		if (user.getSupervisor()) dashboard.add(ImmutableMap.of("name", "Supervisor Homepage", "link", "/dashboard/supervisor", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
 		
 		ImmutableMap.Builder<String, Object> dashboardMap = new ImmutableMap.Builder<String, Object>();
 		dashboardMap.put("name", "Dashboard");
