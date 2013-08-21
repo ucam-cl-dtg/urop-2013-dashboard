@@ -7,7 +7,7 @@
 	{foreach $notification in $notifications}
 	<li class="notification-feed-item">
 		<div class="row" id="{$notification.id}" data-section="{$notification.section}">
-			<a href="{$notification.link}" class="black-link" data-bypass>
+			<a href="{$notification.link}" class="black-link" data-absolute>
 				<div class="columns large-9 small-8">
 					<div class="notification-message">{$notification.message}</div>
 					<div class="notification-info"><i class="icon icon-globe"></i>&nbsp;&nbsp;{$notification.section} &nbsp;&nbsp; <span class="websymbols-icon">P</span> {$notification.timestamp}</div>
