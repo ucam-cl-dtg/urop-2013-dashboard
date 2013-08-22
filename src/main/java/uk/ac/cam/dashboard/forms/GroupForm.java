@@ -136,14 +136,14 @@ public class GroupForm {
 
 		// title
 		if (title.equals("") || title == null){
-			errors.put("title", "Please give your group a name");
+			errors.put("title", Strings.GROUP_NO_TITLE);
 		} else if(title.length()>255){
-			errors.put("title", "Name cannot be longer than 255 characters");
+			errors.put("title", Strings.GROUP_TITLE_LENGTH);
 		}
 		
 		// users
 		if((users==null||users.equals(""))){ 
-			errors.put("users", "You must add at least one user to this group"); 
+			errors.put("users", Strings.GROUP_NO_USERS); 
 		} 
 		
 		return errors;	
@@ -165,20 +165,20 @@ public class GroupForm {
 		ArrayListMultimap<String, String> errors = ArrayListMultimap.create();
 		
 		if((importID==null||importID.equals(""))){ 
-			errors.put("import_id", "Please choose at least one group to import"); 
+			errors.put("import_id", Strings.GROUP_IMPORT_NONE); 
 		}	
 		
 		try { 
 			importedGroup = LDAPQueryManager.getGroup(importID); 
 			if(importedGroup.getUsers().size()>100){
-				errors.put("import_id", "Group size too large: maximum group size is 100 members");
+				errors.put("import_id", Strings.GROUP_TOO_LARGE);
 			}
 			if(importedGroup.getUsers().size()==0){
-				errors.put("import_id", "Group contains no members");
+				errors.put("import_id", Strings.GROUP_NO_MEMBERS);
 			}
 		} 
 		catch (LDAPObjectNotFoundException e) {
-			errors.put("import_id", "Group cannot be retrieved from LDAP");
+			errors.put("import_id", Strings.GROUP_CANNOT_RETRIEVE);
 		}
 		
 		return errors;	

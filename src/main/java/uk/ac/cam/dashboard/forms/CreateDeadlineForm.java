@@ -146,21 +146,21 @@ public class CreateDeadlineForm {
 
 		// title
 		if (title.equals("") || title == null){
-			errors.put("title", "Please give your deadline a name");
+			errors.put("title", Strings.DEADLINE_NO_TITLE);
 		} else if(title.length()>255){
-			errors.put("title", "Name cannot be longer than 255 characters");
+			errors.put("title", Strings.DEADLINE_TITLE_LENGTH);
 		}
 		
 		// date
 		if((date==null||date.equals(""))){ 
-			errors.put("date", "Please choose a due date for the deadline"); 
+			errors.put("date", Strings.DEADLINE_NO_DATE); 
 		}	
 
 		Calendar cal = parseDate();
 		Calendar today = Calendar.getInstance();
 		
 		if(cal.getTime().before(today.getTime())){
-			errors.put("date", "Deadline due date cannot be in the past");
+			errors.put("date", Strings.DEADLINE_DATE_PASSED);
 		}	
 		
 		// message (optional)
@@ -175,7 +175,7 @@ public class CreateDeadlineForm {
 		
 		// users/groups
 		if((users==null||users.equals(""))&&(groups==null||groups.equals(""))){ 
-			errors.put("users", "You must assign at least one user to this deadline"); 
+			errors.put("users", Strings.DEADLINE_NO_USERS); 
 		}
 		
 		// send mail

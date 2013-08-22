@@ -268,24 +268,26 @@ public class DeadlinesController extends ApplicationController {
 		Set<DeadlineUser> deadlineUsers = currentUser.getDeadlines();
 		if (deadlineUsers != null) {
 			for (DeadlineUser d : deadlineUsers) {
-				if(!d.getArchived()){
+				if (!d.getArchived()) {
 					Deadline deadline = d.getDeadline();
-	
+
 					java.util.Calendar datetime = deadline.getDatetime();
 					Date start = datetime.getTime();
 					datetime.add(java.util.Calendar.MINUTE, 1);
 					Date end = datetime.getTime();
 					Dur dur = new Dur(start, end);
-					System.out.println("Start: "+start.toString()+ " end: "+end.toString());
-					String subject = "OTTER: "+deadline.getTitle();
-	
+					System.out.println("Start: " + start.toString() + " end: "
+							+ end.toString());
+					String subject = "OTTER: " + deadline.getTitle();
+
 					String hostEmail = deadline.getOwner().getCrsid()
 							+ "@cam.ac.uk";
 					UidGenerator ug = new UidGenerator("1");
-	
+
 					DateTime eventStart = new DateTime(start);
 					VEvent event = new VEvent(eventStart, dur, subject);
-					event.getProperties().add(new Organizer("MAILTO:" + hostEmail));
+					event.getProperties().add(
+							new Organizer("MAILTO:" + hostEmail));
 					event.getProperties().add(ug.generateUid());
 					calendar.getComponents().add(event);
 				}
@@ -296,9 +298,9 @@ public class DeadlinesController extends ApplicationController {
 
 		ResponseBuilder response = Response.ok(calendar.toString());
 		response.header("Content-Disposition",
-						"attachment; filename=deadlines_for_" + currentUser.getCrsid()
+				"attachment; filename=deadlines_for_" + currentUser.getCrsid()
 						+ ".ics");
 		return response.build();
 	}
-	
+
 }
