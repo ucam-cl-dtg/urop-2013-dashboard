@@ -93,7 +93,7 @@ public class AccountController extends ApplicationController {
 		
 		// Dashboard
 		List<Object> dashboard = new LinkedList<Object>();
-		dashboard.add(ImmutableMap.of("name", "Home", "link", "/dashboard", "icon", "icon-globe", "iconType", 1, "notificationCount", 0));
+		dashboard.add(ImmutableMap.of("name", "Home", "link", "/dashboard/", "icon", "icon-globe", "iconType", 1, "notificationCount", 0));
 		dashboard.add(ImmutableMap.of("name", "Notifications", "link", "/dashboard/notifications", "icon", "icon-newspaper", "iconType", 1, "notificationCount", 0));
 		dashboard.add(ImmutableMap.of("name", "Deadlines", "link", "/dashboard/deadlines", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 0));
 		dashboard.add(ImmutableMap.of("name", "Groups", "link", "/dashboard/groups", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
@@ -147,9 +147,9 @@ public class AccountController extends ApplicationController {
 		// Handins
 		if (settings.isHandinsOptIn()) {
 			List<Object> handins = new LinkedList<Object>();
-			handins.add(ImmutableMap.of("name", "Create bin", "link", "bins/create", "icon", ",", "iconType", 2, "notificationCount", 0));
-			handins.add(ImmutableMap.of("name", "Upload answers", "link", "bins", "icon", ",", "iconType", 2, "notificationCount", 0));
-			handins.add(ImmutableMap.of("name", "Mark answers", "link", "marking", "icon", "C", "iconType", 2, "notificationCount", 0));
+			handins.add(ImmutableMap.of("name", "Create bin", "link", "/handins/bins/create", "icon", ",", "iconType", 2, "notificationCount", 0));
+			handins.add(ImmutableMap.of("name", "Upload answers", "link", "/handins/bins", "icon", ",", "iconType", 2, "notificationCount", 0));
+			handins.add(ImmutableMap.of("name", "Mark answers", "link", "/handins/bins/marking", "icon", "C", "iconType", 2, "notificationCount", 0));
 			
 			ImmutableMap.Builder<String, Object> handinsMap = new ImmutableMap.Builder<String, Object>();
 			handinsMap.put("name", "Marking Work");

@@ -1,9 +1,9 @@
 package uk.ac.cam.dashboard.controllers;
 
-import java.io.FileOutputStream;
 import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +21,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
-import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Date;
+import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Dur;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.CalScale;
@@ -269,20 +268,27 @@ public class DeadlinesController extends ApplicationController {
 		Set<DeadlineUser> deadlineUsers = currentUser.getDeadlines();
 		if (deadlineUsers != null) {
 			for (DeadlineUser d : deadlineUsers) {
-				Deadline deadline = d.getDeadline();
-
-				Date start = new Date(deadline.getDatetime().getTime());
-				Dur dur = new Dur(0, 0, 0, 0);
-				String subject = deadline.getMessage();
-
-				String hostEmail = deadline.getOwner().getCrsid()
-						+ "@cam.ac.uk";
-				UidGenerator ug = new UidGenerator("1");
-
-				VEvent event = new VEvent(start, dur, subject);
-				event.getProperties().add(new Organizer("MAILTO:" + hostEmail));
-				event.getProperties().add(ug.generateUid());
-				calendar.getComponents().add(event);
+				if(!d.getArchived()){
+					Deadline deadline = d.getDeadline();
+	
+					java.util.Calendar datetime = deadline.getDatetime();
+					Date start = datetime.getTime();
+					datetime.add(java.util.Calendar.MINUTE, 1);
+					Date end = datetime.getTime();
+					Dur dur = new Dur(start, end);
+					System.out.println("Start: "+start.toString()+ " end: "+end.toString());
+					String subject = "OTTER: "+deadline.getTitle();
+	
+					String hostEmail = deadline.getOwner().getCrsid()
+							+ "@cam.ac.uk";
+					UidGenerator ug = new UidGenerator("1");
+	
+					DateTime eventStart = new DateTime(start);
+					VEvent event = new VEvent(eventStart, dur, subject);
+					event.getProperties().add(new Organizer("MAILTO:" + hostEmail));
+					event.getProperties().add(ug.generateUid());
+					calendar.getComponents().add(event);
+				}
 			}
 		} else {
 			return Response.status(401).build();
