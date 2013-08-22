@@ -7,12 +7,15 @@ function deadlinesIndex() {
                   type: 'PUT',
                   url: prepareURL("deadlines/" + deadline_id + "/complete"),
                   success: function(resultData) {
-                	  console.log(resultData);
+            		  successNotification("Successfully updated deadline");
                 	  if(resultData.complete){
                 		  $("#"+deadline_id).find(".complete_deadline").addClass("button success");
                 	  } else {
                 		  $("#"+deadline_id).find(".complete_deadline").removeClass("success");                		  
                 	  }
+                  },
+                  error: function() {
+                  	errorNotification("Could not update deadline");
                   }
             });
         });
@@ -25,12 +28,16 @@ function deleteDeadline() {
             type: 'DELETE',
             url: prepareURL("deadlines/" + deadlineID),
             success: function(data) {
+            	successNotification("Successfully deleted deadline");
             	router.navigate(data.redirectTo, {trigger: true});
-            } 
+            },
+            error: function() {
+            	errorNotification("Could not delete deadline");
+            }
 		});	
 	});
 }
 
 function editDeadline() {
-	submitAjaxForm("editDeadlineForm", ".main", "dashboard.deadlines.manage");
+	submitAjaxForm("editDeadlineForm", ".main", "dashboard.deadlines.manage", "Successfully edited deadline");
 }

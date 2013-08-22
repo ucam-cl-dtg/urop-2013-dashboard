@@ -1,5 +1,5 @@
 function tabMemory() {
-	$(document).on('click', 'section .title', function() {
+	$('section .title').on('click', function() {
 		if ( $(this).parent().parent().attr('data-base-path') ) {
 			var location = $(this).parent().parent().attr('data-base-path') + "/" + $(this).children('a').attr('data-target');
 			router.navigate(location, {trigger: false});
@@ -7,22 +7,26 @@ function tabMemory() {
 	});
 }
 
-function submitAjaxForm(form, section, template){
+function submitAjaxForm(form, section, template, successMessage){
 	var options = {
-			beforeSubmit: function(){
-				$('input[type=submit]', '#'+form).attr('disabled', 'disabled');
-				$('input[type=submit]', '#'+form).addClass('secondary');
-			},
-			success: function(data) {
-				applyTemplate($(section), template, data);
-			}		
+		beforeSubmit: function(){
+			$('input[type=submit]', '#'+form).attr('disabled', 'disabled');
+			$('input[type=submit]', '#'+form).addClass('secondary');
+		},
+		success: function(data) {
+			successNotification(successMessage);
+			applyTemplate($(section), template, data);
+		},
+		error: function() {
+			errorNotification("Could not complete request");
+		}
 	};
 	$('#'+form).ajaxForm(options);	
 }
 
 function bindPaginationShowMoreListener() {
 	
-	$(document).on('click', '.show-more-pagination', function(e) {
+	$('.show-more-pagination').on('click', function(e) {
 		e.preventDefault();
 		
 		if (!$(this).hasClass('disabled')) {
