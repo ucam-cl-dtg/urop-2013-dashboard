@@ -28,6 +28,7 @@ import uk.ac.cam.dashboard.forms.GroupForm;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.GroupQuery;
+import uk.ac.cam.dashboard.queries.UserQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 import uk.ac.cam.dashboard.util.Util;
 
@@ -66,7 +67,7 @@ public class GroupsController extends ApplicationController {
 			List<HashMap<String, String>> users = null;
 			try {
 				users = new ArrayList<HashMap<String, String>>();
-				for(User u : group.getUsers()){
+				for(User u : UserQuery.all().byGroup(group).list()){
 					LDAPUser user = LDAPQueryManager.getUser(u.getCrsid());
 					HashMap<String, String> userMap = user.getAll();
 					userMap.put("supervisor", Boolean.toString(u.getSupervisor()));
