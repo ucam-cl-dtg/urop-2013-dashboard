@@ -17,7 +17,8 @@
 	<context-param>
 		<param-name>cssFiles</param-name>
 		<param-value>
-			/css/account.css
+			/css/account.css,
+			/css/home.css
 		</param-value>
 	</context-param>
 	
