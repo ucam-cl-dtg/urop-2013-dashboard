@@ -9,6 +9,8 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
@@ -46,7 +48,14 @@ public class UserQuery {
 	public UserQuery byCrsid(String crsid) {
 		log.debug("Getting user with crsid: " + crsid);
 		criteria.add(Restrictions.eq("crsid", crsid));
-	return this;
+		return this;
+	}
+	
+	public UserQuery byGroup(Group group){
+		log.debug("Getting users from group " + group.getId());
+		criteria.createAlias("subscriptions", "subs");
+		criteria.add(Restrictions.eq("subs.id", group.getId()));
+		return this;
 	}
 	
 	@SuppressWarnings("unchecked")

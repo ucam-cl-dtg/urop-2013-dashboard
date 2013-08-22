@@ -6,45 +6,45 @@
  * @param services
  */
 {template .index}
-	<h3>Supervisions</h3>
+	<div class="row">
+	
+	</div>
 	<div class="row">
         <ul class="panels">
             <li class="panel-wrapper columns large-12">
                 <div class="list-panel">
                     <div class="row list-inner-panel">
-                        <div class="columns large-7 small-7"><h4>Welcome {$user.name} - Timetable/Signups Home</h4></div>
-                        <div class="columns large-5 small-5 text-right">
-                        </div>
+                        <div class="columns large-11 small-11"><h3>Welcome {$user.name} - Dashboard</h3></div>
+                    	<div class="columns large-1 small-1">
+	                        <!--user picture-->
+	                        {if $user.photo == 'undefined'}
+	                        <img src="/dashboard/img/nophoto.jpeg"/>
+	                        {else}
+	                        <img src="data:image/jpeg;base64,{$user.photo}"/>
+	                        {/if}                                      
+	                         <!--end user picture-->
+                    	</div>
                     </div>
                 </div>
                 <ul class="sub-panel expanded">
                     <li class="list-sub-panel">
-                        <div class="row list-inner-sub-panel">                           
-                            <div class="columns large-11 small-11 text-left">
+                        <div class="row list-inner-sub-panel">
+                        <div class="columns large-3 small-3 text-center logo">
+						<img src="img/otterlogo.jpg" />
+						</div>                           
+                            <div class="columns large-9 small-9 text-left">
                                 <div class="row">
                                     <div class="columns large-11 small-11 text-left">
-                                    <strong>User: </strong>{$user.name} ({$user.crsid}) - <em>{$user.email}</em>
+                                    <ul class="vcard udetails"> 
+                                    <li><strong>crsid:</strong> {$user.crsid}</li>
+                                    <li><strong>Username:</strong> {$user.name}</li>
+                                    <li><strong>Email:</strong> {$user.email}</em></li>
+                                    <li><strong>User status:</strong> <span class="label round">{if $user.supervisor}Supervisor{else}Student{/if} </span></li>
+                                    <li><strong>College/Department:</strong> <span class="round secondary label">{$user.institution} </span></li>
+                                    <li><strong>Institution:</strong> <span class="round secondary label">{$user.institution} </span></li>
+                                    </ul>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="columns large-11 small-11 text-left">
-                                    &nbsp;
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="columns large-11 small-11 text-left">
-                                    <span class="label round">User status: {if $user.supervisor}Supervisor{else}Student{/if} </span>  <span class="round secondary label">User institution: {$user.institution} </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="columns large-1 small-1">
-                                <!--user picture-->
-                                {if $user.photo == 'undefined'}
-                                    <img src="/dashboard/img/nophoto.jpeg"/>
-                                 {else}
-                                    <img src="data:image/jpeg;base64,{$user.photo}"/>
-                                {/if}                                      
-                                <!--end user picture-->
                             </div>
                         </div>
                     </li>
@@ -52,13 +52,11 @@
                         <div class="row list-inner-sub-panel">                           
                             <div class="columns large-11 small-11 text-left">
                                 <div class="row">
-                                    <div class="columns large-2 small-2 text-left">
+                                    <div class="columns large-12 small-12 text-left">
                                     	<strong>Active services:</strong>
-                                    </div>
-                                     <div class="columns large-10 small-10 text-left">
-                                    	<span class="label {if $services.signups}success{else}error{/if}">Signups</span>
-                                        <span class="label {if $services.questions}success{else}error{/if}">Questions</span>
-                                    	<span class="label {if $services.handins}success{else}error{/if}">Handins</span>
+                                    	<span class="services label {if $services.signups}success{else}error{/if}">Signups</span>
+                                        <span class="services label {if $services.questions}success{else}error{/if}">Questions</span>
+                                    	<span class="services label {if $services.handins}success{else}error{/if}">Handins</span>
                                     </div>
                                 </div>
                             </div>
@@ -67,8 +65,5 @@
                 </ul>
             </li>
         </ul>
-    </div>
-    <div class="row text-center">
-    	<img src="/dashboard/img/otterlogo.jpg"/>
     </div>
 {/template}
