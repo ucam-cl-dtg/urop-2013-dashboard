@@ -7,15 +7,19 @@ function tabMemory() {
 	});
 }
 
-function submitAjaxForm(form, section, template){
+function submitAjaxForm(form, section, template, successMessage){
 	var options = {
-			beforeSubmit: function(){
-				$('input[type=submit]', '#'+form).attr('disabled', 'disabled');
-				$('input[type=submit]', '#'+form).addClass('secondary');
-			},
-			success: function(data) {
-				applyTemplate($(section), template, data);
-			}		
+		beforeSubmit: function(){
+			$('input[type=submit]', '#'+form).attr('disabled', 'disabled');
+			$('input[type=submit]', '#'+form).addClass('secondary');
+		},
+		success: function(data) {
+			successNotification(successMessage);
+			applyTemplate($(section), template, data);
+		},
+		error: function() {
+			errorNotification("Could not complete request");
+		}
 	};
 	$('#'+form).ajaxForm(options);	
 }
