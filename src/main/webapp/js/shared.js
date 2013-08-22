@@ -1,5 +1,5 @@
 function tabMemory() {
-	$(document).on('click', 'section .title', function() {
+	$('section .title').on('click', function() {
 		if ( $(this).parent().parent().attr('data-base-path') ) {
 			var location = $(this).parent().parent().attr('data-base-path') + "/" + $(this).children('a').attr('data-target');
 			router.navigate(location, {trigger: false});
@@ -22,7 +22,7 @@ function submitAjaxForm(form, section, template){
 
 function bindPaginationShowMoreListener() {
 	
-	$(document).on('click', '.show-more-pagination', function(e) {
+	$('.show-more-pagination').on('click', function(e) {
 		e.preventDefault();
 		
 		if (!$(this).hasClass('disabled')) {

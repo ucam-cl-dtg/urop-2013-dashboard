@@ -1,5 +1,5 @@
 function bindSaveSettingsListener() {
-	$(document).on('click', '#save-account-settings', function(e) {
+	$('#save-account-settings').on('click', function(e) {
 		e.preventDefault();
 		
 		var signups = $('#signups-opt-in').is(':checked');

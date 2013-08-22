@@ -1,5 +1,5 @@
 function markNotificationAsReadUnread() {
-	$(document).on('click', '.mark-notification-as-read', function() {
+	$('.mark-notification-as-read').on('click', function() {
 		var target = $(this).attr('data-notification-target');
 		var clickedSection = $(this).parent().attr('data-section');
 		// Implicitly checking whether markAsUnread is true or false
