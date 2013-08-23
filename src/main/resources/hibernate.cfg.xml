@@ -27,42 +27,40 @@
 "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
-
     <session-factory>
 
-        <!-- Database connection settings -->
+		<!-- Database connection settings -->
 		<property name="connection.driver_class">org.postgresql.Driver</property>
-        <property name="connection.url">jdbc:postgresql://localhost:5432/notifications</property>
-        <property name="connection.username">signups</property>
-        <property name="connection.password">signups</property>
+		<property name="connection.url">jdbc:postgresql://localhost:5432/notifications</property>
+		<property name="connection.username">notifications</property>
+		<property name="connection.password">notifications</property>
 
-        <!-- JDBC connection pool (use the built-in) -->
-        <property name="connection.pool_size">1</property>
+		<!-- JDBC connection pool (use the built-in) -->
+		<property name="connection.pool_size">1</property>
 
-        <!-- SQL dialect -->
+		<!-- SQL dialect -->
 		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
 		
-		<!-- Raven HTTP context -->
+		<!-- Session per thread -->
 		<property name="current_session_context_class">thread</property>
 
-        <!-- Disable the second-level cache -->
-        <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+		<!-- Disable the second-level cache -->
+		<property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
 
-        <!-- Echo all executed SQL to stdout -->
-        <property name="show_sql">true</property>
+		<!-- Leave printing of SQL to the logger -->
+		<property name="show_sql">false</property>
 
-        <!-- Drop and re-create the database schema on startup -->
-        <property name="hbm2ddl.auto">validate</property>
+		<!-- Only validate the database schema on startup -->
+		<property name="hbm2ddl.auto">validate</property>
 
-        <mapping class="uk.ac.cam.dashboard.models.User" />
-        <mapping class="uk.ac.cam.dashboard.models.Settings" />
-        <mapping class="uk.ac.cam.dashboard.models.Group" />
-        <mapping class="uk.ac.cam.dashboard.models.Deadline" />
-        <mapping class="uk.ac.cam.dashboard.models.DeadlineUser" />
-        <mapping class="uk.ac.cam.dashboard.models.Notification" />
-        <mapping class="uk.ac.cam.dashboard.models.NotificationUser" />
-        <mapping class="uk.ac.cam.dashboard.models.Api" />
-
-    </session-factory>
-
+		<!-- Mapped classes -->
+		<mapping class="uk.ac.cam.dashboard.models.User" />
+		<mapping class="uk.ac.cam.dashboard.models.Settings" />
+		<mapping class="uk.ac.cam.dashboard.models.Group" />
+		<mapping class="uk.ac.cam.dashboard.models.Deadline" />
+		<mapping class="uk.ac.cam.dashboard.models.DeadlineUser" />
+		<mapping class="uk.ac.cam.dashboard.models.Notification" />
+		<mapping class="uk.ac.cam.dashboard.models.NotificationUser" />
+		<mapping class="uk.ac.cam.dashboard.models.Api" />
+	</session-factory>
 </hibernate-configuration>
