@@ -97,7 +97,7 @@ public class AccountController extends ApplicationController {
 		dashboard.add(ImmutableMap.of("name", "Notifications", "link", "/dashboard/notifications", "icon", "icon-newspaper", "iconType", 1, "notificationCount", 0));
 		dashboard.add(ImmutableMap.of("name", "Deadlines", "link", "/dashboard/deadlines", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 0));
 		dashboard.add(ImmutableMap.of("name", "Groups", "link", "/dashboard/groups", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
-		if (user.getSupervisor()) dashboard.add(ImmutableMap.of("name", "Supervisor Homepage", "link", "/dashboard/supervisor", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
+		if (user.getSupervisor()) dashboard.add(ImmutableMap.of("name", "Supervisor Homepage", "link", "/dashboard/supervisor", "icon", "icon-home", "iconType", 1, "notificationCount", 0));
 		
 		ImmutableMap.Builder<String, Object> dashboardMap = new ImmutableMap.Builder<String, Object>();
 		dashboardMap.put("name", "Dashboard");
@@ -111,9 +111,9 @@ public class AccountController extends ApplicationController {
 		// Signups
 		if (settings.isSignupsOptIn()) {
 			List<Object> signups = new LinkedList<Object>();
-			signups.add(ImmutableMap.of("name", "Events", "link", "/signapp/events", "icon", "?", "iconType", 2, "notificationCount", 0));
-			signups.add(ImmutableMap.of("name", "Create new event", "link", "/signapp/events/new", "icon", "?", "iconType", 2, "notificationCount", 0));
-			signups.add(ImmutableMap.of("name", "DoS Area", "link", "/signapp/events/dos", "icon", "?", "iconType", 2, "notificationCount", 0));
+			signups.add(ImmutableMap.of("name", "Events", "link", "/signapp/events", "icon", "icon-calendar", "iconType", 1, "notificationCount", 0));
+			signups.add(ImmutableMap.of("name", "Create new event", "link", "/signapp/events/new", "icon", "icon-plus", "iconType", 1, "notificationCount", 0));
+			signups.add(ImmutableMap.of("name", "DoS Area", "link", "/signapp/events/dos", "icon", "icon-lock", "iconType", 1, "notificationCount", 0));
 			
 			ImmutableMap.Builder<String, Object> sidebarMap = new ImmutableMap.Builder<String, Object>();
 			sidebarMap.put("name", "Timetable/Signups");
@@ -129,9 +129,9 @@ public class AccountController extends ApplicationController {
 		if (settings.isQuestionsOptIn()) {
 			List<Object> questions = new LinkedList<Object>();
 			questions.add(ImmutableMap.of("name", "Browse own content", "link", "/questions/users/me", "icon", "icon-file_open", "iconType", 1, "notificationCount", 0));
-			questions.add(ImmutableMap.of("name", "Browse questions", "link", "/questions/q/search", "icon", "icon-list", "iconType", 1, "notificationCount", 0));
-			questions.add(ImmutableMap.of("name", "Browse question sets", "link", "/questions/sets", "icon", "icon-list", "iconType", 1, "notificationCount", 0));
+			questions.add(ImmutableMap.of("name", "Browse questions", "link", "/questions/q/search", "icon", "icon-magnifying", "iconType", 1, "notificationCount", 0));
 			questions.add(ImmutableMap.of("name", "Create question", "link", "/questions/q/add", "icon", "icon-plus", "iconType", 1, "notificationCount", 0));
+			questions.add(ImmutableMap.of("name", "Browse question sets", "link", "/questions/sets", "icon", "icon-magnifying", "iconType", 1, "notificationCount", 0));
 			questions.add(ImmutableMap.of("name", "Create question set", "link", "/questions/sets/add", "icon", "icon-plus", "iconType", 1, "notificationCount", 0));
 			
 			ImmutableMap.Builder<String, Object> questionsMap = new ImmutableMap.Builder<String, Object>();
@@ -147,10 +147,10 @@ public class AccountController extends ApplicationController {
 		// Handins
 		if (settings.isHandinsOptIn()) {
 			List<Object> handins = new LinkedList<Object>();
-			handins.add(ImmutableMap.of("name", "Create bin", "link", "/handins/bins/create", "icon", ",", "iconType", 2, "notificationCount", 0));
-			handins.add(ImmutableMap.of("name", "Manage bins", "link", "/handins/bins/manage", "icon", "C", "iconType", 2, "notificationCount", 0));
-			handins.add(ImmutableMap.of("name", "Upload answers", "link", "/handins/bins/upload", "icon", ",", "iconType", 2, "notificationCount", 0));
-			handins.add(ImmutableMap.of("name", "Mark answers", "link", "/handins/bins/marking", "icon", "C", "iconType", 2, "notificationCount", 0));
+			handins.add(ImmutableMap.of("name", "Create bin", "link", "/handins/bins/create", "icon", "icon-plus", "iconType", 1, "notificationCount", 0));
+			handins.add(ImmutableMap.of("name", "Manage bins", "link", "/handins/bins/manage", "icon", "icon-trash_can", "iconType", 1, "notificationCount", 0));
+			handins.add(ImmutableMap.of("name", "Upload answers", "link", "/handins/bins/upload", "icon", "icon-cloud_download", "iconType", 1, "notificationCount", 0));
+			handins.add(ImmutableMap.of("name", "Mark answers", "link", "/handins/bins/marking", "icon", "icon-vector_pen", "iconType", 1, "notificationCount", 0));
 			
 			ImmutableMap.Builder<String, Object> handinsMap = new ImmutableMap.Builder<String, Object>();
 			handinsMap.put("name", "Marking Work");
