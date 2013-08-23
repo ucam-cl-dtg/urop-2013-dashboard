@@ -83,12 +83,16 @@ public class ApiController extends ApplicationController {
 	// Excluded from API filter
 	
 	@GET @Path("/type/{key}")
-	public static Map<String, String> checkApiKeyType(@PathParam("key") String key) {
+	public Map<String, String> checkApiKeyType(@PathParam("key") String key) {
 		
 		Session s = HibernateUtil.getTransactionSession();
 		
 		if (key == null || key == "") {
 			return ImmutableMap.of("error", Strings.AUTHEXCEPTION_NO_KEY);
+		}
+
+		if (key.equals(sRequest.getSession().getServletContext().getInitParameter("apiKey"))) {
+			return ImmutableMap.of("type", "global");
 		}
 		
 		Api api = (Api) s.createQuery("from Api where key = :key").setParameter("key", key).uniqueResult();
