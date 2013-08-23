@@ -101,7 +101,7 @@ public class GetDeadlineForm {
 				if (intOffset < 0) {
 					errors.put("offset", Strings.DEADLINE_OFFSET_INVALID_NUM);
 				}
-			} catch(Exception e) {
+			} catch(NumberFormatException e) {
 				errors.put("offset", Strings.DEADLINE_OFFSET_NOT_INTEGER);
 			}
 		}
@@ -113,7 +113,7 @@ public class GetDeadlineForm {
 				if (intLimit < 0) {
 					errors.put("limit", Strings.DEADLINE_LIMIT_INVALID_NUM);
 				}
-			} catch(Exception e) {
+			} catch(NumberFormatException e) {
 				errors.put("limit", Strings.DEADLINE_LIMIT_NOT_INTEGER);
 			}
 		}
