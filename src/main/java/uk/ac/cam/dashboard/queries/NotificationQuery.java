@@ -74,8 +74,8 @@ public class NotificationQuery extends PaginationQuery<NotificationQuery> {
 		return this;
 	}
 	
-	public NotificationQuery eventId(int eventId) {
-		criteria.add(Restrictions.eq("n.eventId", eventId));
+	public NotificationQuery foreignId(String foreignId) {
+		criteria.add(Restrictions.eq("n.foreignId", foreignId));
 		return this;
 	}
 	

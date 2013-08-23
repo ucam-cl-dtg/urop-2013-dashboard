@@ -25,11 +25,10 @@ public class GetNotificationForm {
 	@QueryParam("offset") String offset;
 	@QueryParam("limit") String limit;
 	@QueryParam("section") String section;
-	@QueryParam("eventId") String eventId;
+	@QueryParam("foreignId") String foreignId;
 	
 	private Integer intOffset;
 	private Integer intLimit;
-	private Integer intEventId;
 	
 	// Logger
 	private static Logger log = LoggerFactory.getLogger(GetNotificationForm.class);
@@ -74,11 +73,11 @@ public class GetNotificationForm {
 			userNotifications.put("limit", 10);
 		}
 		
-		if (intEventId != null) {
-			nq.eventId(intEventId);
-			userNotifications.put("eventId", intEventId);
+		if (foreignId != null && foreignId != "" && foreignId != "none") {
+			nq.foreignId(foreignId);
+			userNotifications.put("foreignId", foreignId);
 		} else {
-			userNotifications.put("eventId", "");
+			userNotifications.put("foreignId", "none");
 		}
 		
 		// Process query result set
@@ -124,13 +123,9 @@ public class GetNotificationForm {
 			}
 		}
 		
-		// Event id
-		if (eventId != null && !eventId.equals("")) {
-			try {
-				intEventId = Integer.parseInt(eventId);
-			} catch (NumberFormatException e) {
-				errors.put("eventId", Strings.NOTIFICATION_EVENTID_NOT_INTEGER);
-			}
+		// Foreign id
+		if (foreignId == null) {
+			foreignId = "none";
 		}
 
 		// Section
@@ -154,8 +149,8 @@ public class GetNotificationForm {
 		String localSection = (section == null ? "" : section);
 		builder.put("section", localSection);
 		
-		String localEventId = (eventId == null ? "" : eventId);
-		builder.put("eventId", localEventId);
+		String localForeignId = (foreignId == null ? "" : foreignId);
+		builder.put("foreignId", localForeignId);
 		
 		return builder.build();
 	}

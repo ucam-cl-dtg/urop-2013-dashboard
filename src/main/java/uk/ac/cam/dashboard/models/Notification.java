@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -36,7 +37,9 @@ public class Notification implements Mappable {
 	
 	private String section;
 	private String link;
-	private int eventId;
+	
+	@Column(name="foreign_id")
+	private String foreignId;
 	
 	public Notification() {
 		this.timestamp = Calendar.getInstance();
@@ -49,11 +52,11 @@ public class Notification implements Mappable {
 		this.timestamp = Calendar.getInstance();
 	}
 	
-	public Notification(String message, String section, String link, int eventId) {
+	public Notification(String message, String section, String link, String foreignId) {
 		this.message = message;
 		this.section = section;
 		this.link = link;
-		this.eventId = eventId;
+		this.setForeignId(foreignId);
 		this.timestamp = Calendar.getInstance();
 	}
 	
@@ -72,8 +75,8 @@ public class Notification implements Mappable {
 	public String getLink() {return link;}
 	public void setLink(String link) {this.link = link;}
 
-	public int getEventId() {return eventId;}
-	public void setEventId(int eventId) {this.eventId = eventId;}
+	public String getForeignId() {return foreignId;}
+	public void setForeignId(String foreignId) {this.foreignId = foreignId;}
 	
 	@Override
 	public ImmutableMap<String, Object> toMap() {

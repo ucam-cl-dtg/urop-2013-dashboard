@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
+import uk.ac.cam.dashboard.queries.NotificationQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 import uk.ac.cam.dashboard.util.Strings;
 import uk.ac.cam.dashboard.util.Util;
@@ -24,9 +25,7 @@ public class CreateNotificationForm {
 	@FormParam("section") String section;
 	@FormParam("link") String link;
 	@FormParam("users") String users;
-	@FormParam("eventId") String eventId;
-	
-	Integer intEventId;
+	@FormParam("foreignId") String foreignId;
 	
 	// Logger
 	private static Logger log = LoggerFactory.getLogger(CreateNotificationForm.class);
@@ -35,7 +34,7 @@ public class CreateNotificationForm {
 		
 		Session session = HibernateUtil.getTransactionSession();
 		
-		Notification notification = new Notification(message, section, "/" + section + "/" + link, intEventId);
+		Notification notification = new Notification(message, section, "/" + section + "/" + link, foreignId);
 		
 		session.save(notification);
 		
@@ -87,14 +86,15 @@ public class CreateNotificationForm {
 			errors.put("users", Strings.NOTIFICATION_USERS_MAX);
 		}
 		
-		// Event id
-		if (eventId != null && !eventId.equals("")) {
-			try {
-				intEventId = Integer.parseInt(eventId);
-			} catch (NumberFormatException e) {
-				intEventId = -1;
-				errors.put("eventId", Strings.NOTIFICATION_EVENTID_NOT_INTEGER);
+		// Foreign id
+		if (foreignId != null) {
+			// Query the database to ensure that the foreignId is unique
+			List<NotificationUser> results = NotificationQuery.all().foreignId(foreignId).list();
+			if (results.size() > 0) {
+				errors.put("foreignId", Strings.NOTIFICATION_FOREIGN_ID_NOT_UNIQUE);
 			}
+		} else {
+			foreignId = "none";
 		}
 
 		return Util.multimapToImmutableMap(errors);
@@ -115,8 +115,8 @@ public class CreateNotificationForm {
 		String localUsers = (users == null ? "" : users);
 		builder.put("users", localUsers);
 		
-		String localEventId = (eventId == null ? "" : eventId);
-		builder.put("eventId", localEventId);
+		String localForeignId = (foreignId == null ? "" : foreignId);
+		builder.put("foreignId", localForeignId);
 		
 		return builder.build();
 	}
