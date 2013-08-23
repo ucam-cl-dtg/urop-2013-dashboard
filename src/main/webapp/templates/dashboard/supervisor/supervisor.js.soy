@@ -6,7 +6,7 @@
  * @param cgroups
  * @param target
  * @param errors
- * @param url
+ * @param presetDeadline
  */
 {template .index }
 	<h3>Supervisor Homepage</h3>
@@ -48,8 +48,8 @@
 			<div id="newDeadlineSection" class="content" data-section-content>        
 				{call .newdeadline}
 					{param errors: $errors /}
-					{param url: $url /}
 					{param deadline: 'undefined' /}
+					{param presetDeadline: $presetDeadline /}
 				{/call}
 			</div>
 		</section>
@@ -123,7 +123,7 @@
  * Dashboard: supervisor page, create deadlines
  * @param deadline
  * @param errors
- * @param url
+ * @param presetDeadline
  */
 {template .newdeadline }
 	<form id="newDeadlineForm" action="{$ij.path}deadlines" method="post" class="custom">
@@ -131,7 +131,7 @@
 			<div class="columns large-2 small-4 field-label" >Deadline name</div>
 			<div class="columns large-10 small-8">
 				{if $errors != 'undefined' and $errors.title}<label class="error">Error</label>{/if}
-				<input type="text" name="title" placeholder="Deadline name" {if $errors != 'undefined' and $errors.title}class="error"{/if}{if $deadline != 'undefined'}value="{$deadline.name}"{/if}/>
+				<input type="text" name="title" placeholder="Deadline name" {if $errors != 'undefined' and $errors.title}class="error"{/if}{if $deadline != 'undefined'}value="{$deadline.name}"{else}value="{$presetDeadline.title}"{/if}/>
 				{if $errors != 'undefined' and $errors.title}<small class="error">{$errors.title}</small>{/if}
 			</div>
 		</div>
@@ -174,13 +174,13 @@
 		<div class="row">
 			<div class="columns large-2 small-4 field-label">URL</div>
 			<div class="columns large-10 small-8">
-				<input type="text" name="url" placeholder="(optional) URL of event, question set etc." {if $deadline != 'undefined'}value="{$deadline.url}"{else}value="{$url}"{/if}/>
+				<input type="text" name="url" placeholder="(optional) URL of event, question set etc." {if $deadline != 'undefined'}value="{$deadline.url}"{else}value="{$presetDeadline.url}"{/if}/>
 			</div>
 		</div>
 		<div class="row">
 			<div class="columns large-2 small-4 field-label">Message</div>
 			<div class="columns large-10 small-8">
-				<textarea name="message" placeholder="(optional) Deadline description eg. sign up for OOP supervisions" {if $deadline != 'undefined'}value="{$deadline.message}"{/if}></textarea>
+				<textarea name="message" placeholder="(optional) Deadline description eg. sign up for OOP supervisions" >{if $deadline != 'undefined'}{$deadline.message}{else}{$presetDeadline.message}{/if}</textarea>
 			</div>
 		</div>
 		<div class="row">

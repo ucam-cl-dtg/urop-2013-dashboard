@@ -1,5 +1,8 @@
 package uk.ac.cam.dashboard.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -26,15 +29,23 @@ public class SupervisorController extends ApplicationController {
 	// Index 
 	@GET @Path("/")
 	public ImmutableMap<String, ?> indexSupervisor() {
-		return indexSupervisorTab("", "");
+		return indexSupervisorTab("", null, null, null);
 	}
 	
 	@GET @Path("/{tab}") 
-	public ImmutableMap<String, ?> indexSupervisorTab(@PathParam("tab") String tab, @QueryParam("url") String url) {
+	public ImmutableMap<String, ?> indexSupervisorTab(@PathParam("tab") String tab, 
+			@QueryParam("title") String title,
+			@QueryParam("message") String message,
+			@QueryParam("url") String url) {
 
 		currentUser = getUser();
 		
+		
+		title = (title == null ? "" : title);
+		message = (message == null ? "" : message);
 		url = (url == null ? "" : url);
+		
+		Map<String, String> presetDeadline = ImmutableMap.of("title", title, "message", message, "url", url);
 		
 		if(currentUser.getSupervisor()){
 			log.debug("User authorised, returning group and deadline management data JSON");
@@ -44,9 +55,9 @@ public class SupervisorController extends ApplicationController {
 			builder.put("user", currentUser.toMap());
 			builder.put("target", tab);
 			builder.put("cdeadlines", currentUser.createdDeadlinesToMap());
+			builder.put("presetDeadline", presetDeadline);
 			builder.put("errors", "undefined");
 			builder.put("cgroups", currentUser.groupsToMap());
-			builder.put("url", url);
 			
 			return builder.build();
 		}
