@@ -74,6 +74,11 @@ public class NotificationQuery extends PaginationQuery<NotificationQuery> {
 		return this;
 	}
 	
+	public NotificationQuery foreignId(String foreignId) {
+		criteria.add(Restrictions.eq("n.foreignId", foreignId));
+		return this;
+	}
+	
 	public NotificationQuery isRead(boolean read) {
 		this.criteria.add(Restrictions.eq("read", read));
 		return this;

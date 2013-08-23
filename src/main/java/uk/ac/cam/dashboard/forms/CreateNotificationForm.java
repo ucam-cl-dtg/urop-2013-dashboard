@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
+import uk.ac.cam.dashboard.queries.NotificationQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 import uk.ac.cam.dashboard.util.Strings;
 import uk.ac.cam.dashboard.util.Util;
@@ -24,6 +25,7 @@ public class CreateNotificationForm {
 	@FormParam("section") String section;
 	@FormParam("link") String link;
 	@FormParam("users") String users;
+	@FormParam("foreignId") String foreignId;
 	
 	// Logger
 	private static Logger log = LoggerFactory.getLogger(CreateNotificationForm.class);
@@ -32,10 +34,7 @@ public class CreateNotificationForm {
 		
 		Session session = HibernateUtil.getTransactionSession();
 		
-		Notification notification = new Notification();
-		notification.setMessage(message);
-		notification.setSection(section);
-		notification.setLink("/" + section + "/" + link);
+		Notification notification = new Notification(message, section, "/" + section + "/" + link, foreignId);
 		
 		session.save(notification);
 		
@@ -86,6 +85,17 @@ public class CreateNotificationForm {
 		} else if (users.split(",").length > 50) {
 			errors.put("users", Strings.NOTIFICATION_USERS_MAX);
 		}
+		
+		// Foreign id
+		if (foreignId != null) {
+			// Query the database to ensure that the foreignId is unique
+			List<NotificationUser> results = NotificationQuery.all().foreignId(foreignId).list();
+			if (results.size() > 0) {
+				errors.put("foreignId", Strings.NOTIFICATION_FOREIGN_ID_NOT_UNIQUE);
+			}
+		} else {
+			foreignId = "none";
+		}
 
 		return Util.multimapToImmutableMap(errors);
 	}
@@ -104,6 +114,9 @@ public class CreateNotificationForm {
 		
 		String localUsers = (users == null ? "" : users);
 		builder.put("users", localUsers);
+		
+		String localForeignId = (foreignId == null ? "" : foreignId);
+		builder.put("foreignId", localForeignId);
 		
 		return builder.build();
 	}
