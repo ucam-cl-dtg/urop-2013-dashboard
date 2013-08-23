@@ -7,9 +7,6 @@
  */
 {template .index}
 	<div class="row">
-	
-	</div>
-	<div class="row">
         <ul class="panels">
             <li class="panel-wrapper columns large-12">
                 <div class="list-panel">
@@ -29,24 +26,24 @@
                 <ul class="sub-panel expanded">
                     <li class="list-sub-panel">
                         <div class="row list-inner-sub-panel">
-                        <div class="columns large-3 small-3 text-center logo">
-						<img src="img/otterlogo.gif" />
-						</div>                           
-                            <div class="columns large-9 small-9 text-left">
+                        	<div class="columns large-3 small-3 text-center logo">
+								<img src="img/otterlogo.gif" />
+							</div>                           
+							<div class="columns large-9 small-9 text-left">
                                 <div class="row">
                                     <div class="columns large-11 small-11 text-left">
-                                    <ul class="vcard udetails"> 
-                                    <li><strong>crsid:</strong> {$user.crsid}</li>
-                                    <li><strong>Username:</strong> {$user.name}</li>
-                                    <li><strong>Email:</strong> {$user.email}</em></li>
-                                    <li><strong>College/Department ID:</strong> <span class="round secondary label">{$user.instID} </span></li>
-                                    <li><strong>Institution:</strong> <span class="round secondary label">{$user.institution} </span></li>
-                                    <li><strong>User status:</strong> <span class="label round">{if $user.supervisor}Supervisor{else}Student{/if} </span></li>
-                                    </ul>
+                                    	<ul class="vcard udetails"> 
+                                    		<li><strong>crsid:</strong> {$user.crsid}</li>
+                                    		<li><strong>Username:</strong> {$user.name}</li>
+                                    		<li><strong>Email:</strong> {$user.email}</em></li>
+                                    		<li><strong>College/Department ID:</strong> <span class="round secondary label">{$user.instID} </span></li>
+                                    		<li><strong>Institution:</strong> <span class="round secondary label">{$user.institution} </span></li>
+                                    		<li><strong>User status:</strong> <span class="label round">{if $user.supervisor}Supervisor{else}Student{/if} </span></li>
+                                    	</ul>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+						</div>
                     </li>
 					<li class="list-sub-panel">
                         <div class="row list-inner-sub-panel">                           
@@ -54,9 +51,9 @@
                                 <div class="row">
                                     <div class="columns large-12 small-12 text-left">
                                     	<strong>Active services:</strong>
-                                    	<span class="services label {if $services.signups}success{else}error{/if}">Signups</span>
-                                        <span class="services label {if $services.questions}success{else}error{/if}">Questions</span>
-                                    	<span class="services label {if $services.handins}success{else}error{/if}">Handins</span>
+                                    	<span class="services label round {if $services.signups}success{else}error{/if}">Signups</span>
+                                        <span class="services label round {if $services.questions}success{else}error{/if}">Questions</span>
+                                    	<span class="services label round {if $services.handins}success{else}error{/if}">Handins</span>
                                     </div>
                                 </div>
                             </div>
