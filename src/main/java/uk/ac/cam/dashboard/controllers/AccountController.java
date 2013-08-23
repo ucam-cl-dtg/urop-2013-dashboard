@@ -148,7 +148,8 @@ public class AccountController extends ApplicationController {
 		if (settings.isHandinsOptIn()) {
 			List<Object> handins = new LinkedList<Object>();
 			handins.add(ImmutableMap.of("name", "Create bin", "link", "/handins/bins/create", "icon", ",", "iconType", 2, "notificationCount", 0));
-			handins.add(ImmutableMap.of("name", "Upload answers", "link", "/handins/bins", "icon", ",", "iconType", 2, "notificationCount", 0));
+			handins.add(ImmutableMap.of("name", "Manage bins", "link", "/handins/bins/manage", "icon", "C", "iconType", 2, "notificationCount", 0));
+			handins.add(ImmutableMap.of("name", "Upload answers", "link", "/handins/bins/upload", "icon", ",", "iconType", 2, "notificationCount", 0));
 			handins.add(ImmutableMap.of("name", "Mark answers", "link", "/handins/bins/marking", "icon", "C", "iconType", 2, "notificationCount", 0));
 			
 			ImmutableMap.Builder<String, Object> handinsMap = new ImmutableMap.Builder<String, Object>();
