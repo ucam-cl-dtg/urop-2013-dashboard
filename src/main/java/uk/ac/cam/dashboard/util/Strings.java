@@ -71,6 +71,7 @@ public class Strings {
 	public static final String NOTIFICATION_NO_LINK = "Link field cannot be empty";
 	public static final String NOTIFICATION_NO_USERS = "A list of comma separated users must be set";
 	public static final String NOTIFICATION_USERS_MAX = "A maximum of 50 users can be set for any notification";
+	public static final String NOTIFICATION_EVENTID_NOT_INTEGER = "EventId must be an integer";
 	
 	// Authorisation exceptions
 	public static final String AUTHEXCEPTION_GLOBAL = "Could not validate global API permissions.";

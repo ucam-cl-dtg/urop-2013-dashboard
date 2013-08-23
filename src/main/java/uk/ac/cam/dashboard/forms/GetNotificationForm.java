@@ -25,9 +25,11 @@ public class GetNotificationForm {
 	@QueryParam("offset") String offset;
 	@QueryParam("limit") String limit;
 	@QueryParam("section") String section;
+	@QueryParam("eventId") String eventId;
 	
 	private Integer intOffset;
 	private Integer intLimit;
+	private Integer intEventId;
 	
 	// Logger
 	private static Logger log = LoggerFactory.getLogger(GetNotificationForm.class);
@@ -72,6 +74,13 @@ public class GetNotificationForm {
 			userNotifications.put("limit", 10);
 		}
 		
+		if (intEventId != null) {
+			nq.eventId(intEventId);
+			userNotifications.put("eventId", intEventId);
+		} else {
+			userNotifications.put("eventId", "");
+		}
+		
 		// Process query result set
 		
 		List<NotificationUser> results = nq.list();
@@ -98,7 +107,7 @@ public class GetNotificationForm {
 				if (intOffset < 0) {
 					errors.put("limit", Strings.NOTIFICATION_OFFSET_INVALID_NUM);
 				}
-			} catch(Exception e) {
+			} catch(NumberFormatException e) {
 				errors.put("offset", Strings.NOTIFICATION_OFFSET_NOT_INTEGER);
 			}
 		}
@@ -110,11 +119,20 @@ public class GetNotificationForm {
 				if (intLimit < 0) {
 					errors.put("limit", Strings.NOTIFICATION_LIMIT_INVALID_NUM);
 				}
-			} catch(Exception e) {
+			} catch(NumberFormatException e) {
 				errors.put("limit", Strings.NOTIFICATION_LIMIT_NOT_INTEGER);
 			}
 		}
 		
+		// Event id
+		if (eventId != null && !eventId.equals("")) {
+			try {
+				intEventId = Integer.parseInt(eventId);
+			} catch (NumberFormatException e) {
+				errors.put("eventId", Strings.NOTIFICATION_EVENTID_NOT_INTEGER);
+			}
+		}
+
 		// Section
 		String[] validSections = {"dashboard", "signups", "questions", "handins"}; // Shared with CreateNotificationForm
 		if (section != null && !section.equals("") && !Arrays.asList(validSections).contains(section)) {
@@ -135,6 +153,9 @@ public class GetNotificationForm {
 		
 		String localSection = (section == null ? "" : section);
 		builder.put("section", localSection);
+		
+		String localEventId = (eventId == null ? "" : eventId);
+		builder.put("eventId", localEventId);
 		
 		return builder.build();
 	}

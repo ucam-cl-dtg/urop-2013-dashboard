@@ -24,6 +24,9 @@ public class CreateNotificationForm {
 	@FormParam("section") String section;
 	@FormParam("link") String link;
 	@FormParam("users") String users;
+	@FormParam("eventId") String eventId;
+	
+	Integer intEventId;
 	
 	// Logger
 	private static Logger log = LoggerFactory.getLogger(CreateNotificationForm.class);
@@ -32,10 +35,7 @@ public class CreateNotificationForm {
 		
 		Session session = HibernateUtil.getTransactionSession();
 		
-		Notification notification = new Notification();
-		notification.setMessage(message);
-		notification.setSection(section);
-		notification.setLink("/" + section + "/" + link);
+		Notification notification = new Notification(message, section, "/" + section + "/" + link, intEventId);
 		
 		session.save(notification);
 		
@@ -86,6 +86,16 @@ public class CreateNotificationForm {
 		} else if (users.split(",").length > 50) {
 			errors.put("users", Strings.NOTIFICATION_USERS_MAX);
 		}
+		
+		// Event id
+		if (eventId != null && !eventId.equals("")) {
+			try {
+				intEventId = Integer.parseInt(eventId);
+			} catch (NumberFormatException e) {
+				intEventId = -1;
+				errors.put("eventId", Strings.NOTIFICATION_EVENTID_NOT_INTEGER);
+			}
+		}
 
 		return Util.multimapToImmutableMap(errors);
 	}
@@ -104,6 +114,9 @@ public class CreateNotificationForm {
 		
 		String localUsers = (users == null ? "" : users);
 		builder.put("users", localUsers);
+		
+		String localEventId = (eventId == null ? "" : eventId);
+		builder.put("eventId", localEventId);
 		
 		return builder.build();
 	}

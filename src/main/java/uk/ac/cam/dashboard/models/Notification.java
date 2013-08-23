@@ -36,6 +36,7 @@ public class Notification implements Mappable {
 	
 	private String section;
 	private String link;
+	private int eventId;
 	
 	public Notification() {
 		this.timestamp = Calendar.getInstance();
@@ -45,6 +46,14 @@ public class Notification implements Mappable {
 		this.message = message;
 		this.section = section;
 		this.link = link;
+		this.timestamp = Calendar.getInstance();
+	}
+	
+	public Notification(String message, String section, String link, int eventId) {
+		this.message = message;
+		this.section = section;
+		this.link = link;
+		this.eventId = eventId;
 		this.timestamp = Calendar.getInstance();
 	}
 	
@@ -62,6 +71,9 @@ public class Notification implements Mappable {
 	
 	public String getLink() {return link;}
 	public void setLink(String link) {this.link = link;}
+
+	public int getEventId() {return eventId;}
+	public void setEventId(int eventId) {this.eventId = eventId;}
 	
 	@Override
 	public ImmutableMap<String, Object> toMap() {

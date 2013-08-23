@@ -74,6 +74,11 @@ public class NotificationQuery extends PaginationQuery<NotificationQuery> {
 		return this;
 	}
 	
+	public NotificationQuery eventId(int eventId) {
+		criteria.add(Restrictions.eq("n.eventId", eventId));
+		return this;
+	}
+	
 	public NotificationQuery isRead(boolean read) {
 		this.criteria.add(Restrictions.eq("read", read));
 		return this;
