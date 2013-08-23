@@ -52,7 +52,9 @@
 		<li class="panel-wrapper columns large-12">
 			<div class="list-panel">
 				<div class="row list-inner-panel">
-					<div class="columns large-9 small-9"><strong>{$deadline.name} </strong> {if not $deadline.archived}<span class="{if $deadline.imminent}round alert label{else}label{/if}">due {$deadline.datetime}</span>{else}{if $deadline.complete} Completed {else} [Deadline past - due on {$deadline.datetime}]{/if}{/if}<br/><em>{$deadline.message}</em></div>
+					<div class="columns large-9 small-9">
+						<strong>{$deadline.name}</strong> {if not $deadline.archived}<span class="round label {if $deadline.imminent}alert{/if}">due {$deadline.datetime}</span>{else}{if $deadline.complete} Completed {else} [Deadline past - due on {$deadline.datetime}]{/if}{/if}<br/><em>{$deadline.message}</em>
+					</div>
 					<div class="columns large-3 small-3 text-right">
 						<div class="icon-button-wrapper">
 							{if not $deadline.archived}
