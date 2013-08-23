@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cam.dashboard.models.DeadlineUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
+import uk.ac.cam.dashboard.util.Strings;
 import uk.ac.cam.dashboard.util.Util;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -98,10 +99,10 @@ public class GetDeadlineForm {
 			try {
 				intOffset = Integer.parseInt(offset);
 				if (intOffset < 0) {
-					errors.put("limit", "Limit must be greater than or equal to 0");
+					errors.put("offset", Strings.DEADLINE_OFFSET_INVALID_NUM);
 				}
 			} catch(Exception e) {
-				errors.put("offset", "Offset must be an integer");
+				errors.put("offset", Strings.DEADLINE_OFFSET_NOT_INTEGER);
 			}
 		}
 		
@@ -110,10 +111,10 @@ public class GetDeadlineForm {
 			try {
 				intLimit = Integer.parseInt(limit);
 				if (intLimit < 0) {
-					errors.put("limit", "Limit must be greater than or equal to 0");
+					errors.put("limit", Strings.DEADLINE_LIMIT_INVALID_NUM);
 				}
 			} catch(Exception e) {
-				errors.put("limit", "Limit must be an integer");
+				errors.put("limit", Strings.DEADLINE_LIMIT_NOT_INTEGER);
 			}
 		}
 		

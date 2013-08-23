@@ -14,6 +14,7 @@ import uk.ac.cam.dashboard.exceptions.AuthException;
 import uk.ac.cam.dashboard.models.Api;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.dashboard.util.Strings;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -87,13 +88,13 @@ public class ApiController extends ApplicationController {
 		Session s = HibernateUtil.getTransactionSession();
 		
 		if (key == null || key == "") {
-			return ImmutableMap.of("error", "A key must be provided");
+			return ImmutableMap.of("error", Strings.AUTHEXCEPTION_NO_KEY);
 		}
 		
 		Api api = (Api) s.createQuery("from Api where key = :key").setParameter("key", key).uniqueResult();
 		
 		if (api == null) {
-			return ImmutableMap.of("error", "Invalid key");
+			return ImmutableMap.of("error", Strings.AUTHEXCEPTION_GENERAL);
 		} else if (api.isGlobalPermissions()) {
 			return ImmutableMap.of("type", "global");
 		} else {

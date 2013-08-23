@@ -6,6 +6,7 @@
  * @param cgroups
  * @param target
  * @param errors
+ * @param url
  */
 {template .index }
 	<h3>Supervisor Homepage</h3>
@@ -47,6 +48,7 @@
 			<div id="newDeadlineSection" class="content" data-section-content>        
 				{call .newdeadline}
 					{param errors: $errors /}
+					{param url: $url /}
 					{param deadline: 'undefined' /}
 				{/call}
 			</div>
@@ -121,6 +123,7 @@
  * Dashboard: supervisor page, create deadlines
  * @param deadline
  * @param errors
+ * @param url
  */
 {template .newdeadline }
 	<form id="newDeadlineForm" action="{$ij.path}deadlines" method="post" class="custom">
@@ -171,7 +174,7 @@
 		<div class="row">
 			<div class="columns large-2 small-4 field-label">URL</div>
 			<div class="columns large-10 small-8">
-				<input type="text" name="url" placeholder="(optional) URL of event, question set etc." {if $deadline != 'undefined'}value="{$deadline.url}"{/if}/>
+				<input type="text" name="url" placeholder="(optional) URL of event, question set etc." {if $deadline != 'undefined'}value="{$deadline.url}"{else}value="{$url}"{/if}/>
 			</div>
 		</div>
 		<div class="row">

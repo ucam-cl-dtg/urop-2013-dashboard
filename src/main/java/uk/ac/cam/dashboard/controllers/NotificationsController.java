@@ -23,6 +23,7 @@ import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
+import uk.ac.cam.dashboard.util.Strings;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -90,7 +91,7 @@ public class NotificationsController extends ApplicationController {
 				return notification.toMap();
 			} else {
 				log.debug("Notification with id " + id + " does not exist, returning error");
-				return ImmutableMap.of("error", "Could not find a notification with id " + id);
+				return ImmutableMap.of("error", Strings.NOTIFICATION_GET_ERROR_INDIVIDUAL + id);
 			}
 			
 		}
@@ -134,14 +135,14 @@ public class NotificationsController extends ApplicationController {
 			if (read != null) {
 				if (read == true) {
 					log.error("Error marking notification as read");
-					error = ImmutableMap.of("formErrors", "Could not mark notification as read");
+					error = ImmutableMap.of("formErrors", Strings.NOTIFICATION_UPDATE_ERROR + "read");
 				} else {
 					log.error("Error marking notification as read");
-					error = ImmutableMap.of("formErrors", "Could not mark notification as unread");
+					error = ImmutableMap.of("formErrors", Strings.NOTIFICATION_UPDATE_ERROR + "unread");
 				}
 			} else {
 				log.error("Errors in form, no value provide for read");
-				error = ImmutableMap.of("formErrors", "Please include a value for the query parameter 'read'");
+				error = ImmutableMap.of("formErrors", Strings.NOTIFICATION_UPDATE_NO_READ_PARAM);
 				return error;
 			}
 			

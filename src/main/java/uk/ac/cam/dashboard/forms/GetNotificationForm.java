@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
+import uk.ac.cam.dashboard.util.Strings;
 import uk.ac.cam.dashboard.util.Util;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -95,10 +96,10 @@ public class GetNotificationForm {
 			try {
 				intOffset = Integer.parseInt(offset);
 				if (intOffset < 0) {
-					errors.put("limit", "Limit must be greater than or equal to 0");
+					errors.put("limit", Strings.NOTIFICATION_OFFSET_INVALID_NUM);
 				}
 			} catch(Exception e) {
-				errors.put("offset", "Offset must be an integer");
+				errors.put("offset", Strings.NOTIFICATION_OFFSET_NOT_INTEGER);
 			}
 		}
 		
@@ -107,17 +108,17 @@ public class GetNotificationForm {
 			try {
 				intLimit = Integer.parseInt(limit);
 				if (intLimit < 0) {
-					errors.put("limit", "Limit must be greater than or equal to 0");
+					errors.put("limit", Strings.NOTIFICATION_LIMIT_INVALID_NUM);
 				}
 			} catch(Exception e) {
-				errors.put("limit", "Limit must be an integer");
+				errors.put("limit", Strings.NOTIFICATION_LIMIT_NOT_INTEGER);
 			}
 		}
 		
 		// Section
 		String[] validSections = {"dashboard", "signups", "questions", "handins"}; // Shared with CreateNotificationForm
 		if (section != null && !section.equals("") && !Arrays.asList(validSections).contains(section)) {
-			errors.put("section", "Invalid section field.");
+			errors.put("section", Strings.NOTIFICATION_INVALID_SECTION);
 		}
 		
 		return Util.multimapToImmutableMap(errors);

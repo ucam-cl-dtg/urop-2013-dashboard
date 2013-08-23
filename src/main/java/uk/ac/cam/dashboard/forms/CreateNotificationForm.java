@@ -13,6 +13,7 @@ import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.dashboard.util.Strings;
 import uk.ac.cam.dashboard.util.Util;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -61,29 +62,29 @@ public class CreateNotificationForm {
 		
 		// Message
 		if (message == null || message.equals("")) {
-			errors.put("message", "Message field cannot be empty.");
+			errors.put("message", Strings.NOTIFICATION_NO_MESSAGE);
 		} else if (message.length() >= 255) {
-			errors.put("message", "Message length cannot be more than 255 characters.");
+			errors.put("message", Strings.NOTIFICATION_MESSAGE_LENGTH);
 		}
 
 		// Section
 		String[] validSections = {"dashboard", "signups", "questions", "handins"}; // Shared with GetNotificationForm
 		if (section == null || section.equals("")) {
-			errors.put("section", "Section field cannot be empty.");
+			errors.put("section", Strings.NOTIFICATION_NO_SECTION);
 		} else if (!Arrays.asList(validSections).contains(section)) {
-			errors.put("section", "Invalid section field.");
+			errors.put("section", Strings.NOTIFICATION_INVALID_SECTION);
 		}
 		
 		// Link
 		if (link == null || link.equals("")) {
-			errors.put("link", "Link field cannot be empty.");
+			errors.put("link", Strings.NOTIFICATION_NO_LINK);
 		}
 		
 		// Users
 		if (users == null || users.equals("")) {
-			errors.put("users", "A list of comma separated users must be set.");
+			errors.put("users", Strings.NOTIFICATION_NO_USERS);
 		} else if (users.split(",").length > 50) {
-			errors.put("users", "A maximum of 50 users can be set for any notification.");
+			errors.put("users", Strings.NOTIFICATION_USERS_MAX);
 		}
 
 		return Util.multimapToImmutableMap(errors);
