@@ -25,6 +25,7 @@ public class GetNotificationForm {
 	@QueryParam("offset") String offset;
 	@QueryParam("limit") String limit;
 	@QueryParam("section") String section;
+	@QueryParam("foreignId") String foreignId;
 	
 	private Integer intOffset;
 	private Integer intLimit;
@@ -72,6 +73,13 @@ public class GetNotificationForm {
 			userNotifications.put("limit", 10);
 		}
 		
+		if (foreignId != null && foreignId != "" && foreignId != "none") {
+			nq.foreignId(foreignId);
+			userNotifications.put("foreignId", foreignId);
+		} else {
+			userNotifications.put("foreignId", "none");
+		}
+		
 		// Process query result set
 		
 		List<NotificationUser> results = nq.list();
@@ -98,7 +106,7 @@ public class GetNotificationForm {
 				if (intOffset < 0) {
 					errors.put("limit", Strings.NOTIFICATION_OFFSET_INVALID_NUM);
 				}
-			} catch(Exception e) {
+			} catch(NumberFormatException e) {
 				errors.put("offset", Strings.NOTIFICATION_OFFSET_NOT_INTEGER);
 			}
 		}
@@ -110,11 +118,16 @@ public class GetNotificationForm {
 				if (intLimit < 0) {
 					errors.put("limit", Strings.NOTIFICATION_LIMIT_INVALID_NUM);
 				}
-			} catch(Exception e) {
+			} catch(NumberFormatException e) {
 				errors.put("limit", Strings.NOTIFICATION_LIMIT_NOT_INTEGER);
 			}
 		}
 		
+		// Foreign id
+		if (foreignId == null) {
+			foreignId = "none";
+		}
+
 		// Section
 		String[] validSections = {"dashboard", "signups", "questions", "handins"}; // Shared with CreateNotificationForm
 		if (section != null && !section.equals("") && !Arrays.asList(validSections).contains(section)) {
@@ -135,6 +148,9 @@ public class GetNotificationForm {
 		
 		String localSection = (section == null ? "" : section);
 		builder.put("section", localSection);
+		
+		String localForeignId = (foreignId == null ? "" : foreignId);
+		builder.put("foreignId", localForeignId);
 		
 		return builder.build();
 	}
