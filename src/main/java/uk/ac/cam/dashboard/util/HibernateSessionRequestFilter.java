@@ -10,6 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -40,8 +41,15 @@ public class HibernateSessionRequestFilter implements Filter {
 		
 		Transaction transaction = sf.getCurrentSession().getTransaction();
 
-        if (transaction.isActive())
-            sf.getCurrentSession().getTransaction().commit();
+        if (transaction.isActive()) {
+        	try {
+        		sf.getCurrentSession().getTransaction().commit();
+        	}
+        	catch (HibernateException e) {
+        		sf.getCurrentSession().getTransaction().rollback();
+        		throw e;
+        	}
+        }
 	}
 
 	@Override
