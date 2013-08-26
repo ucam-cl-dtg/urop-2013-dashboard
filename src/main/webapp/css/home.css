@@ -1,6 +1,11 @@
 .logo {
 	padding: 0px 10px 10px 10px;
 }
+.udetails {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
 .udetails li{
 	padding: 5px;
 }
