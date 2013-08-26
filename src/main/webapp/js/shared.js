@@ -148,6 +148,13 @@ function gGroupTokenInput() {
 	applyTokenInput("import-group-token-input", "group", "groups/queryGroup", "id", "name", resultFormat, tokenFormat);
 }
 
+function sUserTokenInput() {
+	var resultFormat = function(item){ return "<li>" + "<div style='display: inline-block; padding-left: 10px;'><div class='full_name'>" + item.name + " (" + item.crsid + ")</div><div class='email'>" + item.crsid + "@cam.ac.uk</div></div></li>"; };
+	var tokenFormat = function(item) { return "<li><p>" + item.name + " (" + item.crsid + ")</p></li>"; };
+	
+	applyTokenInput("supervisor-user-token-input", "user", "groups/queryCRSID", "crsid", "crsid", resultFormat, tokenFormat);
+}
+
 function tokenInputType() {
 	var path = "groups/queryCRSID"; //default path
 	var property = "crsid";

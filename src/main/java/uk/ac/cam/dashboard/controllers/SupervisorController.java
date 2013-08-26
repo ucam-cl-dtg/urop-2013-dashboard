@@ -3,7 +3,9 @@ package uk.ac.cam.dashboard.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -13,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.dashboard.exceptions.AuthException;
 import uk.ac.cam.dashboard.models.User;
 
 import com.google.common.collect.ImmutableMap;
@@ -38,7 +41,11 @@ public class SupervisorController extends ApplicationController {
 			@QueryParam("message") String message,
 			@QueryParam("url") String url) {
 
-		currentUser = getUser();
+		try {
+			currentUser = validateUser();
+		} catch(AuthException e){
+			return ImmutableMap.of("error", e.getMessage());
+		}
 		
 		
 		title = (title == null ? "" : title);
@@ -64,6 +71,35 @@ public class SupervisorController extends ApplicationController {
 		
 		log.debug("User is not authorised to view supervision homepage, redirecting");
 		return ImmutableMap.of("redirectTo", "error");
+	}
+	
+	@POST @Path("/add") 
+	public ImmutableMap<String, ?> indexSupervisorTab(@FormParam("users") String users) {
+
+		try {
+			currentUser = validateUser();
+		} catch(AuthException e){
+			return ImmutableMap.of("errors", e.getMessage());
+		}
+		
+		if(!currentUser.getSupervisor()){
+			return ImmutableMap.of("errors", "You are not authorised to add a new supervisor.");
+		}
+		
+		if(users==null||users==""){
+			return ImmutableMap.of("errors", "No users specified");
+		}
+		
+		String[] supervisors = users.split(",");
+		for(String s : supervisors){
+			User supervisor = User.registerUser(s);
+			if(supervisor!=null){
+				supervisor.setSupervisor(true);
+			}
+		}
+		
+		return ImmutableMap.of("errors", "undefined");
+		
 	}
 	
 }

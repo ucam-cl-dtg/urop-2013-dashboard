@@ -71,6 +71,14 @@
 				{/call}
 			</div>
 		</section>
+		<section {if $target=='addSupervisor'}class="active"{/if}>
+			<p class="title" data-section-title><a data-target="addSupervisor">Add Supervisor</a></p>
+			<div id="addSupervisorSection" class="content" data-section-content>    
+				{call .addsupervisor}
+					{param errors: 'undefined' /}
+				{/call}
+			</div>
+		</section>
 	</div>
 {/template}
 
@@ -279,6 +287,29 @@
 		<div class="row">
 			<div class="columns large-12 small-12">
 				<input type="submit" value="Save"/ class="button"><img src="img/ajax-loader.gif" class="ajax-loader" />
+			</div>
+		</div>
+	</form>   
+{/template}
+
+/**
+ * Dashboard: add a new supervisor
+ * @param errors
+ */
+{template .addsupervisor }
+	<h3>Add a new supervisor</h3>    
+	<form id="addSupervisorForm" action="{$ij.path}supervisor/add" method="post" class="custom">
+		<div class="row">
+			<div class="columns large-2 small-4 field-label">Add Users</div>
+			<div class="columns large-10 small-8">
+				{if $errors != 'undefined'}<label class="error">Error</label>{/if}
+				<input type="text" placeholder="Add User" class="supervisor-user-token-input {if $errors != 'undefined'}error{/if}" name="users"/>          
+				{if $errors != 'undefined'}<small class="error">{$errors}</small>{/if}
+			</div>
+		</div>
+		<div class="row">
+			<div class="columns large-12 small-12">
+				<input type="submit" value="Save"/ class="button">
 			</div>
 		</div>
 	</form>   
