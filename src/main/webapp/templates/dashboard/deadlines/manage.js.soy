@@ -8,42 +8,35 @@
  * @param users
  */
 {template .manage }
-
-	<h3>{$deadline.name}</h3>
-        
-    <div class="section-container auto" data-section>
-        <section {if $target == 'statistics' or $target==''}class="active"{/if}>
-            <p class="title" data-section-title><a>Statistics</a></p>
-            <div class="content" data-section-content>
-            
-      			{call .stats}
-                	{param deadline: $deadline /}
-                	{param users: $users /}
-                {/call}
-                
-            </div>
-            </section>
-            <section {if $target == 'edit'}class="active"{/if}>
-            <p class="title" data-section-title><a>Edit Deadline</a></p>
-            <div class="content" data-section-content id="editDeadlineSection">
-                {call .edit}
-                	{param deadline: $deadline /}
-                	{param errors: $errors /}
-                {/call}
-            </div>
-        </section>
-        <section>
-            <p class="title" data-section-title><a><i class="icon icon-trash_can"></i></a></p>
-            <div class="content" data-section-content>
-
-                {call .delete}
-                {param deadline: $deadline /}
-                {/call}          
-
-            </div>
-        </section>
-    </div>
-				
+<h3>{$deadline.name}</h3>
+<div class="section-container auto" data-section>
+	<section {if $target == 'statistics' or $target==''}class="active"{/if}>
+		<p class="title" data-section-title><a>Statistics</a></p>
+		<div class="content" data-section-content>
+			{call .stats}
+				{param deadline: $deadline /}
+				{param users: $users /}
+			{/call}
+		</div>
+	</section>
+	<section {if $target == 'edit'}class="active"{/if}>
+		<p class="title" data-section-title><a>Edit Deadline</a></p>
+		<div class="content" data-section-content id="editDeadlineSection">
+			{call .edit}
+				{param deadline: $deadline /}
+				{param errors: $errors /}
+			{/call}
+		</div>
+	</section>
+	<section>
+		<p class="title" data-section-title><a><i class="icon icon-trash_can"></i></a></p>
+		<div class="content" data-section-content>
+			{call .delete}
+				{param deadline: $deadline /}
+			{/call}
+		</div>
+	</section>
+</div>	
 {/template}
 
 /**
@@ -53,33 +46,33 @@
  */
 {template .stats }
 <div class="row">
-<ul class="panels">
-	<li class="panel-wrapper columns large-12">
-		<div class="row list-inner-sub-panel">                           
-			<div class="columns large-11 small-11 text-left">
-				<div class="row">
-					<div class="columns large-11 small-11 text-left">
-						<div class="progress large-6 success round"><span class="meter" style="width: {$deadline.pComplete}%"></span></div>
+	<ul class="panels">
+		<li class="panel-wrapper columns large-12">
+			<div class="row list-inner-sub-panel">
+				<div class="columns large-11 small-11 text-left">
+					<div class="row">
+						<div class="columns large-11 small-11 text-left">
+							<div class="progress large-6 success round"><span class="meter" style="width: {$deadline.pComplete}%"></span></div>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</li>
-	{foreach $user in $users}
-	<li class="panel-wrapper columns large-12">
-		<div class="row list-inner-sub-panel">                           
-			<div class="columns large-11 small-11 text-left">
-				<div class="row">
-					<div class="columns large-11 small-11 text-left">
-					<strong>{$user.name} ({$user.crsid}) {if $user.complete}<span class="success label">complete</span>{else}<span class="round alert label">not complete</span>{/if}</strong>
+		</li>
+		{foreach $user in $users}
+		<li class="panel-wrapper columns large-12">
+			<div class="row list-inner-sub-panel">
+				<div class="columns large-11 small-11 text-left">
+					<div class="row">
+						<div class="columns large-11 small-11 text-left">
+						<strong>{$user.name} ({$user.crsid}) {if $user.complete}<span class="success round label">Complete</span>{else}<span class="round alert label">Not complete</span>{/if}</strong>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</li> 
-	{/foreach}
-</ul>		
-</div>	
+		</li> 
+		{/foreach}
+	</ul>
+</div>
 
 {/template}
 
@@ -89,101 +82,97 @@
  * @param errors
  */
 {template .edit }
-    
-    <form class="custom" id="editDeadlineForm" method="post" action="{$ij.path}deadlines/{$deadline.id}">
-        <div class="row">
-            <div class="columns large-2 small-4 field-label">Deadline name</div>
-            <div class="columns large-10 small-8">
-                {if $errors != 'undefined' and $errors.title}<label class="error">Error</label>{/if}
-                <input type="text" name="title" placeholder="Deadline name" value="{$deadline.name}" {if $errors != 'undefined' and $errors.title}class="error"{/if}/>
-                {if $errors != 'undefined' and $errors.title}<small class="error">{$errors.title}</small>{/if}
-            </div>
-        </div>
-         
-        <div class="row">
-            <div class="columns large-2 small-4 field-label">Due date</div>
-            <div class="columns large-10 small-8">
-                <div class="row">
-                    <div class="columns large-6">
-                        <input type="text" placeholder="Date" value="{$deadline.date.date}" class="datepicker" name="date" />
-                    </div>
-                    <div class="large-6 columns">
-                        <div class="row collapse">
-                            <div class="large-3 columns">
-                                <span class="prefix field-label">Hour</span>
-                            </div>
-                            <div class="large-3 columns">
-                                <select name="hour">
-                                    {for $i in range(0,24)}
-                                        {if $i == $deadline.date.hour}
-                                        <option SELECTED>{$i}</option> 
-                                        {else}
-                                        <option>{$i}</option> 
-                                        {/if}
-                                    {/for}
-                                </select>
-                            </div>
-                            <div class="large-3 columns">
-                                <span class="prefix field-label">Minute</span>
-                            </div>
-                            <div class="large-3 columns">
-                                <select name="minute">
-                                    {for $i in range(0,60)}
-                                        {if $i == $deadline.date.minute}
-                                        <option SELECTED>{$i}</option> 
-                                        {else}
-                                        <option>{$i}</option> 
-                                        {/if}
-                                    {/for}
-                                </select>
-                            </div>                   
-                        </div>
-                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="columns large-2 small-4 field-label">URL</div>
-            <div class="columns large-10 small-8">
-                <input type="text" name="url" value="{$deadline.url}" placeholder="(optional) URL of event, question set etc." />
-            </div>
-        </div>
-        <div class="row">
-            <div class="columns large-2 small-4 field-label">Message</div>
-            <div class="columns large-10 small-8">
-                <textarea name="message" placeholder="(optional) Deadline description eg. sign up for OOP supervisions">{$deadline.message}</textarea>
-            </div>
-        </div>
-        
-         <div class="row">
-            <div class="columns large-2 small-4 field-label">Recipients</div>
-        </div>
-		 <div class="row">
-            <div class="columns large-2 small-4 field-label"></div>
-            <div class="columns large-10 small-8">
-                <input type="radio" class="token-type-radio" value="crsid" name="lookup-type" checked/> By Crsid &nbsp; &nbsp;
-                <input type="radio" class="token-type-radio" value="surname" name="lookup-type"/> By Surname
-            </div>
-        </div>	
-        <div class="row">
-                <div class="columns large-2 small-4 field-label">Add users</div>
-                <div class="columns large-10 small-8">
-                    <input type="text" placeholder="Add users" class="deadline-user-token-input" name="users" data-prepopulate='{lb}"users":[{foreach $user in $deadline.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'/>
-                </div>
-            </div>
-        <div class="row">
-                <div class="columns large-2 small-4 field-label">Add groups</div>
-                <div class="columns large-10 small-8">
-                    <input type="text"  placeholder="Add groups" class="group-token-input" name="groups"/>
-                </div>
-            </div>       
-         <div class="row">
-            <div class="columns large-12 small-12">
-                <input type="submit" value="Save deadline" class="button"/>
-            </div>
-        </div>
-        </form>
-
+<form class="custom" id="editDeadlineForm" method="post" action="{$ij.path}deadlines/{$deadline.id}">
+	<div class="row">
+		<div class="columns large-2 small-4 field-label">Deadline name</div>
+		<div class="columns large-10 small-8">
+			{if $errors != 'undefined' and $errors.title}<label class="error">Error</label>{/if}
+			<input type="text" name="title" placeholder="Deadline name" value="{$deadline.name}" {if $errors != 'undefined' and $errors.title}class="error"{/if}/>
+			{if $errors != 'undefined' and $errors.title}<small class="error">{$errors.title}</small>{/if}
+		</div>
+	</div>
+	<div class="row">
+		<div class="columns large-2 small-4 field-label">Due date</div>
+		<div class="columns large-10 small-8">
+			<div class="row">
+				<div class="columns large-6">
+					<input type="text" placeholder="Date" value="{$deadline.date.date}" class="datepicker" name="date" />
+				</div>
+				<div class="large-6 columns">
+					<div class="row collapse">
+						<div class="large-3 columns">
+							<span class="prefix field-label">Hour</span>
+						</div>
+						<div class="large-3 columns">
+							<select name="hour">
+								{for $i in range(0,24)}
+								{if $i == $deadline.date.hour}
+								<option SELECTED>{$i}</option>
+								{else}
+								<option>{$i}</option>
+								{/if}
+								{/for}
+							</select>
+						</div>
+						<div class="large-3 columns">
+							<span class="prefix field-label">Minute</span>
+						</div>
+						<div class="large-3 columns">
+							<select name="minute">
+								{for $i in range(0,60)}
+								{if $i == $deadline.date.minute}
+								<option SELECTED>{$i}</option>
+								{else}
+								<option>{$i}</option>
+								{/if}
+								{/for}
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="columns large-2 small-4 field-label">URL</div>
+		<div class="columns large-10 small-8">
+			<input type="text" name="url" value="{$deadline.url}" placeholder="(optional) URL of event, question set etc." />
+		</div>
+	</div>
+	<div class="row">
+		<div class="columns large-2 small-4 field-label">Message</div>
+		<div class="columns large-10 small-8">
+			<textarea name="message" placeholder="(optional) Deadline description eg. sign up for OOP supervisions">{$deadline.message}</textarea>
+		</div>
+	</div>
+	<div class="row">
+		<div class="columns large-2 small-4 field-label">Recipients</div>
+	</div>
+	<div class="row">
+		<div class="columns large-2 small-4 field-label"></div>
+		<div class="columns large-10 small-8">
+			<input type="radio" class="token-type-radio" value="crsid" name="lookup-type" checked/> By Crsid &nbsp; &nbsp;
+			<input type="radio" class="token-type-radio" value="surname" name="lookup-type"/> By Surname
+		</div>
+	</div>
+	<div class="row">
+		<div class="columns large-2 small-4 field-label">Add users</div>
+		<div class="columns large-10 small-8">
+			<input type="text" placeholder="Add users" class="deadline-user-token-input" name="users" data-prepopulate='{lb}"users":[{foreach $user in $deadline.users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'/>
+		</div>
+	</div>
+	<div class="row">
+		<div class="columns large-2 small-4 field-label">Add groups</div>
+		<div class="columns large-10 small-8">
+			<input type="text"  placeholder="Add groups" class="group-token-input" name="groups"/>
+		</div>
+	</div>
+	<div class="row">
+		<div class="columns large-12 small-12">
+			<input type="submit" value="Save deadline" class="button"/>
+		</div>
+	</div>
+</form>
 {/template}
 
 /**
@@ -191,10 +180,10 @@
  * @param deadline
  */
 {template .delete }
-            <div class="row">
-                <div class="columns large-10 small-8">
-                    <h5>Are you sure you want to delete the deadline {$deadline.name}? </h5><br/>
-                    <input type="button" class="button alert delete-deadline" value="Delete deadline" id="{$deadline.id}"/>
-                </div>
-            </div>
+<div class="row">
+	<div class="columns large-10 small-8">
+		<h5>Are you sure you want to delete the deadline "{$deadline.name}"?</h5>
+		<input type="button" class="button alert delete-deadline" value="Delete deadline" id="{$deadline.id}"/>
+	</div>
+</div>
 {/template}

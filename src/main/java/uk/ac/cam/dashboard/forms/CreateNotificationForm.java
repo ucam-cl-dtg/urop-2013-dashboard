@@ -28,6 +28,7 @@ public class CreateNotificationForm {
 	@FormParam("foreignId") String foreignId;
 	
 	// Logger
+	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(CreateNotificationForm.class);
 	
 	public int handle() {

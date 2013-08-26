@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableMap;
 public class HomePageController extends ApplicationController{
 	
 	// Logger
+	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(HomePageController.class);
 	
 	private User currentUser;

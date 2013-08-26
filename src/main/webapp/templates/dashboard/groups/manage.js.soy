@@ -8,89 +8,79 @@
  * @param users
  */
 {template .manage }
-
-	<h3>Group: {$group.name}</h3>
-        
-    <div class="section-container auto" data-section>
-        <section {if $target=='statistics' or $target==''}class="active"{/if}>
-            <p class="title" data-section-title><a>Members</a></p>
-            <div class="content" data-section-content>
-            
-                {call .stats}
-                {param group: $group /}
-                {param users: $users /}
-                {/call}  
-                
-            </div>
-            </section>
-            <section {if $target=='edit'}class="active"{/if}>
-            <p class="title" data-section-title><a>Edit Group</a></p>
-            <div class="content" data-section-content id="editGroupSection">
-
-                {call .edit}
-                {param group: $group /}
-                {param errors: $errors /}
-                {param users: $users /}
-                {/call}          
-
-            </div>
-        </section>
-        <section>
-            <p class="title" data-section-title><a><i class="icon icon-trash_can"></i></a></p>
-            <div class="content" data-section-content>
-
-                {call .delete}
-                {param group: $group /}
-                {/call}          
-
-            </div>
-        </section>
-    </div>
-				
+<h3>Group: {$group.name}</h3>
+<div class="section-container auto" data-section>
+	<section {if $target=='statistics' or $target==''}class="active"{/if}>
+	<p class="title" data-section-title><a>Members</a></p>
+	<div class="content" data-section-content>
+		{call .stats}
+		{param group: $group /}
+		{param users: $users /}
+		{/call}  
+	</div>
+	</section>
+	<section {if $target=='edit'}class="active"{/if}>
+		<p class="title" data-section-title><a>Edit Group</a></p>
+		<div class="content" data-section-content id="editGroupSection">
+			{call .edit}
+			{param group: $group /}
+			{param errors: $errors /}
+			{param users: $users /}
+			{/call}          
+		</div>
+	</section>
+	<section>
+		<p class="title" data-section-title><a><i class="icon icon-trash_can"></i></a></p>
+		<div class="content" data-section-content>
+			{call .delete}
+			{param group: $group /}
+			{/call}          
+		</div>
+	</section>
+</div>
 {/template}
 
-/**					<strong>User: </strong>{$user.name} ({$user.crsid}) - <em>{$user.email}</em>
-
+/**
  * Group details
  * @param users
  */
 {template .stats }
 <div class="row">
-<ul class="panels">
-	{foreach $user in $users}
-	<li class="panel-wrapper columns large-12">
-		<div class="row list-inner-sub-panel">                           
-			<div class="columns large-11 small-11 text-left">
-				<div class="row">
-					<div class="columns large-11 small-11 text-left">
-					<strong>User: </strong>{$user.name} ({$user.crsid}) - <em>{$user.email}</em>
+	<ul class="panels">
+		{foreach $user in $users}
+		<li class="panel-wrapper columns large-12">
+			<div class="row list-inner-sub-panel">
+				<div class="columns large-11 small-11 text-left">
+					<div class="row">
+						<div class="columns large-11 small-11 text-left">
+							<strong>User: </strong>{$user.name} ({$user.crsid}) - <em>{$user.email}</em>
+						</div>
+					</div>
+					<div class="row">
+						<div class="columns large-11 small-11 text-left">
+							&nbsp;
+						</div>
+					</div>
+					<div class="row">
+						<div class="columns large-11 small-11 text-left">
+							<span class="label round">User status: {if $user.supervisor}Supervisor{else}Student{/if} </span>  <span class="round secondary label">User institution: {$user.institution} </span>
+						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="columns large-11 small-11 text-left">
-					&nbsp;
-					</div>
-				</div>
-				<div class="row">
-					<div class="columns large-11 small-11 text-left">
-					<span class="label round">User status: {if $user.supervisor}Supervisor{else}Student{/if} </span>  <span class="round secondary label">User institution: {$user.institution} </span>
-					</div>
+				<div class="columns large-1 small-1">
+					<!--user picture-->
+					{if $user.photo == 'undefined'}
+					<img src="/dashboard/img/nophoto.jpeg"/>
+					{else}
+					<img src="data:image/jpeg;base64,{$user.photo}"/>
+					{/if}                                      
+					<!--end user picture-->
 				</div>
 			</div>
-			<div class="columns large-1 small-1">
-				<!--user picture-->
-				{if $user.photo == 'undefined'}
-				<img src="/dashboard/img/nophoto.jpeg"/>
-				{else}
-				<img src="data:image/jpeg;base64,{$user.photo}"/>
-				{/if}                                      
-				<!--end user picture-->
-			</div>
-		</div>
-	</li> 
-	{/foreach}
-</ul>		
-</div>		
+		</li>
+		{/foreach}
+	</ul>
+</div>	
 {/template}
 
 /**
@@ -100,38 +90,36 @@
  * @param users
  */
 {template .edit }
-    
-    <form class="custom" id="editGroupForm" method="post" action="{$ij.path}groups/{$group.id}">
-            <div class="row">
-                <div class="columns large-2 small-4 field-label">Group name</div>
-                <div class="columns large-10 small-8">
-                    {if $errors != 'undefined' and $errors.title}<label class="error">Error</label>{/if}
-                    <input type="text" placeholder="Group name" name="title" id="title" value="{$group.name}" {if $errors != 'undefined' and $errors.title}class="error"{/if}/>
-                 	{if $errors != 'undefined' and $errors.title}<small class="error">{$errors.title}</small>{/if}
-                </div>
-            </div>
-            <div class="row">
-            <div class="columns large-2 small-4 field-label"></div>
-            <div class="columns large-10 small-8">
-                <input type="radio" class="token-type-radio" value="crsid" name="lookup-type" checked/> By Crsid &nbsp; &nbsp;
-                <input type="radio" class="token-type-radio" value="surname" name="lookup-type"/> By Surname
-            </div>
-        	</div>	
-            <div class="row">
-                <div class="columns large-2 small-4 field-label">Group members</div>
-                <div class="columns large-10 small-8">
-                    {if $errors != 'undefined' and $errors.users}<label class="error">Error</label>{/if}
-                    <input type="text" placeholder="Group members" class="group-user-token-input {if $errors != 'undefined' and $errors.users}error{/if}" name="users" data-prepopulate='{lb}"users":[{foreach $user in $users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'/>                   
-                 	{if $errors != 'undefined' and $errors.users}<small class="error">{$errors.users}</small>{/if} 
-                </div>
-            </div>
-            <div class="row">
-                <div class="columns large-12 small-12">
-                    <input type="submit" value="Save group" class="button"/>
-                </div>
-            </div>
-        </form>
-
+<form class="custom" id="editGroupForm" method="post" action="{$ij.path}groups/{$group.id}">
+	<div class="row">
+		<div class="columns large-2 small-4 field-label">Group name</div>
+		<div class="columns large-10 small-8">
+			{if $errors != 'undefined' and $errors.title}<label class="error">Error</label>{/if}
+			<input type="text" placeholder="Group name" name="title" id="title" value="{$group.name}" {if $errors != 'undefined' and $errors.title}class="error"{/if}/>
+			{if $errors != 'undefined' and $errors.title}<small class="error">{$errors.title}</small>{/if}
+		</div>
+	</div>
+	<div class="row">
+		<div class="columns large-2 small-4 field-label"></div>
+		<div class="columns large-10 small-8">
+			<input type="radio" class="token-type-radio" value="crsid" name="lookup-type" checked/> By Crsid &nbsp; &nbsp;
+			<input type="radio" class="token-type-radio" value="surname" name="lookup-type"/> By Surname
+		</div>
+	</div>
+	<div class="row">
+		<div class="columns large-2 small-4 field-label">Group members</div>
+		<div class="columns large-10 small-8">
+			{if $errors != 'undefined' and $errors.users}<label class="error">Error</label>{/if}
+			<input type="text" placeholder="Group members" class="group-user-token-input {if $errors != 'undefined' and $errors.users}error{/if}" name="users" data-prepopulate='{lb}"users":[{foreach $user in $users}{lb}"crsid":"{$user.crsid}", "name":"{$user.name}"{rb}{if not isLast($user)},{/if}{/foreach}]{rb}'/>                   
+			{if $errors != 'undefined' and $errors.users}<small class="error">{$errors.users}</small>{/if} 
+		</div>
+	</div>
+	<div class="row">
+		<div class="columns large-12 small-12">
+			<input type="submit" value="Save group" class="button"/>
+		</div>
+	</div>
+</form>
 {/template}
 
 /**
@@ -139,10 +127,10 @@
  * @param group
  */
 {template .delete }
-            <div class="row">
-                <div class="columns large-10 small-8">
-                    <h5>Are you sure you want to delete the group {$group.name}? </h5><br/>
-                    <input type="button" class="button alert delete-group" value="Delete group" id="{$group.id}"/>
-                </div>
-            </div>
+<div class="row">
+	<div class="columns large-10 small-8">
+		<h5>Are you sure you want to delete the group "{$group.name}"?</h5>
+		<input type="button" class="button alert delete-group" value="Delete group" id="{$group.id}"/>
+	</div>
+</div>
 {/template}
