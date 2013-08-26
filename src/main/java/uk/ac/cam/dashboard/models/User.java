@@ -87,6 +87,7 @@ public class User {
 	}
 	
 	public boolean getSupervisor() {return supervisor;}
+	public void setSupervisor(boolean supervisor) {this.supervisor = supervisor;}
 	
 	public Set<DeadlineUser> getDeadlines() { return deadlines; }
 	public void clearDeadlines() { deadlines.clear(); }

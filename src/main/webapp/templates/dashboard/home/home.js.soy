@@ -25,24 +25,21 @@
                 </div>
                 <ul class="sub-panel expanded">
                     <li class="list-sub-panel">
-                        <div class="row list-inner-sub-panel">
-                        	<div class="columns large-3 small-3 text-center logo">
-								<img src="img/otterlogo.gif" />
-							</div>                           
-							<div class="columns large-9 small-9 text-left">
+                        <div class="row list-inner-sub-panel">           
+                            <div class="columns large-9 small-9 text-left">
                                 <div class="row">
                                     <div class="columns large-11 small-11 text-left">
-                                    	<ul class="vcard udetails"> 
-                                    		<li><strong>Crsid:</strong> {$user.crsid}</li>
-                                    		<li><strong>Username:</strong> {$user.name}</li>
-                                    		<li><strong>Email:</strong> {$user.email}</em></li>
-                                    		<li><strong>College/Department ID:</strong> <span class="round secondary label">{$user.instID} </span></li>
-                                    		<li><strong>Institution:</strong> <span class="round secondary label">{$user.institution} </span></li>
-                                    		<li><strong>User status:</strong> <span class="label round">{if $user.supervisor}Supervisor{else}Student{/if} </span></li>
-                                    	</ul>
-                                    </div>
-                                </div>
-                            </div>
+                    	                <ul class="udetails"> 
+                	                    	<li><div class="fixed-width-icon"><i class="icon icon-user"></i></div><strong>CRSID:</strong> {$user.crsid}</li>
+                	                    	<li><div class="fixed-width-icon"><i class="icon icon-user"></i></div><strong>Username:</strong> {$user.name}</li>
+                	                    	<li><div class="fixed-width-icon"><i class="icon icon-mail"></i></div><strong>Email:</strong> {$user.email}</li>
+            	                        	<li><div class="fixed-width-icon"><i class="icon icon-data_science_black"></i></div><strong>College/Department ID:</strong> <span class="round secondary label">{$user.instID} </span></li>
+            	                        	<li><div class="fixed-width-icon"><i class="icon icon-globe"></i></div><strong>Institution:</strong> <span class="round secondary label">{$user.institution} </span></li>
+	    	                                <li><div class="fixed-width-icon"><i class="icon icon-lock"></i></div><strong>User status:</strong> <span class="label round">{if $user.supervisor}Supervisor{else}Student{/if} </span></li>
+    	                                </ul>
+    	                            </div>
+    	                        </div>
+    	                    </div>
 						</div>
                     </li>
 					<li class="list-sub-panel">

@@ -74,6 +74,7 @@ moduleScripts['dashboard'] = {
 			dGroupTokenInput,
 			gUserTokenInput,
 			gGroupTokenInput,
+			sUserTokenInput,
 			tokenInputType
 		],
 		'newdeadline' : [
@@ -93,5 +94,8 @@ moduleScripts['dashboard'] = {
 		    importGroup,
 		    gGroupTokenInput
 		],
+		'addsupervisor' : [
+		    sUserTokenInput,
+		]
 	}
 };
