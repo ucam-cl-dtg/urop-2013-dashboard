@@ -81,13 +81,13 @@ function applyDatepicker() {
 }
 
 function applyTokenInput(element, type, path, tokenValue, propertyToSearch, resultFormat, tokenFormat){
-	
+	var hintText;
 	if(type=="user"){
-		var hintText = "Search for a user";
+		hintText = "Search for a user";
 	} else if(type=="group"){
-		var hintText = "Serach for a group";
+		hintText = "Search for a group";
 	} else {
-		var intText = "Start typing to search";
+		hintText = "Start typing to search";
 	}
 	
 	$("."+ element).tokenInput(prepareURL(path), {

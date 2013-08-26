@@ -1,6 +1,5 @@
 package uk.ac.cam.dashboard.controllers;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.GET;
