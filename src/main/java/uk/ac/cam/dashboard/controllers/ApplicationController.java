@@ -13,6 +13,7 @@ import uk.ac.cam.dashboard.util.Strings;
 public class ApplicationController {
 	
 	// Logger
+	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(ApplicationController.class);
 	
 	@Context
