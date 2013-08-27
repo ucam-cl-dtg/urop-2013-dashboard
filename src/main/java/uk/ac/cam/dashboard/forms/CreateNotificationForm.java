@@ -68,7 +68,7 @@ public class CreateNotificationForm {
 		}
 
 		// Section
-		String[] validSections = {"dashboard", "signups", "questions", "handins"}; // Shared with GetNotificationForm
+		String[] validSections = {"dashboard", "signapp", "questions", "handins"}; // Shared with GetNotificationForm
 		if (section == null || section.equals("")) {
 			errors.put("section", Strings.NOTIFICATION_NO_SECTION);
 		} else if (!Arrays.asList(validSections).contains(section)) {
@@ -88,13 +88,7 @@ public class CreateNotificationForm {
 		}
 		
 		// Foreign id
-		if (foreignId != null) {
-			// Query the database to ensure that the foreignId is unique
-			List<NotificationUser> results = NotificationQuery.all().foreignId(foreignId).list();
-			if (results.size() > 0) {
-				errors.put("foreignId", Strings.NOTIFICATION_FOREIGN_ID_NOT_UNIQUE);
-			}
-		} else {
+		if (foreignId == null) {
 			foreignId = "none";
 		}
 
