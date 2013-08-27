@@ -19,6 +19,7 @@ import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.GroupQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.dashboard.util.Mail;
 import uk.ac.cam.dashboard.util.Strings;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -60,6 +61,8 @@ public class GroupForm {
 			session.save(nu);
 		}
 		
+		Mail.sendNotificationEmail(notification.getMessage(), groupMembers);
+		
 		return group.getId();
 	}
 
@@ -88,8 +91,9 @@ public class GroupForm {
 			session.save(nu);
 		}
 		
-		return group;
-				
+		Mail.sendNotificationEmail(notification.getMessage(), groupMembers);
+		
+		return group;			
 	}
 	
 	public int handleImport(User currentUser) {	

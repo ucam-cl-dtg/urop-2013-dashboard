@@ -112,9 +112,7 @@ public class NotificationsController extends ApplicationController {
 
 			if (errors.isEmpty()) {
 				int id = notificationForm.handle();
-				Notification notification = NotificationQuery.get(id);
 				log.debug("Notification created successfully, redirecting");
-//				Mail.sendNotificationEmail(currentUser, notification.getMessage(), notification.getUsers());
 				return ImmutableMap.of("redirectTo", "dashboard/notifications");
 			} else {
 				log.debug("Errors in form, returning form data with error flags");

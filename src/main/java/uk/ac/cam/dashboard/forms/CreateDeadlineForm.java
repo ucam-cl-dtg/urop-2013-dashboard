@@ -90,6 +90,8 @@ public class CreateDeadlineForm {
 			Mail.setDeadline(currentUser, deadline, deadlineUsers);
 		}
 		
+		Mail.sendNotificationEmail(notification.getMessage(), userSet);
+		
 		return deadline.getId();			
 	}
 	
@@ -136,7 +138,7 @@ public class CreateDeadlineForm {
 			session.save(nu);
 		}
 		
-		
+		Mail.sendNotificationEmail(notification.getMessage(), userSet);
 		
 		return deadline;	
 	}
