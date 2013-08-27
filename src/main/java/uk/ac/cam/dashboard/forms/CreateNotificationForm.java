@@ -40,19 +40,19 @@ public class CreateNotificationForm {
 		session.save(notification);
 		
 		// Create notificationUser objects
-		if(!users.equals("")){
-			User user;
-			
-			NotificationUser nUser;
-			
+		if(!users.equals("")){			
 			String[] crsids = users.split(",");
 			for(String u : crsids){
-				user = User.registerUser(u);
-				nUser = new NotificationUser(user, notification);
-				session.save(nUser);
+				User user = User.registerUser(u);
+				if (u != null && user != null) {
+					NotificationUser nUser = new NotificationUser(user, notification);
+					session.save(nUser);
 				
-				if (user.getSettings().isNotificationSendsEmail()) {
-					// Send email
+					if (user.getSettings().isNotificationSendsEmail()) {
+						// Send email
+					}
+				} else {
+					log.error("Could not push notification to user with crsid: " + u);
 				}
 			}		
 		}
