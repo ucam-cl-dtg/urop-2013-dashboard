@@ -51,6 +51,7 @@ public class AccountController extends ApplicationController {
 	public Map<String, ?> changeAccountSettings(@QueryParam("signups") Boolean signups,
 												@QueryParam("questions") Boolean questions,
 												@QueryParam("handins") Boolean handins,
+												@QueryParam("notificationSendsEmail") Boolean notificationSendsEmail,
 												@QueryParam("userId") String userId) {
 		
 		try {
@@ -66,6 +67,8 @@ public class AccountController extends ApplicationController {
 			if (signups != null) newUserSettings.setSignupsOptIn(signups);
 			if (questions != null) newUserSettings.setQuestionsOptIn(questions);
 			if (handins != null) newUserSettings.setHandinsOptIn(handins);
+			
+			if (notificationSendsEmail != null) newUserSettings.setNotificationSendsEmail(notificationSendsEmail);
 			
 			currentUser.setSettings(newUserSettings);
 			session.save(newUserSettings);

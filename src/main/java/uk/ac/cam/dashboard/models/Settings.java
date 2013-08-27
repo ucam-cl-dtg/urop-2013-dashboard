@@ -24,6 +24,8 @@ public class Settings {
 	private boolean questionsOptIn = true;
 	private boolean handinsOptIn = true;
 	
+	private boolean notificationSendsEmail = true;
+	
 	@OneToOne (mappedBy="settings")
 	@JoinColumn(name="USER_CRSID")
 	private User user;
@@ -39,8 +41,12 @@ public class Settings {
 	
 	public boolean isHandinsOptIn() {return handinsOptIn;}
 	public void setHandinsOptIn(boolean handinsOptIn) {this.handinsOptIn = handinsOptIn;}
+
+	public boolean isNotificationSendsEmail() {return notificationSendsEmail;}
+	public void setNotificationSendsEmail(boolean notificationSendsEmail) {this.notificationSendsEmail = notificationSendsEmail;}
 	
 	public Map<String, Boolean> toMap() {
-		return ImmutableMap.of("signups", signupsOptIn, "questions", questionsOptIn, "handins", handinsOptIn);
+		return ImmutableMap.of("signups", signupsOptIn, "questions", questionsOptIn, "handins", handinsOptIn, "notificationSendsEmail", notificationSendsEmail);
 	}
+
 }

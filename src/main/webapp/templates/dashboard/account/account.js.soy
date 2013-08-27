@@ -15,6 +15,10 @@
 					<label for="questions-opt-in" class="checkbox-label"><input type="checkbox" id="questions-opt-in" {if $user.questionsOptIn}checked{/if}><span class="custom checkbox checked"></span> Questions</label>
 					<label for="handins-opt-in" class="checkbox-label"><input type="checkbox" id="handins-opt-in" {if $user.handinsOptIn}checked{/if}><span class="custom checkbox checked"></span> Handins</label>
 				</fieldset>
+				<fieldset>
+					<legend>Select your notification settings</legend>
+					<label for="notification-sends-email" class="checkbox-label"><input type="checkbox" id="notification-sends-email" {if $user.notificationSendsEmail}checked{/if}><span class="custom checkbox"></span> Receive an email for every notification</label>
+				</fieldset>
 				<input type="submit" value="Save changes" class="medium success button" id="save-account-settings" />
 			</div>
 		</div>

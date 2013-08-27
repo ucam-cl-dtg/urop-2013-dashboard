@@ -50,6 +50,10 @@ public class CreateNotificationForm {
 				user = User.registerUser(u);
 				nUser = new NotificationUser(user, notification);
 				session.save(nUser);
+				
+				if (user.getSettings().isNotificationSendsEmail()) {
+					// Send email
+				}
 			}		
 		}
 		

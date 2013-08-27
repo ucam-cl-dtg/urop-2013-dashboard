@@ -6,9 +6,11 @@ function bindSaveSettingsListener() {
 		var questions = $('#questions-opt-in').is(':checked');
 		var handins = $('#handins-opt-in').is(':checked');
 		
+		var email = $('#notification-sends-email').is(':checked');
+		
 	    $.ajax({
 	    	type: 'PUT',
-	    	url: prepareURL("account?signups=" + signups + "&questions=" + questions + "&handins=" + handins),
+	    	url: prepareURL("account?signups=" + signups + "&questions=" + questions + "&handins=" + handins + "&notificationSendsEmail=" + email),
 	    	success: function(data) {
 	    		if (data.errors) {
 	    			errorNotification(data.errors);
