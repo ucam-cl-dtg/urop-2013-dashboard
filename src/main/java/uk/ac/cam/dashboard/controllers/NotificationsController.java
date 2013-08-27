@@ -23,6 +23,7 @@ import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
+import uk.ac.cam.dashboard.util.Mail;
 import uk.ac.cam.dashboard.util.Strings;
 
 import com.google.common.collect.ImmutableMap;
@@ -110,8 +111,10 @@ public class NotificationsController extends ApplicationController {
 			ImmutableMap<String, List<String>> errors = notificationForm.validate();
 
 			if (errors.isEmpty()) {
-				notificationForm.handle();
+				int id = notificationForm.handle();
+				Notification notification = NotificationQuery.get(id);
 				log.debug("Notification created successfully, redirecting");
+//				Mail.sendNotificationEmail(currentUser, notification.getMessage(), notification.getUsers());
 				return ImmutableMap.of("redirectTo", "dashboard/notifications");
 			} else {
 				log.debug("Errors in form, returning form data with error flags");

@@ -1,15 +1,19 @@
 package uk.ac.cam.dashboard.models;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,8 +27,8 @@ import com.google.common.collect.ImmutableMap;
 public class Notification implements Mappable {
 	
 	@Id
-	@GeneratedValue(generator="increment")
-	@GenericGenerator(name="increment", strategy="increment")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="notificationIdSeq") 
+	@SequenceGenerator(name="notificationIdSeq",sequenceName="NOTIFICATION_SEQ", allocationSize=1)
 	private int id;
 	
 	@OneToMany(mappedBy = "notification", cascade = CascadeType.ALL, orphanRemoval=true)
@@ -77,6 +81,14 @@ public class Notification implements Mappable {
 
 	public String getForeignId() {return foreignId;}
 	public void setForeignId(String foreignId) {this.foreignId = foreignId;}
+	
+	public List<User> getUsers() {
+		List<User> users = new ArrayList<User>();
+		for(NotificationUser u : this.users){
+			users.add(u.getUser());
+		}
+		return users;
+	}
 	
 	@Override
 	public ImmutableMap<String, Object> toMap() {

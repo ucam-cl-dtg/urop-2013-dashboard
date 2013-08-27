@@ -72,6 +72,10 @@ public class Strings {
 	public static final String NOTIFICATION_NO_USERS = "A list of comma separated users must be set";
 	public static final String NOTIFICATION_USERS_MAX = "A maximum of 50 users can be set for any notification";
 	public static final String NOTIFICATION_FOREIGN_ID_NOT_UNIQUE = "Foreign id must be unique";
+	// Notification mail
+	public static final String MAIL_NOTIFICATION_SUBJECT = "[OTTER] ";
+	public static final String MAIL_NOTIFICATION_HEADER = "Click the link below to go to your OTTER notifications";	
+	public static final String MAIL_NOTIFICATION_FOOTER = "This is an automatically generated message from OTTER (University of Cambridge Online Teaching Tools). To unsubscribe, log in to http://otter.cl.cam.ac.uk and change preferences in your accound page";		
 	
 	// Authorisation exceptions
 	public static final String AUTHEXCEPTION_GLOBAL = "Could not validate global API permissions.";

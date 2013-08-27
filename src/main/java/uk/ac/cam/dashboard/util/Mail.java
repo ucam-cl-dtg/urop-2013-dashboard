@@ -1,5 +1,6 @@
 package uk.ac.cam.dashboard.util;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -63,11 +64,37 @@ public class Mail {
         	}
             
         } catch (MessagingException e) {
-            // TODO Auto-generated catch block
         	System.out.println("Unable to send");
             e.printStackTrace();
         }
     }
+	
+	public static void sendNotificationEmail(User currentUser, String subject, List<User> users){
+		String eol = System.getProperty("line.separator"); 
+		String mailSubject = Strings.MAIL_NOTIFICATION_SUBJECT + subject;
+		String mailBody = Strings.MAIL_NOTIFICATION_SUBJECT+ eol +
+						Strings.MAIL_NOTIFICATION_FOOTER + eol;
+		
+		String[] recipients = new String[users.size()];
+		int i=0;
+		for(User u : users){
+			String email;
+			if(u.getSettings().isNotificationSendsEmail()){
+				try{
+					LDAPUser lU = LDAPQueryManager.getUser(u.getCrsid());
+					email = lU.getEmail();
+					if(email==null){ email = u.getCrsid()+"@cam.ac.uk"; }
+				} catch (LDAPObjectNotFoundException e){
+					email = u.getCrsid()+"@cam.ac.uk"; 
+				}
+				recipients[i] = email;
+				i++;
+			}
+		}
+		
+		Mail.sendMail(recipients, "otter-admin@cl.cam.ac.uk", mailBody, mailSubject);	
+		
+	}
 	
 	public static void buildDeadlineEmail(User currentUser, Set<DeadlineUser> deadlineUsers, String body){
 		
@@ -104,7 +131,7 @@ public class Mail {
 						"Deadline: " + deadline.getTitle() + eol +
 						"Due: " + deadline.getFormattedDate() + eol +
 						"Message: " + deadline.getMessage() + eol +
-						"http://localhost:8080/dashboard/deadlines/" + eol +
+						"http://otter.cl.cam.ac.uk/dashboard/deadlines/" + eol +
 						Strings.MAIL_SETDEADLINE_FOOTER + " ("+currentUser.getCrsid()+"@cam.ac.uk)";
 		buildDeadlineEmail(currentUser, deadlineUsers, body);
 	}
@@ -115,7 +142,7 @@ public class Mail {
 						"Deadline: " + deadline.getTitle() + eol +
 						"Due: " + deadline.getFormattedDate() + eol +
 						"Message: " + deadline.getMessage() + eol +
-						"http://localhost:8080/dashboard/deadlines/" + eol +
+						"http://otter.cl.cam.ac.uk/dashboard/deadlines/" + eol +
 						Strings.MAIL_REMINDDEADLINE_FOOTER + " ("+currentUser.getCrsid()+"@cam.ac.uk)";
 		buildDeadlineEmail(currentUser, deadlineUsers, body);
 	}
@@ -126,7 +153,7 @@ public class Mail {
 						"Deadline: " + deadline.getTitle() + eol +
 						"Due: " + deadline.getFormattedDate() + eol +
 						"Message: " + deadline.getMessage() + eol +
-						"http://localhost:8080/dashboard/deadlines/" + eol +
+						"http://otter.cl.cam.ac.uk/dashboard/deadlines/" + eol +
 						Strings.MAIL_UPDATEDEADLINE_FOOTER + " ("+currentUser.getCrsid()+"@cam.ac.uk)";
 		buildDeadlineEmail(currentUser, deadlineUsers, body);
 	}
