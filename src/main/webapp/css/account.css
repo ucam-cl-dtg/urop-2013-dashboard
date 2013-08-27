@@ -10,3 +10,7 @@ label.checkbox-label {
 .row.pagination-header {
 	margin-bottom: 12px;
 }
+
+.api-keys {
+	list-style-type: none;
+}

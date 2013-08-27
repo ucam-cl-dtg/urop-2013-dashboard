@@ -2,6 +2,8 @@
 
 /**
  * Account settings page
+ * @param settings
+ * @param keys
  * @param user
  */
 {template .index }
@@ -11,15 +13,36 @@
 			<div class="columns large-12 small-12">
 				<fieldset>
 					<legend>Select the services you wish to opt in to</legend>
-					<label for="signups-opt-in" class="checkbox-label"><input type="checkbox" id="signups-opt-in" {if $user.signupsOptIn}checked{/if}><span class="custom checkbox"></span> Signups</label>
-					<label for="questions-opt-in" class="checkbox-label"><input type="checkbox" id="questions-opt-in" {if $user.questionsOptIn}checked{/if}><span class="custom checkbox checked"></span> Questions</label>
-					<label for="handins-opt-in" class="checkbox-label"><input type="checkbox" id="handins-opt-in" {if $user.handinsOptIn}checked{/if}><span class="custom checkbox checked"></span> Handins</label>
+					<label for="signups-opt-in" class="checkbox-label"><input type="checkbox" id="signups-opt-in" {if $settings.signupsOptIn}checked{/if}><span class="custom checkbox"></span> Signups</label>
+					<label for="questions-opt-in" class="checkbox-label"><input type="checkbox" id="questions-opt-in" {if $settings.questionsOptIn}checked{/if}><span class="custom checkbox checked"></span> Questions</label>
+					<label for="handins-opt-in" class="checkbox-label"><input type="checkbox" id="handins-opt-in" {if $settings.handinsOptIn}checked{/if}><span class="custom checkbox checked"></span> Handins</label>
 				</fieldset>
 				<fieldset>
 					<legend>Select your notification settings</legend>
-					<label for="notification-sends-email" class="checkbox-label"><input type="checkbox" id="notification-sends-email" {if $user.notificationSendsEmail}checked{/if}><span class="custom checkbox"></span> Receive an email for every notification</label>
+					<label for="notification-sends-email" class="checkbox-label"><input type="checkbox" id="notification-sends-email" {if $settings.notificationSendsEmail}checked{/if}><span class="custom checkbox"></span> Receive an email for every notification</label>
 				</fieldset>
 				<input type="submit" value="Save changes" class="medium success button" id="save-account-settings" />
+			</div>
+		</div>
+	</form>
+	<form class="custom">
+		<div class="row">
+			<div class="columns large-12 small-12">
+				<fieldset>
+					<legend>Your API keys</legend>
+					<p>Please not, anybody with access to one of your API keys can perform the same actions as if he/she were logged into your account. You should therefore treat API keys with the same level of privacy as your password.</p>
+					{if true}
+						<p>To automatically import deadlines into your Hermes account, copy the below URL across:</p>
+						<p><input disabled value="http://otter.cam.ac.uk/dashboard/api/deadlines/calendar?key={$keys[0]}&userId={$user}" type="text" /></p>
+					{/if}
+					<hr />
+					<ul class="api-keys">
+					{foreach $key in $keys}
+						<li><div class="fixed-width-icon"><i class="icon icon-lock"></i></div>{$key}</li>
+					{/foreach}
+					</ul>
+				</fieldset>
+				<input type="button" class="medium success button" id="generate-new-api-key" value="Generate new API key">
 			</div>
 		</div>
 	</form>

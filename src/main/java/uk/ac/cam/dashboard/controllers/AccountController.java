@@ -1,8 +1,10 @@
 package uk.ac.cam.dashboard.controllers;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -15,6 +17,7 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.dashboard.models.Api;
 import uk.ac.cam.dashboard.models.Settings;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
@@ -43,8 +46,7 @@ public class AccountController extends ApplicationController {
 			return ImmutableMap.of("error", e.getMessage());
 		}
 		
-		return ImmutableMap.of("user", currentUser.getSettings(), "sidebar", getSidebarLinkHierarchy(currentUser));
-
+		return ImmutableMap.of("user", currentUser.getCrsid(), "settings", currentUser.getSettings(), "sidebar", getSidebarLinkHierarchy(currentUser), "keys", currentUser.apisToMap());
 	}
 
 	@PUT @Path("/")
