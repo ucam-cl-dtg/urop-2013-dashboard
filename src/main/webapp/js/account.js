@@ -37,6 +37,9 @@ function bindNewApiKeyListener() {
 	    		} else {
 	    			successNotification("Successfully created a new API key");
 	    			$('.api-keys').append('<li><div class="fixed-width-icon"><i class="icon icon-lock"></i></div>' + data.key + '</li>');
+	    			if ($('.api-keys li').length == 1) {
+	    				location.reload();
+	    			}
 	    		}
 	    	},
 	    	error: function(jqXHR, textStatus, error) {

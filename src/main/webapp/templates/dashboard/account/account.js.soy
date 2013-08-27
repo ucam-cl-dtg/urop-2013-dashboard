@@ -30,12 +30,12 @@
 			<div class="columns large-12 small-12">
 				<fieldset>
 					<legend>Your API keys</legend>
-					<p>Please not, anybody with access to one of your API keys can perform the same actions as if he/she were logged into your account. You should therefore treat API keys with the same level of privacy as your password.</p>
-					{if true}
+					<p>Please note, anybody with access to one of your API keys can perform the same actions as if he/she were logged into your account. You should therefore treat API keys with the same level of privacy as your password.</p>
+					{if length($keys) != 0}
 						<p>To automatically import deadlines into your Hermes account, copy the below URL across:</p>
 						<p><input disabled value="http://otter.cam.ac.uk/dashboard/api/deadlines/calendar?key={$keys[0]}&userId={$user}" type="text" /></p>
+						<hr />
 					{/if}
-					<hr />
 					<ul class="api-keys">
 					{foreach $key in $keys}
 						<li><div class="fixed-width-icon"><i class="icon icon-lock"></i></div>{$key}</li>
