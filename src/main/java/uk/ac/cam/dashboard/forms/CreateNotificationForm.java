@@ -1,7 +1,9 @@
 package uk.ac.cam.dashboard.forms;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.FormParam;
 
@@ -12,8 +14,8 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
-import uk.ac.cam.dashboard.queries.NotificationQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.dashboard.util.Mail;
 import uk.ac.cam.dashboard.util.Strings;
 import uk.ac.cam.dashboard.util.Util;
 
@@ -40,6 +42,7 @@ public class CreateNotificationForm {
 		session.save(notification);
 		
 		// Create notificationUser objects
+		Set<User> userList = new HashSet<User>();
 		if(!users.equals("")){			
 			String[] crsids = users.split(",");
 			for(String u : crsids){
@@ -47,15 +50,14 @@ public class CreateNotificationForm {
 				if (u != null && user != null) {
 					NotificationUser nUser = new NotificationUser(user, notification);
 					session.save(nUser);
-				
-					if (user.getSettings().isNotificationSendsEmail()) {
-						// Send email
-					}
+					userList.add(user);
 				} else {
 					log.error("Could not push notification to user with crsid: " + u);
 				}
 			}		
 		}
+		
+		Mail.sendNotificationEmail(notification.getMessage(), userList);
 		
 		return notification.getId();
 				

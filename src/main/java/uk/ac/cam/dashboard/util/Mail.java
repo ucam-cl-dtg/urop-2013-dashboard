@@ -1,5 +1,6 @@
 package uk.ac.cam.dashboard.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -69,13 +70,16 @@ public class Mail {
         }
     }
 	
-	public static void sendNotificationEmail(User currentUser, String subject, List<User> users){
+	public static void sendNotificationEmail(String subject, Set<User> users){
 		String eol = System.getProperty("line.separator"); 
 		String mailSubject = Strings.MAIL_NOTIFICATION_SUBJECT + subject;
-		String mailBody = Strings.MAIL_NOTIFICATION_SUBJECT+ eol +
+		String mailBody = subject + eol +
+						Strings.MAIL_NOTIFICATION_HEADER + eol +
+						" http://otter.cl.cam.ac.uk/dashboard/notifications " + eol +
+						"----------------------------" + eol +
 						Strings.MAIL_NOTIFICATION_FOOTER + eol;
-		
-		String[] recipients = new String[users.size()];
+				
+		List<String> recipientsList = new ArrayList<String>();
 		int i=0;
 		for(User u : users){
 			String email;
@@ -87,10 +91,13 @@ public class Mail {
 				} catch (LDAPObjectNotFoundException e){
 					email = u.getCrsid()+"@cam.ac.uk"; 
 				}
-				recipients[i] = email;
+				recipientsList.add(email);
 				i++;
 			}
 		}
+		
+		String[] recipients = new String[recipientsList.size()];
+		recipientsList.toArray(recipients);
 		
 		Mail.sendMail(recipients, "otter-admin@cl.cam.ac.uk", mailBody, mailSubject);	
 		
