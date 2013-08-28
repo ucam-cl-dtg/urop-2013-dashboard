@@ -24,7 +24,7 @@ public class Settings {
 	private boolean questionsOptIn = true;
 	private boolean handinsOptIn = true;
 	
-	private boolean notificationSendsEmail = true;
+	private boolean notificationSendsEmail = false;
 	
 	@OneToOne (mappedBy="settings")
 	@JoinColumn(name="USER_CRSID")
