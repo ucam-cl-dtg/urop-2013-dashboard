@@ -1,0 +1,18 @@
+.user-image-wrapper {
+	max-width:58px;
+	max-height: 45px;
+	float:right;
+}
+
+.user-image {
+	max-height: 100%;
+	max-width:100%;
+}
+
+.user-info-wrapper {
+	margin-right: 58px;
+}
+
+.lower-info {
+	margin-top:12px;
+}
