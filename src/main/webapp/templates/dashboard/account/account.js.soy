@@ -37,7 +37,7 @@
 					<legend>Your API keys</legend>
 					<p>Please note, anybody with access to one of your API keys can perform the same actions as if he/she were logged into your account. You should therefore treat API keys with the same level of privacy as your password.</p>
 					{if length($keys) != 0}
-						<p>To automatically import deadlines into your Hermes account, copy the following URL across:</p>
+						<p>To routinely import deadlines into Thunderbird (or any other calendar application), copy the following URL:</p>
 						<p><input disabled value="{$projectUrl}/dashboard/api/deadlines/calendar?key={$keys[0]}&userId={$user}" type="text" /></p>
 						<hr />
 					{/if}
