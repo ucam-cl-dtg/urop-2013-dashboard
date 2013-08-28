@@ -12,6 +12,10 @@
       	<div class="row">
 			<div class="columns large-12 small-12">
 				<fieldset>
+					<legend>User information</legend>
+					To edit your registered name or photo, pleased visit your page <a href="http://www.lookup.cam.ac.uk/person/crsid/{$user}" data-bypass>on the University Lookup Service.</a>
+				</fieldset>
+				<fieldset>
 					<legend>Select the services you wish to opt in to</legend>
 					<label for="signups-opt-in" class="checkbox-label"><input type="checkbox" id="signups-opt-in" {if $settings.signupsOptIn}checked{/if}><span class="custom checkbox"></span> Signups</label>
 					<label for="questions-opt-in" class="checkbox-label"><input type="checkbox" id="questions-opt-in" {if $settings.questionsOptIn}checked{/if}><span class="custom checkbox checked"></span> Questions</label>
@@ -32,7 +36,7 @@
 					<legend>Your API keys</legend>
 					<p>Please note, anybody with access to one of your API keys can perform the same actions as if he/she were logged into your account. You should therefore treat API keys with the same level of privacy as your password.</p>
 					{if length($keys) != 0}
-						<p>To automatically import deadlines into your Hermes account, copy the below URL across:</p>
+						<p>To automatically import deadlines into your Hermes account, copy the following URL across:</p>
 						<p><input disabled value="http://otter.cam.ac.uk/dashboard/api/deadlines/calendar?key={$keys[0]}&userId={$user}" type="text" /></p>
 						<hr />
 					{/if}
