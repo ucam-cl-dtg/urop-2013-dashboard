@@ -75,7 +75,7 @@ public class Mail {
 		String mailSubject = Strings.MAIL_NOTIFICATION_SUBJECT + subject;
 		String mailBody = subject + eol +
 						Strings.MAIL_NOTIFICATION_HEADER + eol +
-						" http://otter.cl.cam.ac.uk/dashboard/notifications " + eol +
+						" http://ott.cl.cam.ac.uk/dashboard/notifications " + eol +
 						"----------------------------" + eol +
 						Strings.MAIL_NOTIFICATION_FOOTER + eol;
 				
@@ -138,7 +138,7 @@ public class Mail {
 						"Deadline: " + deadline.getTitle() + eol +
 						"Due: " + deadline.getFormattedDate() + eol +
 						"Message: " + deadline.getMessage() + eol +
-						"http://otter.cl.cam.ac.uk/dashboard/deadlines/" + eol +
+						"http://ott.cl.cam.ac.uk/dashboard/deadlines/" + eol +
 						Strings.MAIL_SETDEADLINE_FOOTER + " ("+currentUser.getCrsid()+"@cam.ac.uk)";
 		buildDeadlineEmail(currentUser, deadlineUsers, body);
 	}
@@ -149,7 +149,7 @@ public class Mail {
 						"Deadline: " + deadline.getTitle() + eol +
 						"Due: " + deadline.getFormattedDate() + eol +
 						"Message: " + deadline.getMessage() + eol +
-						"http://otter.cl.cam.ac.uk/dashboard/deadlines/" + eol +
+						"http://ott.cl.cam.ac.uk/dashboard/deadlines/" + eol +
 						Strings.MAIL_REMINDDEADLINE_FOOTER + " ("+currentUser.getCrsid()+"@cam.ac.uk)";
 		buildDeadlineEmail(currentUser, deadlineUsers, body);
 	}
@@ -160,7 +160,7 @@ public class Mail {
 						"Deadline: " + deadline.getTitle() + eol +
 						"Due: " + deadline.getFormattedDate() + eol +
 						"Message: " + deadline.getMessage() + eol +
-						"http://otter.cl.cam.ac.uk/dashboard/deadlines/" + eol +
+						"http://ott.cl.cam.ac.uk/dashboard/deadlines/" + eol +
 						Strings.MAIL_UPDATEDEADLINE_FOOTER + " ("+currentUser.getCrsid()+"@cam.ac.uk)";
 		buildDeadlineEmail(currentUser, deadlineUsers, body);
 	}
