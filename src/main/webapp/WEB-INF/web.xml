@@ -18,6 +18,7 @@
 		<param-name>cssFiles</param-name>
 		<param-value>
 			/css/account.css,
+			/css/group.css,
 			/css/home.css
 		</param-value>
 	</context-param>

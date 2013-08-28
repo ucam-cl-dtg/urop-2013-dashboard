@@ -10,17 +10,15 @@
         <ul class="panels">
             <li class="panel-wrapper columns large-12">
                 <div class="list-panel">
-                    <div class="row list-inner-panel">
-                        <div class="columns large-11 small-11"><h3>Welcome {$user.name} - Dashboard</h3></div>
-                    	<div class="columns large-1 small-1">
-	                        <!--user picture-->
-	                        {if $user.photo == 'undefined'}
-	                        <img src="/dashboard/img/nophoto.jpeg"/>
-	                        {else}
-	                        <img src="data:image/jpeg;base64,{$user.photo}"/>
-	                        {/if}                                      
-	                         <!--end user picture-->
+                    <div class="list-inner-panel">
+                    	<div class="user-image-wrapper">
+							{if $user.photo == 'undefined'}
+							<img src="/dashboard/img/nophoto.jpeg" class="user-image" />
+							{else}
+							<img src="data:image/jpeg;base64,{$user.photo}" class="user-image" />
+							{/if}
                     	</div>
+                        <div class="user-info-wrapper"><h3>Welcome {$user.name} - Dashboard</h3></div>
                     </div>
                 </div>
                 <ul class="sub-panel expanded">
