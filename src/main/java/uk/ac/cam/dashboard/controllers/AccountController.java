@@ -46,7 +46,14 @@ public class AccountController extends ApplicationController {
 			return ImmutableMap.of("error", e.getMessage());
 		}
 		
-		return ImmutableMap.of("user", currentUser.getCrsid(), "settings", currentUser.getSettings(), "sidebar", getSidebarLinkHierarchy(currentUser), "keys", currentUser.apisToMap());
+		int port = sRequest.getServerPort();
+		String urlPrefix = "http://";
+		String urlSuffix = "";
+		if (port != 80) {
+			urlSuffix = ":" + Integer.toString(port);
+		}
+		
+		return ImmutableMap.of("user", currentUser.getCrsid(), "settings", currentUser.getSettings(), "sidebar", getSidebarLinkHierarchy(currentUser), "keys", currentUser.apisToMap(), "projectUrl", urlPrefix + sRequest.getServerName() + urlSuffix);
 	}
 
 	@PUT @Path("/")

@@ -5,6 +5,7 @@
  * @param settings
  * @param keys
  * @param user
+ * @param projectUrl
  */
 {template .index }
 	<h3>Account Settings</h3>
@@ -37,7 +38,7 @@
 					<p>Please note, anybody with access to one of your API keys can perform the same actions as if he/she were logged into your account. You should therefore treat API keys with the same level of privacy as your password.</p>
 					{if length($keys) != 0}
 						<p>To automatically import deadlines into your Hermes account, copy the following URL across:</p>
-						<p><input disabled value="http://otter.cam.ac.uk/dashboard/api/deadlines/calendar?key={$keys[0]}&userId={$user}" type="text" /></p>
+						<p><input disabled value="{$projectUrl}/dashboard/api/deadlines/calendar?key={$keys[0]}&userId={$user}" type="text" /></p>
 						<hr />
 					{/if}
 					<ul class="api-keys">
