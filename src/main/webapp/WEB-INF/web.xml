@@ -45,32 +45,6 @@
 		</param-value>
 	</context-param>
 
-	<!-- Scripts formerly in the pom.xml
-	<custom_scripts>
-      	<![CDATA[<link href="/css/vendor/jquery-ui/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css">]]>
-      	<![CDATA[<script src="/js/vendor/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>]]>
-     
-        <![CDATA[<script src="http://malsup.github.com/jquery.form.js" type="text/javascript"></script>]]>
-      		
-      	<![CDATA[<script src="/js/dashboard.js"></script>]]>
-      	<![CDATA[<script src="/js/shared.js"></script>]]>
-      		
-      	<![CDATA[<script src="/js/notifications.js"></script>]]>
-		<![CDATA[<script src="/js/groups.js"></script>]]>
-		<![CDATA[<script src="/js/deadlines.js"></script>]]>
-        <![CDATA[<script src="/js/supervisor.js"></script>]]>
-	</custom_scripts>
-	<custom_templates>
-		<![CDATA[<script src="/soy/js/3/shared.dashboard.js"></script>]]>
-		<![CDATA[<script src="/soy/js/3/dashboard.groups.js"></script>]]>
-     	<![CDATA[<script src="/soy/js/3/dashboard.deadlines.js"></script>]]>
-		<![CDATA[<script src="/soy/js/3/dashboard.homePage.js"></script>]]>
-        <![CDATA[<script src="/soy/js/3/dashboard.errors.js"></script>]]>
-        <![CDATA[<script src="/soy/js/3/dashboard.notifications.js"></script>]]>
-        <![CDATA[<script src="/soy/js/3/dashboard.supervisor.js"></script>]]>
-	</custom_templates>
- 	-->
-
 	<!-- For API filter -->
 	
 	<context-param>

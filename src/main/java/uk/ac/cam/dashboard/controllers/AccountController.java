@@ -77,7 +77,12 @@ public class AccountController extends ApplicationController {
 			if (questions != null) newUserSettings.setQuestionsOptIn(questions);
 			if (handins != null) newUserSettings.setHandinsOptIn(handins);
 			
-			if (notificationSendsEmail != null) newUserSettings.setNotificationSendsEmail(notificationSendsEmail);
+			if (notificationSendsEmail != null) {
+				newUserSettings.setDashboardSendsEmail(notificationSendsEmail);
+				newUserSettings.setSignupsSendsEmail(notificationSendsEmail);
+				newUserSettings.setQuestionsSendsEmail(notificationSendsEmail);
+				newUserSettings.setHandinsSendsEmail(notificationSendsEmail);
+			}
 			
 			currentUser.setSettings(newUserSettings);
 			session.save(newUserSettings);

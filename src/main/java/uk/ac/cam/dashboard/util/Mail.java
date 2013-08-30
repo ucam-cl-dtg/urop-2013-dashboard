@@ -83,7 +83,7 @@ public class Mail {
 		int i=0;
 		for(User u : users){
 			String email;
-			if(u.getSettings().isNotificationSendsEmail()){
+			if(u.getSettings().getDashboardSendsEmail()){
 				try{
 					LDAPUser lU = LDAPQueryManager.getUser(u.getCrsid());
 					email = lU.getEmail();

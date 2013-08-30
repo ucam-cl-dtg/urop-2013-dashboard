@@ -24,7 +24,13 @@ public class Settings {
 	private boolean questionsOptIn = true;
 	private boolean handinsOptIn = true;
 	
-	private boolean notificationSendsEmail = false;
+	private boolean dashboardSendsEmail = false;
+	private boolean signupsSendsEmail = false;
+	private boolean questionsSendsEmail = false;
+	private boolean handinsSendsEmail = false;
+	
+	private boolean isSupervisor = false;
+	private boolean isDOS = false;
 	
 	@OneToOne (mappedBy="settings")
 	@JoinColumn(name="USER_CRSID")
@@ -42,11 +48,33 @@ public class Settings {
 	public boolean isHandinsOptIn() {return handinsOptIn;}
 	public void setHandinsOptIn(boolean handinsOptIn) {this.handinsOptIn = handinsOptIn;}
 
-	public boolean isNotificationSendsEmail() {return notificationSendsEmail;}
-	public void setNotificationSendsEmail(boolean notificationSendsEmail) {this.notificationSendsEmail = notificationSendsEmail;}
+	public boolean getDashboardSendsEmail(){return this.dashboardSendsEmail;}
+	public void setDashboardSendsEmail(boolean sendsEmail){this.dashboardSendsEmail = sendsEmail;}
+	public boolean getSignupsSendsEmail(){return this.signupsSendsEmail;}
+	public void setSignupsSendsEmail(boolean sendsEmail){this.signupsSendsEmail = sendsEmail;}
+	public boolean getQuestionsSendsEmail(){return this.questionsSendsEmail;}
+	public void setQuestionsSendsEmail(boolean sendsEmail){this.questionsSendsEmail = sendsEmail;}
+	public boolean getHandinsSendsEmail(){return this.handinsSendsEmail;}
+	public void setHandinsSendsEmail(boolean sendsEmail){this.handinsSendsEmail = sendsEmail;}
 	
-	public Map<String, Boolean> toMap() {
-		return ImmutableMap.of("signups", signupsOptIn, "questions", questionsOptIn, "handins", handinsOptIn, "notificationSendsEmail", notificationSendsEmail);
+	public boolean getSupervisor(){return this.isSupervisor;}
+	public void setSuperivsor(boolean supervisor){this.isSupervisor = supervisor;}
+	public boolean getDOS(){return this.isDOS;}
+	public void setDOS(boolean DOS){this.isDOS = DOS;}
+	
+	public Map<String, Object> toMap() {
+		ImmutableMap<String, Object> map = new ImmutableMap.Builder<String, Object>()
+				.put("signups", signupsOptIn)
+				.put("questions", questionsOptIn)
+				.put("handins", handinsOptIn)
+				.put("emails", ImmutableMap.of("dashboard", dashboardSendsEmail, 
+												"signups", signupsSendsEmail,
+												"questions", questionsSendsEmail,
+												"handins", handinsSendsEmail))
+				.put("supervisor", isSupervisor)
+				.put("dos", isDOS)
+				.build();
+		return map;
 	}
 
 }
