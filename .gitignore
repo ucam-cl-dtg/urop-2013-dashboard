@@ -9,3 +9,5 @@ Guardfile
 src/main/webapp/WEB-INF/frontend.xml
 .externalToolBuilders/*
 /bin
+/nbproject
+/backup
