@@ -70,7 +70,7 @@ public class GroupsController extends ApplicationController {
 				for(User u : UserQuery.all().byGroup(group).list()){
 					LDAPUser user = LDAPQueryManager.getUser(u.getCrsid());
 					HashMap<String, String> userMap = user.getAll();
-					userMap.put("supervisor", Boolean.toString(u.getSupervisor()));
+					userMap.put("supervisor", Boolean.toString(u.getSettings().getSupervisor()));
 					users.add(userMap);
 				}
 			} catch(LDAPObjectNotFoundException e){

@@ -53,7 +53,7 @@ public class SupervisorController extends ApplicationController {
 		
 		Map<String, String> presetDeadline = ImmutableMap.of("title", title, "message", message, "url", url);
 		
-		if(currentUser.getSupervisor()){
+		if(currentUser.getSettings().getSupervisor()){
 			log.debug("User authorised, returning group and deadline management data JSON");
 			tab = (tab == null || tab == "" ? "undefined" : tab);
 			
@@ -81,7 +81,7 @@ public class SupervisorController extends ApplicationController {
 			return ImmutableMap.of("errors", e.getMessage());
 		}
 		
-		if(!currentUser.getSupervisor()){
+		if(!currentUser.getSettings().getSupervisor()){
 			return ImmutableMap.of("errors", "You are not authorised to add a new supervisor.");
 		}
 		
@@ -93,7 +93,7 @@ public class SupervisorController extends ApplicationController {
 		for(String s : supervisors){
 			User supervisor = User.registerUser(s);
 			if(supervisor!=null){
-				supervisor.setSupervisor(true);
+				supervisor.getSettings().setSupervisor(true);
 			}
 		}
 		

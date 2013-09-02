@@ -58,7 +58,7 @@ public class Settings {
 	public void setHandinsSendsEmail(boolean sendsEmail){this.handinsSendsEmail = sendsEmail;}
 	
 	public boolean getSupervisor(){return this.isSupervisor;}
-	public void setSuperivsor(boolean supervisor){this.isSupervisor = supervisor;}
+	public void setSupervisor(boolean supervisor){this.isSupervisor = supervisor;}
 	public boolean getDOS(){return this.isDOS;}
 	public void setDOS(boolean DOS){this.isDOS = DOS;}
 	

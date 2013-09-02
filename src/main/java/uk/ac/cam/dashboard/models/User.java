@@ -37,9 +37,7 @@ public class User {
 	private String crsid;
 	
 	private String username;
-	
-	private boolean supervisor;
-	
+		
 	@OneToOne
 	private Settings settings; 
 	
@@ -63,7 +61,6 @@ public class User {
 		this.crsid = crsid;
 		this.settings = settings;
 		this.username = this.getName();
-		this.supervisor = false;
 	}
 	
 	public Settings getSettings() {return settings;}
@@ -85,9 +82,6 @@ public class User {
 		}
 		return this.username;
 	}
-	
-	public boolean getSupervisor() {return supervisor;}
-	public void setSupervisor(boolean supervisor) {this.supervisor = supervisor;}
 	
 	public Set<DeadlineUser> getDeadlines() { return deadlines; }
 	public void clearDeadlines() { deadlines.clear(); }
@@ -131,7 +125,7 @@ public class User {
 			HashMap<String, Object> userMap = new HashMap<String, Object>();
 			LDAPUser user = LDAPQueryManager.getUser(crsid);
 			userMap.putAll(user.getAll());
-			userMap.put("supervisor", this.supervisor);
+			userMap.put("supervisor", this.getSettings().getSupervisor());
 			return userMap;
 		} catch (LDAPObjectNotFoundException e){
 			HashMap<String, Object> defaultUser = new HashMap<String, Object>();
@@ -143,7 +137,7 @@ public class User {
 			defaultUser.put("institution", Strings.USER_NOINST);
 			defaultUser.put("status", Strings.USER_NOSTATUS);
 			defaultUser.put("photo", Strings.USER_NOPHOTO);
-			defaultUser.put("supervisor", this.supervisor);
+			defaultUser.put("supervisor", this.getSettings().getSupervisor());
 
 			return defaultUser;
 		}

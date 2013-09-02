@@ -43,7 +43,7 @@ public class HomePageController extends ApplicationController{
 		
 		Map<String, Object> userData = currentUser.getUserDetails();
 		
-		return ImmutableMap.of("user", userData, "supervisor", currentUser.getSupervisor(), "services", currentUser.getSettings().toMap());
+		return ImmutableMap.of("user", userData, "supervisor", currentUser.getSettings().getSupervisor(), "services", currentUser.getSettings().toMap());
 	}
 
 }
