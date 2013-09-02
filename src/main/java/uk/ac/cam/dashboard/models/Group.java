@@ -8,11 +8,13 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.ws.rs.FormParam;
 
@@ -24,9 +26,9 @@ import com.google.common.collect.ImmutableMap;
 @Table(name="GROUPS")
 public class Group implements Mappable {
 
-    @Id
-	@GeneratedValue(generator="increment")
-	@GenericGenerator(name="increment", strategy="increment")
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="groupIdSeq") 
+	@SequenceGenerator(name="groupIdSeq",sequenceName="GROUP_SEQ", allocationSize=1)
 	private int id;
 
 	@FormParam("title") private String title;

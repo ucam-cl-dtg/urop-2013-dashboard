@@ -6,9 +6,11 @@ import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -20,8 +22,8 @@ import com.google.common.collect.ImmutableMap;
 public class Api implements Mappable{
 
 	@Id
-	@GeneratedValue(generator="increment")
-	@GenericGenerator(name="increment", strategy="increment")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="apiIdSeq") 
+	@SequenceGenerator(name="apiIdSeq",sequenceName="API_SEQ", allocationSize=1)
 	private int id;
 	
 	@ManyToOne
