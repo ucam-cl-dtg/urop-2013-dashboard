@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -18,21 +19,35 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cam.dashboard.models.Settings;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
+import uk.ac.cam.dashboard.queries.UserQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
+
 
 @Path("/api/account")
 @Produces(MediaType.APPLICATION_JSON)
 public class AccountController extends ApplicationController {
 
 	// Create the logger
-	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(AccountController.class);
 
 	// Get current user from raven session
 	private User currentUser;
-
+	
+	@GET
+	@Path("/{crsid}")
+	public Map<String,?> getUserDetails(@PathParam("crsid") String crsid){
+		try{
+			validateGlobal();
+		} catch(Exception e) {
+			log.error("Error validating global: " +e.getMessage());
+			return ImmutableMap.of("error", e.getMessage());
+		}
+		return getUserData(crsid);
+		
+	}
+	
 	@GET
 	@Path("/")
 	public Map<String, ?> getAccountSettings(@QueryParam("userId") String userId) {
@@ -43,6 +58,18 @@ public class AccountController extends ApplicationController {
 			return ImmutableMap.of("error", e.getMessage());
 		}
 		
+		return getUserData(currentUser.getCrsid());
+	}
+
+	private Map<String, ?> getUserData(String userId){
+		User u;
+		try{
+			u = UserQuery.get(userId);
+			if (u == null) {throw new Exception("User does not exist.");}
+		}catch(Exception e){
+			return ImmutableMap.of("error", "An error occurred! " + e.getMessage());
+		}
+		
 		int port = sRequest.getServerPort();
 		String urlPrefix = "http://";
 		String urlSuffix = "";
@@ -50,9 +77,9 @@ public class AccountController extends ApplicationController {
 			urlSuffix = ":" + Integer.toString(port);
 		}
 		
-		return ImmutableMap.of("user", currentUser.getCrsid(), "settings", currentUser.getSettings(), "sidebar", getSidebarLinkHierarchy(currentUser), "keys", currentUser.apisToMap(), "projectUrl", urlPrefix + sRequest.getServerName() + urlSuffix);
+		return ImmutableMap.of("user", userId, "settings", u.getSettings(), "sidebar", getSidebarLinkHierarchy(u), "keys", u.apisToMap(), "projectUrl", urlPrefix + sRequest.getServerName() + urlSuffix);
 	}
-
+	
 	@PUT @Path("/")
 	public Map<String, ?> changeAccountSettings(@QueryParam("signups") Boolean signups,
 												@QueryParam("questions") Boolean questions,
