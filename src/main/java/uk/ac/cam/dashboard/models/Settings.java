@@ -4,9 +4,11 @@ import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -15,9 +17,9 @@ import com.google.common.collect.ImmutableMap;
 @Entity
 public class Settings {
 
-    @Id
-	@GeneratedValue(generator="increment")
-	@GenericGenerator(name="increment", strategy="increment")
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="settingsIdSeq") 
+	@SequenceGenerator(name="settingsIdSeq",sequenceName="SETTINGS_SEQ", allocationSize=1)
 	private int id;
 	
 	private boolean signupsOptIn = true;
