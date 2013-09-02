@@ -31,27 +31,17 @@ public class SupervisorController extends ApplicationController {
 	// Index 
 	@GET @Path("/")
 	public ImmutableMap<String, ?> indexSupervisor() {
-		return indexSupervisorTab("", null, null, null);
+		return indexSupervisorTab("");
 	}
 	
 	@GET @Path("/{tab}") 
-	public ImmutableMap<String, ?> indexSupervisorTab(@PathParam("tab") String tab, 
-			@QueryParam("title") String title,
-			@QueryParam("message") String message,
-			@QueryParam("url") String url) {
+	public ImmutableMap<String, ?> indexSupervisorTab(@PathParam("tab") String tab) {
 
 		try {
 			currentUser = validateUser();
 		} catch(AuthException e){
 			return ImmutableMap.of("error", e.getMessage());
 		}
-		
-		
-		title = (title == null ? "" : title);
-		message = (message == null ? "" : message);
-		url = (url == null ? "" : url);
-		
-		Map<String, String> presetDeadline = ImmutableMap.of("title", title, "message", message, "url", url);
 		
 		if(currentUser.getSettings().getSupervisor()){
 			log.debug("User authorised, returning group and deadline management data JSON");
@@ -60,8 +50,6 @@ public class SupervisorController extends ApplicationController {
 			ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>();
 			builder.put("user", currentUser.toMap());
 			builder.put("target", tab);
-			builder.put("cdeadlines", currentUser.createdDeadlinesToMap());
-			builder.put("presetDeadline", presetDeadline);
 			builder.put("errors", "undefined");
 			builder.put("cgroups", currentUser.groupsToMap());
 			
@@ -73,7 +61,7 @@ public class SupervisorController extends ApplicationController {
 	}
 	
 	@POST @Path("/add") 
-	public ImmutableMap<String, ?> indexSupervisorTab(@FormParam("users") String users) {
+	public ImmutableMap<String, ?> addSupervisor(@FormParam("users") String users) {
 
 		try {
 			currentUser = validateUser();

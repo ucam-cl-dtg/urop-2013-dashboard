@@ -61,7 +61,7 @@ public class GroupForm {
 			session.save(nu);
 		}
 		
-		Mail.sendNotificationEmail(notification.getMessage(), groupMembers);
+		Mail.sendNotificationEmail(notification.getMessage(), groupMembers, "dashboard");
 		
 		return group.getId();
 	}
@@ -91,7 +91,7 @@ public class GroupForm {
 			session.save(nu);
 		}
 		
-		Mail.sendNotificationEmail(notification.getMessage(), groupMembers);
+		Mail.sendNotificationEmail(notification.getMessage(), groupMembers, "dashboard");
 		
 		return group;			
 	}

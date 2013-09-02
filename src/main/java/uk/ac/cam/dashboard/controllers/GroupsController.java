@@ -96,9 +96,9 @@ public class GroupsController extends ApplicationController {
 			
 			if(errors.isEmpty()){
 				int id = groupForm.handle(currentUser);
-				return ImmutableMap.of("redirectTo", "groups/manage/"+id);
+				return ImmutableMap.of("redirectTo", "groups/manage/"+id, "success", true);
 			} else {
-				return ImmutableMap.of("group", groupForm.toMap(-1), "errors", actualErrors, "users", groupForm.usersToMap());
+				return ImmutableMap.of("group", groupForm.toMap(-1), "errors", actualErrors, "users", groupForm.usersToMap(), "success", false);
 			}
 		}
 		
@@ -117,9 +117,9 @@ public class GroupsController extends ApplicationController {
 			
 			if(errors.isEmpty()){
 				int id = groupForm.handleImport(currentUser);
-				return ImmutableMap.of("redirectTo", "groups/manage/"+id);
+				return ImmutableMap.of("redirectTo", "groups/manage/"+id, "success", true);
 			} else {
-				return ImmutableMap.of("group", "undefined", "errors", actualErrors);
+				return ImmutableMap.of("group", "undefined", "errors", actualErrors, "success", false);
 			}
 		}
 		
@@ -168,10 +168,10 @@ public class GroupsController extends ApplicationController {
 				for(User u : group.getUsers()){
 					users.add(u.getUserDetails());
 				}
-				return ImmutableMap.of("group", group.toMap(), "users", users, "errors", "undefined", "target", "statistics");
+				return ImmutableMap.of("group", group.toMap(), "users", users, "errors", "undefined", "target", "statistics", "success", true);
 				
 			} else {
-				return ImmutableMap.of("group", groupForm.toMap(id), "users", groupForm.usersToMap(), "errors", actualErrors);
+				return ImmutableMap.of("group", groupForm.toMap(id), "users", groupForm.usersToMap(), "errors", actualErrors, "success", false);
 			}
 		}
 		
@@ -192,9 +192,7 @@ public class GroupsController extends ApplicationController {
 		// Find users by crsid
 		@POST @Path("/queryCRSID")
 		public List<HashMap<String, String>> queryCRSId(@FormParam("q") String x) {
-			
-			System.out.println(">>>>>>>>>>>>>>"+x);
-			
+						
 			List<HashMap<String, String>> matches = null;
 			try {
 				matches = LDAPPartialQuery.partialUserByCrsid(x);

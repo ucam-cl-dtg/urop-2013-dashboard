@@ -14,7 +14,7 @@
 			<div class="columns large-12 small-12">
 				<fieldset>
 					<legend>User information</legend>
-					To edit your registered name or photo, pleased visit your page <a href="http://www.lookup.cam.ac.uk/person/crsid/{$user}" data-bypass>on the University Lookup Service.</a>
+					To edit your registered name, email or photo, pleased visit your page <a href="http://www.lookup.cam.ac.uk/person/crsid/{$user}" data-bypass>on the University Lookup Service.</a>
 				</fieldset>
 				<fieldset>
 					<legend>Select the services you wish to opt in to</legend>
@@ -23,8 +23,11 @@
 					<label for="handins-opt-in" class="checkbox-label"><input type="checkbox" id="handins-opt-in" {if $settings.handinsOptIn}checked{/if}><span class="custom checkbox checked"></span> Handins</label>
 				</fieldset>
 				<fieldset>
-					<legend>Select your notification settings</legend>
-					<label for="notification-sends-email" class="checkbox-label"><input type="checkbox" id="notification-sends-email" {if $settings.notificationSendsEmail}checked{/if}><span class="custom checkbox"></span> Receive an email for every notification</label>
+					<legend>Email notification settings</legend>
+					<label for="dashboard-get-email" class="checkbox-label"><input type="checkbox" id="dashboard-get-email" {if $settings.dashboardSendsEmail}checked{/if}><span class="custom checkbox"></span> Dashboard</label>
+					<label for="signups-get-email" class="checkbox-label"><input type="checkbox" id="signups-get-email" {if $settings.signupsSendsEmail}checked{/if}><span class="custom checkbox checked"></span> Signups</label>
+					<label for="questions-get-email" class="checkbox-label"><input type="checkbox" id="questions-get-email" {if $settings.questionsSendsEmail}checked{/if}><span class="custom checkbox checked"></span> Questions</label>
+					<label for="handins-get-email" class="checkbox-label"><input type="checkbox" id="handins-get-email" {if $settings.handinsSendsEmail}checked{/if}><span class="custom checkbox checked"></span> Handins</label>
 				</fieldset>
 				<input type="submit" value="Save changes" class="medium success button" id="save-account-settings" />
 			</div>

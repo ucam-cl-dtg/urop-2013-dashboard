@@ -62,6 +62,20 @@ public class Settings {
 	public boolean getDOS(){return this.isDOS;}
 	public void setDOS(boolean DOS){this.isDOS = DOS;}
 	
+	public boolean filterMail(String type){
+		if(type.equals("dashboard")){
+			return dashboardSendsEmail;
+		} else if(type.equals("signapp")){
+			return signupsSendsEmail;
+		} else if(type.equals("questions")){
+			return questionsSendsEmail;
+		} else if(type.equals("handins")){
+			return handinsSendsEmail;
+		} else {
+			return false;
+		}
+	}
+	
 	public Map<String, Object> toMap() {
 		ImmutableMap<String, Object> map = new ImmutableMap.Builder<String, Object>()
 				.put("signups", signupsOptIn)

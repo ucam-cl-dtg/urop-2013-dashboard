@@ -14,11 +14,15 @@ function submitAjaxForm(form, section, template, successMessage){
 			$('input[type=submit]', '#'+form).addClass('secondary');
 		},
 		success: function(data) {
-			successNotification(successMessage);
+			if(data.success){
+				successNotification(successMessage);
+			} else {
+				errorNotification("Could not complete request: there are some errors in the form");				
+			}
 			applyTemplate($(section), template, data);
 		},
 		error: function() {
-			errorNotification("Could not complete request");
+			errorNotification("Deadline not created: cannot connect to server");
 		}
 	};
 	$('#'+form).ajaxForm(options);	

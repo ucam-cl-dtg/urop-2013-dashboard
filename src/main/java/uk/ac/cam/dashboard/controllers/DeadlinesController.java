@@ -17,6 +17,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -89,6 +90,26 @@ public class DeadlinesController extends ApplicationController {
 
 	// Manage
 	@GET
+	@Path("/manage")
+	public Map<String, ?> manageDeadlines(@QueryParam("title") String title,
+								@QueryParam("message") String message,
+								@QueryParam("url") String url) {
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
+		
+		title = (title == null ? "" : title);
+		message = (message == null ? "" : message);
+		url = (url == null ? "" : url);
+		
+		Map<String, String> presetDeadline = ImmutableMap.of("title", title, "message", message, "url", url);
+
+		return ImmutableMap.of("deadlines", currentUser.createdDeadlinesToMap(), "errors", "undefined", "presetDeadline", presetDeadline);
+	}
+	
+	@GET
 	@Path("/manage/{id}")
 	public Map<String, ?> getDeadline(@PathParam("id") int id) {
 
@@ -127,10 +148,10 @@ public class DeadlinesController extends ApplicationController {
 
 		if (errors.isEmpty()) {
 			int id = deadlineForm.handleCreate(currentUser);
-			return ImmutableMap.of("redirectTo", "deadlines/manage/" + id);
+			return ImmutableMap.of("redirectTo", "deadlines/manage/" + id, "success", true);
 		} else {
 			return ImmutableMap.of("deadline", deadlineForm.toMap(-1),
-					"errors", actualErrors);
+					"errors", actualErrors, "success", false);
 		}
 	}
 
@@ -154,7 +175,7 @@ public class DeadlinesController extends ApplicationController {
 			Deadline deadline = deadlineForm.handleUpdate(currentUser, id);
 			return ImmutableMap.of("deadline", deadline.toMap(), "users",
 					deadline.usersToMap(), "errors", "undefined", "target",
-					"statistics");
+					"statistics", "success", true);
 		} else {
 			return ImmutableMap.of("errors", actualErrors, "deadline",
 					deadlineForm.toMap(id), "target", "edit");
@@ -172,7 +193,7 @@ public class DeadlinesController extends ApplicationController {
 
 		session.delete(deadline);
 
-		return ImmutableMap.of("redirectTo", "supervisor/");
+		return ImmutableMap.of("redirectTo", "supervisor/", "success", true);
 
 	}
 

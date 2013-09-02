@@ -6,11 +6,16 @@ function bindSaveSettingsListener() {
 		var questions = $('#questions-opt-in').is(':checked');
 		var handins = $('#handins-opt-in').is(':checked');
 		
-		var email = $('#notification-sends-email').is(':checked');
+		var dashboardEmail = $('#dashboard-get-email').is(':checked');
+		var signupsEmail = $('#signups-get-email').is(':checked');
+		var questionsEmail = $('#questions-get-email').is(':checked');
+		var handinsEmail = $('#handins-get-email').is(':checked');
 		
 	    $.ajax({
 	    	type: 'PUT',
-	    	url: prepareURL("account?signups=" + signups + "&questions=" + questions + "&handins=" + handins + "&notificationSendsEmail=" + email),
+	    	url: prepareURL("account?signups=" + signups + "&questions=" + questions + "&handins=" + handins
+	    					+ "&dashboardEmail=" + dashboardEmail + "&signupsEmail=" + signupsEmail + "&questionsEmail=" + questionsEmail 
+	    					+ "&handinsEmail=" + handinsEmail),
 	    	success: function(data) {
 	    		if (data.errors) {
 	    			errorNotification(data.errors);

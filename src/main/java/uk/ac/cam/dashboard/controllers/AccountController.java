@@ -1,10 +1,8 @@
 package uk.ac.cam.dashboard.controllers;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -17,7 +15,6 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cam.dashboard.models.Api;
 import uk.ac.cam.dashboard.models.Settings;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
@@ -60,7 +57,10 @@ public class AccountController extends ApplicationController {
 	public Map<String, ?> changeAccountSettings(@QueryParam("signups") Boolean signups,
 												@QueryParam("questions") Boolean questions,
 												@QueryParam("handins") Boolean handins,
-												@QueryParam("notificationSendsEmail") Boolean notificationSendsEmail,
+												@QueryParam("dashboardEmail") Boolean dashboardSendsEmail,
+												@QueryParam("signupsEmail") Boolean signupsSendsEmail,
+												@QueryParam("questionsEmail") Boolean questionsSendsEmail,
+												@QueryParam("handinsEmail") Boolean handinsSendsEmail,												
 												@QueryParam("userId") String userId) {
 		
 		try {
@@ -77,11 +77,17 @@ public class AccountController extends ApplicationController {
 			if (questions != null) newUserSettings.setQuestionsOptIn(questions);
 			if (handins != null) newUserSettings.setHandinsOptIn(handins);
 			
-			if (notificationSendsEmail != null) {
-				newUserSettings.setDashboardSendsEmail(notificationSendsEmail);
-				newUserSettings.setSignupsSendsEmail(notificationSendsEmail);
-				newUserSettings.setQuestionsSendsEmail(notificationSendsEmail);
-				newUserSettings.setHandinsSendsEmail(notificationSendsEmail);
+			if (dashboardSendsEmail != null) { 
+				newUserSettings.setDashboardSendsEmail(dashboardSendsEmail);
+			}
+			if (signupsSendsEmail != null) { 
+				newUserSettings.setSignupsSendsEmail(signupsSendsEmail);
+			}
+			if (questionsSendsEmail != null) { 
+				newUserSettings.setQuestionsSendsEmail(questionsSendsEmail);
+			}
+			if (handinsSendsEmail != null) { 
+				newUserSettings.setHandinsSendsEmail(handinsSendsEmail);
 			}
 			
 			currentUser.setSettings(newUserSettings);
@@ -113,9 +119,9 @@ public class AccountController extends ApplicationController {
 		List<Object> dashboard = new LinkedList<Object>();
 		dashboard.add(ImmutableMap.of("name", "Home", "link", "/dashboard/", "icon", "icon-globe", "iconType", 1, "notificationCount", 0));
 		dashboard.add(ImmutableMap.of("name", "Notifications", "link", "/dashboard/notifications", "icon", "icon-newspaper", "iconType", 1, "notificationCount", 0));
+		dashboard.add(ImmutableMap.of("name", "Groups", "link", "/dashboard/groups", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
 		dashboard.add(ImmutableMap.of("name", "Deadlines", "link", "/dashboard/deadlines", "icon", "icon-ringbell", "iconType", 1, "notificationCount", 0));
 		dashboard.add(ImmutableMap.of("name", "Create new deadline", "link", "/dashboard/deadlines/manage", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
-		dashboard.add(ImmutableMap.of("name", "Groups", "link", "/dashboard/groups", "icon", "icon-users", "iconType", 1, "notificationCount", 0));
 		if (user.getSettings().getSupervisor()) dashboard.add(ImmutableMap.of("name", "Supervisor Homepage", "link", "/dashboard/supervisor", "icon", "icon-home", "iconType", 1, "notificationCount", 0));
 		
 		ImmutableMap.Builder<String, Object> dashboardMap = new ImmutableMap.Builder<String, Object>();

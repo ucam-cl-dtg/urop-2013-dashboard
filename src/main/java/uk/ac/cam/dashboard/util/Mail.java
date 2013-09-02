@@ -70,20 +70,13 @@ public class Mail {
         }
     }
 	
-	public static void sendNotificationEmail(String subject, Set<User> users){
-		String eol = System.getProperty("line.separator"); 
-		String mailSubject = Strings.MAIL_NOTIFICATION_SUBJECT + subject;
-		String mailBody = subject + eol +
-						Strings.MAIL_NOTIFICATION_HEADER + eol +
-						" http://ott.cl.cam.ac.uk/dashboard/notifications " + eol +
-						"----------------------------" + eol +
-						Strings.MAIL_NOTIFICATION_FOOTER + eol;
-				
+	public static void sendNotificationEmail(String subject, Set<User> users, String type){
+		
 		List<String> recipientsList = new ArrayList<String>();
 		int i=0;
 		for(User u : users){
-			String email;
-			if(u.getSettings().getDashboardSendsEmail()){
+			if(u.getSettings().filterMail(type)){
+				String email;
 				try{
 					LDAPUser lU = LDAPQueryManager.getUser(u.getCrsid());
 					email = lU.getEmail();
@@ -98,6 +91,16 @@ public class Mail {
 		
 		String[] recipients = new String[recipientsList.size()];
 		recipientsList.toArray(recipients);
+		
+		if(recipients.length==0){ return; } // No users will be emailed
+		
+		String eol = System.getProperty("line.separator"); 
+		String mailSubject = Strings.MAIL_NOTIFICATION_SUBJECT + subject;
+		String mailBody = subject + eol +
+						Strings.MAIL_NOTIFICATION_HEADER + eol +
+						" http://ott.cl.cam.ac.uk/dashboard/notifications " + eol +
+						"----------------------------" + eol +
+						Strings.MAIL_NOTIFICATION_FOOTER + eol;
 		
 		Mail.sendMail(recipients, "otter-admin@cl.cam.ac.uk", mailBody, mailSubject);	
 		

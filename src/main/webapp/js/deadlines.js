@@ -38,6 +38,9 @@ function deleteDeadline() {
 	});
 }
 
+function createDeadline() {
+	submitAjaxForm("newDeadlineForm", "#newDeadlineSection", "dashboard.deadlines.newdeadline", "Successfully created deadline");
+}
 function editDeadline() {
 	submitAjaxForm("editDeadlineForm", ".main", "dashboard.deadlines.manage", "Successfully edited deadline");
 }

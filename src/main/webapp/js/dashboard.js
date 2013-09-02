@@ -45,6 +45,20 @@ moduleScripts['dashboard'] = {
 			deadlinesIndex,
 			bindPaginationShowMoreListener
 		],
+		'manageindex' : [
+		    createDeadline,
+		    applyDatepicker,
+		    dUserTokenInput,
+		    dGroupTokenInput,
+		    tokenInputType		    
+		],
+		'newdeadline' : [
+		    createDeadline,
+		    applyDatepicker,
+		    dUserTokenInput,
+		    dGroupTokenInput,
+		    tokenInputType
+		],
 		'manage' : [
 			editDeadline,
 			deleteDeadline,
@@ -67,24 +81,15 @@ moduleScripts['dashboard'] = {
 	'supervisor' : {
 		'index' : [
 		    tabMemory,
-			createDeadline,	
 	      	createGroup,
 	      	importGroup,
 	        applyDatepicker,
-	        dUserTokenInput,
 			dGroupTokenInput,
 			gUserTokenInput,
 			gGroupTokenInput,
 			sUserTokenInput,
 			tokenInputType,
 			addSupervisor
-		],
-		'newdeadline' : [
-			createDeadline,
-	        applyDatepicker,
-			dUserTokenInput,
-			dGroupTokenInput,
-			tokenInputType
 		],
 		'newgroup' : [
 			createGroup,

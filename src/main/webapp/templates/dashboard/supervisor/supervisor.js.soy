@@ -2,31 +2,13 @@
 
 /**
  * Dashboard: supervisor page
- * @param cdeadlines
  * @param cgroups
  * @param target
  * @param errors
- * @param presetDeadline
  */
 {template .index }
 	<h3>Supervisor Homepage</h3>
 	<div class="section-container tabs" data-section="tabs" data-base-path="supervisor">
-		<section {if $target=='deadlines' or $target==''}class="active"{/if}>
-			<p class="title" data-section-title><a data-target="deadlines">Manage Deadlines</a></p>
-			<div class="content" data-section-content>
-				<div class="row">
-					<ul class="panels">
-						{foreach $deadline in $cdeadlines}
-							{call .deadline}
-								{param deadline: $deadline /}
-							{/call}
-						{ifempty}
-						<div class="columns large-12 small-12">You have not created any deadlines</div>
-						{/foreach}
-					</ul>
-				</div>
-			</div>
-		</section>
 		<section {if $target=='groups'}class="active"{/if}>
 			<p class="title" data-section-title><a data-target="groups">Manage Groups</a></p>
 			<div class="content" data-section-content>
@@ -41,16 +23,6 @@
 						{/foreach}
 					</ul>
 				</div>
-			</div>
-		</section>
-		<section {if $target=='newDeadline'}class="active"{/if}>
-			<p class="title" data-section-title><a data-target="newDeadline">New Deadline</a></p>
-			<div id="newDeadlineSection" class="content" data-section-content>        
-				{call .newdeadline}
-					{param errors: $errors /}
-					{param deadline: 'undefined' /}
-					{param presetDeadline: $presetDeadline /}
-				{/call}
 			</div>
 		</section>
 		<section {if $target=='newGroup'}class="active"{/if}>
@@ -83,29 +55,6 @@
 {/template}
 
 /**
- * Manage deadlines
- * @param deadline
- * 
- */
-{template .deadline }
-	<form id="d_{$deadline.id}"> 
-		<li class="panel-wrapper columns large-12">
-			<div class="list-panel">
-				<div class="row list-inner-panel">
-					<div class="columns large-9 small-9"><strong>{$deadline.name}</strong> - due {$deadline.datetime}<br/><em>{$deadline.message}</em></div>
-					<div class="columns large-3 small-3 text-right">
-						<div class="icon-button-wrapper">
-							<a class="icon-button panel-icon-button websymbols-icon black-link has-tip" title="Click to manage deadline" href="deadlines/manage/{$deadline.id}">&#83;</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</li>
-	</form>
-{/template}
-
-
-/**
  * Manage groups
  * @param group
  *
@@ -124,107 +73,6 @@
 				</div>
 			</div>
 		</li>
-	</form>
-{/template}
-
-/**
- * Dashboard: supervisor page, create deadlines
- * @param deadline
- * @param errors
- * @param presetDeadline
- */
-{template .newdeadline }
-	<form id="newDeadlineForm" action="{$ij.path}deadlines" method="post" class="custom">
-		<div class="row">
-			<div class="columns large-2 small-4 field-label" >Deadline name</div>
-			<div class="columns large-10 small-8">
-				{if $errors != 'undefined' and $errors.title}<label class="error">Error</label>{/if}
-				<input type="text" name="title" placeholder="Deadline name" {if $errors != 'undefined' and $errors.title}class="error"{/if}{if $deadline != 'undefined'}value="{$deadline.name}"{else}value="{$presetDeadline.title}"{/if}/>
-				{if $errors != 'undefined' and $errors.title}<small class="error">{$errors.title}</small>{/if}
-			</div>
-		</div>
-		<div class="row">
-			<div class="columns large-2 small-4 field-label">Due date</div>
-			<div class="columns large-10 small-8">
-				<div class="row">
-					<div class="columns large-6">
-						{if $errors != 'undefined' and ($errors.date or $errors.datepast)}<label class="error">Error</label>{/if}
-						<input type="text" placeholder="Date" class="datepicker" name="date" {if $errors != 'undefined' and ($errors.datepast or $errors.date)}class="error"{/if} {if $deadline != 'undefined'}value="{$deadline.date.date}"{/if}/>
-						{if $errors != 'undefined' and $errors.date}<small class="error">{$errors.date}</small>{elseif $errors != 'undefined' and $errors.datepast}<small class="error">{$errors.datepast}</small>{/if}                   
-					</div>
-					<div class="large-6 columns">
-						<div class="row collapse">
-							<div class="large-3 columns">
-								<span class="prefix field-label">Hour</span>
-							</div>
-							<div class="large-3 columns">
-								<select name="hour">
-									{for $i in range(0,24)}
-										<option>{$i}</option> 
-									{/for}
-								</select>
-							</div>
-							<div class="large-3 columns">
-								<span class="prefix field-label">Minute</span>
-							</div>
-							<div class="large-3 columns">
-								<select name="minute">
-									{for $i in range(0,60)}
-										<option>{$i}</option> 
-									{/for}
-								</select>
-							</div>                   
-						</div>
-					 </div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="columns large-2 small-4 field-label">URL</div>
-			<div class="columns large-10 small-8">
-				<input type="text" name="url" placeholder="(optional) URL of event, question set etc." {if $deadline != 'undefined'}value="{$deadline.url}"{else}value="{$presetDeadline.url}"{/if}/>
-			</div>
-		</div>
-		<div class="row">
-			<div class="columns large-2 small-4 field-label">Message</div>
-			<div class="columns large-10 small-8">
-				<textarea name="message" placeholder="(optional) Deadline description eg. sign up for OOP supervisions" >{if $deadline != 'undefined'}{$deadline.message}{else}{$presetDeadline.message}{/if}</textarea>
-			</div>
-		</div>
-		<div class="row">
-			<div class="columns large-2 small-4 field-label"></div>
-			<div class="columns large-10 small-8">
-				Search by &nbsp; &nbsp;
-				<input type="radio" class="token-type-radio" value="crsid" name="lookup-type" checked/> Crsid &nbsp; &nbsp;
-				<input type="radio" class="token-type-radio" value="surname" name="lookup-type"/> Surname
-			</div>
-		</div>		
-		<div class="row">
-				<div class="columns large-2 small-4 field-label">Add users</div>
-				<div class="columns large-10 small-8">
-				{if $errors != 'undefined'  and $errors.users}<label class="error">Error</label>{/if}
-					<input type="text" placeholder="Add users" class="deadline-user-token-input {if $errors != 'undefined' and $errors.users}error{/if}" name="users" {if $deadline != 'undefined'}data-prepopulate="{$deadline.users}"{/if}/>
-				{if $errors != 'undefined'  and $errors.users}<small class="error">{$errors.users}</small>{/if}
-				</div>
-			</div>
-		<div class="row">
-				<div class="columns large-2 small-4 field-label">Add groups</div>
-				<div class="columns large-10 small-8">
-					<input type="text" placeholder="Add groups" class="deadline-group-token-input" name="groups" {if $deadline != 'undefined'}data-prepopulate="{$deadline.groups}"{/if}/>
-				</div>
-			</div>
-		<div class="row">
-			<div class="columns large-2 small-4 field-label"></div>
-			<div class="columns large-10 small-8">
-				<input type="radio" class="token-type-radio" value="true" name="send-email"/> Email users &nbsp; &nbsp;
-				<input type="radio" class="token-type-radio" value="false" name="send-email" checked/> Don't email
-			</div>
-		</div>		
-		 <div class="row">
-			<div class="columns large-12 small-12">
-				<input type="submit" value="Create deadline" class="button"/>
-			</div>
-		</div>
 	</form>
 {/template}
 
