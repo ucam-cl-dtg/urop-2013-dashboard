@@ -141,7 +141,7 @@ public class GroupsController extends ApplicationController {
 
 			List<Map<String, Object>> users = null;
 				users = new ArrayList<Map<String, Object>>();
-				for(User u : group.getUsers()){
+				for(User u : UserQuery.all().byGroup(group).list()){
 					users.add(u.getUserDetails());
 				}
 			
