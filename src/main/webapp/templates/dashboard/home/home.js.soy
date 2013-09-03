@@ -21,7 +21,7 @@
                         <div class="user-info-wrapper"><h3>Welcome {$user.name} - Dashboard</h3></div>
                     </div>
                 </div>
-                <ul class="sub-panel expanded">
+                <ul class="sub-panel expanded otter-faded">
                     <li class="list-sub-panel">
                         <div class="row list-inner-sub-panel">           
                             <div class="columns large-9 small-9 text-left">
@@ -58,4 +58,45 @@
             </li>
         </ul>
     </div>
+{/template}
+
+/**
+ * Help/About page
+ * @param about
+ * @param help
+ * @param faq
+ */
+{template .help}
+	<h3>About & Help</h3>
+	<div class="row">
+		<div class="columns large-12 small-12">
+			<fieldset>
+				<legend>About OTTER - Online Teaching Tools</legend>
+				<p>
+				{$about.info}
+				{$about.moreinfo}<a href="{$about.dtglink}">{$about.dtglink}</a></p>
+				<p>{$about.gitinfo}</p>
+				<ul class="pricing-table">
+					{foreach $link in $about.links}
+					<li class="price"><a href="{$link}">{$link}</a></li>
+					{/foreach}
+				</ul>
+			</fieldset>
+			<fieldset>
+				<legend>Getting Help</legend>
+				<p>{$help.info}</p>
+				<ul class="pricing-table">
+					<li class="price"><a href="mailto:{$help.email}">{$help.email}</a></li>
+				</ul>
+			</fieldset>
+			<fieldset>
+				<legend>FAQ</legend>
+				{foreach $question in $faq}
+				//display question
+				{ifempty}
+				The FAQ is currently empty; please email ott-admin@cl.cam.ac.uk for help.
+				{/foreach}
+			</fieldset>
+		</div>
+	</div>
 {/template}

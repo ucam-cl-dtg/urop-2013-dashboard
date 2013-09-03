@@ -86,4 +86,20 @@ public class Strings {
 	
 	// API keys
 	public static final String APIKEY_MAX = "Maximum number of API keys reached, please delete some to generate more.";
+	
+	// Help/About
+	public static final String ABOUT_INFO = "Cambridge Online Teaching Tools or OTTER for short is a project developed by the University of Cambridge Computer Labratory to assist supervisors with organising and managing supervisons. "
+			+ "The Otter software has been built as a summer UROP project and is planned to be used by from October 2013. "
+			+ "The system is open to anyone with a Raven account so can be used by supervisors and students from all departments in the University. ";
+	public static final String ABOUT_MOREINFO = "For more information visit the project page on the DTG website: ";
+	public static final String ABOUT_DTGLINK = "http://www.cl.cam.ac.uk/research/dtg/summer/";
+	public static final String ABOUT_GIT = "Otter is an open source project and is available on GitHub; links to the individual projects are below:";
+	public static final String[] ABOUT_GITLINKS = {"https://github.com/ucam-cl-dtg/urop-2013-dashboard",
+														"https://github.com/ucam-cl-dtg/urop-2013-signups",
+														"https://github.com/ucam-cl-dtg/urop-2013-questions",
+														"https://github.com/ucam-cl-dtg/urop-2013-handins"};
+
+	public static final String HELP_INFO = "If you need help using any of the features or have ideas on how to improve Otter, email us at the address below.";
+	public static final String HELP_EMAIL = "ott-admin@cl.cam.ac.uk";
+	
 }

@@ -1,5 +1,6 @@
 package uk.ac.cam.dashboard.controllers;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cam.dashboard.exceptions.AuthException;
 //Import models
 import uk.ac.cam.dashboard.models.User;
+import uk.ac.cam.dashboard.util.Strings;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -31,11 +33,6 @@ public class HomePageController extends ApplicationController{
 	
 	private User currentUser;
 	
-	@GET @Path("/error")
-	public ImmutableMap<String, ?> accessDenied() {
-		return ImmutableMap.of();
-	}
-	
 	@GET @Path("/")
 	public Map<String, ?> homePage() {
 		
@@ -50,6 +47,13 @@ public class HomePageController extends ApplicationController{
 
 		
 		return ImmutableMap.of("user", userData, "supervisor", currentUser.getSettings().getSupervisor(), "services", currentUser.getSettings().toMap());
+	}
+	
+	@GET @Path("/help")
+	public ImmutableMap<String, ?> aboutHelpPage() {
+		Map<String,?> about = ImmutableMap.of("info", Strings.ABOUT_INFO, "moreinfo", Strings.ABOUT_MOREINFO, "dtglink", Strings.ABOUT_DTGLINK, "gitinfo", Strings.ABOUT_GIT, "links", Strings.ABOUT_GITLINKS);
+		Map<String,?> help = ImmutableMap.of("info", Strings.HELP_INFO, "email", Strings.HELP_EMAIL);
+		return ImmutableMap.of("about", about, "help", help, "faq", new ArrayList<String>());
 	}
 
 }

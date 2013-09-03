@@ -31,6 +31,7 @@ $(document).ready(function() {
         
         // Home page
         "": "dashboard.home.index",
+        "help": "dashboard.home.help",
         
         // Account
         "account": "dashboard.account.index",

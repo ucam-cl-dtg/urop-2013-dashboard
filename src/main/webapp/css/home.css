@@ -12,3 +12,13 @@
 .services {
 	margin-left: 5px;
 }
+.otter-faded {
+	background-color: #f4f4f4;
+	background-image:url('/dashboard/img/ottergreyfaded.png');
+	background-repeat: no-repeat;
+	background-size: 400px;
+	background-position: 100% -80px;
+}
+.otter-faded li {
+	background-color: transparent;
+}
