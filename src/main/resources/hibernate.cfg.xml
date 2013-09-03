@@ -56,6 +56,7 @@
 		<!-- Mapped classes -->
 		<mapping class="uk.ac.cam.dashboard.models.User" />
 		<mapping class="uk.ac.cam.dashboard.models.Settings" />
+		<mapping class="uk.ac.cam.dashboard.models.Dos" />
 		<mapping class="uk.ac.cam.dashboard.models.Group" />
 		<mapping class="uk.ac.cam.dashboard.models.Deadline" />
 		<mapping class="uk.ac.cam.dashboard.models.DeadlineUser" />

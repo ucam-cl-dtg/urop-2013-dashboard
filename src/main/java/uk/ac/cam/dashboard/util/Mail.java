@@ -73,7 +73,6 @@ public class Mail {
 	public static void sendNotificationEmail(String subject, Set<User> users, String type){
 		
 		List<String> recipientsList = new ArrayList<String>();
-		int i=0;
 		for(User u : users){
 			if(u.getSettings().filterMail(type)){
 				String email;
@@ -85,7 +84,6 @@ public class Mail {
 					email = u.getCrsid()+"@cam.ac.uk"; 
 				}
 				recipientsList.add(email);
-				i++;
 			}
 		}
 		

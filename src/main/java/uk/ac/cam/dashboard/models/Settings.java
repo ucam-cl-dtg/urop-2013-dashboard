@@ -10,6 +10,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
+
+import uk.ac.cam.dashboard.util.HibernateUtil;
+
 import com.google.common.collect.ImmutableMap;
 
 @Entity
@@ -30,7 +35,6 @@ public class Settings {
 	private boolean handinsSendsEmail = false;
 	
 	private boolean isSupervisor = false;
-	private boolean isDOS = false;
 	
 	@OneToOne (mappedBy="settings")
 	@JoinColumn(name="USER_CRSID")
@@ -50,17 +54,39 @@ public class Settings {
 
 	public boolean getDashboardSendsEmail(){return this.dashboardSendsEmail;}
 	public void setDashboardSendsEmail(boolean sendsEmail){this.dashboardSendsEmail = sendsEmail;}
+	
 	public boolean getSignupsSendsEmail(){return this.signupsSendsEmail;}
 	public void setSignupsSendsEmail(boolean sendsEmail){this.signupsSendsEmail = sendsEmail;}
+	
 	public boolean getQuestionsSendsEmail(){return this.questionsSendsEmail;}
 	public void setQuestionsSendsEmail(boolean sendsEmail){this.questionsSendsEmail = sendsEmail;}
+	
 	public boolean getHandinsSendsEmail(){return this.handinsSendsEmail;}
 	public void setHandinsSendsEmail(boolean sendsEmail){this.handinsSendsEmail = sendsEmail;}
 	
 	public boolean getSupervisor(){return this.isSupervisor;}
 	public void setSupervisor(boolean supervisor){this.isSupervisor = supervisor;}
-	public boolean getDOS(){return this.isDOS;}
-	public void setDOS(boolean DOS){this.isDOS = DOS;}
+	
+	public boolean isDos(){
+		Session s = HibernateUtil.getTransactionSession();
+		Dos dos = (Dos) s.createCriteria(Dos.class)
+				.add(Restrictions.eqOrIsNull("crsid", this.user.getCrsid()))
+				.uniqueResult();
+		return (dos!=null);
+	}
+	
+	public String getDosCollege(){
+		Session s = HibernateUtil.getTransactionSession();
+		Dos dos = (Dos) s.createCriteria(Dos.class)
+				.add(Restrictions.eqOrIsNull("crsid", this.user.getCrsid()))
+				.uniqueResult();
+		if(dos!=null){
+			return dos.getInstID();
+		} else {
+			return "none";
+		}
+	}
+	
 	
 	public boolean filterMail(String type){
 		if(type.equals("dashboard")){
@@ -86,7 +112,8 @@ public class Settings {
 												"questions", questionsSendsEmail,
 												"handins", handinsSendsEmail))
 				.put("supervisor", isSupervisor)
-				.put("dos", isDOS)
+				.put("dos", isDos())
+				.put("dosCollege", getDosCollege())
 				.build();
 		return map;
 	}
