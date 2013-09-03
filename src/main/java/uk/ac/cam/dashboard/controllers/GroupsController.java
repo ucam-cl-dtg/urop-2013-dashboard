@@ -193,6 +193,10 @@ public class GroupsController extends ApplicationController {
 		@POST @Path("/queryCRSID")
 		public List<HashMap<String, String>> queryCRSId(@FormParam("q") String x) {
 						
+			if(x==null){
+				return new ArrayList<HashMap<String,String>>();
+			}
+			
 			List<HashMap<String, String>> matches = null;
 			try {
 				matches = LDAPPartialQuery.partialUserByCrsid(x);
