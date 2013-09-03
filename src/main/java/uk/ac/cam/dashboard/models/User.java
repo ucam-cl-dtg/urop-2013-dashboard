@@ -101,12 +101,13 @@ public class User {
 	
 	public static User registerUser(String crsid){
 
-	  	UserQuery uq = UserQuery.all();
-	  	uq.byCrsid(crsid);
-	  	User user = uq.uniqueResult();
-	  	
+	  	//UserQuery uq = UserQuery.all();
+	  	//uq.byCrsid(crsid);
+	  	//User user = uq.uniqueResult();
+	  	User user = UserQuery.get(crsid);
+		
 	  	if(user==null){	  		
-			try { LDAPQueryManager.getUser(crsid); } 
+	  		try { LDAPQueryManager.getUser(crsid); } 
 			catch(LDAPObjectNotFoundException e){ return null;}
 			
 	  		Session session = HibernateUtil.getTransactionSession();

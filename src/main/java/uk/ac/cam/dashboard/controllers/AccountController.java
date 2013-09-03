@@ -64,8 +64,9 @@ public class AccountController extends ApplicationController {
 	private Map<String, ?> getUserData(String userId){
 		User u;
 		try{
-			u = UserQuery.get(userId);
-			if (u == null) {throw new Exception("User does not exist.");}
+			System.err.println("Registering user " + userId);
+			u = User.registerUser(userId);
+			if (u == null) {throw new Exception("User " + userId + " does not exist.");}
 		}catch(Exception e){
 			return ImmutableMap.of("error", "An error occurred! " + e.getMessage());
 		}
