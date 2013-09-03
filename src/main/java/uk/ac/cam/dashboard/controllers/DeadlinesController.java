@@ -193,7 +193,7 @@ public class DeadlinesController extends ApplicationController {
 
 		session.delete(deadline);
 
-		return ImmutableMap.of("redirectTo", "supervisor/", "success", true);
+		return ImmutableMap.of("redirectTo", "deadlines/manage", "success", true);
 
 	}
 

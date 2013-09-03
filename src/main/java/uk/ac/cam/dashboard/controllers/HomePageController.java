@@ -1,11 +1,12 @@
 package uk.ac.cam.dashboard.controllers;
 
-import java.lang.management.ManagementFactory;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -20,6 +21,9 @@ import com.google.common.collect.ImmutableMap;
 @Path("/api/")
 @Produces(MediaType.APPLICATION_JSON)
 public class HomePageController extends ApplicationController{
+	
+	@Context
+	private HttpServletRequest request;
 	
 	// Logger
 	@SuppressWarnings("unused")
@@ -42,6 +46,8 @@ public class HomePageController extends ApplicationController{
 		}
 		
 		Map<String, Object> userData = currentUser.getUserDetails();
+		
+
 		
 		return ImmutableMap.of("user", userData, "supervisor", currentUser.getSettings().getSupervisor(), "services", currentUser.getSettings().toMap());
 	}
