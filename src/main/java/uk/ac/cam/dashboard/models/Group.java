@@ -18,8 +18,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.ws.rs.FormParam;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import com.google.common.collect.ImmutableMap;
 
 @Entity

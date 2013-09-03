@@ -10,8 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import com.google.common.collect.ImmutableMap;
 
 @Entity
