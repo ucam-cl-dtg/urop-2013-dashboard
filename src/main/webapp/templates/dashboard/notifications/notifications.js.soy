@@ -29,8 +29,8 @@
 	</div>
 	<div class="row">
 		<div class="columns large-12 small-12">
-			<ul class="pagination-feed notification-feed" data-limit="{$limit}" data-offset="{$offset}" data-total="{$total}" data-location="notifications" data-template="shared.dashboard.getNotifications">
-				{call shared.dashboard.getNotifications}
+			<ul class="pagination-feed notification-feed" data-limit="{$limit}" data-offset="{$offset}" data-total="{$total}" data-location="notifications" data-template="dashboard.notifications.getNotifications" data-functions="markNotificationAsReadUnread">
+				{call .getNotifications}
 					{param notifications: $notifications /}
 				{/call}
 			</ul>
@@ -46,4 +46,29 @@
 		</div>
 	</div>
 	<div class="hide" id="new-pagination-wrapper"></div>
+{/template}
+
+/**
+ * @param notifications
+ */
+{template .getNotifications}
+	{foreach $notification in $notifications}
+	<li class="notification-feed-item">
+		<div class="row" id="{$notification.id}" data-section="{$notification.section}">
+			<a href="{$notification.link}" class="black-link" data-absolute>
+				<div class="columns large-9 small-8">
+					<div class="notification-message">{$notification.message}</div>
+					<div class="notification-info"><i class="icon icon-globe"></i>&nbsp;&nbsp;{$notification.section} &nbsp;&nbsp; <span class="websymbols-icon">P</span> {$notification.timestamp}</div>
+				</div>
+			</a>
+			<div class="columns large-3 small-4 text-right mark-notification-as-read" data-notification-target="{$notification.id}">
+				{if $notification.read}
+					<a class="mark-as-unread">Mark as unread</a>
+				{else}
+					<a class="mark-as-read">Mark as read</a>
+				{/if}
+			</div>
+		</div>
+	</li>
+	{/foreach}
 {/template}

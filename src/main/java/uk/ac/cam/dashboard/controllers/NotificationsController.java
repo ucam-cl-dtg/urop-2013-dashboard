@@ -135,11 +135,11 @@ public class NotificationsController extends ApplicationController {
 			ImmutableMap<String, String> error;
 			if (read != null) {
 				if (read == true) {
-					log.error("Error marking notification as read");
-					error = ImmutableMap.of("formErrors", Strings.NOTIFICATION_UPDATE_ERROR + "read");
+					NotificationUser.markAsReadUnread(currentUser, id, read);
+					log.debug("Marked notification "+id+" as read");		
 				} else {
-					log.error("Error marking notification as read");
-					error = ImmutableMap.of("formErrors", Strings.NOTIFICATION_UPDATE_ERROR + "unread");
+					NotificationUser.markAsReadUnread(currentUser, id, read);
+					log.debug("Marked notification "+id+" as unread");	
 				}
 			} else {
 				log.error("Errors in form, no value provide for read");
@@ -147,8 +147,7 @@ public class NotificationsController extends ApplicationController {
 				return error;
 			}
 			
-			NotificationUser.markAsReadUnread(currentUser, id, read);
-			log.debug("Marked notification "+id+" to " + read);			
+				
 			return ImmutableMap.of("redirectTo", "notifications");
 		}
 		

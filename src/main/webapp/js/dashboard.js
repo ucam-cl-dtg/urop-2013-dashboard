@@ -14,8 +14,11 @@ moduleScripts['dashboard'] = {
 	},
 	'notifications' : {
 		'index': [
-			bindPaginationShowMoreListener,
-            markNotificationAsReadUnread
+		    markNotificationAsReadUnread,
+			bindPaginationShowMoreListener
+		],
+		'getNotifications': [
+		    markNotificationAsReadUnread
 		]
 	},
 	'shared' : {

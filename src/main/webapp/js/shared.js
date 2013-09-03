@@ -54,6 +54,10 @@ function bindPaginationShowMoreListener() {
 				$targetElem.empty();
 				$('.pagination-feed').append($newItems.html());
 				
+				if(template=='dashboard.notifications.getNotifications'){
+					markNotificationAsReadUnread();
+				}
+				
 				// Check if the number of items returned is the limit, otherwise
 				// the number returned must be lower than the limit, and therefore
 				// the list is exhausted.
