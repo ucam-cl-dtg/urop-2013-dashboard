@@ -75,7 +75,7 @@ public class User {
 		if(this.username==null){
 			try {
 				LDAPUser u = LDAPQueryManager.getUser(crsid);
-				this.username = u.getcName();
+				this.username = u.getDisplayName();
 			} catch(LDAPObjectNotFoundException e){
 				this.username = Strings.USER_NOUSERNAME;
 			}			
@@ -132,7 +132,8 @@ public class User {
 			HashMap<String, Object> defaultUser = new HashMap<String, Object>();
 			
 			defaultUser.put("crsid", crsid);
-			defaultUser.put("name", username);
+			defaultUser.put("name", Strings.USER_NOUSERNAME);
+			defaultUser.put("username", username);
 			defaultUser.put("surname", Strings.USER_NOSURNAME);
 			defaultUser.put("email", Strings.USER_NOEMAIL);
 			defaultUser.put("institution", Strings.USER_NOINST);

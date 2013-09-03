@@ -46,7 +46,7 @@
 					{/if}
 					<ul class="api-keys">
 					{foreach $key in $keys}
-						<li><div class="fixed-width-icon"><i class="icon icon-lock"></i></div>{$key}</li>
+						<li><div class="fixed-width-icon"><i class="icon icon-lock"></i></div>{$key}<div class="api-delete-icon"><a class="delete-api-key" data-key="{$key}"><i class="icon icon-cancel_circle"></i></a></div></li>
 					{/foreach}
 					</ul>
 				</fieldset>

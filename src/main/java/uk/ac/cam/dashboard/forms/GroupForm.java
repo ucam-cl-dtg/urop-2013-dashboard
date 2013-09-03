@@ -203,7 +203,7 @@ public class GroupForm {
 		for(String c : parseUsers()){
 			try {
 				LDAPUser u = LDAPQueryManager.getUser(c);
-				users.add(ImmutableMap.of("crsid", c, "name", u.getcName()));
+				users.add(ImmutableMap.of("crsid", c, "name", u.getDisplayName()));
 			} catch (LDAPObjectNotFoundException e) {
 				users.add(ImmutableMap.of("crsid", c, "name", Strings.USER_NOUSERNAME));				
 			}

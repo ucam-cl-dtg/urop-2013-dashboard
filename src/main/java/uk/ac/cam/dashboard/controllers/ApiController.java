@@ -1,14 +1,18 @@
 package uk.ac.cam.dashboard.controllers;
 
+import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import uk.ac.cam.dashboard.exceptions.AuthException;
 import uk.ac.cam.dashboard.models.Api;
@@ -41,21 +45,28 @@ public class ApiController extends ApplicationController {
 	// Creation
 	
 	@GET @Path("/new")
-	public Map<String, String> getNewApiKey() {
+	public Map<String, ?> getNewApiKey() {
 		Session s = HibernateUtil.getTransactionSession();
 
 		try {
 			currentUser = validateUser();
 		} catch (AuthException e) {
-			return ImmutableMap.of("error", e.getMessage());
+			return ImmutableMap.of("success", false, "errors", e.getMessage());
 		}
+		
+		Criteria criteria = s.createCriteria(Api.class);
+		criteria.add(Restrictions.eq("user", currentUser));
+		List<Api> keys = criteria.list();
+		if(keys.size()>=5){
+			return ImmutableMap.of("success", false, "errors", Strings.APIKEY_MAX);
+		}	
 		
 		Api api = new Api();
 		api.setUser(currentUser);
 		
 		s.save(api);
 		
-		return ImmutableMap.of("user", currentUser.getCrsid(), "key", api.getKey());
+		return ImmutableMap.of("success", true, "user", currentUser.getCrsid(), "key", api.getKey());
 	}
 	
 	@GET @Path("/newGlobal")
@@ -75,6 +86,30 @@ public class ApiController extends ApplicationController {
 		s.save(api);
 		
 		return ImmutableMap.of("key", api.getKey());
+	}
+	
+	// Deletion
+	@DELETE @Path("/delete")
+	public Map<String, ?> deleteApiKey(String key) {
+		Session s = HibernateUtil.getTransactionSession();
+
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("errors", e.getMessage());
+		}
+		
+		Criteria criteria = s.createCriteria(Api.class);
+		criteria.add(Restrictions.eq("key", key));
+		criteria.add(Restrictions.eq("user", currentUser));
+		Api api = (Api)criteria.uniqueResult();
+		
+		if(api!=null){
+			s.delete(api);
+			return ImmutableMap.of("success", true);
+		} else {
+			return ImmutableMap.of("success", false);
+		}
 	}
 	
 	// Validation

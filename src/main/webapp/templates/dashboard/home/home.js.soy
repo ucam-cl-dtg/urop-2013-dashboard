@@ -29,10 +29,10 @@
                                     <div class="columns large-11 small-11 text-left">
                     	                <ul class="udetails"> 
                 	                    	<li><div class="fixed-width-icon"><i class="icon icon-user"></i></div><strong>CRSID:</strong> {$user.crsid}</li>
-                	                    	<li><div class="fixed-width-icon"><i class="icon icon-user"></i></div><strong>Username:</strong> {$user.name}</li>
+                	                    	<li><div class="fixed-width-icon"><i class="icon icon-user"></i></div><strong>Username:</strong> {$user.username} ({$user.name})</li>
                 	                    	<li><div class="fixed-width-icon"><i class="icon icon-mail"></i></div><strong>Email:</strong> {$user.email}</li>
-            	                        	<li><div class="fixed-width-icon"><i class="icon icon-data_science_black"></i></div><strong>College/Department ID:</strong> <span class="round secondary label">{$user.instID} </span></li>
-            	                        	<li><div class="fixed-width-icon"><i class="icon icon-globe"></i></div><strong>Institution:</strong> <span class="round secondary label">{$user.institution} </span></li>
+            	                        	<li><div class="fixed-width-icon"><i class="icon icon-data_science_black"></i></div><strong>College/Department ID:</strong>{foreach $inst in $user.instID} <span class="round secondary label">{$inst} </span>{/foreach}</li>
+            	                        	<li><div class="fixed-width-icon"><i class="icon icon-globe"></i></div><strong>Institution:</strong> {foreach $i in $user.institution}<span class="round secondary label">{$i} </span>{/foreach}</li>
 	    	                                <li><div class="fixed-width-icon"><i class="icon icon-lock"></i></div><strong>User status:</strong> <span class="label round">{if $user.supervisor}Supervisor{else}Student{/if} </span></li>
     	                                </ul>
     	                            </div>

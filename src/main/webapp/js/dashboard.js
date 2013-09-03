@@ -8,7 +8,8 @@ moduleScripts['dashboard'] = {
 	'account' : {
 		'index': [
             bindSaveSettingsListener,
-            bindNewApiKeyListener
+            bindNewApiKeyListener,
+            bindDeleteApiKeyListener
 		 ]
 	},
 	'notifications' : {

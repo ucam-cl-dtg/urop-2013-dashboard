@@ -64,18 +64,18 @@ public class GroupsController extends ApplicationController {
 
 			Group group = GroupQuery.get(id);
 	
-			List<HashMap<String, String>> users = null;
+			List<HashMap<String, Object>> users = null;
 			try {
-				users = new ArrayList<HashMap<String, String>>();
+				users = new ArrayList<HashMap<String, Object>>();
 				for(User u : UserQuery.all().byGroup(group).list()){
 					LDAPUser user = LDAPQueryManager.getUser(u.getCrsid());
-					HashMap<String, String> userMap = user.getAll();
+					HashMap<String, Object> userMap = user.getAll();
 					userMap.put("supervisor", Boolean.toString(u.getSettings().getSupervisor()));
 					users.add(userMap);
 				}
 			} catch(LDAPObjectNotFoundException e){
 				log.error("Error performing LDAPQuery: " + e.getMessage());
-				users = new ArrayList<HashMap<String, String>>();
+				users = new ArrayList<HashMap<String, Object>>();
 			}
 			
 			return ImmutableMap.of("group", group.toMap(), "users", users);
@@ -141,7 +141,7 @@ public class GroupsController extends ApplicationController {
 
 			List<Map<String, Object>> users = null;
 				users = new ArrayList<Map<String, Object>>();
-				for(User u : group.getUsers()){
+				for(User u : UserQuery.all().byGroup(group).list()){
 					users.add(u.getUserDetails());
 				}
 			
@@ -193,6 +193,10 @@ public class GroupsController extends ApplicationController {
 		@POST @Path("/queryCRSID")
 		public List<HashMap<String, String>> queryCRSId(@FormParam("q") String x) {
 						
+			if(x==null){
+				return new ArrayList<HashMap<String,String>>();
+			}
+			
 			List<HashMap<String, String>> matches = null;
 			try {
 				matches = LDAPPartialQuery.partialUserByCrsid(x);

@@ -61,10 +61,10 @@
 							</div>
 							<div class="user-info-wrapper">
 								<div>
-									<strong>User: </strong>{$user.name} ({$user.crsid}) - <em>{$user.email}</em>
+									<strong>User: </strong><span title="{$user.name}">{$user.username} ({$user.crsid})</span> - <em>{$user.email}</em>
 								</div>
 								<div class="lower-info">
-									<span class="label round">User status: {if $user.supervisor == 'true'}Supervisor{else}Student{/if} </span>  <span class="round secondary label">User institution: {$user.institution} </span>
+									<span class="label round">User status: {if $user.supervisor == 'true'}Supervisor{else}Student{/if} </span>  {foreach $i in $user.institution}<span class="round secondary label">{$i}</span>{/foreach}
 								</div>
 							</div>
 						</div>
