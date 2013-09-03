@@ -113,7 +113,7 @@ public class NotificationsController extends ApplicationController {
 			if (errors.isEmpty()) {
 				int id = notificationForm.handle();
 				log.debug("Notification created successfully, redirecting");
-				return ImmutableMap.of("redirectTo", "dashboard/notifications");
+				return ImmutableMap.of("redirectTo", "notifications");
 			} else {
 				log.debug("Errors in form, returning form data with error flags");
 				return ImmutableMap.of("formErrors", errors, "data", notificationForm.toMap());
@@ -149,7 +149,7 @@ public class NotificationsController extends ApplicationController {
 			
 			NotificationUser.markAsReadUnread(currentUser, id, read);
 			log.debug("Marked notification "+id+" to " + read);			
-			return ImmutableMap.of("redirectTo", "dashboard/notifications");
+			return ImmutableMap.of("redirectTo", "notifications");
 		}
 		
 }
