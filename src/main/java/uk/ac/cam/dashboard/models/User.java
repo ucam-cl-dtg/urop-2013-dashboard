@@ -75,7 +75,7 @@ public class User {
 		if(this.username==null){
 			try {
 				LDAPUser u = LDAPQueryManager.getUser(crsid);
-				this.username = u.getcName();
+				this.username = u.getDisplayName();
 			} catch(LDAPObjectNotFoundException e){
 				this.username = Strings.USER_NOUSERNAME;
 			}			
