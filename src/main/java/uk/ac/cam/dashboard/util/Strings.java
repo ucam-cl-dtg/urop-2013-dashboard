@@ -84,4 +84,6 @@ public class Strings {
 	public static final String AUTHEXCEPTION_GENERAL = "Error validating permissions.";
 	public static final String AUTHEXCEPTION_NO_KEY = "A key must be provided";
 	
+	// API keys
+	public static final String APIKEY_MAX = "Maximum number of API keys reached, please delete some to generate more.";
 }

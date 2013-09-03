@@ -14,3 +14,8 @@ label.checkbox-label {
 .api-keys {
 	list-style-type: none;
 }
+
+.api-delete-icon {
+	padding: 0px 20px;
+	display: inline-block;
+}
