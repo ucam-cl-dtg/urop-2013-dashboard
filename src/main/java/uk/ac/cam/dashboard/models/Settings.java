@@ -79,7 +79,7 @@ public class Settings {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<String> getDosCollege(){
+	public List<String> getDosColleges(){
 		Session s = HibernateUtil.getTransactionSession();
 		List<Dos> doses = (List<Dos>) s.createCriteria(Dos.class)
 				.add(Restrictions.eqOrIsNull("crsid", this.user.getCrsid()))
@@ -121,7 +121,7 @@ public class Settings {
 												"handins", handinsSendsEmail))
 				.put("supervisor", isSupervisor)
 				.put("dos", isDos())
-				.put("dosCollege", getDosCollege())
+				.put("dosColleges", getDosColleges())
 				.build();
 		return map;
 	}
