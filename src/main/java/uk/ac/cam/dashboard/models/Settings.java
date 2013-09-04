@@ -1,5 +1,7 @@
 package uk.ac.cam.dashboard.models;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Entity;
@@ -67,23 +69,29 @@ public class Settings {
 	public boolean getSupervisor(){return this.isSupervisor;}
 	public void setSupervisor(boolean supervisor){this.isSupervisor = supervisor;}
 	
+	@SuppressWarnings("unchecked")
 	public boolean isDos(){
 		Session s = HibernateUtil.getTransactionSession();
-		Dos dos = (Dos) s.createCriteria(Dos.class)
+		List<Dos> dos = (List<Dos>) s.createCriteria(Dos.class)
 				.add(Restrictions.eqOrIsNull("crsid", this.user.getCrsid()))
-				.uniqueResult();
-		return (dos!=null);
+				.list();
+		return (!dos.isEmpty());
 	}
 	
-	public String getDosCollege(){
+	@SuppressWarnings("unchecked")
+	public List<String> getDosCollege(){
 		Session s = HibernateUtil.getTransactionSession();
-		Dos dos = (Dos) s.createCriteria(Dos.class)
+		List<Dos> doses = (List<Dos>) s.createCriteria(Dos.class)
 				.add(Restrictions.eqOrIsNull("crsid", this.user.getCrsid()))
-				.uniqueResult();
-		if(dos!=null){
-			return dos.getInstID();
+				.list();
+		List<String> colleges = new ArrayList<String>();
+		if(!doses.isEmpty()){
+			for(Dos d : doses) {
+				colleges.add(d.getInstID());
+			}
+			return colleges;
 		} else {
-			return "none";
+			return colleges;
 		}
 	}
 	
