@@ -46,7 +46,7 @@ public class HomePageController extends ApplicationController{
 		
 
 		
-		return ImmutableMap.of("user", userData, "supervisor", currentUser.getSettings().getSupervisor(), "services", currentUser.getSettings().toMap());
+		return ImmutableMap.of("user", userData, "supervisor", currentUser.getSettings().getSupervisor(), "services", currentUser.getSettings().toMap(), "dos", currentUser.getSettings().isDos());
 	}
 	
 	@GET @Path("/help")

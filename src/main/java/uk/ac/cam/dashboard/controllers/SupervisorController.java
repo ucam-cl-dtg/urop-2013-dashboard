@@ -85,7 +85,7 @@ public class SupervisorController extends ApplicationController {
 			}
 		}
 		
-		return ImmutableMap.of("errors", "undefined");
+		return ImmutableMap.of("success", true, "errors", "undefined");
 		
 	}
 	
