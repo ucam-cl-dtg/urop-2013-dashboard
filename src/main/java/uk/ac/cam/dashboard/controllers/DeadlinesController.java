@@ -121,6 +121,10 @@ public class DeadlinesController extends ApplicationController {
 
 		Deadline deadline = DeadlineQuery.get(id);
 
+		if(deadline==null){
+			return ImmutableMap.of("redirectTo", "deadlines/manage");
+		}
+		
 		if (!deadline.getOwner().equals(currentUser)) {
 			return ImmutableMap.of("redirectTo", "deadlines");
 		}
