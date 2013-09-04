@@ -51,6 +51,11 @@
 		<param-name>dashboardUrl</param-name>
 		<param-value>http://localhost:8080/dashboard</param-value>
 	</context-param>
+    
+    <context-param>
+        <param-name>handinsUrl</param-name>
+        <param-value>http://localhost:8080/handins</param-value>
+    </context-param>
 	
 	<context-param>
 		<param-name>excludePrefixes</param-name>

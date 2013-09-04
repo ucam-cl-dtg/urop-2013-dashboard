@@ -1,5 +1,7 @@
 package uk.ac.cam.dashboard.forms;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,8 +9,12 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.core.Context;
 
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -17,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
 import uk.ac.cam.cl.dtg.ldap.LDAPUser;
+import uk.ac.cam.cl.dtg.teaching.api.HandinsApi;
 import uk.ac.cam.dashboard.models.Deadline;
 import uk.ac.cam.dashboard.models.DeadlineUser;
 import uk.ac.cam.dashboard.models.Group;
@@ -43,6 +50,7 @@ public class CreateDeadlineForm {
 	@FormParam("groups") String groups;
 	@FormParam("send-email") String sendMail;
 	
+    @Context HttpServletRequest request;
 	//Logger
 	private static Logger log = LoggerFactory.getLogger(CreateDeadlineForm.class);
 	
@@ -72,6 +80,8 @@ public class CreateDeadlineForm {
 			deadlineUsers.addAll(saveDeadlineUsers(groupUsers, deadline));
 		}
 		
+        // Create a bin for the deadline
+        createBin(currentUser, deadlineUsers, title, url);
 		// send notification
 		Notification notification = new Notification(); 
 		notification.setMessage(currentUser.getName() + " ("+currentUser.getCrsid()+")" +Strings.NOTIFICATION_SETDEADLINE + deadline.getTitle());
@@ -94,7 +104,66 @@ public class CreateDeadlineForm {
 		
 		return deadline.getId();			
 	}
-	
+    private Long extractSetId(String url) {
+        // Assume url is the form http://<host>/questions/sets/{id}
+        URL setURL = null;
+        try {
+            setURL = new URL(url);
+        } catch (MalformedURLException e) {
+            return null;
+        }
+        // Force the link host to be as the same as the server
+        // This is to prevent the global key from leaking
+        if (!request.getServerName().equals(setURL.getHost()))
+            return null;
+
+        // This should be now something like /questions/sets/1
+        String path = setURL.getPath();
+
+        Pattern p = Pattern.compile("^/questions/sets/([0-9]+).*$");
+        Matcher m = p.matcher(path);
+
+        if (m.find()) {
+            String strId = m.group(1);
+            try {
+                return Long.parseLong(strId);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    private void createBin(User owner, Set<DeadlineUser> students, String title, String url) {
+        String apiKey = request.getSession().getServletContext().getInitParameter("apiKey");
+        String handinsUrl = request.getSession().getServletContext().getInitParameter("handinsUrl");
+        
+        if (apiKey == null || handinsUrl == null)
+            return ;
+        
+        HandinsApi.HandinsApiWrapper api = new HandinsApi.HandinsApiWrapper(handinsUrl, apiKey);
+
+        String[] users = new String[students.size()];
+
+        int index = 0;
+        for (DeadlineUser student: students) {
+            users[index] = student.getUser().getCrsid();
+            index ++;
+        }
+
+        Long setId = extractSetId(url);
+
+        HandinsApi.Bin bin = api.createBin(title, owner.getCrsid());
+
+        if (bin == null )
+            return ;
+
+        api.setUsers(bin, users);
+        if (setId != null) {
+            api.importQuestionSet(bin, setId, owner.getCrsid());
+        }
+    }
+    
 	public Deadline handleUpdate(User currentUser, int id) {		
 		
 		Session session = HibernateUtil.getTransactionSession();
