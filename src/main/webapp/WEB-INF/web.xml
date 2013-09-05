@@ -54,7 +54,12 @@
 	
 	<context-param>
 		<param-name>excludePrefixes</param-name>
-		<param-value>/api/keys/type/</param-value>
+		<param-value>/api/keys/type/,
+			 /css/*,
+			 /js/*,
+			 /img/*,
+			 /index.html		 
+			 </param-value>
 	</context-param>
 	
 	<context-param>
