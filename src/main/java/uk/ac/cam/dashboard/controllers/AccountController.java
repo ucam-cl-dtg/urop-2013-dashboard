@@ -34,7 +34,14 @@ public class AccountController extends ApplicationController {
 
 	// Get current user from raven session
 	private User currentUser;
-	
+
+	@GET
+    @Path("/{crsid}/doses/{inst}")
+    public Object getDoses(@PathParam("crsid") String crsId,
+                           @PathParam("inst") String inst) {
+        return ImmutableMap.of("doses", ((Settings) getUserData(crsId).get("settings")).getUserDoses(inst));
+    }
+
 	@GET
 	@Path("/{crsid}")
 	public Map<String,?> getUserDetails(@PathParam("crsid") String crsid){
