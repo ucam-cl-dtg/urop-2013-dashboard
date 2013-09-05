@@ -7,6 +7,11 @@
      xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
      version="2.5">
      
+     <!-- Error Pages -->
+     <error-page>
+		<error-code>410</error-code>
+		<location>/index.html</location>
+	 </error-page> 
      <!-- For frontend main.soy -->
      
 	<context-param>
