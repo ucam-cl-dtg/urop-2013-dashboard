@@ -25,7 +25,7 @@ public class Mail {
 
 	private final static String SMTP_ADDRESS = "mail-serv.cl.cam.ac.uk";
 	
-	public static void sendMail(String[] recipients, String from, String contents, String subject){
+	public static void sendMail(String[] recipients, String from, String contents, String subject) throws MessagingException, AddressException{
 		
 		final String MAIL_ADDRESS = "ott-admin@cl.cam.ac.uk";
 		
@@ -41,36 +41,24 @@ public class Mail {
         InternetAddress[] sender = new InternetAddress[1];
         InternetAddress[] recievers = new InternetAddress[recipients.length];
         
-        try {
-        	sentBy = new InternetAddress(MAIL_ADDRESS);
-            sender[0]  = new InternetAddress(from);
-            for(int i=0; i<recipients.length; i++){
-            	recievers[i] = new InternetAddress(recipients[i]);
-            }
-        } catch (AddressException e) {
-            // TODO return an error
-        	System.out.println("Unable to parse to/from");
-            e.printStackTrace();
+    	sentBy = new InternetAddress(MAIL_ADDRESS);
+        sender[0]  = new InternetAddress(from);
+        for(int i=0; i<recipients.length; i++){
+        	recievers[i] = new InternetAddress(recipients[i]);
         }
-        
-        try {
-        	if(sentBy!=null&&sender!=null&&recievers!=null){
-	            msg.setFrom(sentBy);            
-	            msg.setReplyTo(sender);
-	            msg.setRecipients(RecipientType.TO, recievers);
-	            msg.setSubject(subject);
-	            msg.setText(contents);
-	 
-	            Transport.send(msg);
-        	}
-            
-        } catch (MessagingException e) {
-        	System.out.println("Unable to send");
-            e.printStackTrace();
-        }
+
+    	if(sentBy!=null&&sender!=null&&recievers!=null){
+            msg.setFrom(sentBy);            
+            msg.setReplyTo(sender);
+            msg.setRecipients(RecipientType.TO, recievers);
+            msg.setSubject(subject);
+            msg.setText(contents);
+ 
+            Transport.send(msg);
+    	}
     }
 	
-	public static void sendNotificationEmail(String subject, Set<User> users, String type){
+	public static boolean sendNotificationEmail(String subject, Set<User> users, String type) {
 		
 		List<String> recipientsList = new ArrayList<String>();
 		for(User u : users){
@@ -90,7 +78,7 @@ public class Mail {
 		String[] recipients = new String[recipientsList.size()];
 		recipientsList.toArray(recipients);
 		
-		if(recipients.length==0){ return; } // No users will be emailed
+		if(recipients.length==0){ return true; } // No users will be emailed
 		
 		String eol = System.getProperty("line.separator"); 
 		String mailSubject = Strings.MAIL_NOTIFICATION_SUBJECT + subject;
@@ -99,12 +87,16 @@ public class Mail {
 						" http://ott.cl.cam.ac.uk/dashboard/notifications " + eol +
 						"----------------------------" + eol +
 						Strings.MAIL_NOTIFICATION_FOOTER + eol;
-		
-		Mail.sendMail(recipients, "otter-admin@cl.cam.ac.uk", mailBody, mailSubject);	
+		try {
+			Mail.sendMail(recipients, "otter-admin@cl.cam.ac.uk", mailBody, mailSubject);
+			return true;
+		} catch (MessagingException e){
+			return false;
+		} 
 		
 	}
 	
-	public static void buildDeadlineEmail(User currentUser, Set<DeadlineUser> deadlineUsers, String body){
+	public static void buildDeadlineEmail(User currentUser, Set<DeadlineUser> deadlineUsers, String body) throws MessagingException, AddressException{
 		
 		String[] recipients = new String[deadlineUsers.size()];
 		int i=0;
@@ -133,7 +125,7 @@ public class Mail {
 		Mail.sendMail(recipients, sender, body, subject);	
 	}
 	
-	public static void setDeadline(User currentUser, Deadline deadline, Set<DeadlineUser> deadlineUsers){
+	public static boolean setDeadline(User currentUser, Deadline deadline, Set<DeadlineUser> deadlineUsers){
 		String eol = System.getProperty("line.separator"); 
 		String body = Strings.MAIL_SETDEADLINE_HEADER + eol +
 						"Deadline: " + deadline.getTitle() + eol +
@@ -141,10 +133,15 @@ public class Mail {
 						"Message: " + deadline.getMessage() + eol +
 						"http://ott.cl.cam.ac.uk/dashboard/deadlines/" + eol +
 						Strings.MAIL_SETDEADLINE_FOOTER + " ("+currentUser.getCrsid()+"@cam.ac.uk)";
-		buildDeadlineEmail(currentUser, deadlineUsers, body);
+		try{
+			buildDeadlineEmail(currentUser, deadlineUsers, body);
+			return true;
+		} catch(MessagingException e){
+			return false;
+		}
 	}
 	
-	public static void remindDeadline(User currentUser, Deadline deadline, Set<DeadlineUser> deadlineUsers){
+	public static boolean remindDeadline(User currentUser, Deadline deadline, Set<DeadlineUser> deadlineUsers){
 		String eol = System.getProperty("line.separator"); 
 		String body = Strings.MAIL_REMINDDEADLINE_HEADER + eol +
 						"Deadline: " + deadline.getTitle() + eol +
@@ -152,10 +149,16 @@ public class Mail {
 						"Message: " + deadline.getMessage() + eol +
 						"http://ott.cl.cam.ac.uk/dashboard/deadlines/" + eol +
 						Strings.MAIL_REMINDDEADLINE_FOOTER + " ("+currentUser.getCrsid()+"@cam.ac.uk)";
-		buildDeadlineEmail(currentUser, deadlineUsers, body);
+		
+		try {
+			buildDeadlineEmail(currentUser, deadlineUsers, body);
+			return true;
+		} catch (MessagingException e) {
+			return false;
+		}
 	}
 	
-	public static void updateDeadline(User currentUser, Deadline deadline, Set<DeadlineUser> deadlineUsers){
+	public static boolean updateDeadline(User currentUser, Deadline deadline, Set<DeadlineUser> deadlineUsers){
 		String eol = System.getProperty("line.separator"); 
 		String body = Strings.MAIL_UPDATEDEADLINE_HEADER + eol +
 						"Deadline: " + deadline.getTitle() + eol +
@@ -163,7 +166,12 @@ public class Mail {
 						"Message: " + deadline.getMessage() + eol +
 						"http://ott.cl.cam.ac.uk/dashboard/deadlines/" + eol +
 						Strings.MAIL_UPDATEDEADLINE_FOOTER + " ("+currentUser.getCrsid()+"@cam.ac.uk)";
-		buildDeadlineEmail(currentUser, deadlineUsers, body);
+		try {
+			buildDeadlineEmail(currentUser, deadlineUsers, body);
+			return true;
+		} catch (MessagingException e) {
+			return false;
+		}
 	}
 	
 }

@@ -57,7 +57,7 @@ public class CreateNotificationForm {
 			}		
 		}
 		
-		Mail.sendNotificationEmail(notification.getMessage(), userList, notification.getSection());
+		boolean mailSent = Mail.sendNotificationEmail(notification.getMessage(), userList, notification.getSection());
 		
 		return notification.getId();
 				
