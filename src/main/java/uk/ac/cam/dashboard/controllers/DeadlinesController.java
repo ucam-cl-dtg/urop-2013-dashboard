@@ -296,7 +296,7 @@ public class DeadlinesController extends ApplicationController {
 				if (!d.getArchived()) {
 					Deadline deadline = d.getDeadline();
 
-					java.util.Calendar datetime = deadline.getDatetime();
+					java.util.Calendar datetime = (java.util.Calendar)deadline.getDatetime().clone();
 					Date start = datetime.getTime();
 					datetime.add(java.util.Calendar.MINUTE, 1);
 					Date end = datetime.getTime();
