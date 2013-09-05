@@ -79,6 +79,19 @@ public class Settings {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<String> getUserDoses(String inst) {
+		List<String> dosCrsids = new ArrayList<String>();
+		Session s = HibernateUtil.getTransactionSession();
+		List<Dos> doses = (List<Dos>) s.createCriteria(Dos.class)
+				.add(Restrictions.eq("instID", inst))
+				.list();
+		for(Dos d : doses) {
+			dosCrsids.add(d.getCrsid());
+		}
+		return dosCrsids;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<String> getDosColleges(){
 		Session s = HibernateUtil.getTransactionSession();
 		List<Dos> doses = (List<Dos>) s.createCriteria(Dos.class)
