@@ -75,7 +75,7 @@ public class Strings {
 	// Notification mail
 	public static final String MAIL_NOTIFICATION_SUBJECT = "[OTTER] ";
 	public static final String MAIL_NOTIFICATION_HEADER = "Click the link below to go to your OTTER notifications";	
-	public static final String MAIL_NOTIFICATION_FOOTER = "This is an automatically generated message from OTTER (University of Cambridge Online Teaching Tools). To unsubscribe, log in to http://ott.cl.cam.ac.uk and change preferences in your accound page";		
+	public static final String MAIL_NOTIFICATION_FOOTER = "This is an automatically generated message from OTTER (University of Cambridge Online Teaching Tools). To unsubscribe, log in to http://ott.cl.cam.ac.uk and change preferences in your account page";		
 	
 	// Authorisation exceptions
 	public static final String AUTHEXCEPTION_GLOBAL = "Could not validate global API permissions.";
