@@ -98,6 +98,7 @@ public class User {
 	public Set<Api> getApis() { return this.apis; }
 	public void addApi(Api api) { this.apis.add(api); }
 	public void addApis(Set<Api> apis) { this.apis.addAll(apis); }
+	public void clearApis() { this.apis.clear(); }
 	
 	public static User registerUser(String crsid){
 
@@ -198,6 +199,14 @@ public class User {
 		List<String> userApis = new ArrayList<String>();
 		
 		if(apis==null){ return new ArrayList<String>();}
+		
+		if(apis.isEmpty()){
+			Session s = HibernateUtil.getTransactionSession();
+			Api api = new Api();
+			api.setUser(this);
+			s.save(api);
+			this.addApi(api);
+		}
 		
 		for(Api a : apis){
 			userApis.add(a.getKey());

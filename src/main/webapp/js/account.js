@@ -82,3 +82,26 @@ function bindDeleteApiKeyListener() {
 	    });
 	});
 }
+
+function bindResetApiKeyListener() {
+	$('#reset-api-key').on('click', function() {
+		$.ajax({
+	    	type: 'POST',
+	    	url: prepareURL("keys/reset"),
+	    	success: function(data) {
+	    		if (data.errors) {
+	    			errorNotification(data.errors);
+	    		} else {
+	    			successNotification("Successfully created a new API key");
+	    			$('.api-keys').html('<li><div class="fixed-width-icon"><i class="icon icon-lock"></i></div>' + data.key + '</li>');
+	    			$('#deadlines-cal-url').val(prepareURL("deadlines/calendar?key="+data.key+"&userId="+data.userID));
+	    			var eventsURL = prepareURL("api/events/calendar?key="+data.key+"&userId="+data.userID).replace("dashboard", "signapp");
+	    			$('#events-cal-url').val(eventsURL);
+	    		}
+	    	},
+	    	error: function(jqXHR, textStatus, error) {
+	    		errorNotification("Could not perform AJAX request: " + error);
+	    	}
+	    });
+	});
+}

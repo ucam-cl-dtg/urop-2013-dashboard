@@ -9,7 +9,8 @@ moduleScripts['dashboard'] = {
 		'index': [
             bindSaveSettingsListener,
             bindNewApiKeyListener,
-            bindDeleteApiKeyListener
+            bindDeleteApiKeyListener,
+            bindResetApiKeyListener
 		 ]
 	},
 	'notifications' : {

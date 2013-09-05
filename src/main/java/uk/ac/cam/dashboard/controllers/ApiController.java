@@ -1,10 +1,13 @@
 package uk.ac.cam.dashboard.controllers;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -110,6 +113,34 @@ public class ApiController extends ApplicationController {
 		} else {
 			return ImmutableMap.of("success", false);
 		}
+	}
+	
+	// Reset
+	@POST @Path("/reset")
+	public Map<String, ?> deleteApiKey() {
+		Session s = HibernateUtil.getTransactionSession();
+
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("errors", e.getMessage());
+		}
+		
+		for(Api a : currentUser.getApis()){
+			s.delete(a);
+		}
+		
+		currentUser.clearApis();
+		
+		Api api = new Api();
+		api.setUser(currentUser);
+		s.save(api);
+		
+		currentUser.addApi(api);
+		
+		s.save(currentUser);
+		
+		return ImmutableMap.of("success", true, "key", api.getKey(), "userID", currentUser.getCrsid());
 	}
 	
 	// Validation

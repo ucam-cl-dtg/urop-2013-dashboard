@@ -126,6 +126,7 @@ public class AccountController extends ApplicationController {
 		
 		return ImmutableMap.of("redirectTo", "dashboard/account");
 	}
+
 		
 	private List<Object> getSidebarLinkHierarchy(User user) {
 		
