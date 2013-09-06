@@ -1,28 +1,19 @@
 package uk.ac.cam.dashboard.controllers;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
+import com.google.common.collect.ImmutableMap;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.ac.cam.dashboard.models.Settings;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
-import uk.ac.cam.dashboard.queries.UserQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 
-import com.google.common.collect.ImmutableMap;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 
 @Path("/api/account")
@@ -211,7 +202,8 @@ public class AccountController extends ApplicationController {
 			handins.add(ImmutableMap.of("name", "Manage bins", "link", "/handins/bins/manage", "icon", "icon-trash_can", "iconType", 1, "notificationCount", 0));
 			handins.add(ImmutableMap.of("name", "Upload answers", "link", "/handins/bins/upload", "icon", "icon-cloud_download", "iconType", 1, "notificationCount", 0));
 			handins.add(ImmutableMap.of("name", "Mark answers", "link", "/handins/bins/marking", "icon", "icon-vector_pen", "iconType", 1, "notificationCount", 0));
-			
+            handins.add(ImmutableMap.of("name", "DoS Search", "link", "/handins/bins/dos", "icon", "icon-lock", "iconType", 1, "notificationCount", 0));
+
 			ImmutableMap.Builder<String, Object> handinsMap = new ImmutableMap.Builder<String, Object>();
 			handinsMap.put("name", "Marking Work");
 			handinsMap.put("links", handins);
