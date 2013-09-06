@@ -171,7 +171,7 @@ public class DeadlinesController extends ApplicationController {
 			return ImmutableMap.of("error", e.getMessage());
 		}
 
-		ArrayListMultimap<String, String> errors = deadlineForm.validate();
+		ArrayListMultimap<String, String> errors = deadlineForm.validateUpdate(id, currentUser);
 		ImmutableMap<String, List<String>> actualErrors = Util
 				.multimapToImmutableMap(errors);
 
@@ -191,13 +191,27 @@ public class DeadlinesController extends ApplicationController {
 	@Path("/{id}")
 	public Map<String, ?> deleteDeadline(@PathParam("id") int id) {
 
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
+		
 		Session session = HibernateUtil.getTransactionSession();
 
 		Deadline deadline = DeadlineQuery.get(id);
-
-		session.delete(deadline);
-
-		return ImmutableMap.of("redirectTo", "deadlines/manage", "success", true);
+		
+		if(deadline!=null){
+			if(deadline.getOwner()!=currentUser){
+				return ImmutableMap.of("success", false, "error", "You are not authorised to delete this deadline");
+			}
+		
+			session.delete(deadline);
+			
+			return ImmutableMap.of("redirectTo", "deadlines/manage", "success", true);
+		}
+		
+		return ImmutableMap.of("success", false, "error", "Deadline does not exist");
 
 	}
 
@@ -206,7 +220,17 @@ public class DeadlinesController extends ApplicationController {
 	@Path("/{id}/complete")
 	public Map<String, ?> updateComplete(@PathParam("id") int id) {
 
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
+		
 		DeadlineUser d = DeadlineQuery.getDUser(id);
+		
+		if(currentUser!=d.getUser()){
+			return ImmutableMap.of("success", "false", "error", "You are not authorised to update that deadline");
+		}
 
 		if (d.getComplete()) {
 			d.toggleComplete(false);

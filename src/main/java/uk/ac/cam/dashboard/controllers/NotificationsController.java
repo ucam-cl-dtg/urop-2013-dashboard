@@ -88,6 +88,9 @@ public class NotificationsController extends ApplicationController {
 			Notification notification = NotificationQuery.get(id);
 			
 			if (notification != null) {
+				if(!notification.getUsers().contains(currentUser)){
+					return ImmutableMap.of("success", false, "error", "You are not authorised to access this user's notifications");
+				}
 				log.debug("Notification with id " + id + " retrieved, returning JSON");
 				return notification.toMap();
 			} else {
@@ -130,6 +133,11 @@ public class NotificationsController extends ApplicationController {
 			} catch (AuthException e) {
 				log.error("Error validating user: " +e.getMessage());
 				return ImmutableMap.of("error", e.getMessage());
+			}
+			
+			NotificationUser nu = NotificationQuery.getNU(id);
+			if(nu.getUser()!=currentUser){
+				return ImmutableMap.of("error", "You are not authorised to update this notification");
 			}
 			
 			ImmutableMap<String, String> error;
