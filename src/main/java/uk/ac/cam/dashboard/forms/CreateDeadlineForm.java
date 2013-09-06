@@ -211,6 +211,17 @@ public class CreateDeadlineForm {
 		return deadline;	
 	}
 	
+	public ArrayListMultimap<String, String> validateUpdate(int id, User currentUser){
+		ArrayListMultimap<String, String> errors = validate();
+		
+		Deadline deadline = DeadlineQuery.get(id);
+
+		if(!deadline.getOwner().equals(currentUser)){
+			errors.put("auth", Strings.GROUP_AUTHEDIT);
+		}
+		return errors;
+	}
+	
 	public ArrayListMultimap<String, String> validate() {
 		ArrayListMultimap<String, String> errors = ArrayListMultimap.create();
 
