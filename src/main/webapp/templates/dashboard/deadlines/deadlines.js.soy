@@ -11,7 +11,7 @@
  * @param complete
  */
 {template .index }
-	<h3><a href="{$ij.path}deadlines/calendar" class="icon icon-cloud_download" data-bypass></a> Upcoming deadlines for {$user.name} ({$user.crsid})</h3>
+	<h3><a href="{$ij.path}deadlines/calendar" class="has-tip icon icon-cloud_download" title="Export to Calendar (.ics)" data-bypass></a> Upcoming deadlines for {$user.name} ({$user.crsid})</h3> 
 	<div class="row pagination-header">
 		<div class="columns large-6 small-6">
 			<a href="deadlines/" {if not ($archived or $complete)}class="black-link"{/if}>All</a> | <a href="deadlines/complete" {if $complete}class="black-link"{/if}>Complete</a>
