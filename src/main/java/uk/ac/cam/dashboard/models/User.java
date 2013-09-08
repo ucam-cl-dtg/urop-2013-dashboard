@@ -27,6 +27,7 @@ import uk.ac.cam.dashboard.queries.UserQuery;
 import uk.ac.cam.dashboard.util.HibernateUtil;
 import uk.ac.cam.dashboard.util.Strings;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 @Entity
@@ -137,9 +138,10 @@ public class User {
 			defaultUser.put("username", username);
 			defaultUser.put("surname", Strings.USER_NOSURNAME);
 			defaultUser.put("email", Strings.USER_NOEMAIL);
-			defaultUser.put("institution", Strings.USER_NOINST);
-			defaultUser.put("status", Strings.USER_NOSTATUS);
-			defaultUser.put("photo", Strings.USER_NOPHOTO);
+			defaultUser.put("instID", ImmutableList.of(Strings.USER_NOINSTID));
+			defaultUser.put("institution", ImmutableList.of(Strings.USER_NOINST));
+			defaultUser.put("status", ImmutableList.of(Strings.USER_NOSTATUS));
+			defaultUser.put("photo", ImmutableList.of(Strings.USER_NOPHOTO));
 			defaultUser.put("supervisor", this.getSettings().getSupervisor());
 
 			return defaultUser;

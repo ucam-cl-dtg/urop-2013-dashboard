@@ -6,6 +6,7 @@ public class Strings {
 	public static final String USER_NOUSERNAME = "Annonymous";
 	public static final String USER_NOSURNAME = "Annonymous";
 	public static final String USER_NOEMAIL = "No email";
+	public static final String USER_NOINSTID = "None";
 	public static final String USER_NOINST = "No institution";
 	public static final String USER_NOSTATUS = "Student";
 	public static final String USER_NOPHOTO = "none";
