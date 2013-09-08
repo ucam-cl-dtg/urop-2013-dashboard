@@ -3,8 +3,8 @@ package uk.ac.cam.dashboard.util;
 public class Strings {
 	
 	// User
-	public static final String USER_NOUSERNAME = "Annonymous";
-	public static final String USER_NOSURNAME = "Annonymous";
+	public static final String USER_NOUSERNAME = "Anonymous";
+	public static final String USER_NOSURNAME = "Anonymous";
 	public static final String USER_NOEMAIL = "No email";
 	public static final String USER_NOINSTID = "None";
 	public static final String USER_NOINST = "No institution";
