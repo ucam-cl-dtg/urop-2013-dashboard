@@ -100,7 +100,7 @@ public class CreateDeadlineForm {
 				Mail.setDeadline(currentUser, deadline, deadlineUsers);
 		}
 		
-		boolean MailSent = Mail.sendNotificationEmail(notification.getMessage(), userSet, "dashboard");
+		Mail.sendNotificationEmail(notification.getMessage(), userSet, "dashboard");
 		return deadline.getId();			
 	}
     private Long extractSetId(String url) {

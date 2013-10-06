@@ -30,7 +30,6 @@ public class CreateNotificationForm {
 	@FormParam("foreignId") String foreignId;
 	
 	// Logger
-	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(CreateNotificationForm.class);
 	
 	public int handle() {
@@ -57,7 +56,7 @@ public class CreateNotificationForm {
 			}		
 		}
 		
-		boolean mailSent = Mail.sendNotificationEmail(notification.getMessage(), userList, notification.getSection());
+		Mail.sendNotificationEmail(notification.getMessage(), userList, notification.getSection());
 		
 		return notification.getId();
 				

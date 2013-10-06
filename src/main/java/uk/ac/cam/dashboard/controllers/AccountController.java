@@ -1,6 +1,17 @@
 package uk.ac.cam.dashboard.controllers;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,11 +21,7 @@ import uk.ac.cam.dashboard.models.Settings;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
 
 
 @Path("/api/account")
@@ -66,6 +73,7 @@ public class AccountController extends ApplicationController {
 			u = User.registerUser(userId);
 			if (u == null) {throw new Exception("User " + userId + " does not exist.");}
 		}catch(Exception e){
+			log.error("Error occurred in getUserData",e);
 			return ImmutableMap.of("error", "An error occurred! " + e.getMessage());
 		}
 		
