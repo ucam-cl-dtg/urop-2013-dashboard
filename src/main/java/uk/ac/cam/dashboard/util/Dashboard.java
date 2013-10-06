@@ -33,6 +33,7 @@ public class Dashboard extends Application {
     myServices.add(HomePageController.class);
     myServices.add(ApiController.class);
     myServices.add(SupervisorController.class);
+    myServices.add(ExceptionHandler.class);
     
     // Add Htmleasy Providers
     log.debug("Adding Htmleasy providers");
