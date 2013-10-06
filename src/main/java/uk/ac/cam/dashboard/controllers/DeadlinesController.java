@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPPartialQuery;
+import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
 import uk.ac.cam.dashboard.exceptions.AuthException;
 import uk.ac.cam.dashboard.forms.CreateDeadlineForm;
 import uk.ac.cam.dashboard.forms.GetDeadlineForm;
@@ -47,7 +48,6 @@ import uk.ac.cam.dashboard.models.DeadlineUser;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
-import uk.ac.cam.dashboard.util.HibernateUtil;
 import uk.ac.cam.dashboard.util.Util;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -197,7 +197,7 @@ public class DeadlinesController extends ApplicationController {
 			return ImmutableMap.of("error", e.getMessage());
 		}
 		
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 
 		Deadline deadline = DeadlineQuery.get(id);
 		

@@ -9,9 +9,9 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
-import uk.ac.cam.dashboard.util.HibernateUtil;
 
 public class UserQuery {
 	
@@ -28,14 +28,14 @@ public class UserQuery {
 
 	public static UserQuery all() {
 		return new UserQuery (
-			HibernateUtil.getTransactionSession()
+			HibernateUtil.getInstance().getSession()
 			.createCriteria(User.class)
 			.addOrder(Order.asc("username"))
 		);
 	}
 	
 	public static User get(String id) {
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 		User u = (User) session
 			.createQuery("from User where id = :id")
 			.setParameter("id", id)

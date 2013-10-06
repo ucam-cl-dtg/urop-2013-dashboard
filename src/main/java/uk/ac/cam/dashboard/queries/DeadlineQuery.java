@@ -10,10 +10,10 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
 import uk.ac.cam.dashboard.models.Deadline;
 import uk.ac.cam.dashboard.models.DeadlineUser;
 import uk.ac.cam.dashboard.models.User;
-import uk.ac.cam.dashboard.util.HibernateUtil;
 
 public class DeadlineQuery extends PaginationQuery<DeadlineQuery> {
 	
@@ -28,21 +28,21 @@ public class DeadlineQuery extends PaginationQuery<DeadlineQuery> {
 
 	public static DeadlineQuery created() {
 		return new DeadlineQuery (
-			HibernateUtil.getTransactionSession()	
+			HibernateUtil.getInstance().getSession()	
 			.createCriteria(Deadline.class, "d")
 		);
 	}
 	
 	public static DeadlineQuery set() {
 		return new DeadlineQuery (
-			HibernateUtil.getTransactionSession()
+			HibernateUtil.getInstance().getSession()
 			.createCriteria(DeadlineUser.class)
 			.createAlias("deadline", "d")
 		);
 	}
 	
 	public static Deadline get(int id) {
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 		Deadline n = (Deadline) session
 			.createQuery("from Deadline where id = :id")
 			.setParameter("id", id)
@@ -52,7 +52,7 @@ public class DeadlineQuery extends PaginationQuery<DeadlineQuery> {
 	}
 	
 	public static DeadlineUser getDUser(int id) {
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 		DeadlineUser n = (DeadlineUser) session
 			.createQuery("from DeadlineUser where id = :id")
 			.setParameter("id", id)

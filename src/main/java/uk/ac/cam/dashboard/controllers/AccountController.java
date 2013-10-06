@@ -4,10 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
 import uk.ac.cam.dashboard.models.Settings;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
-import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -68,6 +69,7 @@ public class AccountController extends ApplicationController {
 			return ImmutableMap.of("error", "An error occurred! " + e.getMessage());
 		}
 		
+		
 		int port = sRequest.getServerPort();
 		String urlPrefix = "http://";
 		String urlSuffix = "";
@@ -94,7 +96,7 @@ public class AccountController extends ApplicationController {
 			return ImmutableMap.of("error", e.getMessage());
 		}
 		
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 		Settings newUserSettings = currentUser.getSettings();
 		
 		try {

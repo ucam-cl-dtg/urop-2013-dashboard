@@ -11,10 +11,10 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
 import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
-import uk.ac.cam.dashboard.util.HibernateUtil;
 import uk.ac.cam.dashboard.util.Mail;
 import uk.ac.cam.dashboard.util.Strings;
 import uk.ac.cam.dashboard.util.Util;
@@ -35,7 +35,7 @@ public class CreateNotificationForm {
 	
 	public int handle() {
 		
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 		
 		Notification notification = new Notification(message, section, "/" + section + "/" + link, foreignId);
 		

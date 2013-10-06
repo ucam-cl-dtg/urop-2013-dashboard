@@ -13,12 +13,12 @@ import uk.ac.cam.cl.dtg.ldap.LDAPGroup;
 import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
 import uk.ac.cam.cl.dtg.ldap.LDAPUser;
+import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.GroupQuery;
-import uk.ac.cam.dashboard.util.HibernateUtil;
 import uk.ac.cam.dashboard.util.Mail;
 import uk.ac.cam.dashboard.util.Strings;
 
@@ -33,7 +33,7 @@ public class GroupForm {
 	
 	public int handle(User currentUser) {		
 		
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 		
 		Group group = new Group(currentUser, title);
 
@@ -68,7 +68,7 @@ public class GroupForm {
 
 	public Group handleUpdate(User currentUser, int id) {		
 		
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 
 		Group group = GroupQuery.get(id);
 		group.setTitle(title);
@@ -98,7 +98,7 @@ public class GroupForm {
 	
 	public int handleImport(User currentUser) {	
 
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 		
 		String title = importedGroup.getName();
 		List<String> members = importedGroup.getUsers();

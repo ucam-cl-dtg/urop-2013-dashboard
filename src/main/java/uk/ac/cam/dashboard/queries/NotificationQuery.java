@@ -9,10 +9,10 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
 import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
-import uk.ac.cam.dashboard.util.HibernateUtil;
 
 public class NotificationQuery extends PaginationQuery<NotificationQuery> {
 	
@@ -29,7 +29,7 @@ public class NotificationQuery extends PaginationQuery<NotificationQuery> {
 
 	public static NotificationQuery all() {
 		return new NotificationQuery (
-			HibernateUtil.getTransactionSession()
+			HibernateUtil.getInstance().getSession()
 			.createCriteria(NotificationUser.class)
 			.createAlias("notification", "n")
 		);
@@ -38,7 +38,7 @@ public class NotificationQuery extends PaginationQuery<NotificationQuery> {
 	// Query methods
 	
 	public static Notification get(int id) {
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 		Notification n = (Notification) session
 			.createQuery("from Notification where id = :id")
 			.setParameter("id", id)
@@ -48,7 +48,7 @@ public class NotificationQuery extends PaginationQuery<NotificationQuery> {
 	}
 	
 	public static NotificationUser getNU(int id) {
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 		NotificationUser nu = (NotificationUser) session
 			.createQuery("from NotificationUser where id = :id")
 			.setParameter("id", id)

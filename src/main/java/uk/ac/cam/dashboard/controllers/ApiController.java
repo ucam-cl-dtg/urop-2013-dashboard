@@ -1,9 +1,7 @@
 package uk.ac.cam.dashboard.controllers;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,10 +15,10 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
+import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
 import uk.ac.cam.dashboard.exceptions.AuthException;
 import uk.ac.cam.dashboard.models.Api;
 import uk.ac.cam.dashboard.models.User;
-import uk.ac.cam.dashboard.util.HibernateUtil;
 import uk.ac.cam.dashboard.util.Strings;
 
 import com.google.common.collect.ImmutableMap;
@@ -49,7 +47,7 @@ public class ApiController extends ApplicationController {
 	
 	@GET @Path("/new")
 	public Map<String, ?> getNewApiKey() {
-		Session s = HibernateUtil.getTransactionSession();
+		Session s = HibernateUtil.getInstance().getSession();
 
 		try {
 			currentUser = validateUser();
@@ -59,6 +57,7 @@ public class ApiController extends ApplicationController {
 		
 		Criteria criteria = s.createCriteria(Api.class);
 		criteria.add(Restrictions.eq("user", currentUser));
+		@SuppressWarnings("unchecked")
 		List<Api> keys = criteria.list();
 		if(keys.size()>=5){
 			return ImmutableMap.of("success", false, "errors", Strings.APIKEY_MAX);
@@ -81,7 +80,7 @@ public class ApiController extends ApplicationController {
 			return ImmutableMap.of("error", e.getMessage());
 		}
 		
-		Session s = HibernateUtil.getTransactionSession();
+		Session s = HibernateUtil.getInstance().getSession();
 
 		Api api = new Api();
 		api.setGlobalPermissions(true);
@@ -94,7 +93,7 @@ public class ApiController extends ApplicationController {
 	// Deletion
 	@DELETE @Path("/delete")
 	public Map<String, ?> deleteApiKey(String key) {
-		Session s = HibernateUtil.getTransactionSession();
+		Session s = HibernateUtil.getInstance().getSession();
 
 		try {
 			currentUser = validateUser();
@@ -118,7 +117,7 @@ public class ApiController extends ApplicationController {
 	// Reset
 	@POST @Path("/reset")
 	public Map<String, ?> deleteApiKey() {
-		Session s = HibernateUtil.getTransactionSession();
+		Session s = HibernateUtil.getInstance().getSession();
 
 		try {
 			currentUser = validateUser();
@@ -151,7 +150,7 @@ public class ApiController extends ApplicationController {
 	@GET @Path("/type/{key}")
 	public Map<String, String> checkApiKeyType(@PathParam("key") String key) {
 		
-		Session s = HibernateUtil.getTransactionSession();
+		Session s = HibernateUtil.getInstance().getSession();
 		
 		if (key == null || key == "") {
 			return ImmutableMap.of("error", Strings.AUTHEXCEPTION_NO_KEY);

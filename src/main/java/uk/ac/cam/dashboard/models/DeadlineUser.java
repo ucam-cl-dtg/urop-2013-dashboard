@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -58,12 +58,12 @@ public class DeadlineUser implements Mappable{
 	
 	public void toggleComplete(boolean complete){
 		this.setComplete(complete);
-		HibernateUtil.getTransactionSession().update(this);
+		HibernateUtil.getInstance().getSession().update(this);
 	}
 	
 	public void toggleArchived(boolean archived){
 		this.setArchived(archived);
-		HibernateUtil.getTransactionSession().update(this);
+		HibernateUtil.getInstance().getSession().update(this);
 	}
 	
 	public ImmutableMap<String, ?> userToMap() {

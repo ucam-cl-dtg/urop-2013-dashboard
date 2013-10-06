@@ -23,13 +23,13 @@ import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPPartialQuery;
 import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
 import uk.ac.cam.cl.dtg.ldap.LDAPUser;
+import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
 import uk.ac.cam.dashboard.exceptions.AuthException;
 import uk.ac.cam.dashboard.forms.GroupForm;
 import uk.ac.cam.dashboard.models.Group;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.GroupQuery;
 import uk.ac.cam.dashboard.queries.UserQuery;
-import uk.ac.cam.dashboard.util.HibernateUtil;
 import uk.ac.cam.dashboard.util.Util;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -179,7 +179,7 @@ public class GroupsController extends ApplicationController {
 		@DELETE @Path("/{id}")
 		public Map<String, ?> deleteGroup(@PathParam("id") int id) {
 			
-			Session session = HibernateUtil.getTransactionSession();
+			Session session = HibernateUtil.getInstance().getSession();
 			
 			Group group = GroupQuery.get(id);
 

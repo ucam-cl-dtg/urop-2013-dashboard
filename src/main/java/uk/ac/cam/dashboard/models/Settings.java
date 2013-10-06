@@ -15,7 +15,7 @@ import javax.persistence.SequenceGenerator;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
-import uk.ac.cam.dashboard.util.HibernateUtil;
+import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -71,7 +71,7 @@ public class Settings {
 	
 	@SuppressWarnings("unchecked")
 	public boolean isDos(){
-		Session s = HibernateUtil.getTransactionSession();
+		Session s = HibernateUtil.getInstance().getSession();
 		List<Dos> dos = (List<Dos>) s.createCriteria(Dos.class)
 				.add(Restrictions.eqOrIsNull("crsid", this.user.getCrsid()))
 				.list();
@@ -81,7 +81,7 @@ public class Settings {
 	@SuppressWarnings("unchecked")
 	public List<String> getUserDoses(String inst) {
 		List<String> dosCrsids = new ArrayList<String>();
-		Session s = HibernateUtil.getTransactionSession();
+		Session s = HibernateUtil.getInstance().getSession();
 		List<Dos> doses = (List<Dos>) s.createCriteria(Dos.class)
 				.add(Restrictions.eq("instID", inst))
 				.list();
@@ -93,7 +93,7 @@ public class Settings {
 	
 	@SuppressWarnings("unchecked")
 	public List<String> getDosColleges(){
-		Session s = HibernateUtil.getTransactionSession();
+		Session s = HibernateUtil.getInstance().getSession();
 		List<Dos> doses = (List<Dos>) s.createCriteria(Dos.class)
 				.add(Restrictions.eqOrIsNull("crsid", this.user.getCrsid()))
 				.list();

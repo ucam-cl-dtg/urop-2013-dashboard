@@ -11,8 +11,8 @@ import javax.persistence.Table;
 
 import org.hibernate.Session;
 
+import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
-import uk.ac.cam.dashboard.util.HibernateUtil;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -57,7 +57,7 @@ public class NotificationUser implements Mappable{
 		
 		NotificationUser nu = NotificationQuery.getNU(notificationId);
 		
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 		nu.setRead(read);
 		session.update(nu);
 		

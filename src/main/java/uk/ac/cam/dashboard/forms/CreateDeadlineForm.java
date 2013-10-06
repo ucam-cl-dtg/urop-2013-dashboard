@@ -24,6 +24,7 @@ import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
 import uk.ac.cam.cl.dtg.ldap.LDAPUser;
 import uk.ac.cam.cl.dtg.teaching.api.HandinsApi;
+import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
 import uk.ac.cam.dashboard.models.Deadline;
 import uk.ac.cam.dashboard.models.DeadlineUser;
 import uk.ac.cam.dashboard.models.Group;
@@ -32,7 +33,6 @@ import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.queries.GroupQuery;
-import uk.ac.cam.dashboard.util.HibernateUtil;
 import uk.ac.cam.dashboard.util.Mail;
 import uk.ac.cam.dashboard.util.Strings;
 
@@ -56,7 +56,7 @@ public class CreateDeadlineForm {
 	
 	public int handleCreate(User currentUser) {		
 		
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 		
 		Deadline deadline = new Deadline(currentUser, title);
 		
@@ -165,7 +165,7 @@ public class CreateDeadlineForm {
     
 	public Deadline handleUpdate(User currentUser, int id) {		
 		
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 		
 		Deadline deadline = DeadlineQuery.get(id);
 		
@@ -338,7 +338,7 @@ public class CreateDeadlineForm {
 	}
 	
 	public Set<DeadlineUser> saveDeadlineUsers(Set<User> userSet, Deadline deadline){
-		Session session = HibernateUtil.getTransactionSession();
+		Session session = HibernateUtil.getInstance().getSession();
 
 		Set<DeadlineUser> deadlineUsers = new HashSet<DeadlineUser>();
 		for(User u : userSet){
