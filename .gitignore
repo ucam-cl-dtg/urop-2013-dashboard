@@ -11,3 +11,4 @@ src/main/webapp/WEB-INF/frontend.xml
 /bin
 /nbproject
 
+/target
