@@ -42,6 +42,8 @@ public class Notification implements Mappable {
 	
 	@Column(name="foreign_id")
 	private String foreignId;
+
+	public static final String[] VALID_SECTIONS = {"dashboard", "signups", "questions", "handins"}; // Shared with GetNotificationForm
 	
 	public Notification() {
 		this.timestamp = Calendar.getInstance();

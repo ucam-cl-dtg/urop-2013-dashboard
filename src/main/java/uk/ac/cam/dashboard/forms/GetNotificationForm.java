@@ -11,6 +11,7 @@ import javax.ws.rs.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cam.dashboard.models.Notification;
 import uk.ac.cam.dashboard.models.NotificationUser;
 import uk.ac.cam.dashboard.models.User;
 import uk.ac.cam.dashboard.queries.NotificationQuery;
@@ -129,8 +130,7 @@ public class GetNotificationForm {
 		}
 
 		// Section
-		String[] validSections = {"dashboard", "signapp", "questions", "handins"}; // Shared with CreateNotificationForm
-		if (section != null && !section.equals("") && !Arrays.asList(validSections).contains(section)) {
+		if (section != null && !section.equals("") && !Arrays.asList(Notification.VALID_SECTIONS).contains(section)) {
 			errors.put("section", Strings.NOTIFICATION_INVALID_SECTION);
 		}
 		

@@ -73,10 +73,10 @@ public class CreateNotificationForm {
 		}
 
 		// Section
-		String[] validSections = {"dashboard", "signapp", "questions", "handins"}; // Shared with GetNotificationForm
+
 		if (section == null || section.equals("")) {
 			errors.put("section", Strings.NOTIFICATION_NO_SECTION);
-		} else if (!Arrays.asList(validSections).contains(section)) {
+		} else if (!Arrays.asList(Notification.VALID_SECTIONS).contains(section)) {
 			errors.put("section", Strings.NOTIFICATION_INVALID_SECTION);
 		}
 		
