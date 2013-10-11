@@ -22,6 +22,7 @@ import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
 import uk.ac.cam.cl.dtg.ldap.LDAPUser;
 import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
+import uk.ac.cam.dashboard.controllers.AccountController;
 import uk.ac.cam.dashboard.queries.DeadlineQuery;
 import uk.ac.cam.dashboard.queries.GroupQuery;
 import uk.ac.cam.dashboard.queries.UserQuery;
@@ -64,7 +65,7 @@ public class User {
 		this.username = this.getName();
 	}
 	
-	public Settings getSettings() {return settings;}
+	public Settings getSettings() { return settings;}
 	public void setSettings(Settings settings) {this.settings = settings;}
 	
 	public String getCrsid() {return crsid;}
@@ -108,15 +109,19 @@ public class User {
 	  	//User user = uq.uniqueResult();
 	  	User user = UserQuery.get(crsid);
 		
-	  	if(user==null){	  		
+	  	if(user==null){
 	  		try { LDAPQueryManager.getUser(crsid); } 
 			catch(LDAPObjectNotFoundException e){ return null;}
 			
 	  		Session session = HibernateUtil.getInstance().getSession();
 	  		Settings s = new Settings();
-	  		session.save(s);	
-	  		user = new User(crsid, s);
+	  		session.save(s);
+	  		user = new User(crsid, s);	  		
 	  		session.save(user);
+	  		
+	  		// update the session object with a reference to the user.  Otherwise we get null pointer exceptions later on.
+	  		s.setUser(user);
+	  		HibernateUtil.getInstance().commit();
 	  	}
 		
 		return user;

@@ -43,7 +43,7 @@ public class Settings {
 	private User user;
 	
 	public Settings() {}
-	
+		
 	// Setters and getters
 	public boolean isSignupsOptIn() {return signupsOptIn;}
 	public void setSignupsOptIn(boolean signupsOptIn) {this.signupsOptIn = signupsOptIn;}
@@ -68,6 +68,10 @@ public class Settings {
 	
 	public boolean getSupervisor(){return this.isSupervisor;}
 	public void setSupervisor(boolean supervisor){this.isSupervisor = supervisor;}
+	
+	public void setUser(User user) {
+		this.user = user;
+	}
 	
 	@SuppressWarnings("unchecked")
 	public boolean isDos(){
@@ -94,8 +98,9 @@ public class Settings {
 	@SuppressWarnings("unchecked")
 	public List<String> getDosColleges(){
 		Session s = HibernateUtil.getInstance().getSession();
+		String crsid = this.user.getCrsid();
 		List<Dos> doses = (List<Dos>) s.createCriteria(Dos.class)
-				.add(Restrictions.eqOrIsNull("crsid", this.user.getCrsid()))
+				.add(Restrictions.eqOrIsNull("crsid", crsid))
 				.list();
 		List<String> colleges = new ArrayList<String>();
 		if(!doses.isEmpty()){
