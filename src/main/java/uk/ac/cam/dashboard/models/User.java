@@ -152,30 +152,31 @@ public class User {
 
 	public static User registerUser(String crsid) {
 
-		// UserQuery uq = UserQuery.all();
-		// uq.byCrsid(crsid);
-		// User user = uq.uniqueResult();
 		User user = UserQuery.get(crsid);
 
 		if (user == null) {
-			try {
-				LDAPQueryManager.getUser(crsid);
-			} catch (LDAPObjectNotFoundException e) {
-				return null;
+			synchronized (User.class) {
+				user = UserQuery.get(crsid);
+				if (user == null) {
+					try {
+						LDAPQueryManager.getUser(crsid);
+					} catch (LDAPObjectNotFoundException e) {
+						return null;
+					}
+
+					Session session = HibernateUtil.getInstance().getSession();
+					Settings s = new Settings();
+					session.save(s);
+					user = new User(crsid, s);
+					session.save(user);
+
+					// update the session object with a reference to the user.
+					// Otherwise we get null pointer exceptions later on.
+					s.setUser(user);
+					HibernateUtil.getInstance().commit();
+				}
 			}
-
-			Session session = HibernateUtil.getInstance().getSession();
-			Settings s = new Settings();
-			session.save(s);
-			user = new User(crsid, s);
-			session.save(user);
-
-			// update the session object with a reference to the user. Otherwise
-			// we get null pointer exceptions later on.
-			s.setUser(user);
-			HibernateUtil.getInstance().commit();
 		}
-
 		return user;
 	}
 
