@@ -17,6 +17,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPQueryManager;
@@ -34,6 +36,8 @@ import com.google.common.collect.ImmutableMap;
 @Table(name = "USERS")
 public class User {
 
+	private static final Logger LOG = LoggerFactory.getLogger(User.class);
+	
 	@Id
 	private String crsid;
 
@@ -158,6 +162,7 @@ public class User {
 			synchronized (User.class) {
 				user = UserQuery.get(crsid);
 				if (user == null) {
+					LOG.info("User {} not found",crsid);
 					try {
 						LDAPQueryManager.getUser(crsid);
 					} catch (LDAPObjectNotFoundException e) {
@@ -174,6 +179,7 @@ public class User {
 					// Otherwise we get null pointer exceptions later on.
 					s.setUser(user);
 					HibernateUtil.getInstance().commit();
+					LOG.info("Wrote user to database");
 				}
 			}
 		}

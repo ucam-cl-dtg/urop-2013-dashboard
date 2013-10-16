@@ -45,6 +45,7 @@ public class CreateNotificationForm {
 		if(!users.equals("")){			
 			String[] crsids = users.split(",");
 			for(String u : crsids){
+				log.info("Notifying: {}",u);
 				User user = User.registerUser(u);
 				if (u != null && user != null) {
 					NotificationUser nUser = new NotificationUser(user, notification);
@@ -53,6 +54,7 @@ public class CreateNotificationForm {
 				} else {
 					log.error("Could not push notification to user with crsid: " + u);
 				}
+				log.info("Done");
 			}		
 		}
 		
