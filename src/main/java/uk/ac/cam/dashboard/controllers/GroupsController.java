@@ -219,7 +219,9 @@ public class GroupsController extends ApplicationController {
 	@Path("/queryCRSID")
 	public List<HashMap<String, Object>> queryCRSId(@FormParam("q") String x) {
 		try {
-			return LDAPPartialQuery.partialUserByCrsid(x);
+			return LDAPPartialQuery.partialUserByCrsid(x, LDAPUser.INCLUDE_CRSID
+									| LDAPUser.INCLUDE_NAME | LDAPUser.INCLUDE_DISPLAYNAME
+									| LDAPUser.INCLUDE_SURNAME | LDAPUser.INCLUDE_EMAIL);
 		} catch (LDAPObjectNotFoundException e) {
 			log.error("Error performing LDAPQuery: " + e.getMessage());
 			return new ArrayList<HashMap<String, Object>>();
