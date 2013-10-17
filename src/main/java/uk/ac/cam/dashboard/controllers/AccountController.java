@@ -222,9 +222,6 @@ public class AccountController extends ApplicationController {
 		// Questions
 		if (settings.isQuestionsOptIn()) {
 			List<Object> questions = new LinkedList<Object>();
-			questions.add(ImmutableMap.of("name", "Overview", "link",
-					"/questions/overview", "icon", "icon-information_black",
-					"iconType", 1, "notificationCount", 0));
 			questions.add(ImmutableMap.of("name", "Browse own content", "link",
 					"/questions/users/me", "icon", "icon-file_open",
 					"iconType", 1, "notificationCount", 0));
