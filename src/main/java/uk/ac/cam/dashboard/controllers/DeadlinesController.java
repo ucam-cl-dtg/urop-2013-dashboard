@@ -244,17 +244,13 @@ public class DeadlinesController extends ApplicationController {
 	// Find users by crsid
 	@POST
 	@Path("/queryCRSID")
-	public List<HashMap<String, String>> queryCRSId(@FormParam("q") String x) {
-
-		List<HashMap<String, String>> matches = null;
+	public List<HashMap<String, Object>> queryCRSId(@FormParam("q") String x) {
 		try {
-			matches = LDAPPartialQuery.partialUserByCrsid(x);
+			return LDAPPartialQuery.partialUserByCrsid(x);
 		} catch (LDAPObjectNotFoundException e) {
 			log.error("Error performing LDAPQuery: " + e.getMessage());
-			return new ArrayList<HashMap<String, String>>();
+			return new ArrayList<HashMap<String, Object>>();
 		}
-
-		return matches;
 	}
 
 	// Find groups
