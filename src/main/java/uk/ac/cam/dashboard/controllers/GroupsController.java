@@ -38,203 +38,217 @@ import com.google.common.collect.ImmutableMap;
 @Path("/api/groups")
 @Produces(MediaType.APPLICATION_JSON)
 public class GroupsController extends ApplicationController {
-	
-		// Create the logger
-		private static Logger log = LoggerFactory.getLogger(GroupsController.class);
-		
-		// Get current user from raven session
-		private User currentUser;
-		
-		// Index
-		@GET @Path("/") 
-		public Map<String, ?> indexGroups() {
-			
-			try {
-				currentUser = validateUser();
-			} catch(AuthException e){
-				return ImmutableMap.of("error", e.getMessage());
-			}
-						
-			return ImmutableMap.of("user", currentUser.toMap(), "groups", currentUser.subscriptionsToMap());
-		}
-		
-		// Members
-		@GET @Path("/{id}/members") 
-		public Map<String, ?> groupMembers(@PathParam("id") int id) {
 
-			Group group = GroupQuery.get(id);
-	
-			List<HashMap<String, Object>> users = null;
-			try {
-				users = new ArrayList<HashMap<String, Object>>();
-				for(User u : UserQuery.all().byGroup(group).list()){
-					LDAPUser user = LDAPQueryManager.getUser(u.getCrsid());
-					HashMap<String, Object> userMap = user.getAll();
-					userMap.put("supervisor", Boolean.toString(u.getSettings().getSupervisor()));
-					users.add(userMap);
-				}
-			} catch(LDAPObjectNotFoundException e){
-				log.error("Error performing LDAPQuery: " + e.getMessage());
-				users = new ArrayList<HashMap<String, Object>>();
-			}
-			
-			return ImmutableMap.of("group", group.toMap(), "users", users);
-		}
-		
-		// Create
-		@POST @Path("/") 
-		public Map<String, ?> createGroup(@Form GroupForm groupForm) throws Exception {
-			
-			try {
-				currentUser = validateUser();
-			} catch(AuthException e){
-				return ImmutableMap.of("error", e.getMessage());
-			}
-			
-			ArrayListMultimap<String, String> errors = groupForm.validate();
-			ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
-			
-			if(errors.isEmpty()){
-				int id = groupForm.handle(currentUser);
-				return ImmutableMap.of("redirectTo", "groups/manage/"+id, "success", true);
-			} else {
-				return ImmutableMap.of("group", groupForm.toMap(-1), "errors", actualErrors, "users", groupForm.usersToMap(), "success", false);
-			}
-		}
-		
-		// Import 
-		@POST @Path("/import") 
-		public Map<String, ?> importGroup(@Form GroupForm groupForm) throws Exception {
-			
-			try {
-				currentUser = validateUser();
-			} catch(AuthException e){
-				return ImmutableMap.of("error", e.getMessage());
-			}
-			
-			ArrayListMultimap<String, String> errors = groupForm.validateImport();
-			ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
-			
-			if(errors.isEmpty()){
-				int id = groupForm.handleImport(currentUser);
-				return ImmutableMap.of("redirectTo", "groups/manage/"+id, "success", true);
-			} else {
-				return ImmutableMap.of("group", "undefined", "errors", actualErrors, "success", false);
-			}
-		}
-		
-		// Manage
-		@GET @Path("/manage/{id}") 
-		public Map<String, ?> getGroup(@PathParam("id") int id) {
-			
-			try {
-				currentUser = validateUser();
-			} catch(AuthException e){
-				return ImmutableMap.of("error", e.getMessage());
-			}
-			
-			Group group = GroupQuery.get(id);
-			
-		  	if(!group.getOwner().equals(currentUser)){
-		  		return ImmutableMap.of("redirectTo", "groups");
-		  	}
+	// Create the logger
+	private static Logger log = LoggerFactory.getLogger(GroupsController.class);
 
+	// Get current user from raven session
+	private User currentUser;
+
+	// Index
+	@GET
+	@Path("/")
+	public Map<String, ?> indexGroups() {
+
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
+
+		return ImmutableMap.of("user", currentUser.toMap(), "groups",
+				currentUser.subscriptionsToMap());
+	}
+
+	// Members
+	@GET
+	@Path("/{id}/members")
+	public Map<String, ?> groupMembers(@PathParam("id") int id) {
+
+		Group group = GroupQuery.get(id);
+
+		List<HashMap<String, Object>> users = null;
+		try {
+			users = new ArrayList<HashMap<String, Object>>();
+			for (User u : UserQuery.all().byGroup(group).list()) {
+				LDAPUser user = LDAPQueryManager.getUser(u.getCrsid());
+				HashMap<String, Object> userMap = user.getAll();
+				userMap.put("supervisor",
+						Boolean.toString(u.getSettings().getSupervisor()));
+				users.add(userMap);
+			}
+		} catch (LDAPObjectNotFoundException e) {
+			log.error("Error performing LDAPQuery: " + e.getMessage());
+			users = new ArrayList<HashMap<String, Object>>();
+		}
+
+		return ImmutableMap.of("group", group.toMap(), "users", users);
+	}
+
+	// Create
+	@POST
+	@Path("/")
+	public Map<String, ?> createGroup(@Form GroupForm groupForm)
+			throws Exception {
+
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
+
+		ArrayListMultimap<String, String> errors = groupForm.validate();
+		ImmutableMap<String, List<String>> actualErrors = Util
+				.multimapToImmutableMap(errors);
+
+		if (errors.isEmpty()) {
+			int id = groupForm.handle(currentUser);
+			return ImmutableMap.of("redirectTo", "groups/manage/" + id,
+					"success", true);
+		} else {
+			return ImmutableMap.of("group", groupForm.toMap(-1), "errors",
+					actualErrors, "users", groupForm.usersToMap(), "success",
+					false);
+		}
+	}
+
+	// Import
+	@POST
+	@Path("/import")
+	public Map<String, ?> importGroup(@Form GroupForm groupForm)
+			throws Exception {
+
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
+
+		ArrayListMultimap<String, String> errors = groupForm.validateImport();
+		ImmutableMap<String, List<String>> actualErrors = Util
+				.multimapToImmutableMap(errors);
+
+		if (errors.isEmpty()) {
+			int id = groupForm.handleImport(currentUser);
+			return ImmutableMap.of("redirectTo", "groups/manage/" + id,
+					"success", true);
+		} else {
+			return ImmutableMap.of("group", "undefined", "errors",
+					actualErrors, "success", false);
+		}
+	}
+
+	// Manage
+	@GET
+	@Path("/manage/{id}")
+	public Map<String, ?> getGroup(@PathParam("id") int id) {
+
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
+
+		Group group = GroupQuery.get(id);
+
+		if (!group.getOwner().equals(currentUser)) {
+			return ImmutableMap.of("redirectTo", "groups");
+		}
+
+		List<Map<String, Object>> users = null;
+		users = new ArrayList<Map<String, Object>>();
+		for (User u : UserQuery.all().byGroup(group).list()) {
+			users.add(u.getUserDetails());
+		}
+
+		return ImmutableMap.of("group", group.toMap(), "errors", "undefined",
+				"users", users);
+	}
+
+	// Update
+	@POST
+	@Path("/{id}")
+	public Map<String, ?> updateGroup(@Form GroupForm groupForm,
+			@PathParam("id") int id) {
+
+		try {
+			currentUser = validateUser();
+		} catch (AuthException e) {
+			return ImmutableMap.of("error", e.getMessage());
+		}
+
+		ArrayListMultimap<String, String> errors = groupForm.validate();
+		ImmutableMap<String, List<String>> actualErrors = Util
+				.multimapToImmutableMap(errors);
+
+		if (errors.isEmpty()) {
+			Group group = groupForm.handleUpdate(currentUser, id);
 			List<Map<String, Object>> users = null;
-				users = new ArrayList<Map<String, Object>>();
-				for(User u : UserQuery.all().byGroup(group).list()){
-					users.add(u.getUserDetails());
-				}
-			
-			return ImmutableMap.of("group", group.toMap(), "errors", "undefined", "users", users);
-		}
-		
-		// Update
-		@POST @Path("/{id}")
-		public Map<String, ?> updateGroup(@Form GroupForm groupForm, @PathParam("id") int id) {	
-			
-			try {
-				currentUser = validateUser();
-			} catch(AuthException e){
-				return ImmutableMap.of("error", e.getMessage());
-			}			
-			
-			ArrayListMultimap<String, String> errors = groupForm.validate();
-			ImmutableMap<String, List<String>> actualErrors = Util.multimapToImmutableMap(errors);
-			
-			if(errors.isEmpty()){
-				Group group = groupForm.handleUpdate(currentUser, id);
-				List<Map<String, Object>> users = null;
-				users = new ArrayList<Map<String, Object>>();
-				for(User u : group.getUsers()){
-					users.add(u.getUserDetails());
-				}
-				return ImmutableMap.of("group", group.toMap(), "users", users, "errors", "undefined", "target", "statistics", "success", true);
-				
-			} else {
-				return ImmutableMap.of("group", groupForm.toMap(id), "users", groupForm.usersToMap(), "errors", actualErrors, "success", false);
+			users = new ArrayList<Map<String, Object>>();
+			for (User u : group.getUsers()) {
+				users.add(u.getUserDetails());
 			}
-		}
-		
-		// Delete
-		@DELETE @Path("/{id}")
-		public Map<String, ?> deleteGroup(@PathParam("id") int id) {
-			
-			Session session = HibernateUtil.getInstance().getSession();
-			
-			Group group = GroupQuery.get(id);
+			return ImmutableMap.of("group", group.toMap(), "users", users,
+					"errors", "undefined", "target", "statistics", "success",
+					true);
 
-		  	session.delete(group);
-			
-			return ImmutableMap.of("redirectTo", "/supervisor/");
-			
-		}		
-		
-		// Find users by crsid
-		@POST @Path("/queryCRSID")
-		public List<HashMap<String, String>> queryCRSId(@FormParam("q") String x) {
-						
-			if(x==null){
-				return new ArrayList<HashMap<String,String>>();
-			}
-			
-			List<HashMap<String, String>> matches = null;
-			try {
-				matches = LDAPPartialQuery.partialUserByCrsid(x);
-			} catch (LDAPObjectNotFoundException e){
-				log.error("Error performing LDAPQuery: " + e.getMessage());
-				return new ArrayList<HashMap<String, String>>();
-			}
-			
-			return matches;
+		} else {
+			return ImmutableMap.of("group", groupForm.toMap(id), "users",
+					groupForm.usersToMap(), "errors", actualErrors, "success",
+					false);
 		}
-		
-		// Find users by surname
-		@POST @Path("/querySurname")
-		public List<HashMap<String, String>> querySurname(@FormParam("q") String x) {
-			
-			// Perform LDAP search
-			List<HashMap<String, String>> matches = null;
-			try {
-				matches = LDAPPartialQuery.partialUserBySurname(x);
-			} catch (LDAPObjectNotFoundException e){
-				log.error("Error performing LDAPQuery: " + e.getMessage());
-				return new ArrayList<HashMap<String, String>>();
-			}
-			
-			return matches;
+	}
+
+	// Delete
+	@DELETE
+	@Path("/{id}")
+	public Map<String, ?> deleteGroup(@PathParam("id") int id) {
+
+		Session session = HibernateUtil.getInstance().getSession();
+
+		Group group = GroupQuery.get(id);
+
+		session.delete(group);
+
+		return ImmutableMap.of("redirectTo", "/supervisor/");
+
+	}
+
+	// Find users by crsid
+	@POST
+	@Path("/queryCRSID")
+	public List<HashMap<String, Object>> queryCRSId(@FormParam("q") String x) {
+		try {
+			return LDAPPartialQuery.partialUserByCrsid(x, LDAPUser.INCLUDE_CRSID
+									| LDAPUser.INCLUDE_NAME | LDAPUser.INCLUDE_DISPLAYNAME
+									| LDAPUser.INCLUDE_SURNAME | LDAPUser.INCLUDE_EMAIL);
+		} catch (LDAPObjectNotFoundException e) {
+			log.error("Error performing LDAPQuery: " + e.getMessage());
+			return new ArrayList<HashMap<String, Object>>();
 		}
-		
-		// Find groups from LDAP
-		@POST @Path("/queryGroup")
-		public List<HashMap<String, String>> queryGroup(@FormParam("q") String x) {
-			
-			List<HashMap<String, String>> matches = null;
-			try {
-				matches = LDAPPartialQuery.partialGroupByName(x);
-			} catch (LDAPObjectNotFoundException e){
-				log.error("Error performing LDAPQuery: " + e.getMessage());
-				return new ArrayList<HashMap<String, String>>();
-			}			
-			return matches;
-		}	
+	}
+
+	// Find users by surname
+	@POST
+	@Path("/querySurname")
+	public List<HashMap<String, Object>> querySurname(@FormParam("q") String x) {
+		try {
+			return LDAPPartialQuery.partialUserBySurname(x);
+		} catch (LDAPObjectNotFoundException e) {
+			log.error("Error performing LDAPQuery: " + e.getMessage());
+			return new ArrayList<HashMap<String, Object>>();
+		}
+	}
+
+	// Find groups from LDAP
+	@POST
+	@Path("/queryGroup")
+	public List<HashMap<String, Object>> queryGroup(@FormParam("q") String x) {
+		try {
+			return LDAPPartialQuery.partialGroupByName(x);
+		} catch (LDAPObjectNotFoundException e) {
+			log.error("Error performing LDAPQuery: " + e.getMessage());
+			return new ArrayList<HashMap<String, Object>>();
+		}
+	}
 }

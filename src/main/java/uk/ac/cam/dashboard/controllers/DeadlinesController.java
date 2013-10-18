@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cam.cl.dtg.ldap.LDAPObjectNotFoundException;
 import uk.ac.cam.cl.dtg.ldap.LDAPPartialQuery;
+import uk.ac.cam.cl.dtg.ldap.LDAPUser;
 import uk.ac.cam.cl.dtg.teaching.hibernate.HibernateUtil;
 import uk.ac.cam.dashboard.exceptions.AuthException;
 import uk.ac.cam.dashboard.forms.CreateDeadlineForm;
@@ -244,17 +245,15 @@ public class DeadlinesController extends ApplicationController {
 	// Find users by crsid
 	@POST
 	@Path("/queryCRSID")
-	public List<HashMap<String, String>> queryCRSId(@FormParam("q") String x) {
-
-		List<HashMap<String, String>> matches = null;
+	public List<HashMap<String, Object>> queryCRSId(@FormParam("q") String x) {
 		try {
-			matches = LDAPPartialQuery.partialUserByCrsid(x);
+			return LDAPPartialQuery.partialUserByCrsid(x, LDAPUser.INCLUDE_CRSID
+									| LDAPUser.INCLUDE_NAME | LDAPUser.INCLUDE_DISPLAYNAME
+									| LDAPUser.INCLUDE_SURNAME | LDAPUser.INCLUDE_EMAIL);
 		} catch (LDAPObjectNotFoundException e) {
 			log.error("Error performing LDAPQuery: " + e.getMessage());
-			return new ArrayList<HashMap<String, String>>();
+			return new ArrayList<HashMap<String, Object>>();
 		}
-
-		return matches;
 	}
 
 	// Find groups
