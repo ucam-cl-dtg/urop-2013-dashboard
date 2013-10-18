@@ -178,7 +178,6 @@ public class User {
 					// update the session object with a reference to the user.
 					// Otherwise we get null pointer exceptions later on.
 					s.setUser(user);
-					HibernateUtil.getInstance().commit();
 					LOG.info("Wrote user to database");
 				}
 			}
