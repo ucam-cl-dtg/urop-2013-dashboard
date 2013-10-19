@@ -16,7 +16,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +40,7 @@ import com.google.common.collect.ImmutableMap;
 public class User {
 
 	private static final Logger LOG = LoggerFactory.getLogger(User.class);
-	
+
 	@Id
 	private String crsid;
 
@@ -162,23 +165,39 @@ public class User {
 			synchronized (User.class) {
 				user = UserQuery.get(crsid);
 				if (user == null) {
-					LOG.info("User {} not found",crsid);
 					try {
 						LDAPQueryManager.getUser(crsid);
 					} catch (LDAPObjectNotFoundException e) {
 						return null;
 					}
 
-					Session session = HibernateUtil.getInstance().getSession();
 					Settings s = new Settings();
-					session.save(s);
 					user = new User(crsid, s);
-					session.save(user);
 
-					// update the session object with a reference to the user.
+					// Here we use a new hibernate session rather than the one
+					// associated with our thread. The idea is to create the new
+					// user in the database and commit it so that other
+					// concurrent threads can see it too.
+					SessionFactory sf = HibernateUtil.getInstance().getSF();
+					Session session = sf.openSession();
+					try {
+						Transaction t;
+						try {
+							t = session.beginTransaction();
+						} catch (HibernateException e) {
+							LOG.error("Failed to open a database connection when creating user {}",crsid);
+							return null;
+						}
+						session.save(s);
+						session.save(user);
+						t.commit();
+					} finally {
+						session.close();
+					}
+
+					// update the settings object with a reference to the user.
 					// Otherwise we get null pointer exceptions later on.
 					s.setUser(user);
-					LOG.info("Wrote user to database");
 				}
 			}
 		}
