@@ -70,16 +70,11 @@ public class AccountController extends ApplicationController {
 	}
 
 	private Map<String, ?> getUserData(String userId) {
-		User u;
-		try {
-			u = User.registerUser(userId);
-			if (u == null) {
-				throw new Exception("User " + userId + " does not exist.");
-			}
-		} catch (Exception e) {
-			log.error("Error occurred in getUserData", e);
+		User u = User.registerUser(userId);
+		if (u == null) {
+			log.error("Failed to register user with crsid {} in getUserData", userId);
 			return ImmutableMap.of("error",
-					"An error occurred! " + e.getMessage());
+					"Failed to lookup user with crsid "+userId);
 		}
 
 		int port = sRequest.getServerPort();
