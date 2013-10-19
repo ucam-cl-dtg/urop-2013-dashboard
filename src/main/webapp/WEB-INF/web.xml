@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE web-app [
-<!ENTITY frontend SYSTEM "frontend.xml">
-]>
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-     version="3.0">
-     
-     <!-- For frontend main.soy -->
-     
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+
+	<!-- For frontend main.soy -->
+
 	<context-param>
 		<param-name>cssNamespace</param-name>
 		<param-value>dashboard</param-value>
@@ -22,7 +18,7 @@
 			/css/home.css
 		</param-value>
 	</context-param>
-	
+
 	<context-param>
 		<param-name>jsFiles</param-name>
 		<param-value>
@@ -46,43 +42,45 @@
 	</context-param>
 
 	<!-- For API filter -->
-	
+
 	<context-param>
 		<param-name>dashboardUrl</param-name>
 		<param-value>http://localhost:8080/dashboard</param-value>
 	</context-param>
-    
-    <context-param>
-        <param-name>handinsUrl</param-name>
-        <param-value>http://localhost:8080/handins</param-value>
-    </context-param>
-	
+
+	<context-param>
+		<param-name>handinsUrl</param-name>
+		<param-value>http://localhost:8080/handins</param-value>
+	</context-param>
+
 	<context-param>
 		<param-name>excludePrefixes</param-name>
-		<param-value>/api/keys/type/		 
+		<param-value>/api/keys/type/
 		</param-value>
 	</context-param>
-	
+
 	<context-param>
 		<param-name>excludeFromLogger</param-name>
 		<param-value>/dashboard/api/notifications</param-value>
 	</context-param>
-	
+
 	<context-param>
 		<param-name>apiKey</param-name>
 		<param-value>4870v534lmomthfssb27ho4vjtidhujlmmssasuf</param-value>
 	</context-param>
- 	
- 	<!-- Filters -->
+
+	<!-- Filters -->
 
 	<filter>
 		<filter-name>Hibernate</filter-name>
-		<filter-class>uk.ac.cam.cl.dtg.teaching.hibernate.HibernateSessionRequestFilter</filter-class>
+		<filter-class>uk.ac.cam.cl.dtg.teaching.hibernate.HibernateSessionRequestFilter
+		</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>Htmleasy</filter-name>
-		<filter-class>com.googlecode.htmleasy.HtmleasyFilterDispatcher</filter-class>
+		<filter-class>com.googlecode.htmleasy.HtmleasyFilterDispatcher
+		</filter-class>
 		<init-param>
 			<param-name>javax.ws.rs.Application</param-name>
 			<param-value>uk.ac.cam.dashboard.util.Dashboard</param-value>
@@ -97,14 +95,44 @@
 			<param-value>true</param-value>
 		</init-param>
 	</filter>
-	
+
 	<!-- Filter mappings -->
-	
+	<!-- Resource Filter: Paths behind these filter mappings will not be chained, 
+		ie. the response will be returned directly therefore requests will not be 
+		passed to the Raven filter and not authenticated. Anything that does not 
+		need raven access should be mapped here. These filter mappings MUST be before 
+		the raven filter -->
+
+	<filter>
+		<filter-name>resource</filter-name>
+		<filter-class>uk.ac.cam.cl.dtg.teaching.ResourceFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>resource</filter-name>
+		<url-pattern>/css/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>resource</filter-name>
+		<url-pattern>/js/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>resource</filter-name>
+		<url-pattern>/img/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>resource</filter-name>
+		<url-pattern>/about.html</url-pattern>
+	</filter-mapping>
+
 	<filter-mapping>
 		<filter-name>apiauth</filter-name>
 		<url-pattern>/api/*</url-pattern>
 	</filter-mapping>
-	
+
 	<filter-mapping>
 		<filter-name>Hibernate</filter-name>
 		<url-pattern>/api/*</url-pattern>
@@ -114,6 +142,31 @@
 		<filter-name>Htmleasy</filter-name>
 		<url-pattern>/api/*</url-pattern>
 	</filter-mapping>
-	
-	&frontend;
+
+
+	<!-- Raven Authentication Note that this should be after Htmleasy in the 
+		filter chain to ensure that API requests that are expected to return JSON 
+		are not redirected to the Raven login page. The APIFilter should be placed 
+		before Htmleasy mapped to /api/* to deal with authentication of API requests. -->
+
+	<filter>
+		<filter-name>raven</filter-name>
+		<filter-class>uk.ac.cam.ucs.webauth.RavenFilter</filter-class>
+		<init-param>
+			<param-name>maxSkew</param-name>
+			<param-value>3000</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>raven</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<error-page>
+		<error-code>410</error-code>
+		<location>/about.html</location>
+	</error-page>
+
+
 </web-app>
