@@ -40,9 +40,9 @@
 					<legend>Calendar Imports</legend>
 					{if length($keys) != 0}
 						<p>To routinely import deadlines into Thunderbird (or any other calendar application), copy the following URL:</p>
-						<p><input disabled value="{$projectUrl}/dashboard/api/deadlines/calendar?key={$keys[0]}&userId={$user}" type="text" id="deadlines-cal-url"/></p>
+						<p><input readonly value="{$projectUrl}/dashboard/api/deadlines/calendar?key={$keys[0]}&userId={$user}" type="text" id="deadlines-cal-url"/></p>
 						<p>To routinely import events copy the following URL:</p>
-						<p><input disabled value="{$projectUrl}/signapp/api/events/calendar?key={$keys[0]}&userId={$user}" type="text" id="events-cal-url"/></p>
+						<p><input readonly value="{$projectUrl}/signapp/api/events/calendar?key={$keys[0]}&userId={$user}" type="text" id="events-cal-url"/></p>
 						<hr />
 						<p>Please note, anybody with access to your API key can perform the same actions as if he/she were logged into your account. You should therefore treat API keys with the same level of privacy as your password and reset it if you feel it has been compromised.</p>	
 					{/if}
