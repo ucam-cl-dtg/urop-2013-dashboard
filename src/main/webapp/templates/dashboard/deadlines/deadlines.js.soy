@@ -58,8 +58,8 @@
 					<div class="columns large-3 small-3 text-right">
 						<div class="icon-button-wrapper">
 							{if not $deadline.archived}
-							{if $deadline.url != '#'}<a class="icon-button panel-icon-button websymbols-icon icon-button-array has-tip" href="{$deadline.url}" title="Click to go to link: {$deadline.url}">&#88;</a>{/if}
 							<a class="icon-button panel-icon-button websymbols-icon complete_deadline button has-tip {if $deadline.complete}success{/if}" title="Mark this deadline as complete/incomplete">&#46;</a>
+							{if $deadline.url != '#'}<a class="icon-button panel-icon-button websymbols-icon icon-button-array has-tip" href="{$deadline.url}" title="Click to go to link: {$deadline.url}" data-absolute>&#88;</a>{/if}
 							{/if}
 						</div>
 					</div>
