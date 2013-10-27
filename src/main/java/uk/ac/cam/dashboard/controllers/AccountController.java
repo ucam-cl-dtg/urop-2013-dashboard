@@ -195,13 +195,13 @@ public class AccountController extends ApplicationController {
 		if (settings.isSignupsOptIn()) {
 			List<Object> signups = new LinkedList<Object>();
 			signups.add(ImmutableMap.of("name", "Events", "link",
-					"/signapp/events", "icon", "icon-calendar", "iconType", 1,
+					"/signups/events", "icon", "icon-calendar", "iconType", 1,
 					"notificationCount", 0));
 			signups.add(ImmutableMap.of("name", "Create new event", "link",
-					"/signapp/events/new", "icon", "icon-plus", "iconType", 1,
+					"/signups/events/new", "icon", "icon-plus", "iconType", 1,
 					"notificationCount", 0));
 			signups.add(ImmutableMap.of("name", "DoS Area", "link",
-					"/signapp/events/dos", "icon", "icon-lock", "iconType", 1,
+					"/signups/events/dos", "icon", "icon-lock", "iconType", 1,
 					"notificationCount", 0));
 
 			ImmutableMap.Builder<String, Object> sidebarMap = new ImmutableMap.Builder<String, Object>();

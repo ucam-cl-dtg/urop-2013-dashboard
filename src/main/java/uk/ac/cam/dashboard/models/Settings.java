@@ -117,7 +117,7 @@ public class Settings {
 	public boolean filterMail(String type){
 		if(type.equals("dashboard")){
 			return dashboardSendsEmail;
-		} else if(type.equals("signapp")){
+		} else if(type.equals("signups")){
 			return signupsSendsEmail;
 		} else if(type.equals("questions")){
 			return questionsSendsEmail;

@@ -95,7 +95,7 @@ function bindResetApiKeyListener() {
 	    			successNotification("Successfully created a new API key");
 	    			$('.api-keys').html('<li><div class="fixed-width-icon"><i class="icon icon-lock"></i></div>' + data.key + '</li>');
 	    			$('#deadlines-cal-url').val(prepareURL("deadlines/calendar?key="+data.key+"&userId="+data.userID));
-	    			var eventsURL = prepareURL("api/events/calendar?key="+data.key+"&userId="+data.userID).replace("dashboard", "signapp");
+	    			var eventsURL = prepareURL("api/events/calendar?key="+data.key+"&userId="+data.userID).replace("dashboard", "signups");
 	    			$('#events-cal-url').val(eventsURL);
 	    		}
 	    	},
