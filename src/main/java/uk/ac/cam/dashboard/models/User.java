@@ -165,12 +165,6 @@ public class User {
 			synchronized (User.class) {
 				user = UserQuery.get(crsid);
 				if (user == null) {
-					try {
-						LDAPQueryManager.getUser(crsid);
-					} catch (LDAPObjectNotFoundException e) {
-						return null;
-					}
-
 					Settings s = new Settings();
 					user = new User(crsid, s);
 
